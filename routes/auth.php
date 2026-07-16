@@ -1,15 +1,15 @@
 <?php
 
-use App\Http\Controllers\Web\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Web\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\Web\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\Web\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\Web\Auth\NewPasswordController;
-use App\Http\Controllers\Web\Auth\PasswordController;
-use App\Http\Controllers\Web\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Web\Auth\RegisteredUserController;
-use App\Http\Controllers\Web\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\Auth\PasswordController;
+use App\Http\Controllers\Web\Auth\NewPasswordController;
+use App\Http\Controllers\Web\Auth\VerifyEmailController;
+use App\Http\Controllers\Web\Auth\RegisteredUserController;
+use App\Http\Controllers\Web\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Web\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Web\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Web\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Web\Auth\EmailVerificationNotificationController;
 
 Route::middleware('check')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use Exception;
-use App\Helpers\Helper;
-use App\Models\FirebaseTokens;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\Helper;
+use App\Models\FirebaseTokens;
+use Exception;
 
 class LogoutController extends Controller
 {
@@ -14,7 +14,7 @@ class LogoutController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->select = ['id', 'name', 'email', 'avatar'];
+        $this->select = ['id', 'name', 'email', 'avatar'];   
     }
     public function logout()
     {
@@ -25,14 +25,12 @@ class LogoutController extends Controller
                 if ($firebaseTokens) {
                     $firebaseTokens->each->delete();
                 }
-                $user = auth('api')->user();
-                $user->logActivity('Logout - '. $user->id , $user->email . '- User Logout Manually.');
 
-                auth('api')->logout();
-
+                Auth::logout('api');
+                
                 return Helper::jsonResponse(true, 'Logged out successfully. Token revoked.', 200);
             } else {
-                return Helper::jsonErrorResponse('User not authenticated', 401);
+                return Helper::jsonErrorResponse( 'User not authenticated', 401);
             }
         } catch (Exception $e) {
             return Helper::jsonErrorResponse($e->getMessage(), 500);

@@ -2,6 +2,7 @@
 
 use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
+use App\Services\ActivityLogService;
 
 if (!function_exists('settings')) {
     function settings($key = null)
@@ -15,5 +16,17 @@ if (!function_exists('settings')) {
         }
 
         return $settings;
+    }
+}
+
+if (!function_exists('activity')) {
+    /**
+     * Get the ActivityLogService instance.
+     *
+     * @return \App\Services\ActivityLogService
+     */
+    function activity(): ActivityLogService
+    {
+        return app(ActivityLogService::class);
     }
 }

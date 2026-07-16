@@ -1,48 +1,48 @@
 <?php
 
 use App\Helpers\Helper;
-use App\Http\Middleware\WebAdminMiddleware;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\ApiAdminMiddleware;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
 use App\Http\Middleware\WebAuthCheckMiddleware;
+use Illuminate\Session\Middleware\StartSession;
+use App\Http\Middleware\ApiOtpVerifiedMiddleware;
+use App\Http\Middleware\RolePermissionMiddleware;
 use App\Http\Middleware\WebOtpVerifiedMiddleware;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Http\Request;
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Validation\ValidationException;
-use Spatie\Permission\Middleware\PermissionMiddleware;
-use Spatie\Permission\Middleware\RoleMiddleware;
-use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        api: __DIR__.'/../routes/api.php',
-        commands: __DIR__.'/../routes/console.php',
-        channels: __DIR__.'/../routes/channels.php',
+        web: __DIR__ . '/../routes/web.php',
+        api: __DIR__ . '/../routes/api.php',
+        commands: __DIR__ . '/../routes/console.php',
+        channels: __DIR__ . '/../routes/channels.php',
         health: '/up',
         then: function () {
-            Route::middleware(['web', 'web-admin'])->prefix('admin')->name('admin.')->group(base_path('routes/web-admin.php'));
-            Route::middleware(['api'])->group(base_path('routes/api-stripe.php'));
+            Route::middleware(['web', 'admin'])->prefix('admin')->name('admin.')->group(base_path('routes/admin.php'));
+            Route::middleware(['web', 'admin'])->group(base_path('routes/backend.php'));
             require base_path('routes/cmd.php');
         }
     )
     ->withBroadcasting(
-        __DIR__.'/../routes/channels.php',
+        __DIR__ . '/../routes/channels.php',
         ['prefix' => 'api', 'middleware' => ['auth:api']],
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'web-admin' => WebAdminMiddleware::class,
+            'admin' => AdminMiddleware::class,
+            'api-admin' => ApiAdminMiddleware::class,
             'web-otp' => WebOtpVerifiedMiddleware::class,
+            'api-otp' => ApiOtpVerifiedMiddleware::class,
             'check' => WebAuthCheckMiddleware::class,
-            'role' => RoleMiddleware::class,
-            'permission' => PermissionMiddleware::class,
-            'role_or_permission' => RoleOrPermissionMiddleware::class,
+            'permission' => RolePermissionMiddleware::class,
         ]);
         $middleware->validateCsrfTokens(except: [
             'payment/stripe/webhook',

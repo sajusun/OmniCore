@@ -2,43 +2,59 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Notification extends Model
 {
     use HasUuids;
 
     protected $fillable = [
+        'user_id',
         'type',
-        'notifiable_type',
-        'notifiable_id',
         'title',
         'body',
+        'reference_type',
+        'reference_id',
+        'action',
+        'link',
+        'meta',
         'read_at',
     ];
 
     protected $casts = [
+        'meta' => 'array',
         'read_at' => 'datetime',
     ];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
+    protected $appends = [
+    'is_read',
+];
 
-    public function notifiable()
+
+    public function newUniqueId(): string
     {
-        return $this->morphTo();
+        return (string) Str::uuid();
     }
 
-    public function scopeUnread($query)
+    public function user(): BelongsTo
     {
-        return $query->whereNull('read_at');
+        return $this->belongsTo(User::class);
     }
 
-    public function scopeRead($query)
+
+    public function markAsRead(): bool
     {
-        return $query->whereNotNull('read_at');
+        return $this->update([
+            'read_at' => now(),
+        ]);
+    }
+
+
+    public function getIsReadAttribute(): bool
+    {
+        return ! is_null($this->read_at);
     }
 }

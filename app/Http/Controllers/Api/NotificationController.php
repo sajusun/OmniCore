@@ -4,73 +4,97 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use App\Services\NotificationService;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\NotificationResource;
+use App\Repositories\Contracts\NotificationRepositoryInterface;
 
 class NotificationController extends Controller
 {
+    public function __construct(
+        protected NotificationRepositoryInterface $repository,
+        protected NotificationService $service
+    ) {}
 
+    /**
+     * Notification List
+     */
     public function index(Request $request)
     {
-        $notifications = $request->user()->notifications()->latest()->paginate($request->per_page ?? 15);
+        $notifications = $this->repository->getByUser(
+            auth()->id(),
+            $request->integer('per_page', 15)
+        );
 
+        return NotificationResource::collection($notifications);
+    }
+
+    /**
+     * Unread Count
+     */
+    public function unreadCount()
+    {
         return response()->json([
-            'status' => true,
-            'message' => 'Notifications fetched successfully.',
-            'data' => $notifications,
+            'success' => true,
+            'count' => $this->service->unreadCount(auth()->id()),
         ]);
     }
 
-    public function store(Request $request)
+    /**
+     * Mark as Read
+     */
+    public function markAsRead(Notification $notification)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'title'   => 'required|string|max:255',
-            'body'    => 'required|string',
-            'type'    => 'nullable|string|max:100',
-        ]);
+        abort_if($notification->user_id != auth()->id(), 403);
 
-        $notification = Notification::create([
-            'type'            => $request->type ?? 'general',
-            'notifiable_type' => \App\Models\User::class,
-            'notifiable_id'   => $request->user_id,
-            'title'           => $request->title,
-            'body'            => $request->body,
-        ]);
+        $this->service->markAsRead(
+            $notification->id,
+            auth()->id()
+        );
 
         return response()->json([
-            'status' => true,
-            'message' => 'Notification sent successfully.',
-            'data'    => $notification,
-        ]);
-    }
-
-    public function markAsRead($id)
-    {
-        $notification = auth('api')->user()
-            ->notifications()
-            ->findOrFail($id);
-
-        $notification->update([
-            'read_at' => now(),
-        ]);
-
-        return response()->json([
-            'status' => true,
+            'success' => true,
             'message' => 'Notification marked as read.',
         ]);
     }
 
-
-    public function markAllAsRead(Request $request)
+    /**
+     * Mark All Read
+     */
+    public function markAllAsRead()
     {
-        $request->user()->notifications()->whereNull('read_at')
-            ->update([
-                'read_at' => now(),
-            ]);
+        $this->service->markAllAsRead(auth()->id());
 
         return response()->json([
-            'status' => true,
+            'success' => true,
             'message' => 'All notifications marked as read.',
         ]);
     }
+
+    /**
+     * Delete Notification
+     */
+public function destroy(Notification $notification)
+{
+    abort_if($notification->user_id !== auth()->id(), 403);
+
+    $deleted = $this->service->delete(
+        $notification->id,
+        auth()->id()
+    );
+
+    if (! $deleted) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Notification not found.',
+        ], 404);
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Notification deleted successfully.',
+    ]);
+}
+
+
 }

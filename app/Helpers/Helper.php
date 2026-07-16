@@ -3,34 +3,31 @@
 namespace App\Helpers;
 
 use Exception;
-use Throwable;
-use Illuminate\Support\Str;
-use Kreait\Firebase\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
-use Kreait\Laravel\Firebase\Facades\Firebase;
 
 class Helper
 {
-    //! File or Image Upload
     public static function fileUpload($file, string $folder, string $name): ?string
     {
-        if (!$file->isValid()) {
+        if (! $file->isValid()) {
             return null;
         }
 
-        $imageName = Str::slug($name) . '.' . $file->extension();
-        $path      = public_path('uploads/' . $folder);
-        if (!file_exists($path)) {
+        $imageName = Str::slug($name).'.'.$file->extension();
+        $path = public_path('uploads/'.$folder);
+        if (! file_exists($path)) {
             mkdir($path, 0777, true);
         }
         $file->move($path, $imageName);
-        return 'uploads/' . $folder . '/' . $imageName;
+
+        return 'uploads/'.$folder.'/'.$imageName;
     }
 
-    //! File or Image Delete
     public static function fileDelete(string $path): void
     {
         if (file_exists($path)) {
@@ -38,26 +35,25 @@ class Helper
         }
     }
 
-    //! Generate Slug
     public static function makeSlug($model, string $title): string
     {
         $slug = Str::slug($title);
         while ($model::where('slug', $slug)->exists()) {
             $randomString = Str::random(5);
-            $slug         = Str::slug($title) . '-' . $randomString;
+            $slug = Str::slug($title).'-'.$randomString;
         }
+
         return $slug;
     }
 
-    //! JSON Response
     public static function jsonResponse(bool $status, string $message, int $code, $data = null, bool $paginate = false, $paginateData = null): JsonResponse
     {
         $response = [
-            'status'  => $status,
+            'status' => $status,
             'message' => $message,
-            'code'    => $code,
+            'code' => $code,
         ];
-        if ($paginate && !empty($paginateData)) {
+        if ($paginate && ! empty($paginateData)) {
             $response['data'] = $data;
             $response['pagination'] = [
                 'current_page' => $paginateData->currentPage(),
@@ -72,7 +68,7 @@ class Helper
                 'to' => $paginateData->lastItem(),
                 'path' => $paginateData->path(),
             ];
-        } elseif ($paginate && !empty($data)) {
+        } elseif ($paginate && ! empty($data)) {
             $response['data'] = $data->items();
             $response['pagination'] = [
                 'current_page' => $data->currentPage(),
@@ -97,89 +93,35 @@ class Helper
     public static function jsonErrorResponse(string $message, int $code = 400, array $errors = []): JsonResponse
     {
         $response = [
-            'status'  => false,
+            'status' => false,
             'message' => $message,
-            'code'    => $code,
-            't-errors'  => $errors,
+            'code' => $code,
+            't-errors' => $errors,
         ];
+
         return response()->json($response, $code);
     }
 
-    // public static function sendNotifyMobile($token, $notifyData): void
-    // {
-    //     try {
-    //         $factory = (new Factory)->withServiceAccount(storage_path(config('firebase.credentials')));
-    //         $messaging = $factory->createMessaging();
-    //         $notification = Notification::create($notifyData['title'], Str::limit($notifyData['body'], 100), $notifyData['icon']);
-    //         $message = CloudMessage::withTarget('token', $token)->withNotification($notification);
-    //         $messaging->send($message);
-    //     } catch (Exception $exception) {
-    //         Log::error($exception->getMessage());
-    //     }
-    //     return;
-    // }
-
-    /* public static function Translate($model, $str){
-        $data = $model::where('key', $str)->first();
-        if($data){
-            return $data->value;
+    public static function sendNotifyMobile(string $token, array $payload): void
+    {
+        try {
+            $factory = (new Factory)->withServiceAccount(storage_path(config('firebase.credentials')));
+            $messaging = $factory->createMessaging();
+            $notification = Notification::create($payload['title'], Str::limit($payload['body'], 100), $payload['icon']);
+            $message = CloudMessage::withTarget('token', $token)->withNotification($notification);
+            $messaging->send($message);
+        } catch (Exception $exception) {
+            Log::error($exception->getMessage());
         }
-        return $str;
-    } */
+
+    }
 
     public static function getImageUrl($path): string
     {
         if (filter_var($path, FILTER_VALIDATE_URL)) {
             return $path;
         }
+
         return asset($path);
-    }
-
-    public static function uploadImage($file, $folder)
-    {
-
-        if (!$file->isValid()) {
-            return null;
-        }
-
-        $imageName = time() . '-' . Str::random(5) . '.' . $file->getClientOriginalExtension(); // Unique name
-        $path = public_path('uploads/' . $folder);
-
-        if (!file_exists($path)) {
-            mkdir($path, 0755, true);
-        }
-
-        $file->move($path, $imageName);
-        return 'uploads/' . $folder . '/' . $imageName;
-        // return url('uploads/' . $folder . '/' . $imageName);
-    }
-
-
-    public static function sendNotifyMobile(string $token, array $notifyData): void
-    {
-        try {
-            $messaging = Firebase::messaging();
-
-            $message = CloudMessage::fromArray([
-                'token'        => $token,
-                'notification' => [
-                    'title' => $notifyData['title'],
-                    'body'  => Str::limit($notifyData['body'], 100),
-                ],
-            ]);
-
-            $messaging->send($message);
-        } catch (Throwable $e) {
-            Log::error($e->getMessage());
-        }
-    }
-
-    public static function notifyData(string $title = "New Notification", string $body = "You have received a new notification.", $icon = null): array
-    {
-        return [
-            'title' => $title,
-            'body'  => $body,
-            'icon'  => $icon,
-        ];
     }
 }

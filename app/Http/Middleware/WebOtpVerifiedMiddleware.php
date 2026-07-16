@@ -11,7 +11,9 @@ class WebOtpVerifiedMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::guard('web')->check() && Auth::guard('web')->user()->otp_verified_at) {
+        $user = Auth::guard('web')->user();
+
+        if ($user && $user->isEmailVerified()) {
             return $next($request);
         }
 

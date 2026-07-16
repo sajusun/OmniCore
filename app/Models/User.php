@@ -2,23 +2,20 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
-use App\Models\FoodLog;
-use App\Traits\HasActivityLog;
-use App\Traits\HasNotification;
 use App\Modules\Media\Traits\HasMedia;
-use Spatie\Permission\Traits\HasRoles;
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Notifications\Notifiable;
+use App\Traits\HasNotifications;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-
-    use HasFactory, Notifiable, HasRoles, SoftDeletes, HasMedia, HasActivityLog, HasNotification;
+    use HasFactory, HasMedia, HasNotifications, HasRoles, Notifiable, SoftDeletes;
 
     protected $guard_name = ['api', 'web'];
 
@@ -32,13 +29,9 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
+        'username',
         'avatar',
         'email',
         'password',
@@ -47,21 +40,9 @@ class User extends Authenticatable implements JWTSubject
         'otp_verified_at',
         'last_activity_at',
         'slug',
-        'provider',
-        'provider_id',
-        'is_social_logged',
-        'google_id',
-        'apple_id',
-        'is_subscribed',
-        'subscription_ends_at',
-
+        'status',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
@@ -70,14 +51,8 @@ class User extends Authenticatable implements JWTSubject
     protected $appends = [
         'role',
         'is_online',
-        // 'balance'
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -86,14 +61,47 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    protected static function booted(): void
+    {
+        static::created(function ($user) {
+            $user->profile()->create();
+        });
+    }
 
-    public function getAvatarAttribute($value): string | null
+    public function profile(): HasOne
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+    public function verifications(): HasMany
+    {
+        return $this->hasMany(Verification::class);
+    }
+
+    public function isEmailVerified(): bool
+    {
+        return $this->verifications()->where('purpose', Verification::PURPOSE_EMAIL_VERIFICATION)
+            ->where('status', Verification::STATUS_VERIFIED)->whereNotNull('verified_at')->exists();
+    }
+
+    public function firebaseTokens(): HasMany
+    {
+        return $this->hasMany(FirebaseToken::class);
+    }
+
+    public function activeFirebaseTokens(): HasMany
+    {
+        return $this->hasMany(FirebaseToken::class)
+            ->where('status', 'active');
+    }
+
+    public function getAvatarAttribute($value): ?string
     {
         if (filter_var($value, FILTER_VALIDATE_URL)) {
             return $value;
         }
         // Check if the request is an API request
-        if (request()->is('api/*') && !empty($value)) {
+        if (request()->is('api/*') && ! empty($value)) {
             // Return the full URL for API requests
             return url($value);
         }
@@ -107,51 +115,26 @@ class User extends Authenticatable implements JWTSubject
         return $this->last_activity_at > now()->subMinutes(5);
     }
 
-
     public function getRoleAttribute()
     {
-        return  $this->getRoleNames()->first();
+        return $this->getRoleNames()->first();
     }
 
-    public function firebaseTokens()
+    /**
+     * Check if the user is a Super Admin.
+     * Super Admins bypass all permission checks via RolePermissionMiddleware.
+     */
+    public function isSuperAdmin(): bool
     {
-        return $this->hasMany(FirebaseTokens::class);
+        return $this->hasRole('super_admin');
     }
 
-
-    public function nutritionGoal()
+    /**
+     * Check if the user holds any admin-level role.
+     */
+    public function isAdmin(): bool
     {
-        return $this->hasOne(NutritionGoal::class);
-    }
-
-    public function notifications()
-    {
-        return $this->morphMany(Notification::class, 'notifiable');
-    }
-
-    public function subscriptions()
-    {
-        return $this->hasMany(Subscription::class);
-    }
-
-    public function activeSubscription()
-    {
-        return $this->hasOne(Subscription::class)->where('is_active', true)->latestOfMany();
-    }
-
-
-    public function foodScans()
-    {
-        return $this->hasMany(FoodScan::class, 'user_id', 'id');
-    }
-    public function foodLogs()
-    {
-        return $this->hasMany(FoodLog::class);
-    }
-
-
-    public function products()
-    {
-        return $this->belongsToMany(Product::class, 'product_user')->withPivot(['source', 'added_at'])->withTimestamps();
+        return $this->hasAnyRole(['super_admin', 'admin']);
     }
 }
+

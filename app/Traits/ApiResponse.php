@@ -4,7 +4,7 @@ namespace App\Traits;
 
 trait ApiResponse
 {
-    public function success(array $data , $message = null , $code = 200)
+    public function success($data , $message = null , $code = 200)
     {
         return response()->json([
             'status' => true ,
@@ -16,13 +16,13 @@ trait ApiResponse
     }
 
 
-    public function error(array $data , $message=null , $code =500)
+    public function error($data , $message=null , $code =500)
     {
         return response()->json([
             'status' => false ,
             'message' => $message ,
             'data' => $data ,
-            'code' => $code 
+            'code' => $code
         ],$code);
     }
 }

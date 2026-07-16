@@ -11,7 +11,9 @@ class ApiOtpVerifiedMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::guard('api')->check() && Auth::guard('api')->user()->otp_verified_at) {
+        $user = Auth::guard('api')->user();
+
+        if ($user && $user->isEmailVerified()) {
             return $next($request);
         }
 

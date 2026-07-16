@@ -9,7 +9,7 @@ trait HasMedia
 
     public function media()
     {
-        return $this->morphMany(Media::class, 'mediable');
+        return $this->morphMany(Media::class, 'mediable')->orderBy('sort_order', 'desc');
     }
 
 

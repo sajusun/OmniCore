@@ -6,7 +6,6 @@ use Exception;
 use App\Models\User;
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +17,7 @@ class LoginController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->select = ['id', 'name', 'email', 'avatar', 'otp_verified_at', 'last_activity_at'];
+        $this->select = ['id', 'name', 'email', 'avatar', 'last_activity_at'];
     }
 
     public function Login(Request $request)
@@ -42,7 +41,7 @@ class LoginController extends Controller
             $user = $user->where('status', 'active')->first();
 
             if (!$user) {
-                return Helper::jsonResponse(false, 'user is not active', 404);
+                return Helper::jsonResponse(false, 'User is not active', 404);
             }
 
             if (!Hash::check($request->password, $user->password)) {
@@ -50,13 +49,8 @@ class LoginController extends Controller
             }
 
             //? Check if the email is verified before login is successful
-            if (!$user->otp_verified_at) {
-                return Helper::jsonResponse(false, 'Email not verified. Please verify your email before logging in.', 403, ['is_otp_verified' => $user->isOtpVerified]);
-            } else {
-                $user->update([
-                    'otp'            => null,
-                    'otp_expires_at' => null,
-                ]);
+            if (!$user->isEmailVerified()) {
+                return Helper::jsonResponse(false, 'Email not verified. Please verify your email before logging in.', 403, ['is_otp_verified' => $user->isEmailVerified()]);
             }
 
             $user->update([
@@ -65,17 +59,8 @@ class LoginController extends Controller
 
             //* Generate token if email is verified
             $token = auth('api')->login($user);
-            if (!$user->nutritionGoal) {
-                try {
-                    $user->sendNotification(title: 'Nutritions Goals', body: 'Please Add Your Nutritions Goals First.', type: 'Nutritions');
-                } catch (\Throwable $e) {
-                    Log::error($e->getMessage());
-                }
-            }
 
-
-            $data = User::select($this->select)->with('roles')->find(auth('api')->user()->id);
-            $user->logActivity('User Login', 'User Login Detect ' . $user->email);
+            $data = User::select($this->select)->find(auth('api')->user()->id);
 
             return response()->json([
                 'status'     => true,
@@ -84,10 +69,7 @@ class LoginController extends Controller
                 'token_type' => 'bearer',
                 'token'      => $token,
                 'expires_in' => auth('api')->factory()->getTTL() * 60,
-                'nutritions_goal' => (bool) $user->nutritionGoal ? true : false,
-                'is_subscribed' => (bool) $user->is_subscribed,
-                'package_id'    => $user->activeSubscription->product_id ?? null,
-                'data'          => $data,
+                'data'       => $data,
             ], 200);
         } catch (Exception $e) {
             return Helper::jsonResponse(false, 'An error occurred during login.', 500, ['error' => $e->getMessage()]);
