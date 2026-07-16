@@ -29,15 +29,15 @@
 
 
     <div class="app-content main-content mt-0">
-        <div class="side-app">
+        <div class="side-app d-flex flex-column min-vh-100">
             @include('backend.partials._header')
             @include('backend.partials._sidebar')
-            {{ $slot??'' }}
-            @yield('content')
+            <div class="flex-grow-1">
+                {{ $slot??'' }}
+                @yield('content')
+            </div>
+            @include('backend.partials._footer')
         </div>
-
-        @include('backend.partials._footer')
-
     </div>
     <!-- page -->
     @include('backend.partials._scripts')
