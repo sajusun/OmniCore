@@ -1,6 +1,6 @@
 <div class="mb-3">
     <label for="{{ $name }}" class="form-label fw-medium">{!! $label !!}</label>
-    <div class="border rounded @error($name) border-danger @enderror" style="background: #fff;">
+    <div class="border @error($name) border-danger @enderror" style="background: #fff;">
         <div id="quill_editor_{{ $name }}" style="min-height: 200px;"></div>
     </div>
     <input type="hidden" name="{{ $name }}" id="{{ $name }}" value="{{ old($name, $value ?? '') }}">
@@ -23,7 +23,7 @@
 
 @push('scripts')
 <script>
-(function () {
+    (function () {
     var quill = new Quill('#quill_editor_{{ $name }}', {
         theme: 'snow',
         placeholder: '{{ $placeholder ?? "" }}',

@@ -34,18 +34,6 @@ use Illuminate\Support\Facades\Route;
                         <span class="side-menu__label">Users</span>
                     </a>
                 </li>
-                {{-- <li class="slide {{ request()->routeIs('admin.data.*') ? 'is-expanded' : '' }}">
-                    <a class="side-menu__item" data-bs-toggle="slide" href="{{ route('admin.data') }}">
-                        <i class="fa-solid fa-database side-menu__icon"></i>
-                        <span class="side-menu__label">Data</span>
-                    </a>
-                </li> --}}
-                {{-- <li class="slide {{ request()->routeIs('admin.scan_histories.*') ? 'is-expanded' : '' }}">
-                    <a class="side-menu__item" href="{{ route('admin.scan_histories.index') }}">
-                        <i class="fa-solid fa-qrcode side-menu__icon"></i>
-                        <span class="side-menu__label">Scan History</span>
-                    </a>
-                </li> --}}
 
                 @if(env('ENABLE_ROLE_MANAGEMENT'))
                 <li
@@ -100,16 +88,6 @@ use Illuminate\Support\Facades\Route;
                 </li>
                 </li>
                 {{-- end pages --}}
-
-                {{-- <li>
-                    <h3>Subscriptions</h3>
-                </li>
-                <li class="slide {{ request()->routeIs('admin.subscription_plans.*') ? 'is-expanded' : '' }}">
-                    <a class="side-menu__item" href="{{ route('admin.subscription_plans.index') }}">
-                        <i class="fa-solid fa-credit-card side-menu__icon"></i>
-                        <span class="side-menu__label">Subscription Plans</span>
-                    </a>
-                </li> --}}
 
                 <li>
                     <h3>System Settings</h3>

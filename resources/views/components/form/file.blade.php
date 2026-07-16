@@ -1,13 +1,10 @@
 <div class="mb-3">
     <label for="{{ $name }}" class="form-label fw-medium">{!! $label !!}</label>
 
-    <div class="border border-2 border-dashed rounded p-4 text-center position-relative"
-        id="drop_zone_{{ $name }}"
-        style="cursor: pointer; min-height: 120px;"
-        onclick="document.getElementById('{{ $name }}').click()"
+    <div class="border border-2 border-dashed p-4 text-center position-relative" id="drop_zone_{{ $name }}"
+        style="cursor: pointer; min-height: 120px;" onclick="document.getElementById('{{ $name }}').click()"
         ondragover="event.preventDefault(); this.classList.add('border-primary', 'bg-primary', 'bg-opacity-10');"
-        ondragleave="this.classList.remove('border-primary', 'bg-primary', 'bg-opacity-10');"
-        ondrop="
+        ondragleave="this.classList.remove('border-primary', 'bg-primary', 'bg-opacity-10');" ondrop="
             event.preventDefault();
             this.classList.remove('border-primary', 'bg-primary', 'bg-opacity-10');
             var dt = event.dataTransfer;
@@ -16,7 +13,8 @@
         ">
 
         <div id="preview_wrapper_{{ $name }}" class="mb-2" style="display:none;">
-            <img id="preview_img_{{ $name }}" src="" class="img-fluid rounded" style="max-height: 160px; object-fit: contain;" />
+            <img id="preview_img_{{ $name }}" src="" class="img-fluid"
+                style="max-height: 160px; object-fit: contain;" />
         </div>
 
         <div id="upload_hint_{{ $name }}">
@@ -28,13 +26,8 @@
         </div>
     </div>
 
-    <input
-        type="file"
-        class="d-none"
-        name="{{ $name }}"
-        id="{{ $name }}"
-        {{ isset($multiple) && $multiple ? 'multiple' : '' }}
-        onchange="
+    <input type="file" class="d-none" name="{{ $name }}" id="{{ $name }}" {{ isset($multiple) && $multiple ? 'multiple'
+        : '' }} onchange="
             var file = this.files[0];
             if (file) {
                 var reader = new FileReader();
@@ -45,8 +38,7 @@
                 };
                 reader.readAsDataURL(file);
             }
-        "
-    />
+        " />
 
     {{ $slot }}
     @error($name)
