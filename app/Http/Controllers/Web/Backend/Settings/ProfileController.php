@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Web\Backend\Settings;
 
 use App\Models\User;
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use App\Helpers\Helper;
 
 class ProfileController extends Controller
 {
     public function index()
     {
         $user = auth()->user();
-        return view('backend.layouts.settings.profile_settings', compact('user'));
+        return view('backend.settings.profile_settings', compact('user'));
     }
 
     public function UpdateProfile(Request $request)
@@ -22,7 +22,16 @@ class ProfileController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
         ]);
+
+        // if ($request->hasFile('image')) {
+        //     if ($user->avatar && $user->avatar != 'default/profile.jpg') {
+        //         Helper::fileDelete(public_path($user->avatar));
+        //     }
+        //     $path = Helper::fileUpload($request->file('image'), 'users', $user->name);
+        //     $user->avatar = $path;
+        // }
 
         $user->update($request->only(['name', 'email']));
 

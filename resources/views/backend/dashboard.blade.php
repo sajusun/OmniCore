@@ -147,7 +147,7 @@
                         <div class="card-header border-bottom">
                             <h4 class="card-title fw-semibold mb-0">System Activity</h4>
                         </div>
-                        <div class="card-body">
+                        {{-- <div class="card-body">
                             <div class="table-responsive">
                                 @if($activityLogs->count())
                                     <ul class="task-list">
@@ -166,7 +166,7 @@
                                     <p class="text-muted">No recent system activity.</p>
                                 @endif
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

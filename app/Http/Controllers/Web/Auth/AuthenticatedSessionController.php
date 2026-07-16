@@ -34,7 +34,7 @@ class AuthenticatedSessionController extends Controller
         session()->put('t-success', 'Welcome back!');
 
         $user = Auth::user();
-        if ($user->status == 'active' && $user->hasAnyRole(['Admin', 'Super Admin'])) {
+        if ($user->status == 'active' && $user->hasAnyRole(['admin', 'super_admin'])) {
             return redirect()->intended(route('admin.dashboard', absolute: false));
         }
 

@@ -14,7 +14,7 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::role(['Admin', 'Super Admin'])->latest()->get();
+            $data = User::role(['admin', 'super_admin'])->latest()->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('role', function ($row) {
@@ -26,7 +26,7 @@ class AdminController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     return '<div class="btn-group">
-                                <a href="' . route('admin.admins.edit', $row->id) . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
+                                <a href="' . route('admin.stuff.edit', $row->id) . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
                                 <button type="button" onclick="deleteAdmin(' . $row->id . ')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                             </div>';
                 })
@@ -34,13 +34,13 @@ class AdminController extends Controller
                 ->make(true);
         }
 
-        return view('backend.layouts.access.admin.index');
+        return view('backend.access.admin.index');
     }
 
     public function create()
     {
-        $roles = Role::whereIn('name', ['Admin', 'Super Admin'])->get();
-        return view('backend.layouts.access.admin.create', compact('roles'));
+        $roles = Role::whereIn('name', ['admin', 'super_admin'])->get();
+        return view('backend.access.admin.create', compact('roles'));
     }
 
     public function store(Request $request)
@@ -62,14 +62,14 @@ class AdminController extends Controller
 
         $user->assignRole($request->role);
 
-        return redirect()->route('admin.admins.index')->with('t-success', 'Admin created successfully');
+        return redirect()->route('admin.stuff.index')->with('t-success', 'Admin created successfully');
     }
 
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
-        $roles = Role::whereIn('name', ['Admin', 'Super Admin'])->get();
-        return view('backend.layouts.access.admin.edit', compact('user', 'roles'));
+        $roles = Role::whereIn('name', ['admin', 'super_admin'])->get();
+        return view('backend.access.admin.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, string $id)
@@ -93,7 +93,7 @@ class AdminController extends Controller
 
         $user->syncRoles($request->role);
 
-        return redirect()->route('admin.admins.index')->with('t-success', 'Admin updated successfully');
+        return redirect()->route('admin.stuff.index')->with('t-success', 'Admin updated successfully');
     }
 
     public function destroy(string $id)

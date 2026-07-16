@@ -17,10 +17,11 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Filter out Admin and Super Admin
-            $data = User::whereDoesntHave('roles', function ($query) {
-                $query->whereIn('name', ['Admin', 'Super Admin']);
-            })->latest()->get();
+            // Filter out Admin and Super Admin and eager-load roles
+            $data = User::with('roles')
+                ->whereDoesntHave('roles', function ($query) {
+                    $query->whereIn('name', ['admin', 'super_admin']);
+                })->latest();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -33,59 +34,24 @@ class UserController extends Controller
                     return '<span class="badge bg-'.$status.'">'.ucfirst($row->status).'</span>';
                 })
                 ->addColumn('action', function ($row) {
-                    return '<div class="btn-group">
-                                <a href="'.route('admin.users.edit', $row->id).'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
-                                <a href="'.route('admin.users.show', $row->id).'" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a>
-                                <button type="button" onclick="deleteUser('.$row->id.')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                    return '<div class="flex items-center gap-1.5">
+                                <a href="'.route('admin.users.edit', $row->id).'" class="inline-flex items-center justify-center p-2 text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors duration-150" title="Edit"><i class="fa fa-edit text-sm leading-none"></i></a>
+                                <button type="button" onclick="confirmDeleteUser('.$row->id.', \''.addslashes($row->name).'\')" class="inline-flex items-center justify-center p-2 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors duration-150" title="Delete"><i class="fa fa-trash text-sm leading-none"></i></button>
                             </div>';
                 })
                 ->rawColumns(['status', 'action'])
                 ->make(true);
         }
 
-        return view('backend.layouts.access.user.index');
+        return view('backend.access.user.index');
     }
 
-    /**
-     * Display Grid.js demo.
-     */
-    public function gridDemo(Request $request)
-    {
-        if ($request->ajax()) {
-            $limit = $request->get('limit', 3);
 
-            // Filter out Admin and Super Admin and paginate
-            $users = User::whereDoesntHave('roles', function ($query) {
-                $query->whereIn('name', ['Admin', 'Super Admin']);
-            })->latest()->paginate($limit);
-
-            $data = $users->map(function ($user) {
-                return [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'role' => $user->getRoleNames()->first() ?? 'N/A',
-                    'status' => $user->status,
-                ];
-            });
-
-            return response()->json([
-                'data' => $data,
-                'total' => $users->total(),
-            ]);
-        }
-
-        return view('backend.layouts.access.user.grid_demo');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $roles = Role::all();
 
-        return view('backend.layouts.access.user.create', compact('roles'));
+        return view('backend.access.user.create', compact('roles'));
     }
 
     /**
@@ -116,16 +82,11 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-        public function show(string $id)
+    public function show(string $id)
     {
         $user = User::findOrFail($id);
 
-        // Load related data
-        $foodScans = $user->foodScans()->latest()->take(7)->get();
-        $foodLogs = $user->foodLogs()->latest()->take(7)->get();
-        $activityLogs = $user->activityLogs()->latest()->take(7)->get();
-
-        return view('backend.layouts.access.user.show', compact('user', 'foodScans', 'foodLogs', 'activityLogs'));
+        return view('backend.access.user.show', compact('user'));
     }
 
     /**
@@ -136,7 +97,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $roles = Role::all();
 
-        return view('backend.layouts.access.user.edit', compact('user', 'roles'));
+        return view('backend.access.user.edit', compact('user', 'roles'));
     }
 
     /**

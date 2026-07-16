@@ -1,91 +1,64 @@
-<!DOCTYPE html>
-<html>
+{{--
+    OTP Email — Purpose-driven
+    ──────────────────────────
+    View:   emails.otp
+    Vars:   string $purpose        — 'password_reset' | 'email_verification'
+            string $otp            — the 4–8 digit code
+            int    $expiryMinutes  — validity window in minutes
+--}}
+@php
+    $isPwReset = $purpose === 'password_reset';
+@endphp
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OTP Verification - {{ config('app.name') }}</title>
-</head>
+<x-mail.layout
+    :title="($isPwReset ? 'Password Reset OTP' : 'Email Verification OTP') . ' — ' . config('app.name')"
+    :preheader="'Your ' . ($isPwReset ? 'password reset' : 'verification') . ' code is: ' . $otp . '. Expires in ' . $expiryMinutes . ' minute' . ($expiryMinutes !== 1 ? 's' : '') . '.'">
 
-<body style="margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f4f6f9;">
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
-        style="background:#f4f6f9;padding:40px 20px;">
-        <tr>
-            <td align="center">
+    <x-mail.header
+        :icon="$isPwReset ? '&#128273;' : '&#9993;'"
+        :title="$isPwReset ? 'Password Reset Request' : 'Verify Your Email Address'"
+        :subtitle="$isPwReset
+            ? 'Use the code below to reset your password'
+            : 'Use the code below to activate your account'"
+    />
 
-                <!-- MAIN CONTAINER -->
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0"
-                    style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08);overflow:hidden;">
+    <x-mail.body>
 
-                    <!-- HEADER – Gradient (Uncomment if you want a purple header) -->
-                    <tr>
-                        <td
-                            style="background:linear-gradient(135deg,#521aac 0%,#521aac 100%);padding:50px 30px;text-align:center;">
-                            <h1 style="margin:0;color:#ffffff;font-size:32px;font-weight:700;letter-spacing:-0.8px;">
-                                {{ $title ?? " Verify Your Account" }}
-                            </h1>
-                        </td>
-                    </tr>
+        <x-mail.text>
+            @if ($isPwReset)
+                We received a request to reset your password. Enter the one-time
+                code below to proceed. If you did not make this request,
+                you can safely ignore this email.
+            @else
+                Thank you for signing up! To activate your account, please enter
+                the one-time code below. If you did not create an account,
+                you can safely ignore this email.
+            @endif
+        </x-mail.text>
 
-                    <!-- MAIN CONTENT -->
-                    <tr>
-                        <td style="padding:45px 35px;text-align:center;">
+        <x-mail.otp-box
+            :code="$otp"
+            :expiry-minutes="$expiryMinutes"
+            :label="$isPwReset ? 'Password Reset Code' : 'Email Verification Code'"
+        />
 
-                            <h2 style="margin:0 0 25px;color:#333;font-size:26px;font-weight:600;">
-                                Your One-Time Verification Code
-                            </h2>
+        <x-mail.alert type="warning">
+            <strong>&#9888; Never share this code.</strong>
+            Our team will never ask for your OTP via email, phone, or any other channel.
+        </x-mail.alert>
 
-                            <p style="margin:0 0 20px;color:#555;font-size:16px;line-height:1.8;">
-                                Hello there,<br><br>
-                                You requested a verification code for your account at <strong>{{ config('app.name') }},
-                                    Inc.</strong>
-                            </p>
+        <x-mail.text variant="small">
+            @if ($isPwReset)
+                If you did not request a password reset, please ignore this email.
+                Your account remains secure and no changes have been made.
+            @else
+                If you did not create an account with us, please ignore this email.
+                No action is required and you will not hear from us again.
+            @endif
+        </x-mail.text>
 
-                            <p style="margin:30px 0 25px;color:#555;font-size:16px;line-height:1.8;">
-                                Please use the code below to complete your verification. It will expire in <strong>10
-                                    minutes</strong> for security reasons.
-                            </p>
+    </x-mail.body>
 
-                            <!-- OTP CODE BOX -->
-                            <div
-                                style="margin:40px auto;padding:20px 0;max-width:280px;background:#f8f5ff;border:2px dashed #521aac;border-radius:12px;">
-                                <p style="margin:0;font-size:42px;font-weight:700;letter-spacing:8px;color:#521aac;">
-                                    {{ $otp }}
-                                </p>
-                            </div>
+    <x-mail.footer />
 
-                            {{-- <p style="margin:35px 0 0;color:#777;font-size:15px;line-height:1.7;">
-                                If you didn’t request this code, you can safely ignore this email. Someone may have
-                                entered your email by mistake.
-                            </p> --}}
-
-                            <p style="margin:35px 0 0;color:#777;font-size:15px;line-height:1.7;">
-                                Thank you for keeping your account secure!<br>
-                                <strong>{{ config('app.name') }} Team</strong>
-                            </p>
-
-                        </td>
-                    </tr>
-
-                    <!-- FOOTER -->
-                    <tr>
-                        <td
-                            style="background:#f8fafc;padding:35px 30px;border-top:1px solid #e5e7eb;text-align:center;">
-                            <p style="margin:0 0 12px;color:#999;font-size:14px;line-height:1.6;">
-                                This is an automated email containing your one-time verification code.
-                            </p>
-                            <p style="margin:15px 0 0;color:#aaa;font-size:13px;">
-                                © {{ date('Y') }} {{ config('app.name') }}, Inc. All rights reserved.
-                            </p>
-                            <p style="margin:20px 0 0;color:#bbb;font-size:12px;">
-                                Please do not reply to this email. For support, contact us via the website.
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-</body>
-
-</html>
+</x-mail.layout>

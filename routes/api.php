@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\FirebaseTokenController;
 use App\Http\Controllers\Api\Auth\SocialLoginController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\Webhooks\RevenueCatWebhookController;
 
 Route::group(['middleware' => 'guest:api'], function ($router) {
 
@@ -95,4 +96,4 @@ Route::middleware(['auth:api'])->prefix('verification')->name('api.verification.
     Route::post('resend', 'resend')->name('resend');
 });
 
-// Route::post('app/webhooks/revenuecat', RevenueCatWebhookController::class);
+Route::post('app/webhooks/revenuecat', RevenueCatWebhookController::class);
