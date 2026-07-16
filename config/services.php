@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     /*
     |--------------------------------------------------------------------------
     | Third Party Services
@@ -39,29 +40,6 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
-
-    'apple' => [
-        'client_id' => env('APPLE_CLIENT_ID'),
-        'client_secret' => env('APPLE_CLIENT_SECRET'),
-        'redirect' => env('APPLE_REDIRECT_URI'),
-    ],
-
-    // openai configuration
-    'openai' => [
-        'api_key' => env('OPENAI_API_KEY'),
-    ],
-
-
-    // Base44 Vision API credentials
-    'base44' => [
-        'key' => env('BASE44_API_KEY'),
-    ],
-
-    'gemini' => [
-        'key' => env('GEMINI_API_KEY', 'AQ.Ab8RN6IdFcgFtie2UtuYIURdnyd2yaOkGLlEykHAKzBHXDqihw'),
-        'model' => env('GIMINI_MODEL', 'gemini-1.5-pro')
-    ],
-
     'revenuecat' => [
         'webhook_secret' => env('REVENUECAT_WEBHOOK_SECRET'),
     ],

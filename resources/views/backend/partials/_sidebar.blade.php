@@ -34,12 +34,12 @@ use Illuminate\Support\Facades\Route;
                         <span class="side-menu__label">Users</span>
                     </a>
                 </li>
-                <li class="slide {{ request()->routeIs('admin.data.*') ? 'is-expanded' : '' }}">
+                {{-- <li class="slide {{ request()->routeIs('admin.data.*') ? 'is-expanded' : '' }}">
                     <a class="side-menu__item" data-bs-toggle="slide" href="{{ route('admin.data') }}">
                         <i class="fa-solid fa-database side-menu__icon"></i>
                         <span class="side-menu__label">Data</span>
                     </a>
-                </li>
+                </li> --}}
                 {{-- <li class="slide {{ request()->routeIs('admin.scan_histories.*') ? 'is-expanded' : '' }}">
                     <a class="side-menu__item" href="{{ route('admin.scan_histories.index') }}">
                         <i class="fa-solid fa-qrcode side-menu__icon"></i>
@@ -76,18 +76,31 @@ use Illuminate\Support\Facades\Route;
                         <span class="side-menu__label">Pages</span>
                         <i class="angle fe fe-chevron-right"></i>
                     </a>
-                    <ul class="slide-menu">
-                        <li><a href="{{ route('admin.cms.privacy.index',['privacy-page','main']) }}"
-                                class="slide-item {{ request()->routeIs('admin.cms.privacy.index') ? 'active' : '' }}">Privacy Page</a></li>
-                        <li><a href="{{ route('admin.cms.privacy.index',['terms-and-condition-page','main']) }}"
-                                class="slide-item {{ request()->routeIs('admin.cms.privacy.index') ? 'active' : '' }}">T&C Page</a></li>
-                        <li><a href="{{ route('admin.cms.privacy.index',['contact-page','main']) }}"
-                                class="slide-item {{ request()->routeIs('admin.cms.privacy.index') ? 'active' : '' }}">Contact Page</a></li>
-                    </ul>
+                    <!-- Page Manage Group -->
+                    <x-sidebar.heading>Page Manage</x-sidebar.heading>
+
+                    @foreach (App\Enums\PageName::cases() as $page)
+                    <x-sidebar.dropdown :title="$page->label()" :active="request()->route('page') === $page->value">
+                        <x-slot name="icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
+                        </x-slot>
+
+                        @foreach ($page->sections() as $section)
+                        <x-sidebar.sub-link href="{{ route('admin.cms.page.edit', [$page->value, $section->value]) }}"
+                            :active="request()->route('page') === $page->value && request()->route('section') === $section->value">
+                            {{ str($section->value)->replace('-', ' ')->title() }}
+                        </x-sidebar.sub-link>
+                        @endforeach
+                    </x-sidebar.dropdown>
+                    @endforeach
                 </li>
                 </li>
                 {{-- end pages --}}
-                
+
                 {{-- <li>
                     <h3>Subscriptions</h3>
                 </li>

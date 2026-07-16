@@ -37,25 +37,6 @@ return [
 
     'mailers' => [
 
-
-        'gmail' => [
-            'transport' => 'smtp',
-            'host' => 'smtp.gmail.com',
-            'port' => env('MAIL_PORT', 2525),
-            'encryption' => 'ssl',
-            'username' => env('MAIL_USERNAME'),
-            'password' => env('MAIL_PASSWORD'),
-            'timeout' => null,
-            'local_domain' => env('MAIL_EHLO_DOMAIN'),
-            'stream' => [
-                'ssl' => [
-                    'allow_self_signed' => true,
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
-                ],
-            ],
-        ],
-
         'smtp' => [
             'transport' => 'smtp',
             'scheme' => env('MAIL_SCHEME'),
