@@ -1,12 +1,12 @@
 <div>
-    <div class="form-group">
-        <label for="{{ $name }}" class="form-label">{{ $label }}:</label>
+    <div class="mb-3">
+        <label for="{{ $name }}" class="form-label fw-medium">{{ $label }}:</label>
 
         {{-- FILE INPUT --}}
         <input
             type="file"
             @if(isset($multiple) && $multiple) multiple @endif
-            class="dropify file-input @error($name) is-invalid @enderror"
+            class="form-control @error($name) is-invalid @enderror"
             name="{{ $name }}@if(isset($multiple) && $multiple)[]@endif"
             id="{{ $name }}"
         />
@@ -28,7 +28,7 @@
                                 class="btn btn-danger btn-sm position-absolute delete-old-image"
                                 style="top: 5px; right: 10px;"
                                 data-image="{{ $img }}">
-                            <i class="fa fa-trash"></i>
+                            <i class="bi bi-trash"></i>
                         </button>
 
                     </div>
@@ -41,7 +41,7 @@
         <div class="row mt-3 new-images-preview" style="display:none;"></div>
 
         @error($name)
-            <span class="text-danger">{{ $message }}</span>
+            <div class="invalid-feedback d-block">{{ $message }}</div>
         @enderror
     </div>
 </div>
