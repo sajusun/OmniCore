@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
@@ -13,12 +13,25 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('type')->default('general');
-            $table->morphs('notifiable');
-            $table->text('title');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('type', 50)->default('general');
+
+            $table->string('title');
             $table->text('body');
+
+            $table->string('reference_type', 100)->nullable();
+            $table->string('reference_id')->nullable();
+
+            $table->string('action')->nullable();
+            $table->string('link')->nullable();
+            
+            $table->json('meta')->nullable();
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
+
+            $table->index(['user_id', 'read_at']);
+            $table->index('type');
+            $table->index(['reference_type', 'reference_id']);
         });
     }
 

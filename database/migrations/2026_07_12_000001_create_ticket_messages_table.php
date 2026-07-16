@@ -4,18 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('activity_logs', function (Blueprint $table) {
+        Schema::create('ticket_messages', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('loggable_id');
-            $table->string('loggable_type');
-            $table->string('title');
-            $table->text('description')->nullable();
+            $table->foreignId('ticket_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Who sent the message
+            $table->text('message');
             $table->timestamps();
         });
     }
@@ -25,7 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('activity_logs');
+        Schema::dropIfExists('ticket_messages');
     }
 };
-?>
