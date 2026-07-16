@@ -1,0 +1,128 @@
+@php
+use Illuminate\Support\Facades\Route;
+@endphp
+
+<!--APP-SIDEBAR-->
+<div class="sticky">
+    <div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
+    <div class="app-sidebar" style="overflow: scroll">
+        <div class="side-header">
+            <a class="header-brand1" href="{{ route('admin.dashboard') }}">
+                <img src="{{ asset(settings('logo') ?? 'default/logo.png') }}" id="header-brand-logo" alt="logo"
+                    width="67" height="67">
+            </a>
+        </div>
+        <div class="main-sidemenu">
+            <ul class="side-menu mt-2">
+                <li>
+                    <h3>Menu</h3>
+                </li>
+                <li class="slide">
+                    <a class="side-menu__item {{ request()->routeIs('dashboard') ? 'has-link active' : '' }}"
+                        href="{{ route('admin.dashboard') }}">
+                        <i class="fa-solid fa-house side-menu__icon"></i>
+                        <span class="side-menu__label">Dashboard</span>
+                    </a>
+                </li>
+
+                <li>
+                    <h3>Access Control</h3>
+                </li>
+                <li class="slide {{ request()->routeIs('admin.users.*') ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="{{ route('admin.users.index') }}">
+                        <i class="fa-solid fa-users side-menu__icon"></i>
+                        <span class="side-menu__label">Users</span>
+                    </a>
+                </li>
+                <li class="slide {{ request()->routeIs('admin.data.*') ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="{{ route('admin.data') }}">
+                        <i class="fa-solid fa-database side-menu__icon"></i>
+                        <span class="side-menu__label">Data</span>
+                    </a>
+                </li>
+                {{-- <li class="slide {{ request()->routeIs('admin.scan_histories.*') ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" href="{{ route('admin.scan_histories.index') }}">
+                        <i class="fa-solid fa-qrcode side-menu__icon"></i>
+                        <span class="side-menu__label">Scan History</span>
+                    </a>
+                </li> --}}
+
+                @if(env('ENABLE_ROLE_MANAGEMENT'))
+                <li
+                    class="slide {{ request()->routeIs(['admin.admins.*', 'admin.roles.*', 'admin.permissions.*']) ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
+                        <i class="fa-solid fa-user-shield side-menu__icon"></i>
+                        <span class="side-menu__label">Admin Management</span>
+                        <i class="angle fe fe-chevron-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li><a href="{{ route('admin.admins.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.admins.*') ? 'active' : '' }}">Staff
+                                Users</a></li>
+                        <li><a href="{{ route('admin.roles.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">Roles</a>
+                        </li>
+                        <li><a href="{{ route('admin.permissions.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.permissions.*') ? 'active' : '' }}">Permissions</a>
+                        </li>
+                    </ul>
+                </li>
+                @endif
+
+                <li
+                    class="slide {{ request()->routeIs(['admin.admins.*', 'admin.roles.*', 'admin.permissions.*']) ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
+                        <i class="fa-solid fa-user-shield side-menu__icon"></i>
+                        <span class="side-menu__label">Pages</span>
+                        <i class="angle fe fe-chevron-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li><a href="{{ route('admin.cms.privacy.index',['privacy-page','main']) }}"
+                                class="slide-item {{ request()->routeIs('admin.cms.privacy.index') ? 'active' : '' }}">Privacy Page</a></li>
+                        <li><a href="{{ route('admin.cms.privacy.index',['terms-and-condition-page','main']) }}"
+                                class="slide-item {{ request()->routeIs('admin.cms.privacy.index') ? 'active' : '' }}">T&C Page</a></li>
+                        <li><a href="{{ route('admin.cms.privacy.index',['contact-page','main']) }}"
+                                class="slide-item {{ request()->routeIs('admin.cms.privacy.index') ? 'active' : '' }}">Contact Page</a></li>
+                    </ul>
+                </li>
+                </li>
+                {{-- end pages --}}
+                
+                {{-- <li>
+                    <h3>Subscriptions</h3>
+                </li>
+                <li class="slide {{ request()->routeIs('admin.subscription_plans.*') ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" href="{{ route('admin.subscription_plans.index') }}">
+                        <i class="fa-solid fa-credit-card side-menu__icon"></i>
+                        <span class="side-menu__label">Subscription Plans</span>
+                    </a>
+                </li> --}}
+
+                <li>
+                    <h3>System Settings</h3>
+                </li>
+                <li class="slide">
+                    <a class="side-menu__item {{ request()->routeIs('admin.setting.general.index') ? 'active' : '' }}"
+                        href="{{ route('admin.setting.general.index') }}">
+                        <i class="fa-solid fa-cog side-menu__icon"></i>
+                        <span class="side-menu__label">General Settings</span>
+                    </a>
+                </li>
+                <li class="slide">
+                    <a class="side-menu__item {{ request()->routeIs('admin.setting.profile.index') ? 'active' : '' }}"
+                        href="{{ route('admin.setting.profile.index') }}">
+                        <i class="fa-solid fa-user-circle side-menu__icon"></i>
+                        <span class="side-menu__label">Profile Settings</span>
+                    </a>
+                </li>
+
+            </ul>
+            <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24"
+                    height="24" viewBox="0 0 24 24">
+                    <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/APP-SIDEBAR-->

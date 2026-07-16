@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.jibon420.jibon360",
+    "sha256_cert_fingerprints":
+    ["BF:CD:C1:2B:7C:37:80:F9:4F:2A:28:63:A9:E9:03:C6:DC:51:64:F8:BF:B8:73:24:8B:D5:38:72:42:2D:18:0B"]
+  }
+}]
