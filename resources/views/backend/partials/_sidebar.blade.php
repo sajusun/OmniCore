@@ -56,7 +56,7 @@ use Illuminate\Support\Facades\Route;
                     </ul>
                 </li>
                 @endif
-
+                <x-sidebar.heading>Page Manage</x-sidebar.heading>
                 <li
                     class="slide {{ request()->routeIs(['admin.admins.*', 'admin.roles.*', 'admin.permissions.*']) ? 'is-expanded' : '' }}">
                     <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
@@ -65,7 +65,6 @@ use Illuminate\Support\Facades\Route;
                         <i class="angle fe fe-chevron-right"></i>
                     </a>
                     <!-- Page Manage Group -->
-                    <x-sidebar.heading>Page Manage</x-sidebar.heading>
 
                     @foreach (App\Enums\PageName::cases() as $page)
                     <x-sidebar.dropdown :title="$page->label()" :active="request()->route('page') === $page->value">
@@ -85,7 +84,7 @@ use Illuminate\Support\Facades\Route;
                         @endforeach
                     </x-sidebar.dropdown>
                     @endforeach
-                </li>
+
                 </li>
                 {{-- end pages --}}
 

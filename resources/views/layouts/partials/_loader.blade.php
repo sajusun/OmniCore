@@ -1,23 +1,17 @@
-<div id="global-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-gray-900">
-    <div class="flex flex-col items-center gap-4">
-        <img src="{{ asset('default/loader.gif') }}" alt="Loading..." class="w-20 h-20 object-contain">
-
-        <p class="text-sm text-gray-500 dark:text-gray-400 animate-pulse">
-            Loading...
-        </p>
+<div id="global-loader" class="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white"
+    style="z-index: 9999;">
+    <div class="d-flex flex-column align-items-center gap-3">
+        <img src="{{ asset('default/loader.gif') }}" alt="Loading..." style="width: 80px; height: 80px; object-fit: contain;">
+        <p class="text-muted small mb-0">Loading...</p>
     </div>
 </div>
+
 @push('scripts')
 <script>
     window.addEventListener('load', function () {
         const loader = document.getElementById('global-loader');
-
-        loader.classList.add(
-            'opacity-0',
-            'transition-opacity',
-            'duration-300'
-        );
-
+        loader.style.transition = 'opacity 0.3s ease';
+        loader.style.opacity = '0';
         setTimeout(() => {
             loader.remove();
         }, 300);

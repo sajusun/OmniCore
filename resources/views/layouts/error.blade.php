@@ -10,7 +10,7 @@
 @endphp
 
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
@@ -32,10 +32,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="min-h-screen bg-white text-slate-900 antialiased">
+<body class="min-vh-100 bg-white text-dark">
 
-    <main class="min-h-screen flex items-center justify-center px-6">
-        <div class="w-full max-w-6xl mx-auto text-center">
+    <main class="min-vh-100 d-flex align-items-center justify-content-center px-3">
+        <div class="w-100 text-center" style="max-width: 1140px;">
             {{ $slot }}
         </div>
     </main>
