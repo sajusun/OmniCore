@@ -33,21 +33,117 @@ $settings = \App\Models\Setting::first();
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Smoky White */
+            background-color: #f8fafc;
             color: #334155;
         }
-        
+
         .page {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+        }
+
+        /* ── Auth Card ── */
+        .auth-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+            max-width: 420px;
+            width: 100%;
+            padding: 40px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .auth-logo img {
+            height: 56px;
+            width: auto;
+        }
+
+        .auth-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .auth-subtitle {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        .auth-links {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .auth-links a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Bootstrap overrides for auth pages ── */
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .form-control,
+        .form-select {
+            height: 44px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            padding: 10px 14px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
+
+        .btn-primary {
+            height: 44px;
+            background-color: #0f172a;
+            border-color: #0f172a;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #1e293b;
+            border-color: #1e293b;
+            transform: translateY(-1px);
         }
 
         .header-brand-img {
             height: 3rem;
             margin-bottom: 1.5rem;
         }
+
+        /* OTP input centering */
+        .ls-2 { letter-spacing: 3px; }
     </style>
 
 </head>

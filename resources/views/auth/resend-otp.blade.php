@@ -1,41 +1,41 @@
 @extends('auth.app')
 
 @section('content')
-<!-- CONTAINER OPEN -->
-<div class="col col-login mx-auto text-center">
-    <a href="index.html" class="text-center">
-        <img src="{{ asset($settings->logo ?? 'default/logo.png') }}" class="header-brand-img" alt="">
-    </a>
-</div>
-<div class="container-login100">
-    <div class="wrap-login100 p-0">
-        <div class="card-body">
-            <form class="login100-form validate-form" method="POST" action="{{ route('verify.otp.resend') }}">
-                @csrf
-                <div class="login100-form-title">
-                    <h2>Resend OTP</h2>
-                </div>
+<div class="auth-card">
+    <div class="auth-logo">
+        <a href="{{ route('home') }}">
+            <img src="{{ asset($settings->logo ?? 'default/logo.png') }}" alt="Logo" class="header-brand-img">
+        </a>
+    </div>
 
-                <div class="wrap-input100">
-                    <input class="input100" type="text" name="email" placeholder="{{ session('email') ?? 'Email' }}" value="{{ session('email') ?? '' }}">
-                    <span class="symbol-input100">
-                        <i class="zmdi zmdi-email" aria-hidden="true"></i>
-                    </span>
-                </div>
-                @error('email')
-                <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+    <h1 class="auth-title">Resend OTP</h1>
+    <p class="auth-subtitle">Enter your email address to receive a new OTP code.</p>
 
-                <div class="container-login100-form-btn">
-                    <button type="submit" class="login100-form-btn btn-primary">
-                        Resend
-                    </button>
-                </div>
-
-            </form>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
+    @endif
+
+    <form method="POST" action="{{ route('verify.otp.resend') }}">
+        @csrf
+
+        <x-form.email
+            name="email"
+            label="Email Address"
+            value="{{ session('email') ?? '' }}"
+            placeholder="{{ session('email') ?? 'Email' }}"
+        />
+
+        <x-form.submit class="btn btn-primary w-100 mt-2">Resend OTP</x-form.submit>
+    </form>
+
+    <div class="auth-links">
+        <a href="{{ route('login') }}"><i class="fa fa-arrow-left me-1"></i> Back to sign in</a>
     </div>
 </div>
-<!-- CONTAINER CLOSED -->
 @endsection
-
