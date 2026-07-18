@@ -3,29 +3,32 @@
 namespace App\Helpers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Kreait\Firebase\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 
 class Helper
 {
-    public static function fileUpload($file, string $folder, string $name): ?string
+    public static function fileUpload($file, string $folder, ?string $name = null): ?string
     {
-        if (! $file->isValid()) {
+        if (!$file || !$file->isValid()) {
             return null;
         }
 
-        $imageName = Str::slug($name).'.'.$file->extension();
-        $path = public_path('uploads/'.$folder);
-        if (! file_exists($path)) {
+        $path = public_path('uploads/' . $folder);
+
+        if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
-        $file->move($path, $imageName);
 
-        return 'uploads/'.$folder.'/'.$imageName;
+        $fileName = ($name ? Str::slug($name) . '-' : '') . Str::uuid() . '.' . $file->extension();
+
+        $file->move($path, $fileName);
+
+        return 'uploads/' . $folder . '/' . $fileName;
     }
 
     public static function fileDelete(string $path): void
@@ -40,7 +43,7 @@ class Helper
         $slug = Str::slug($title);
         while ($model::where('slug', $slug)->exists()) {
             $randomString = Str::random(5);
-            $slug = Str::slug($title).'-'.$randomString;
+            $slug = Str::slug($title) . '-' . $randomString;
         }
 
         return $slug;
@@ -113,7 +116,6 @@ class Helper
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }
-
     }
 
     public static function getImageUrl($path): string

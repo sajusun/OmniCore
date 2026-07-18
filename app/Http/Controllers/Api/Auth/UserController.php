@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Helpers\Helper;
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -15,23 +15,23 @@ class UserController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->select = ['id', 'name', 'email', 'avatar', 'otp_verified_at', 'last_activity_at'];   
+        $this->select = ['id', 'name', 'email', 'avatar', 'last_activity_at'];   
     }
 
     public function me()
     {   
-        $data = User::select($this->select)->with('roles')->find(auth('api')->user()->id);     
+        $data = User::select($this->select)->find(auth('api')->user()->id);     
         return Helper::jsonResponse(true, 'User details fetched successfully', 200, $data);
     }
 
     public function updateProfile(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:100',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
-            'phone' => 'required|string|numeric|max_digits:20',
-            'password' => 'nullable|string|min:6|confirmed',
-            'address' => 'nullable|string|max:255',
+            'name'      => 'nullable|string|max:100',
+            'avatar'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'phone'     => 'nullable|string|numeric|max_digits:20',
+            'password'  => 'nullable|string|min:6|confirmed',
+            'address'   => 'nullable|string|max:255',
         ]);
 
         if (!empty($validatedData['password'])) {
@@ -66,9 +66,9 @@ class UserController extends Controller
         if (!empty($user->avatar)) {
             Helper::fileDelete(public_path($user->getRawOriginal('avatar')));
         }
-        $validatedData['avatar'] = Helper::fileUpload($request->file('avatar'), 'user/avatar', getFileName($request->file('avatar')));
+        $validatedData['avatar'] = Helper::fileUpload($request->file('avatar'), 'user/avatar');
         $user->update($validatedData);
-        $data = User::select($this->select)->with('roles')->find($user->id);
+        $data = User::select($this->select)->find($user->id);
         return Helper::jsonResponse(true, 'Avatar updated successfully', 200, $data);
     }
 

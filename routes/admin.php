@@ -157,17 +157,11 @@ Route::middleware('permission:settings.access')
     ->group(function () {
         Route::get('/', [SettingController::class, 'index'])->name('index');
         Route::get('/logo', [SettingController::class, 'viewLogo'])->name('logo');
-        Route::patch('/logo', [SettingController::class, 'updateLogo'])
-            ->middleware('permission:settings.edit')
-            ->name('logo.update');
-        Route::patch('/update', [SettingController::class, 'update'])
-            ->middleware('permission:settings.edit')
-            ->name('update');
+        Route::patch('/logo', [SettingController::class, 'updateLogo'])->middleware('permission:settings.edit')->name('logo.update');
+        Route::patch('/update', [SettingController::class, 'update'])->middleware('permission:settings.edit')->name('update');
 
         // ENV Settings
-        Route::get('/env', [SettingController::class, 'env'])
-            ->middleware('permission:settings.edit')
-            ->name('env');
+        Route::get('/env', [SettingController::class, 'env'])->middleware('permission:settings.edit')->name('env');
         Route::post('/env/app',          [SettingController::class, 'updateEnvApp'])->middleware('permission:settings.edit')->name('env.app.update');
         Route::post('/env/jwt',          [SettingController::class, 'updateEnvJwt'])->middleware('permission:settings.edit')->name('env.jwt.update');
         Route::post('/env/firebase',     [SettingController::class, 'updateEnvFirebase'])->middleware('permission:settings.edit')->name('env.firebase.update');

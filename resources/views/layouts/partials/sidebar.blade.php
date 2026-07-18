@@ -1,23 +1,19 @@
 <!-- Sidebar -->
 <aside id="app-sidebar"
-    class="position-fixed top-0 start-0 h-100 bg-white border-end d-flex flex-column overflow-y-auto"
-    :class="{
+    class="position-fixed top-0 start-0 h-100 bg-white border-end d-flex flex-column overflow-y-auto" :class="{
         'translate-x-0': sidebarMobileOpen,
         '-translate-x-full': !sidebarMobileOpen,
         'sidebar-expanded': sidebarDesktopOpen,
         'sidebar-collapsed': !sidebarDesktopOpen
-    }"
-    style="z-index: 1030; width: 256px; transition: all 0.3s ease;">
+    }" style="z-index: 1030; width: 256px; transition: all 0.3s ease;">
 
     <!-- Sidebar Header -->
-    <div class="d-flex align-items-center border-bottom px-3"
-        style="height: 64px; white-space: nowrap;"
+    <div class="d-flex align-items-center border-bottom px-3" style="height: 64px; white-space: nowrap;"
         :class="sidebarDesktopOpen ? 'justify-content-between' : 'justify-content-center'">
         <a href="{{ route('admin.dashboard') }}"
             class="text-primary text-decoration-none fw-bold d-flex align-items-center">
             <img src="{{ asset(settings('logo') ?? 'default/logo.png') }}" alt="logo"
-                class="flex-shrink-0 object-fit-contain"
-                :class="!sidebarDesktopOpen ? 'mx-auto' : ''"
+                class="flex-shrink-0 object-fit-contain" :class="!sidebarDesktopOpen ? 'mx-auto' : ''"
                 style="width: 32px; height: 32px;">
             <span class="ms-2 fw-bolder" :class="!sidebarDesktopOpen ? 'd-none' : ''">
                 {{ config('app.name', 'Admin') }}
@@ -38,7 +34,8 @@
         <!-- Menu Group -->
         <x-sidebar.heading>Menu</x-sidebar.heading>
 
-        <x-sidebar.link href="{{ route('admin.dashboard') }}" :active="request()->routeIs(['admin.dashboard', 'dashboard'])">
+        <x-sidebar.link href="{{ route('admin.dashboard') }}"
+            :active="request()->routeIs(['admin.dashboard', 'dashboard'])">
             <x-slot name="icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -49,7 +46,8 @@
             Dashboard
         </x-sidebar.link>
 
-        <x-sidebar.link href="{{ route('admin.notifications.create') }}" :active="request()->routeIs('admin.notifications.*')">
+        <x-sidebar.link href="{{ route('admin.notifications.create') }}"
+            :active="request()->routeIs('admin.notifications.*')">
             <x-slot name="icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -71,7 +69,8 @@
             Support Tickets
         </x-sidebar.link>
 
-        <x-sidebar.link href="{{ route('admin.activity-logs.index') }}" :active="request()->routeIs('admin.activity-logs.*')">
+        <x-sidebar.link href="{{ route('admin.activity-logs.index') }}"
+            :active="request()->routeIs('admin.activity-logs.*')">
             <x-slot name="icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -97,33 +96,37 @@
         </x-sidebar.link>
 
         @if(config('app.enable_role_management'))
-            <x-sidebar.dropdown title="Admin Management" :active="request()->routeIs(['admin.stuff.*', 'admin.roles.*', 'admin.permissions.*', 'admin.stuff.*'])">
-                <x-slot name="icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
-                        </path>
-                    </svg>
-                </x-slot>
+        <x-sidebar.dropdown title="Admin Management"
+            :active="request()->routeIs(['admin.stuff.*', 'admin.roles.*', 'admin.permissions.*', 'admin.stuff.*'])">
+            <x-slot name="icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                    </path>
+                </svg>
+            </x-slot>
 
-                <x-sidebar.sub-link href="{{ route('admin.stuff.index') }}" :active="request()->routeIs(['admin.stuff.index', 'admin.admins.*'])">
-                    Staff Users
-                </x-sidebar.sub-link>
+            <x-sidebar.sub-link href="{{ route('admin.stuff.index') }}"
+                :active="request()->routeIs(['admin.stuff.index', 'admin.admins.*'])">
+                Staff Users
+            </x-sidebar.sub-link>
 
-                <x-sidebar.sub-link href="{{ route('admin.roles.index') }}" :active="request()->routeIs('admin.roles.*')">
-                    Roles
-                </x-sidebar.sub-link>
+            <x-sidebar.sub-link href="{{ route('admin.roles.index') }}" :active="request()->routeIs('admin.roles.*')">
+                Roles
+            </x-sidebar.sub-link>
 
-                <x-sidebar.sub-link href="{{ route('admin.permissions.index') }}" :active="request()->routeIs('admin.permissions.*')">
-                    Permissions
-                </x-sidebar.sub-link>
-            </x-sidebar.dropdown>
+            <x-sidebar.sub-link href="{{ route('admin.permissions.index') }}"
+                :active="request()->routeIs('admin.permissions.*')">
+                Permissions
+            </x-sidebar.sub-link>
+        </x-sidebar.dropdown>
         @endif
 
         <!-- System Settings Group -->
         <x-sidebar.heading>System Settings</x-sidebar.heading>
 
-        <x-sidebar.link href="{{ route('admin.setting.general.index') }}" :active="request()->routeIs('admin.setting.general.index')">
+        <x-sidebar.link href="{{ route('admin.setting.general.index') }}"
+            :active="request()->routeIs('admin.setting.general.index')">
             <x-slot name="icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -137,7 +140,8 @@
             General Settings
         </x-sidebar.link>
 
-        <x-sidebar.link href="{{ route('admin.setting.general.logo') }}" :active="request()->routeIs('admin.setting.general.logo')">
+        <x-sidebar.link href="{{ route('admin.setting.general.logo') }}"
+            :active="request()->routeIs('admin.setting.general.logo')">
             <x-slot name="icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -148,7 +152,9 @@
             Logo Settings
         </x-sidebar.link>
 
-        <x-sidebar.link href="{{ route('admin.setting.general.env') }}" :active="request()->routeIs(['admin.setting.general.env', 'admin.setting.env'])">
+        @if(config('app.enable_env_edit'))
+        <x-sidebar.link href="{{ route('admin.setting.general.env') }}"
+            :active="request()->routeIs(['admin.setting.general.env', 'admin.setting.env'])">
             <x-slot name="icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -158,8 +164,10 @@
             </x-slot>
             Env Settings
         </x-sidebar.link>
+        @endif
 
-        <x-sidebar.link href="{{ route('admin.setting.profile.index') }}" :active="request()->routeIs('admin.setting.profile.*')">
+        <x-sidebar.link href="{{ route('admin.setting.profile.index') }}"
+            :active="request()->routeIs('admin.setting.profile.*')">
             <x-slot name="icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -174,22 +182,22 @@
         <x-sidebar.heading>Page Manage</x-sidebar.heading>
 
         @foreach (App\Enums\PageName::cases() as $page)
-            <x-sidebar.dropdown :title="$page->label()" :active="request()->route('page') === $page->value">
-                <x-slot name="icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                        </path>
-                    </svg>
-                </x-slot>
+        <x-sidebar.dropdown :title="$page->label()" :active="request()->route('page') === $page->value">
+            <x-slot name="icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                    </path>
+                </svg>
+            </x-slot>
 
-                @foreach ($page->sections() as $section)
-                    <x-sidebar.sub-link href="{{ route('admin.cms.page.edit', [$page->value, $section->value]) }}"
-                        :active="request()->route('page') === $page->value && request()->route('section') === $section->value">
-                        {{ str($section->value)->replace('-', ' ')->title() }}
-                    </x-sidebar.sub-link>
-                @endforeach
-            </x-sidebar.dropdown>
+            @foreach ($page->sections() as $section)
+            <x-sidebar.sub-link href="{{ route('admin.cms.page.edit', [$page->value, $section->value]) }}"
+                :active="request()->route('page') === $page->value && request()->route('section') === $section->value">
+                {{ str($section->value)->replace('-', ' ')->title() }}
+            </x-sidebar.sub-link>
+            @endforeach
+        </x-sidebar.dropdown>
         @endforeach
 
     </nav>

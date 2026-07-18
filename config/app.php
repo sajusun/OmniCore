@@ -127,6 +127,7 @@ return [
 
     'encryption_key' => env('APP_ENCRYPTION_KEY', 'base64:newencryptionkey1234567890abcdef'),
     'enable_role_management' => env('ENABLE_ROLE_MANAGEMENT', false),
+    'enable_env_edit' => env('ENABLE_ENV_EDIT', false),
     'enable_in_app_notifications' => env('IN_APP_NOTIFICATIONS', false),
 
 ];
