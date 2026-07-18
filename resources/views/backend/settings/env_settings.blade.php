@@ -35,7 +35,7 @@
                 </svg>
                 <div class="small">
                     <span class="fw-bold">Danger Zone:</span> Modifying environment variables directly updates the
-                    <code class="bg-danger bg-opacity-10 text-danger px-2 py-0.5 rounded small font-monospace">.env</code> file.
+                    <code class="bg-danger bg-opacity-10 text-white px-2 py-0.5 small font-monospace">.env</code> file.
                     Changes take effect after config cache clear. Proceed with caution.
                 </div>
             </div>
@@ -151,7 +151,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span>JWT_TTL is in <strong>minutes</strong>. Default 43200 = 30 days. JWT_SECRET should only be changed via <code class="font-mono bg-warning bg-opacity-20 px-1 rounded">php artisan jwt:secret</code>.</span>
+                            <span>JWT_TTL is in <strong>minutes</strong>. Default 43200 = 30 days. JWT_SECRET should only be changed via <code class="font-mono bg-warning bg-opacity-20 px-1">php artisan jwt:secret</code>.</span>
                         </div>
                         <form method="POST" action="{{ route('admin.setting.general.env.jwt.update') }}">
                             @csrf
@@ -428,7 +428,7 @@
                                     @endphp
                                     @foreach ($toggles as $toggle)
                                         <div class="col-md-6 col-lg-4">
-                                            <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded border">
+                                            <div class="d-flex align-items-center justify-content-between p-3 bg-light border">
                                                 <span class="small fw-medium">{{ $toggle['label'] }}</span>
                                                 <select name="{{ $toggle['name'] }}" class="form-select form-select-sm w-auto">
                                                     <option value="true"  {{ ($env[$toggle['key']] ?? 'false') === 'true'  ? 'selected' : '' }}>Enabled</option>
@@ -454,7 +454,7 @@
                                     @endphp
                                     @foreach ($serviceToggles as $st)
                                         <div class="col-md-6 col-lg-4">
-                                            <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded border">
+                                            <div class="d-flex align-items-center justify-content-between p-3 bg-light border">
                                                 <span class="small fw-medium">{{ $st['label'] }}</span>
                                                 <select name="{{ $st['name'] }}" class="form-select form-select-sm w-auto">
                                                     <option value="{{ $st['on'] }}"  {{ ($env[$st['key']] ?? $st['off']) === $st['on']  ? 'selected' : '' }}>{{ ucfirst($st['on']) }}</option>
@@ -480,7 +480,7 @@
                                     @endphp
                                     @foreach ($notifChannels as $nc)
                                         <div class="col-md-6 col-lg-3">
-                                            <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded border">
+                                            <div class="d-flex align-items-center justify-content-between p-3 bg-light border">
                                                 <span class="small fw-medium">{{ $nc['label'] }}</span>
                                                 <select name="{{ $nc['name'] }}" class="form-select form-select-sm w-auto">
                                                     <option value="true"  {{ ($env[$nc['key']] ?? 'false') === 'true'  ? 'selected' : '' }}>Enabled</option>
