@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Web\Backend\Access;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -13,38 +14,33 @@ class RoleController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Role::all();
+            // Optimization: Eager load permissions to avoid N+1 query issue
+            $data = Role::with('permissions')->get();
+
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('permissions', function ($row) {
                     if ($row->permissions->isEmpty()) {
-                        return '<span class="text-xs text-gray-400 dark:text-gray-500 italic">No permissions</span>';
+                        return '<span class="text-muted fst-italic" style="font-size: 0.75rem;">No permissions</span>';
                     }
-                    $badges = '<div class="flex flex-wrap gap-1">';
+
+                    // Bootstrap flex layout with gap, ensuring zero rounding
+                    $badges = '<div class="d-flex flex-wrap gap-1">';
                     foreach ($row->permissions as $permission) {
-                        $badges .= '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300">' . e($permission->name) . '</span>';
+                        $badges .= '<span class="bg-primary text-white fw-medium rounded-0" style="font-size: 0.75rem; padding: 0.35em 0.65em;">' . e($permission->name) . '</span>';
                     }
                     $badges .= '</div>';
+
                     return $badges;
                 })
                 ->addColumn('action', function ($row) {
                     return '
-                        <div class="flex items-center gap-1.5">
-                            <a href="' . route('admin.roles.edit', $row->id) . '"
-                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-colors"
-                                title="Edit">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                            </a>
-                            <button type="button" onclick="deleteRole(' . $row->id . ')"
-                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors"
-                                title="Delete">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                            </button>
-                        </div>
-                    ';
-                })
-                ->rawColumns(['permissions', 'action'])
-                ->make(true);
+                    <div class="d-flex align-items-center gap-1">
+                    ' . view('components.table.action', ['type' => 'edit', 'href' => route('admin.roles.edit', $row->id)])->render() . '
+                    ' . view('components.table.action', ['type' => 'delete', 'onclick' => "deleteRole({$row->id})"])->render() . '
+                    </div>
+                ';
+                })->rawColumns(['permissions', 'action'])->make(true);
         }
 
         return view('backend.access.role.index');
@@ -64,12 +60,13 @@ class RoleController extends Controller
         ]);
 
         $role = Role::create(['name' => $request->name, 'guard_name' => 'web']);
+        // $role = Role::create(['name' => $request->name, 'guard_name' => 'api']);
 
         if ($request->permissions) {
             $role->syncPermissions($request->permissions);
         }
 
-        return redirect()->route('admin.roles.index')->with('t-success', 'Role created successfully');
+        return redirect()->route('admin.roles.index')->with('success', 'Role created successfully');
     }
 
     public function edit(string $id)
@@ -83,7 +80,14 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
         $request->validate([
-            'name' => 'required|unique:roles,name,' . $role->id,
+            'name' => [
+                'required',
+                Rule::unique('roles', 'name')
+                    ->ignore($role->id)
+                    ->where(function ($query) use ($role) {
+                        return $query->where('guard_name', $role->guard_name);
+                    }),
+            ],
             'permissions' => 'nullable|array'
         ]);
 
@@ -95,7 +99,7 @@ class RoleController extends Controller
             $role->syncPermissions([]);
         }
 
-        return redirect()->route('admin.roles.index')->with('t-success', 'Role updated successfully');
+        return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully');
     }
 
     public function destroy(string $id)

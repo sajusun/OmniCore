@@ -2,170 +2,195 @@
 
 @section('content')
 
-{{-- Page Header --}}
-<div class="mb-8 flex items-center justify-between">
-    <div>
-        <nav class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-1">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-            <span>Access Control</span>
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-            <a href="{{ route('admin.roles.index') }}" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Roles</a>
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-            <span class="text-indigo-600 dark:text-indigo-400 font-medium">Create</span>
-        </nav>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Create New Role</h1>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Define a role and assign permissions to it.</p>
-    </div>
-    <a href="{{ route('admin.roles.index') }}"
-        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group">
-        <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
-        Back
-    </a>
-</div>
+<div class="container-fluid py-4 px-0">
+    <div class="mx-auto" style="max-width: 1024px;">
 
-{{-- Main Card --}}
-<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-
-    {{-- Card Header --}}
-    <div class="px-6 py-5 border-b border-gray-100 dark:border-gray-700 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-md shadow-indigo-200 dark:shadow-indigo-900/40">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-            </div>
+        {{-- Page Header --}}
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
             <div>
-                <h2 class="text-base font-semibold text-gray-900 dark:text-white">Role & Permissions</h2>
-                <p class="text-xs text-gray-500 dark:text-gray-400">Fill in the role name and select the permissions to assign.</p>
+                {{-- Breadcrumb System --}}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-1" style="font-size: 0.875rem;">
+                        <li class="breadcrumb-item text-muted">
+                            <i class="fa-solid fa-shield-halved me-1"></i> Access Control
+                        </li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.roles.index') }}"
+                                class="text-decoration-none text-muted">Roles</a></li>
+                        <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Create</li>
+                    </ol>
+                </nav>
+                <h1 class="h4 fw-bold text-dark mb-1">Create New Role</h1>
+                <p class="small text-muted mb-0">Define a role and assign permissions to it.</p>
             </div>
+
+            {{-- Back Button --}}
+            <a href="{{ route('admin.roles.index') }}"
+                class="btn btn-sm btn-light border px-3 d-inline-flex align-items-center gap-2 rounded-0"
+                style="height: 38px; transition: all 0.2s ease;">
+                <i class="fa-solid fa-arrow-left small"></i>
+                <span>Back</span>
+            </a>
         </div>
-    </div>
 
-    {{-- Form --}}
-    <form action="{{ route('admin.roles.store') }}" method="POST" class="p-6 space-y-6">
-        @csrf
+        {{-- Main Card Content Container --}}
+        <div class="card border border-light-subtle shadow-sm overflow-hidden rounded-0">
 
-        {{-- Role Name --}}
-        <x-form.text
-            name="name"
-            label="Role Name"
-            placeholder="e.g. Manager, Editor, Moderator"
-            :value="old('name')"
-        />
-
-        {{-- Permissions --}}
-        <div>
-            <div class="flex items-center justify-between mb-3">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Permissions
-                    <span class="ml-2 px-2 py-0.5 text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-full">
-                        {{ $permissions->count() }} total
-                    </span>
-                </label>
-                {{-- Select All Toggle --}}
-                <label class="inline-flex items-center gap-2 cursor-pointer select-none">
-                    <span class="text-xs text-gray-500 dark:text-gray-400">Select All</span>
-                    <div class="relative">
-                        <input type="checkbox" id="selectAll" class="sr-only">
-                        <div class="toggle-track w-10 h-5 rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-200"></div>
-                        <div class="toggle-knob absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"></div>
+            {{-- Card Header with Dynamic Subtle Color Scheme --}}
+            <div class="card-header border-bottom border-light-subtle px-4 py-3 bg-light">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-0"
+                        style="width: 40px; height: 40px; font-size: 1.15rem;">
+                        <i class="fa-solid fa-plus"></i>
                     </div>
-                </label>
-            </div>
-
-            {{-- Permissions Grid --}}
-            @if($permissions->count())
-            <div class="border border-gray-100 dark:border-gray-700 rounded-xl overflow-hidden">
-                {{-- Group by prefix if possible --}}
-                @php
-                    $grouped = $permissions->groupBy(function($p) {
-                        $parts = explode('-', $p->name);
-                        return count($parts) > 1 ? ucfirst(end($parts)) : 'General';
-                    });
-                @endphp
-                @foreach($grouped as $group => $perms)
-                <div class="border-b border-gray-100 dark:border-gray-700 last:border-0">
-                    <div class="px-4 py-2 bg-gray-50 dark:bg-gray-900/40 flex items-center gap-2">
-                        <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ $group }}</span>
-                        <span class="text-xs text-gray-400 dark:text-gray-500">({{ $perms->count() }})</span>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1 p-3">
-                        @foreach($perms as $permission)
-                        <label for="perm-{{ $permission->id }}"
-                            class="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors group">
-                            <input
-                                class="permission-checkbox w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-700 cursor-pointer"
-                                type="checkbox"
-                                name="permissions[]"
-                                value="{{ $permission->name }}"
-                                id="perm-{{ $permission->id }}"
-                                {{ in_array($permission->name, old('permissions', [])) ? 'checked' : '' }}
-                            >
-                            <span class="text-xs text-gray-600 dark:text-gray-300 group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors">
-                                {{ $permission->name }}
-                            </span>
-                        </label>
-                        @endforeach
+                    <div>
+                        <h2 class="h6 card-title mb-0 fw-bold text-dark">Role & Permissions</h2>
+                        <p class="small text-muted mb-0" style="font-size: 0.75rem;">
+                            Fill in the role name and select the permissions to assign.
+                        </p>
                     </div>
                 </div>
-                @endforeach
             </div>
-            @else
-            <div class="text-center py-8 border border-dashed border-gray-200 dark:border-gray-700 rounded-xl">
-                <p class="text-sm text-gray-500 dark:text-gray-400">No permissions found. Create permissions first.</p>
-            </div>
-            @endif
+
+            {{-- Form Start --}}
+            <form action="{{ route('admin.roles.store') }}" method="POST" class="card-body p-4">
+                @csrf
+
+                {{-- Role Name Form Group --}}
+                <div class="mb-4">
+                    <x-form.text name="name" label="Role Name" placeholder="e.g. Manager, Editor, Moderator"
+                        :value="old('name')" />
+                </div>
+
+                {{-- Permissions Label & Native Bootstrap Switch Container --}}
+                <div class="mb-4">
+                    <div
+                        class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2 border-light-subtle">
+                        <label class="form-label fw-bold text-dark mb-0 d-inline-flex align-items-center gap-2">
+                            <span>Permissions</span>
+                            <span class="badge bg-primary text-white font-monospace rounded-0"
+                                style="font-size: 0.7rem; padding: 0.35em 0.65em;">
+                                {{ $permissions->count() }} total
+                            </span>
+                        </label>
+
+                        {{-- Standard High Quality Bootstrap Form Switch --}}
+                        <div class="d-flex align-items-center">
+                            <label class="small text-muted mb-0 me-4" for="selectAll">
+                                Select All
+                            </label>
+
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input" type="checkbox" id="selectAll">
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Permissions Grid --}}
+                    @if($permissions->count())
+                    <div class="border border-light-subtle rounded-0 overflow-hidden">
+                        @php
+                        $grouped = $permissions->groupBy(function($p) {
+                        $parts = explode('-', $p->name);
+                        return count($parts) > 1 ? ucfirst(end($parts)) : 'General';
+                        });
+                        @endphp
+
+                        @foreach($grouped as $group => $perms)
+                        <div class="border-bottom border-light-subtle last:border-0">
+                            {{-- Permission Group Category Title --}}
+                            <div
+                                class="px-3 py-2 bg-light border-bottom border-light-subtle d-flex align-items-center gap-2">
+                                <span class="fw-bold text-secondary text-uppercase tracking-wider"
+                                    style="font-size: 0.725rem;">{{ $group }}</span>
+                                <span class="text-muted small" style="font-size: 0.725rem;">({{ $perms->count()
+                                    }})</span>
+                            </div>
+
+                            {{-- Internal Grid Selection Box Layout --}}
+                            <div class="row g-2 p-3">
+                                @foreach($perms as $permission)
+                                @php
+                                $isChecked = in_array($permission->name, old('permissions', []));
+                                @endphp
+                                <div class="col-6 col-sm-4 col-md-3">
+                                    <label for="perm-{{ $permission->id }}"
+                                        class="d-flex align-items-center gap-2 px-3 py-2 border border-light-subtle cursor-pointer w-100 h-100 transition-all text-break perm-label-box"
+                                        style="background-color: {{ $isChecked ? 'var(--bs-light-bg-subtle)' : '#ffffff' }}; font-size: 0.8rem;">
+
+                                        <!-- Added 'me-2' class for required visual gap -->
+                                        <input
+                                            class="form-check-input permission-checkbox m-0 me-2 flex-shrink-0 cursor-pointer rounded-0 border-secondary-subtle"
+                                            type="checkbox" name="permissions[]" value="{{ $permission->name }}"
+                                            id="perm-{{ $permission->id }}" {{ $isChecked ? 'checked' : '' }}>
+                                        <span class="text-dark-emphasis text-capitalize ms-4">
+                                            {{ str_replace('-', ' ', $permission->name) }}
+                                        </span>
+                                    </label>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    @else
+                    <div class="text-center py-5 border border-dashed border-light-subtle bg-light rounded-0">
+                        <p class="small text-muted mb-0">No permissions found. Create permissions first.</p>
+                    </div>
+                    @endif
+                </div>
+
+                {{-- Action Panel Footer --}}
+                <div class="pt-3 border-top border-light-subtle d-flex justify-content-end align-items-center gap-2 ">
+                    <x-form.submit class="btn btn-primary px-4 rounded-0">
+                        <i class="fa-solid fa-check me-1.5 small"></i> Update Role
+                    </x-form.submit>
+                    <x-form.cancel :href="route('admin.roles.index')" class="btn btn-light border rounded-0">Cancel
+                    </x-form.cancel>
+                </div>
+            </form>
         </div>
 
-        {{-- Actions --}}
-        <div class="pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center gap-3">
-            <x-form.submit>
-                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                Save Role
-            </x-form.submit>
-            <x-form.cancel :href="route('admin.roles.index')">Cancel</x-form.cancel>
-        </div>
-    </form>
+    </div>
 </div>
 
 @endsection
 
 @push('scripts')
 <script>
-(function () {
+    (function () {
     const selectAll = document.getElementById('selectAll');
     const checkboxes = document.querySelectorAll('.permission-checkbox');
-    const track = selectAll?.closest('label')?.querySelector('.toggle-track');
-    const knob  = selectAll?.closest('label')?.querySelector('.toggle-knob');
 
-    function syncToggle(checked) {
-        if (track) track.classList.toggle('bg-indigo-600', checked);
-        if (track) track.classList.toggle('bg-gray-200', !checked);
-        if (track) track.classList.toggle('dark:bg-gray-700', !checked);
-        if (knob)  knob.style.transform = checked ? 'translateX(1.25rem)' : '';
+    // Sync label card backgrounds on toggle changes smoothly
+    function updateLabelStyle(cb) {
+        const parentLabel = cb.closest('.perm-label-box');
+        if (parentLabel) {
+            parentLabel.style.backgroundColor = cb.checked ? 'var(--bs-light-bg-subtle)' : '#ffffff';
+        }
     }
 
+    // Checking global state matching handler
+    function checkGlobalState() {
+        if (!checkboxes.length) return;
+        const allChecked = [...checkboxes].every(c => c.checked);
+        if (selectAll) selectAll.checked = allChecked;
+    }
+
+    // Initialize checking process
+    checkboxes.forEach(cb => updateLabelStyle(cb));
+    checkGlobalState();
+
     selectAll?.addEventListener('change', function () {
-        checkboxes.forEach(cb => cb.checked = this.checked);
-        syncToggle(this.checked);
+        checkboxes.forEach(cb => {
+            cb.checked = this.checked;
+            updateLabelStyle(cb);
+        });
     });
 
     checkboxes.forEach(cb => {
         cb.addEventListener('change', function () {
-            const allChecked = [...checkboxes].every(c => c.checked);
-            if (selectAll) selectAll.checked = allChecked;
-            syncToggle(allChecked);
+            updateLabelStyle(this);
+            checkGlobalState();
         });
     });
 })();

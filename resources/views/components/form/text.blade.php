@@ -2,7 +2,8 @@
     'name',
     'label',
     'value' => '',
-    'placeholder' => ''
+    'placeholder' => '',
+    'readonly' => false,
 ])
 
 <div class="mb-3">
@@ -13,6 +14,7 @@
         placeholder="{{ $placeholder }}"
         id="{{ $name }}"
         value="{{ $value }}"
+        @readonly($readonly)
         {{ $attributes->merge(['class' => 'form-control' . ($errors->has($name) ? ' is-invalid' : '')]) }}
     />
     {{ $slot }}
