@@ -1,3 +1,4 @@
+
 @props(['id', 'url', 'columns'])
 
 <div class="card shadow-sm border-light overflow-hidden">

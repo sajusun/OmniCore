@@ -82,7 +82,9 @@
                             </div>
                             <!-- FULL-SCREEN -->
 
-                            <!-- Messages-->
+                            <!-- NOTIFICATIONS-->
+                            @if (config('app.enable_in_app_notifications'))
+                                
                             <div class="dropdown d-md-flex notifications">
                                 <a class="nav-link icon" data-bs-toggle="dropdown">
                                     <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24">
@@ -132,6 +134,8 @@
                                 </div>
                             </div>
                             <!-- NOTIFICATIONS -->
+                            @endif
+
                             <div class="dropdown d-md-flex profile-1">
                                 <a href="#" data-bs-toggle="dropdown"
                                     class="nav-link pe-2 leading-none d-flex animate">
