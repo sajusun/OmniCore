@@ -79,56 +79,23 @@
     </div>
 </div>
 
+<x-modal.confirm-delete name="confirm-user-delete" action="#"
+    message="Are you sure you want to delete this permission? All associated records will be permanently removed." />
+
+<x-modal.status />
+
 @endsection
 
 @push('scripts')
 <script>
-    let deleteTargetId = null;
-    let bootstrapDeleteModal = null;
-
-    // Bootstrap Modal Initializer 
-    document.addEventListener("DOMContentLoaded", function() {
-        bootstrapDeleteModal = new bootstrap.Modal(document.getElementById('deletePermissionModal'));
-    });
-
-    window.deletePermission = function(id) {
-        deleteTargetId = id;
-        bootstrapDeleteModal.show();
-    };
-
-    function closeDeleteModal() {
-        deleteTargetId = null;
-        bootstrapDeleteModal.hide();
-    }
-
-    document.getElementById('confirm-delete-btn').addEventListener('click', function () {
-        if (!deleteTargetId) return;
-        const btn = this;
-        btn.disabled = true;
-        btn.textContent = 'Deleting...';
-
-        $.ajax({
-            url: "{{ url('admin/permissions') }}/" + deleteTargetId,
-            type: 'DELETE',
-            data: { _token: "{{ csrf_token() }}" },
-            success: function (response) {
-                closeDeleteModal();
-                if (response.status) {
-                    Swal.fire({ icon: 'success', title: 'Deleted!', text: response.message, timer: 2000, showConfirmButton: false });
-                    $('#permission-datatable').DataTable().ajax.reload();
-                } else {
-                    Swal.fire({ icon: 'error', title: 'Error!', text: response.message });
-                }
-                btn.disabled = false;
-                btn.textContent = 'Yes, Delete';
-            },
-            error: function () {
-                closeDeleteModal();
-                Swal.fire({ icon: 'error', title: 'Error!', text: 'Something went wrong.' });
-                btn.disabled = false;
-                btn.textContent = 'Yes, Delete';
-            }
-        });
-    });
+    function deletePermission(id) {
+    let url = "{{ route('admin.permissions.destroy', ':id') }}";
+    url = url.replace(':id', id);
+    const form = document.getElementById('confirm-delete-form-confirm-user-delete');
+    form.action = url;
+    const modalElement = document.getElementById('modal_confirm-user-delete');
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
 </script>
 @endpush

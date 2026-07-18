@@ -1,6 +1,6 @@
 <x-admin-layout>
     <x-slot name="title">Users Table</x-slot>
-    
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">Users Table</h2>
     </x-slot>
@@ -35,22 +35,21 @@
 
     {{-- Reusable Delete Confirmation Modal --}}
     <x-modal.confirm-delete name="confirm-user-delete" action=""
-        message="Are you sure you want to delete this user account? All associated records will be permanently removed." />
+        message="Are you sure you want to delete this User? All associated records will be permanently removed." />
 
     {{-- Reusable Success/Error Toast status modal --}}
     <x-modal.status />
 
     @push('scripts')
     <script>
-        function confirmDeleteUser(id, name) {
-
-            const form = document.getElementById('confirm-delete-form');
-            if (form) {
-                let url = "{{ route('admin.stuff.destroy', ':id') }}";
-                url = url.replace(':id', id);
-                form.setAttribute('action', url);
-            }
-            window.dispatchEvent(new CustomEvent('open-modal', { detail: 'confirm-user-delete' }));
+        function deleteAdmin(id, name) {
+    let url = "{{ route('admin.stuff.destroy', ':id') }}";
+    url = url.replace(':id', id);
+    const form = document.getElementById('confirm-delete-form-confirm-user-delete');
+    form.action = url;
+    const modalElement = document.getElementById('modal_confirm-user-delete');
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
         }
     </script>
     @endpush
