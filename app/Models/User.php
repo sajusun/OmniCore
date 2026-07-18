@@ -35,10 +35,8 @@ class User extends Authenticatable implements JWTSubject
         'avatar',
         'email',
         'password',
-        'otp',
-        'otp_expires_at',
-        'otp_verified_at',
         'last_activity_at',
+        'remember_token',
         'slug',
         'status',
     ];
