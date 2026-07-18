@@ -44,8 +44,8 @@ use Illuminate\Support\Facades\Route;
                         <i class="angle fe fe-chevron-right"></i>
                     </a>
                     <ul class="slide-menu">
-                        <li><a href="{{ route('admin.admins.index') }}"
-                                class="slide-item {{ request()->routeIs('admin.admins.*') ? 'active' : '' }}">Staff
+                        <li><a href="{{ route('admin.stuff.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.stuff.*') ? 'active' : '' }}">Staff
                                 Users</a></li>
                         <li><a href="{{ route('admin.roles.index') }}"
                                 class="slide-item {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">Roles</a>

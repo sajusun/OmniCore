@@ -97,7 +97,7 @@
         </x-sidebar.link>
 
         @if(config('app.enable_role_management'))
-            <x-sidebar.dropdown title="Admin Management" :active="request()->routeIs(['admin.admins.*', 'admin.roles.*', 'admin.permissions.*', 'admin.stuff.*'])">
+            <x-sidebar.dropdown title="Admin Management" :active="request()->routeIs(['admin.stuff.*', 'admin.roles.*', 'admin.permissions.*', 'admin.stuff.*'])">
                 <x-slot name="icon">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

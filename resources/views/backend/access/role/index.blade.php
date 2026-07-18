@@ -3,79 +3,71 @@
 @section('content')
 
 {{-- Page Header --}}
-<div class="mb-8 flex items-center justify-between">
+<div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <nav class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-1">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-            <span>Access Control</span>
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-            <span class="text-indigo-600 dark:text-indigo-400 font-medium">Roles</span>
+        <nav aria-label="breadcrumb" class="mb-1">
+            <ol class="breadcrumb mb-0" style="font-size: 0.875rem;">
+                <li class="breadcrumb-item text-muted">
+                    <i class="fas fa-shield-alt me-1"></i> Access Control
+                </li>
+                <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Roles</li>
+            </ol>
         </nav>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Role Management</h1>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage roles and their associated permissions.</p>
+        <h1 class="h3 mb-1 font-weight-bold text-dark dark:text-light">Role Management</h1>
+        <p class="text-muted small mb-0">Manage roles and their associated permissions.</p>
     </div>
-    <a href="{{ route('admin.roles.create') }}"
-        class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md shadow-indigo-200 dark:shadow-indigo-900/40 transition-all duration-200">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-        Add New Role
-    </a>
+    <div>
+        <a href="{{ route('admin.roles.create') }}" class="btn btn-primary px-3 py-2 rounded-3 shadow-sm d-inline-flex align-items-center gap-2">
+            <i class="fas fa-plus"></i>
+            Add New Role
+        </a>
+    </div>
 </div>
 
+{{-- Success Message Alert --}}
 @if(session('t-success'))
-<div class="mb-6 flex items-center gap-3 px-4 py-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 rounded-xl text-sm">
-    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-    {{ session('t-success') }}
+<div class="alert alert-success d-flex align-items-center gap-2 rounded-3 mb-4" role="alert">
+    <i class="fas fa-check-circle flex-shrink-0"></i>
+    <div>
+        {{ session('t-success') }}
+    </div>
 </div>
 @endif
 
-<x-datatable
-    id="role-datatable"
-    url="{{ route('admin.roles.index') }}"
-    :columns="[
-        ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => '#', 'orderable' => false, 'searchable' => false],
-        ['data' => 'name', 'name' => 'name', 'title' => 'Role Name'],
-        ['data' => 'permissions', 'name' => 'permissions', 'title' => 'Permissions', 'orderable' => false],
-        ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false],
-    ]"
-/>
+{{-- Datatable Section --}}
+<div class="card border-0 shadow-sm rounded-3 p-3">
+    <x-datatable
+        id="role-datatable"
+        url="{{ route('admin.roles.index') }}"
+        :columns="[
+            ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => '#', 'orderable' => false, 'searchable' => false],
+            ['data' => 'name', 'name' => 'name', 'title' => 'Role Name'],
+            ['data' => 'permissions', 'name' => 'permissions', 'title' => 'Permissions', 'orderable' => false],
+            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false],
+        ]"
+    />
+</div>
 
 {{-- Delete Confirmation Modal --}}
-<div id="delete-modal-backdrop"
-    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
-    <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-        <div class="p-6">
-            <div class="flex items-start gap-4">
-                <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
+<div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-labelledby="deleteRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4">
+            <div class="modal-body p-4">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="flex-shrink-0 bg-danger-subtle text-danger rounded-circle d-flex align-items-center justify-center" style="width: 48px; height: 48px; font-size: 1.25rem;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-semibold text-dark mb-1" id="deleteRoleModalLabel">Delete Role?</h5>
+                        <p class="text-muted small mb-0">
+                            Deleting a role will affect all users assigned to it. This action cannot be undone.
+                        </p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Delete Role?</h3>
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                        Deleting a role will affect all users assigned to it. This action cannot be undone.
-                    </p>
+                <div class="mt-4 d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-light border px-3" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="confirm-delete-btn" class="btn btn-danger px-3">Yes, Delete</button>
                 </div>
-            </div>
-            <div class="mt-6 flex justify-end gap-3">
-                <button onclick="closeDeleteModal()"
-                    class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                    Cancel
-                </button>
-                <button id="confirm-delete-btn"
-                    class="px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-sm transition-colors disabled:opacity-60">
-                    Yes, Delete
-                </button>
             </div>
         </div>
     </div>
@@ -86,15 +78,17 @@
 @push('scripts')
 <script>
 let deleteTargetId = null;
+// Bootstrap Modal Instance তৈরি
+const deleteModal = new bootstrap.Modal(document.getElementById('deleteRoleModal'));
 
 window.deleteRole = function(id) {
     deleteTargetId = id;
-    document.getElementById('delete-modal-backdrop').classList.remove('hidden');
+    deleteModal.show();
 };
 
 function closeDeleteModal() {
     deleteTargetId = null;
-    document.getElementById('delete-modal-backdrop').classList.add('hidden');
+    deleteModal.hide();
 }
 
 document.getElementById('confirm-delete-btn').addEventListener('click', function () {
@@ -125,10 +119,6 @@ document.getElementById('confirm-delete-btn').addEventListener('click', function
             btn.textContent = 'Yes, Delete';
         }
     });
-});
-
-document.getElementById('delete-modal-backdrop').addEventListener('click', function (e) {
-    if (e.target === this) closeDeleteModal();
 });
 </script>
 @endpush

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web\Backend\Access;
 use App\Enums\Permission as PermissionEnum;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\Facades\DataTables;
 
