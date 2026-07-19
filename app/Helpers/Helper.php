@@ -99,7 +99,7 @@ class Helper
             'status' => false,
             'message' => $message,
             'code' => $code,
-            't-errors' => $errors,
+            'errors' => $errors,
         ];
 
         return response()->json($response, $code);

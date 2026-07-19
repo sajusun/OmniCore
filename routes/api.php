@@ -25,7 +25,7 @@ Route::group(['middleware' => 'guest:api'], function ($router) {
 
     Route::post('login', [LoginController::class, 'login'])->name('api.login');
     Route::post('/forget-password', [ResetPasswordController::class, 'forgotPassword']);
-    Route::post('/forget-password/token', [ResetPasswordController::class, 'MakeOtpToken']);
+    Route::post('/forget-password/token', [ResetPasswordController::class, 'resetSecretKey']);
     Route::post('/reset-password', [ResetPasswordController::class, 'ResetPassword']);
     // social login
     Route::post('/social-login', [SocialLoginController::class, 'SocialLogin']);

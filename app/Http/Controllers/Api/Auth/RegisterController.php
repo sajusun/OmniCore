@@ -53,7 +53,7 @@ class RegisterController extends Controller
             ]);
 
             // Send OTP via the Verification Module (stores in verifications table)
-            $verifcation = $this->verificationService->send(user: $user, purpose: 'email_verification');
+            $verifcation = $this->verificationService->send(user: $user, purpose: Verification::PURPOSE_EMAIL_VERIFICATION);
 
             DB::commit();
 
@@ -136,7 +136,6 @@ class RegisterController extends Controller
                 'request_count' => $verification->request_count,
                 'otp'           => $verification->code, // For testing purposes; remove in production
             ]);
-
         } catch (RuntimeException $e) {
             // Covers: cooldown, max-resend, blocked
             log::error('Resend OTP failed: ' . $e->getMessage(), ['exception' => $e]);

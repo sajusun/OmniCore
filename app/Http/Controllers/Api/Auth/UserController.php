@@ -33,6 +33,13 @@ class UserController extends Controller
             'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240',
             'phone' => 'required|string|numeric|max_digits:20',
             'gender' => 'required|string|max:255',
+
+            'address' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'zip_code' => 'nullable|string|max:255',
+
         ]);
 
         $user = auth('api')->user();
@@ -55,6 +62,11 @@ class UserController extends Controller
             'last_name' => $validatedData['last_name'] ?? null,
             'phone' => $validatedData['phone'],
             'gender' => $validatedData['gender'],
+            'address' => $validatedData['address'] ?? null,
+            'country' => $validatedData['country'] ?? null,
+            'state' => $validatedData['state'] ?? null,
+            'city' => $validatedData['city'] ?? null,
+            'zip_code' => $validatedData['zip_code'] ?? null,
         ]);
 
         $data = User::select($this->select)->find($user->id);
@@ -84,7 +96,7 @@ class UserController extends Controller
             if (! empty($user->avatar)) {
                 Helper::fileDelete(public_path($user->getRawOriginal('avatar')));
             }
-            $validatedData['avatar'] = Helper::fileUpload($request->file('avatar'), 'user/avatar', getFileName($request->file('avatar')));
+            $validatedData['avatar'] = Helper::fileUpload($request->file('avatar'), 'user/avatar');
         } else {
             $validatedData['avatar'] = $user->avatar;
         }

@@ -134,5 +134,13 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasAnyRole(['super_admin', 'admin']);
     }
-}
 
+    public function garage()
+    {
+        return $this->hasOne(Garage::class);
+    }
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
+}
