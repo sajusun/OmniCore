@@ -32,7 +32,12 @@ return new class extends Migration
             $table->string('engine')->nullable();
             $table->string('color')->nullable();
             $table->string('vin')->nullable()->unique();
-            $table->text('description')->nullable();
+            
+            $table->json('performance_mods')->nullable();
+            $table->json('exterior_mods')->nullable();
+            $table->json('suspension')->nullable();
+            
+            $table->text('build_story')->nullable();
 
             $table->timestamps();
         });

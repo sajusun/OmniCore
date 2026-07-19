@@ -29,9 +29,11 @@ class Profile extends Model
         'website',
     ];
 
-    /**
-     * Get the user that owns the profile.
-     */
+    protected $casts = [
+        'latitude'  => 'float',
+        'longitude' => 'float',
+    ];
+    
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

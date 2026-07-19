@@ -30,11 +30,11 @@ abstract class Controller
 
     protected function success($data = null, $message = 'Success', $status = 200)
     {
-        return response()->json(['status' => true, 'message' => $message, 'data'    => $data,], $status);
+        return response()->json(['status' => true, 'message' => $message, 'data'    => $data], $status);
     }
 
     protected function error($message = 'Something went wrong', $errors = null, $status = 400)
     {
-        return response()->json(['status' => false, 'message' => $message, 'errors'  => $errors,], $status);
+        return response()->json(['status' => false, 'message' => $message, 'errors'  => $errors], $status);
     }
 }

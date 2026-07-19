@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\VerificationController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\FirebaseTokenController;
 use App\Http\Controllers\Api\Auth\SocialLoginController;
+use App\Http\Controllers\Api\Frontend\VehicleController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Webhooks\RevenueCatWebhookController;
 
@@ -41,10 +42,23 @@ Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::delete('/profile/delete', [UserController::class, 'destroy']);
 });
 
+Route::middleware('auth:api')->group(function () {
+    Route::get('/vehicles/search', [VehicleController::class, 'search']);
+    Route::get('/garages/{garageId}/vehicles', [VehicleController::class, 'getByGarage']);
+    Route::delete('/vehicles/media/{media}', [VehicleController::class, 'deleteImage']);
+    
+    Route::get('/vehicles', [VehicleController::class,'index']);
+    Route::post('/vehicles/store', [VehicleController::class,'store']);
+    Route::get('/vehicles/{vehicle}/show', [VehicleController::class,'show']);
+    Route::post('/vehicles/{vehicle}/update', [VehicleController::class,'update']);
+    Route::delete('/vehicles/{vehicle}/delete', [VehicleController::class,'destroy']);
+
+});
+
+
 /*
 # Firebase Notification Route
 */
-
 Route::middleware(['auth:api'])->controller(FirebaseTokenController::class)->prefix('firebase')->group(function () {
     Route::post('firebase-token', 'store');
     Route::post('firebase-token/delete', 'destroy');

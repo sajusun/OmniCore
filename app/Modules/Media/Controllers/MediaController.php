@@ -8,9 +8,7 @@ use App\Modules\Media\Traits\HandlesMedia;
 class MediaController
 {
     use HandlesMedia;
-    /**
-     * Delete Media
-     */
+
     public function destroy(Request $request)
     {
 
