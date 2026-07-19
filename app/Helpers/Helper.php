@@ -38,7 +38,7 @@ class Helper
         }
     }
 
-    public static function makeSlug($model, string $title): string
+    public static function makeSlug(mixed $model, string $title): string
     {
         $slug = Str::slug($title);
         while ($model::where('slug', $slug)->exists()) {

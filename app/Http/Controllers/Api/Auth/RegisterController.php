@@ -19,7 +19,6 @@ use App\Services\VerificationService;
 
 class RegisterController extends Controller
 {
-    /** @var list<string> */
     private array $select = ['id', 'name', 'email', 'avatar', 'last_activity_at'];
 
     public function __construct(private readonly VerificationService $verificationService,)
@@ -39,13 +38,9 @@ class RegisterController extends Controller
         try {
             DB::beginTransaction();
 
-            do {
-                $slug = 'user_' . random_int(1_000_000_000, 9_999_999_999);
-            } while (User::where('slug', $slug)->exists());
-
             $user = User::create([
                 'name'             => $request->input('name'),
-                'slug'             => $slug,
+                'slug'             => $this->makeSlug($request->input('name')),
                 'email'            => strtolower($request->input('email')),
                 'password'         => Hash::make($request->input('password')),
                 'status'           => 'active',
@@ -62,16 +57,17 @@ class RegisterController extends Controller
                 'message' => 'Registration successful. Please check your email for the OTP.',
                 'code'    => 200,
                 'otp'      => $verifcation->code,
-                'data'    => User::select($this->select)->with('roles')->find($user->id),
+                'data'    => User::select($this->select)->find($user->id),
             ], 200);
+
         } catch (RuntimeException $e) {
             Log::error('User registration failed: ' . $e->getMessage(), ['exception' => $e]);
             DB::rollBack();
-            return Helper::jsonErrorResponse($e->getMessage(), 422);
+            return $this->error(message: $e->getMessage(), status: 422);
         } catch (Exception $e) {
             Log::error('User registration failed: ' . $e->getMessage(), ['exception' => $e]);
             DB::rollBack();
-            return Helper::jsonErrorResponse('User registration failed.', 500, [$e->getMessage()]);
+            return $this->error(message: $e->getMessage(), status: 500);
         }
     }
 
@@ -88,27 +84,22 @@ class RegisterController extends Controller
 
             // Guard: already verified
             if ($user->isEmailVerified()) {
-                return Helper::jsonErrorResponse('Email is already verified.', 409);
+                return $this->error(message: 'Email is already verified.', status:409);
             }
 
-            $verified = $this->verificationService->verifyOtp(
-                user: $user,
-                purpose: Verification::PURPOSE_EMAIL_VERIFICATION,
-                code: (string) $request->input('otp'),
-            );
+            $verified = $this->verificationService->verifyOtp(user: $user, purpose: Verification::PURPOSE_EMAIL_VERIFICATION, code: (string) $request->input('otp'));
 
             if (!$verified) {
-                return Helper::jsonErrorResponse('Invalid OTP code. Please try again.', 422);
+                return $this->error(message: 'Invalid OTP code. Please try again.', status: 422);
             }
 
-            return Helper::jsonResponse(true, 'Email verified successfully.', 200);
+            return $this->success(message: 'Email verified successfully.', status:200);
         } catch (RuntimeException $e) {
-            // Covers: expired, blocked, max-attempts
             Log::error('Email verification failed: ' . $e->getMessage(), ['exception' => $e]);
-            return Helper::jsonErrorResponse($e->getMessage(), 422);
+            return $this->error(message: $e->getMessage(), status: 422);
         } catch (Exception $e) {
             log::error('Email verification failed: ' . $e->getMessage(), ['exception' => $e]);
-            return Helper::jsonErrorResponse($e->getMessage(), 500);
+            return $this->error(message: $e->getMessage(), status:500);
         }
     }
 
@@ -122,27 +113,23 @@ class RegisterController extends Controller
             $user = User::where('email', $request->input('email'))->firstOrFail();
 
             if ($user->isEmailVerified()) {
-                return Helper::jsonErrorResponse('Email is already verified.', 409);
+                return $this->error(message: 'Email is already verified.', status:409);
             }
 
-            $verification = $this->verificationService->resend(
-                user: $user,
-                purpose: Verification::PURPOSE_EMAIL_VERIFICATION,
-                type: 'otp',
-            );
+            $verification = $this->verificationService->resend(user: $user, purpose: Verification::PURPOSE_EMAIL_VERIFICATION, type: 'otp');
 
-            return Helper::jsonResponse(true, 'A new OTP has been sent to your email.', 200, [
-                'expires_at'    => $verification->expires_at?->toDateTimeString(),
-                'request_count' => $verification->request_count,
-                'otp'           => $verification->code, // For testing purposes; remove in production
-            ]);
+            return $this->success(message: 'A new OTP has been sent to your email.', status:200,
+             data:[
+              'expires_at' => $verification->expires_at?->toDateTimeString(),
+              'request_count' => $verification->request_count, 
+              'otp' => $verification->code,
+              ]);
         } catch (RuntimeException $e) {
-            // Covers: cooldown, max-resend, blocked
             log::error('Resend OTP failed: ' . $e->getMessage(), ['exception' => $e]);
-            return Helper::jsonErrorResponse($e->getMessage(), 422);
+            return $this->error(message:$e->getMessage(),status:422);
         } catch (Exception $e) {
             log::error('Resend OTP failed: ' . $e->getMessage(), ['exception' => $e]);
-            return Helper::jsonErrorResponse($e->getMessage(), 500);
+            return $this->error(message: $e->getMessage(), status:500);
         }
     }
 }

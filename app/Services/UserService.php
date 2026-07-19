@@ -5,6 +5,10 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use stdClass;
 
 class UserService
 {
@@ -66,5 +70,42 @@ class UserService
     public function findByUsername(string $username): ?User
     {
         return User::where('username', $username)->first();
+    }
+
+    public function createPasswordResetToken(User $user): string
+    {
+
+        $token = Str::random(config('verification.token_length'));
+
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $user->email],
+            [
+                'token'      => hash('sha256', $token),
+                'created_at' => now(),
+            ]
+        );
+        return $token;
+    }
+
+    public function getResetTokenUser(string $token, ?string $email = null)
+    {
+        $tokenData = DB::table('password_reset_tokens')->where('token', hash('sha256', $token))->first();
+        if (!$tokenData) {
+            return false;
+        }
+        if ($email && $tokenData->email !== $email) {
+            return false;
+        }
+       
+        return $tokenData;
+    }
+
+    public function isTokenValid(stdClass $tokenData): bool
+    {
+
+        if (now()->diffInMinutes($tokenData->created_at) > config('verification.token_expiry_minutes')) {
+            return false;
+        }
+        return true;
     }
 }

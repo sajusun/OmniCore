@@ -39,15 +39,14 @@ class ResetPasswordController extends Controller
 
             if ($user) {
                 $verifcation = $this->verificationService->send(user: $user, purpose: Verification::PURPOSE_PASSWORD_RESET);
-                $user->save();
                 return Helper::jsonResponse(true, 'Code Sent Successfully Please Check Your Email.', 200, [
                     "otp" => $verifcation->code
                 ]);
             } else {
-                return Helper::jsonErrorResponse('Invalid Email Address', 404);
+                return $this->error(message: 'Invalid Email Address', status: 404);
             }
         } catch (Exception $e) {
-            return Helper::jsonErrorResponse($e->getMessage(), 500);
+            return $this->error(message: $e->getMessage(), status: 500);
         }
     }
 
@@ -62,33 +61,21 @@ class ResetPasswordController extends Controller
             $user = User::where('email', $request->email)->first();
 
             if (!$user) {
-                return Helper::jsonErrorResponse('User not found', 404);
+                return $this->error(message: 'User not found', status: 404);
             }
 
             $verified = $this->verificationService->verifyOtp(user: $user, purpose: Verification::PURPOSE_PASSWORD_RESET, code: (string) $request->input('otp'));
 
             if (!$verified) {
-                return Helper::jsonErrorResponse('Invalid OTP', 400);
+                return $this->error(message: 'Invalid OTP', status: 400);
             }
+            $token = $this->userService->createPasswordResetToken($user);
 
-            $token = Str::random(60);
-
-            DB::table('password_reset_tokens')->updateOrInsert(
-                ['email' => $user->email],
-                [
-                    'token'      => hash('sha256', $token),
-                    'created_at' => now(),
-                ]
-            );
-
-            return response()->json([
-                'status'  => true,
-                'message' => 'OTP verified successfully.',
-                'code'    => 200,
+            return $this->success(message: 'OTP verified successfully.', status: 200, data: [
                 'secret_key'   => $token,
             ]);
         } catch (\Exception $e) {
-            return Helper::jsonErrorResponse($e->getMessage(), 500);
+            return $this->error(message: $e->getMessage(), status: 500);
         }
     }
 
@@ -102,36 +89,38 @@ class ResetPasswordController extends Controller
 
         try {
 
-            $user = User::where('email', $request->email)->first();
+            $user = $this->userService->findByEmail($request->email);
 
             if (!$user) {
-                return Helper::jsonErrorResponse('User not found', 404);
+                return $this->error(message: 'User not found', status: 404);
             }
 
-            $resetToken = DB::table('password_reset_tokens')->where('email', $request->email)->first();
+            // $resetToken = DB::table('password_reset_tokens')->where('email', $request->email)->first();
 
-            if (!$resetToken) {
-                return Helper::jsonErrorResponse('Invalid token', 419);
+            $tokenData = $this->userService->getResetTokenUser($request->secret_key,$request->email);
+            if (!$tokenData) {
+                return $this->error(message: 'Invalid Secret Key', status: 419);
             }
 
-            if (!hash_equals($resetToken->token, hash('sha256', $request->secret_key))) {
-                return Helper::jsonErrorResponse('Invalid Secret Key', 419);
-            }
+            // if (!hash_equals($resetToken->token, hash('sha256', $request->secret_key))) {
+            //     return $this->error(message: 'Invalid Secret Key', status: 419);
+            // }
 
-            if (Carbon::parse($resetToken->created_at)->addHour()->isPast()) {
-                return Helper::jsonErrorResponse('Secret Key expired', 419);
+            // if (Carbon::parse($resetToken->created_at)->addHour()->isPast()) {
+            //     return $this->error(message: 'Secret Key expired', status: 419);
+            // }
+
+            if ($this->userService->isTokenValid($tokenData)) {
+                return $this->error(message: 'Secret Key expired', status: 419);
             }
 
             $this->userService->updatePassword($user, $request->password);
 
-            // $user->update(['password' => Hash::make($request->password)]);
-
             DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
-            return $this->success([], 'Password reset successfully.', 200);
-            
+            return $this->success(message: 'Password reset successfully.', status: 200);
         } catch (\Exception $e) {
-            return Helper::jsonErrorResponse($e->getMessage(), 500);
+            return $this->error(message: $e->getMessage(), status: 500);
         }
     }
 }
