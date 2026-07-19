@@ -27,13 +27,15 @@ class Profile extends Model
         'zip_code',
         'address',
         'website',
+        'latitude',
+        'longitude',
     ];
 
     protected $casts = [
-        'latitude'  => 'float',
+        'latitude' => 'float',
         'longitude' => 'float',
     ];
-    
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

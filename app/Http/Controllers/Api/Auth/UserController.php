@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Models\User;
 use App\Helpers\Helper;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -78,10 +78,17 @@ class UserController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'nullable|string|max:100',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
             'phone' => 'nullable|string|numeric|max_digits:20',
             'password' => 'nullable|string|min:6|confirmed',
             'address' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'zip_code' => 'nullable|string|max:255',
+            'latitude' => 'nullable|string|max:255',
+            'longitude' => 'nullable|string|max:255',
+
         ]);
 
         if (! empty($validatedData['password'])) {
