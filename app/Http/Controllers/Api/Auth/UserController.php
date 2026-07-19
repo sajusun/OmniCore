@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Helpers\Helper;
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -110,7 +110,7 @@ class UserController extends Controller
 
         $user->update($validatedData);
 
-        $data = User::select($this->select)->with('roles')->find($user->id);
+        $data = User::select($this->select)->find($user->id);
 
         return Helper::jsonResponse(true, 'Profile updated successfully', 200, $data);
     }

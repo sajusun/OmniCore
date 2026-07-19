@@ -11,6 +11,7 @@ use App\Mail\SendOTPMail;
 use Illuminate\Support\Str;
 use App\Models\Verification;
 use Illuminate\Http\Request;
+use App\Services\UserService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\Validator;
 class ResetPasswordController extends Controller
 {
     public array $select;
-    public function __construct(private readonly VerificationService $verificationService,)
+    public function __construct(private readonly VerificationService $verificationService, private UserService $userService)
     {
         parent::__construct();
         $this->select = ['id', 'name', 'email', 'avatar'];
@@ -64,11 +65,7 @@ class ResetPasswordController extends Controller
                 return Helper::jsonErrorResponse('User not found', 404);
             }
 
-            $verified = $this->verificationService->verifyOtp(
-                user: $user,
-                purpose: Verification::PURPOSE_PASSWORD_RESET,
-                code: (string) $request->input('otp'),
-            );
+            $verified = $this->verificationService->verifyOtp(user: $user, purpose: Verification::PURPOSE_PASSWORD_RESET, code: (string) $request->input('otp'));
 
             if (!$verified) {
                 return Helper::jsonErrorResponse('Invalid OTP', 400);
@@ -99,7 +96,7 @@ class ResetPasswordController extends Controller
     {
         $request->validate([
             'email'                 => 'required|email|exists:users,email',
-            'secret_key'                 => 'required|string',
+            'secret_key'            => 'required|string',
             'password'              => 'required|string|min:6|confirmed',
         ]);
 
@@ -125,11 +122,14 @@ class ResetPasswordController extends Controller
                 return Helper::jsonErrorResponse('Secret Key expired', 419);
             }
 
-            $user->update(['password' => Hash::make($request->password)]);
+            $this->userService->updatePassword($user, $request->password);
+
+            // $user->update(['password' => Hash::make($request->password)]);
 
             DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
-            return Helper::jsonResponse(true, 'Password reset successfully.', 200);
+            return $this->success([], 'Password reset successfully.', 200);
+            
         } catch (\Exception $e) {
             return Helper::jsonErrorResponse($e->getMessage(), 500);
         }
