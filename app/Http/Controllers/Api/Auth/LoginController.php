@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Services\UserService;
 use Exception;
-use App\Models\User;
-use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
