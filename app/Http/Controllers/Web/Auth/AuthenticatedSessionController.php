@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        session()->put('t-success', 'Welcome back!');
+        session()->put('success', 'Welcome back!');
 
         $user = Auth::user();
         if ($user->status == 'active' && $user->hasAnyRole(['admin', 'super_admin'])) {
@@ -55,7 +55,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        session()->put('t-success', 'Logout Successfully');
+        session()->put('success', 'Logout Successfully');
 
         return redirect('/');
     }

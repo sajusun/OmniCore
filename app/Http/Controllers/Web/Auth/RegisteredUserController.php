@@ -69,13 +69,11 @@ class RegisteredUserController extends Controller
         ]);
 
         //* Send the new OTP to the user's email
-        Mail::to($user->email)->send(new OtpMail($user->otp, $user, 'Verify Your Email Address'));
+        // Mail::to($user->email)->send(new OtpMail($user->otp, $user, 'Verify Your Email Address'));
 
         event(new Registered($user));
 
-        //Auth::login($user);
-
-        session()->put('t-success', 'Your account has been created successfully. Please verify your email.');
+        session()->put('success', 'Your account has been created successfully. Please verify your email.');
 
         return redirect()->intended(route('verify.otp.page'))->with('email', $request->email);
     }
@@ -95,16 +93,16 @@ class RegisteredUserController extends Controller
 
             //! Check if email has already been verified
             if (!empty($user->otp_verified_at)) {
-                return back()->with('t-error', 'Email already verified.');
+                return back()->with('error', 'Email already verified.');
             }
 
             if ((string)$user->otp !== (string)$request->input('otp')) {
-                return back()->with('t-error', 'Invalid OTP.');
+                return back()->with('error', 'Invalid OTP.');
             }
 
             //* Check if OTP has expired
             if (Carbon::parse($user->otp_expires_at)->isPast()) {
-                return back()->with('t-error', 'OTP has expired.');
+                return back()->with('error', 'OTP has expired.');
             }
 
             //* Verify the email
@@ -115,7 +113,7 @@ class RegisteredUserController extends Controller
 
             return redirect()->intended(route('login'));
         } catch (Exception $e) {
-            return back()->with('t-error', $e->getMessage());
+            return back()->with('error', $e->getMessage());
         }
     }
 
@@ -133,11 +131,11 @@ class RegisteredUserController extends Controller
             $user = User::where('email', $request->input('email'))->first();
 
             if (!$user) {
-                return back()->with('t-error', 'User not found.');
+                return back()->with('error', 'User not found.');
             }
 
             if ($user->otp_verified_at) {
-                return back()->with('t-error', 'Email already verified.');
+                return back()->with('error', 'Email already verified.');
             }
 
             $newOtp               = rand(1000, 9999);
@@ -152,7 +150,7 @@ class RegisteredUserController extends Controller
             return redirect()->intended(route('verify.otp.page'))->with('email', $request->email);
 
         } catch (Exception $e) {
-            return back()->with('t-error', $e->getMessage());
+            return back()->with('error', $e->getMessage());
         }
     }
 }

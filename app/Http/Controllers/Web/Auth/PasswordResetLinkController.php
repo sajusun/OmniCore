@@ -34,10 +34,10 @@ class PasswordResetLinkController extends Controller
         );
 
         if ($status == Password::RESET_LINK_SENT) {
-            return back()->with('status', __($status))->with('t-success', 'Reset link sent successfully!');
+            return back()->with('status', __($status))->with('success', 'Reset link sent successfully!');
         } else {
             return back()->withInput($request->only('email'))
-                         ->withErrors(['email' => __($status)])->with('t-error', 'Reset link sent failed!');
+                         ->withErrors(['email' => __($status)])->with('error', 'Reset link sent failed!');
         }
     }
 }

@@ -36,7 +36,7 @@ class ConfirmablePasswordController extends Controller
 
         $request->session()->put('auth.password_confirmed_at', time());
 
-        session()->put('t-success', 'Password Confirmed Successfully');
+        session()->put('success', 'Password Confirmed Successfully');
         
         return app(WebCustomRedirectMiddleware::class)->handle($request, function () {});
     }
