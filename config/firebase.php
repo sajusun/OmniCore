@@ -10,6 +10,7 @@ return [
      */
 
     'default' => env('FIREBASE_PROJECT', 'app'),
+    'credentials_path' => env('FIREBASE_CREDENTIALS_path','storage/firebase/credentials.json'),
 
     /*
      * ------------------------------------------------------------------------

@@ -34,17 +34,18 @@ class ResetPasswordController extends Controller
             'email' => 'required|email|exists:users,email',
         ]);
         try {
-            $email = $request->input('email');
-            $user  = User::where('email', $email)->first();
+            $user = $this->userService->findByEmail($request->input('email'));
 
-            if ($user) {
-                $verifcation = $this->verificationService->send(user: $user, purpose: Verification::PURPOSE_PASSWORD_RESET);
-                return Helper::jsonResponse(true, 'Code Sent Successfully Please Check Your Email.', 200, [
-                    "otp" => $verifcation->code
-                ]);
-            } else {
+            if (!$user) {
                 return $this->error(message: 'Invalid Email Address', status: 404);
             }
+
+            $verification = $this->verificationService->send(user: $user, purpose: Verification::PURPOSE_PASSWORD_RESET);
+
+            return $this->success(message: 'Code Sent Successfully Please Check Your Email.', status: 200, data: [
+                "otp" => $verification->code
+            ]);
+            
         } catch (Exception $e) {
             return $this->error(message: $e->getMessage(), status: 500);
         }
@@ -58,7 +59,7 @@ class ResetPasswordController extends Controller
         ]);
 
         try {
-            $user = User::where('email', $request->email)->first();
+            $user = $this->userService->findByEmail($request->email);
 
             if (!$user) {
                 return $this->error(message: 'User not found', status: 404);
@@ -95,28 +96,17 @@ class ResetPasswordController extends Controller
                 return $this->error(message: 'User not found', status: 404);
             }
 
-            // $resetToken = DB::table('password_reset_tokens')->where('email', $request->email)->first();
-
-            $tokenData = $this->userService->getResetTokenUser($request->secret_key,$request->email);
+            $tokenData = $this->userService->getResetTokenUser($request->secret_key, $request->email);
             if (!$tokenData) {
                 return $this->error(message: 'Invalid Secret Key', status: 419);
             }
-
-            // if (!hash_equals($resetToken->token, hash('sha256', $request->secret_key))) {
-            //     return $this->error(message: 'Invalid Secret Key', status: 419);
-            // }
-
-            // if (Carbon::parse($resetToken->created_at)->addHour()->isPast()) {
-            //     return $this->error(message: 'Secret Key expired', status: 419);
-            // }
 
             if ($this->userService->isTokenValid($tokenData)) {
                 return $this->error(message: 'Secret Key expired', status: 419);
             }
 
             $this->userService->updatePassword($user, $request->password);
-
-            DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+            $this->userService->revokePasswordToken($user);
 
             return $this->success(message: 'Password reset successfully.', status: 200);
         } catch (\Exception $e) {

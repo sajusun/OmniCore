@@ -80,9 +80,11 @@ class RegisterController extends Controller
         ]);
 
         try {
-            $user = User::where('email', $request->input('email'))->firstOrFail();
+            $user = $this->userService->findByEmail($request->input('email'));
+            if (!$user) {
+                return $this->error(message: 'Invalid Email Address', status: 404);
+            }
 
-            // Guard: already verified
             if ($user->isEmailVerified()) {
                 return $this->error(message: 'Email is already verified.', status:409);
             }
@@ -110,7 +112,10 @@ class RegisterController extends Controller
         ]);
 
         try {
-            $user = User::where('email', $request->input('email'))->firstOrFail();
+            $user = $this->userService->findByEmail($request->input('email'));
+            if (!$user) {
+                return $this->error(message: 'Invalid Email Address', status: 404);
+            }
 
             if ($user->isEmailVerified()) {
                 return $this->error(message: 'Email is already verified.', status:409);

@@ -96,7 +96,7 @@ class UserService
         if ($email && $tokenData->email !== $email) {
             return false;
         }
-       
+
         return $tokenData;
     }
 
@@ -107,5 +107,10 @@ class UserService
             return false;
         }
         return true;
+    }
+
+    public function revokePasswordToken(User $user): void
+    {
+        DB::table('password_reset_tokens')->where('email', $user->email)->delete();
     }
 }

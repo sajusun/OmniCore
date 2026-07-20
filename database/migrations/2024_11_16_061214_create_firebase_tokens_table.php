@@ -13,11 +13,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->longText('token');
-            $table->longText('device_id');
+            $table->string('device_id');
 
             $table->string('device_name')->nullable();
             $table->string('platform')->nullable();
-            $table->longText('jwt_token')->nullable();
+            $table->longText('jwt_hash')->nullable();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->timestamp('last_activity_at')->nullable();
