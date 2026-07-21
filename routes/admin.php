@@ -115,7 +115,7 @@ Route::middleware('permission:system.optimize')->get('/optimize', function () {
     Artisan::call('config:cache');
     Cache::flush();
 
-    return redirect()->back()->with('success', 'System Optimized Successfully');
+    return redirect()->back()->with('t-success', 'System Optimized Successfully');
 })->name('optimize');
 
 // ─── CMS / Page Content ───────────────────────────────────────────────────────

@@ -1,4 +1,5 @@
 <x-admin-layout>
+
     <x-slot name="title">Users Table</x-slot>
 
     <x-slot name="header">
@@ -45,7 +46,6 @@
         ]" />
         </div>
     </div>
-
 
     <x-modal.confirm-delete name="confirm-user-delete" action="#"
         message="Are you sure you want to delete this user account? All associated records will be permanently removed." />

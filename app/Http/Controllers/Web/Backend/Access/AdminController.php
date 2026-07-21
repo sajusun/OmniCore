@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Web\Backend\Access;
 
 use App\Models\User;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Spatie\Permission\Models\Role;
-use Yajra\DataTables\Facades\DataTables;
 use App\Helpers\Helper;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Yajra\DataTables\Facades\DataTables;
 
 class AdminController extends Controller
 {

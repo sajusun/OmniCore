@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\Models\ActivityLog;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ActivityLogService
 {
@@ -79,12 +79,12 @@ class ActivityLogService
             $search = $filters['search'];
             $query->where(function ($q) use ($search) {
                 $q->where('event', 'like', "%{$search}%")
-                  ->orWhere('module', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhereHas('user', function ($u) use ($search) {
-                      $u->where('name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%");
-                  });
+                    ->orWhere('module', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($u) use ($search) {
+                        $u->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    });
             });
         }
 
@@ -238,8 +238,8 @@ class ActivityLogService
             if (in_array($key, ['updated_at'])) {
                 continue;
             }
-            $old[$key] = $oldValues && array_key_exists($key, $oldValues) 
-                ? $oldValues[$key] 
+            $old[$key] = $oldValues && array_key_exists($key, $oldValues)
+                ? $oldValues[$key]
                 : $model->getOriginal($key);
             $new[$key] = $newValue;
         }
@@ -373,4 +373,3 @@ class ActivityLogService
         );
     }
 }
-

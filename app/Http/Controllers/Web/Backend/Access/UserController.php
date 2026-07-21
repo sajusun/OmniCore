@@ -43,7 +43,7 @@ class UserController extends Controller
                 ->make(true);
         }
 
-        return view('backend.access.user.index');
+        return view('backend.access.user.index')->with('success',"helo");
     }
 
 

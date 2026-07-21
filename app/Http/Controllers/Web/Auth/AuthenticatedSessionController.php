@@ -19,7 +19,7 @@ class AuthenticatedSessionController extends Controller
     public function create(): View
     {
         $settings = Setting::first();
-        return view('auth.login',compact('settings'));
+        return view('auth.login', compact('settings'));
     }
 
     /**
@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        session()->put('success', 'Welcome back!');
+        session()->flash('success', 'Welcome back!');
 
         $user = Auth::user();
         if ($user->status == 'active' && $user->hasAnyRole(['admin', 'super_admin'])) {
