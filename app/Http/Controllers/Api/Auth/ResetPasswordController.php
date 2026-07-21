@@ -45,7 +45,6 @@ class ResetPasswordController extends Controller
             return $this->success(message: 'Code Sent Successfully Please Check Your Email.', status: 200, data: [
                 "otp" => $verification->code
             ]);
-            
         } catch (Exception $e) {
             return $this->error(message: $e->getMessage(), status: 500);
         }
@@ -65,7 +64,11 @@ class ResetPasswordController extends Controller
                 return $this->error(message: 'User not found', status: 404);
             }
 
-            $verified = $this->verificationService->verifyOtp(user: $user, purpose: Verification::PURPOSE_PASSWORD_RESET, code: (string) $request->input('otp'));
+            $verified = $this->verificationService->verifyOtp(
+                user: $user,
+                purpose: Verification::PURPOSE_PASSWORD_RESET,
+                code: (string) $request->input('otp')
+            );
 
             if (!$verified) {
                 return $this->error(message: 'Invalid OTP', status: 400);
@@ -101,7 +104,7 @@ class ResetPasswordController extends Controller
                 return $this->error(message: 'Invalid Secret Key', status: 419);
             }
 
-            if ($this->userService->isTokenValid($tokenData)) {
+            if (!$this->userService->isTokenValid($tokenData)) {
                 return $this->error(message: 'Secret Key expired', status: 419);
             }
 

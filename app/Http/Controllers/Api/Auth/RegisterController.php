@@ -10,6 +10,7 @@ use RuntimeException;
 use App\Helpers\Helper;
 use App\Models\Verification;
 use Illuminate\Http\Request;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -21,7 +22,7 @@ class RegisterController extends Controller
 {
     private array $select = ['id', 'name', 'email', 'avatar', 'last_activity_at'];
 
-    public function __construct(private readonly VerificationService $verificationService,)
+    public function __construct(private readonly VerificationService $verificationService, private UserService $userService)
     {
         parent::__construct();
     }
@@ -59,7 +60,6 @@ class RegisterController extends Controller
                 'otp'      => $verifcation->code,
                 'data'    => User::select($this->select)->find($user->id),
             ], 200);
-
         } catch (RuntimeException $e) {
             Log::error('User registration failed: ' . $e->getMessage(), ['exception' => $e]);
             DB::rollBack();
@@ -86,7 +86,7 @@ class RegisterController extends Controller
             }
 
             if ($user->isEmailVerified()) {
-                return $this->error(message: 'Email is already verified.', status:409);
+                return $this->error(message: 'Email is already verified.', status: 409);
             }
 
             $verified = $this->verificationService->verifyOtp(user: $user, purpose: Verification::PURPOSE_EMAIL_VERIFICATION, code: (string) $request->input('otp'));
@@ -95,13 +95,13 @@ class RegisterController extends Controller
                 return $this->error(message: 'Invalid OTP code. Please try again.', status: 422);
             }
 
-            return $this->success(message: 'Email verified successfully.', status:200);
+            return $this->success(message: 'Email verified successfully.', status: 200);
         } catch (RuntimeException $e) {
             Log::error('Email verification failed: ' . $e->getMessage(), ['exception' => $e]);
             return $this->error(message: $e->getMessage(), status: 422);
         } catch (Exception $e) {
             log::error('Email verification failed: ' . $e->getMessage(), ['exception' => $e]);
-            return $this->error(message: $e->getMessage(), status:500);
+            return $this->error(message: $e->getMessage(), status: 500);
         }
     }
 
@@ -118,23 +118,26 @@ class RegisterController extends Controller
             }
 
             if ($user->isEmailVerified()) {
-                return $this->error(message: 'Email is already verified.', status:409);
+                return $this->error(message: 'Email is already verified.', status: 409);
             }
 
             $verification = $this->verificationService->resend(user: $user, purpose: Verification::PURPOSE_EMAIL_VERIFICATION, type: 'otp');
 
-            return $this->success(message: 'A new OTP has been sent to your email.', status:200,
-             data:[
-              'expires_at' => $verification->expires_at?->toDateTimeString(),
-              'request_count' => $verification->request_count, 
-              'otp' => $verification->code,
-              ]);
+            return $this->success(
+                message: 'A new OTP has been sent to your email.',
+                status: 200,
+                data: [
+                    'expires_at' => $verification->expires_at?->toDateTimeString(),
+                    'request_count' => $verification->request_count,
+                    'otp' => $verification->code,
+                ]
+            );
         } catch (RuntimeException $e) {
             log::error('Resend OTP failed: ' . $e->getMessage(), ['exception' => $e]);
-            return $this->error(message:$e->getMessage(),status:422);
+            return $this->error(message: $e->getMessage(), status: 422);
         } catch (Exception $e) {
             log::error('Resend OTP failed: ' . $e->getMessage(), ['exception' => $e]);
-            return $this->error(message: $e->getMessage(), status:500);
+            return $this->error(message: $e->getMessage(), status: 500);
         }
     }
 }
