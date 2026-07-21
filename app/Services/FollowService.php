@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Services\BaseService;
 
-class FollowService
+class FollowService extends BaseService
 {
     public function follow(User $authUser, User $user): void
     {
@@ -35,11 +36,11 @@ class FollowService
 
     public function followers(User $user)
     {
-        return $user->followers()->paginate(15);
+        return $this->applyPagination($user->followers());
     }
 
     public function followings(User $user)
     {
-        return $user->followings()->paginate(15);
+        return $this->applyPagination($user->followings());
     }
 }

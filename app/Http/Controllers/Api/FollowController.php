@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\FollowerResource;
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Services\FollowService;
 use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
 
 class FollowController extends Controller
 {
     private User $user;
+
     public function __construct(private readonly FollowService $followService)
     {
         $this->user = auth('api')->user();
@@ -20,43 +21,49 @@ class FollowController extends Controller
     {
         $this->followService->follow($this->user, $user);
 
-        return response()->json([
-            'message' => 'User followed successfully.',
-        ]);
+        return $this->success(message: 'User followed successfully.');
     }
 
     public function unfollow(User $user): JsonResponse
     {
         $this->followService->unfollow($this->user, $user);
 
-        return response()->json([
-            'message' => 'User unfollowed successfully.',
-        ]);
+        return $this->success(message: 'User unfollowed successfully.');
     }
 
     public function toggle(User $user): JsonResponse
     {
         $following = $this->followService->toggle($this->user, $user);
 
-        return response()->json([
-            'message' => $following
-                ? 'User followed successfully.'
-                : 'User unfollowed successfully.',
-            'following' => $following,
-        ]);
+        return $this->success(
+            message: $following ? 'User followed successfully.' : 'User unfollowed successfully.',
+            data: [
+                'follow' => $following,
+            ],
+        );
     }
 
     public function followers(): JsonResponse
     {
-        return response()->json(
-            $this->followService->followers($this->user)
+        $data = $this->followService->followers($this->user);
+
+        return $this->response(
+            message: 'Followers',
+            data: FollowerResource::collection($data),
+            paginate: true,
+            paginateData: $data
         );
     }
 
     public function followings(): JsonResponse
     {
-        return response()->json(
-            $this->followService->followings($this->user)
+        $data = $this->followService->followings($this->user);
+
+        return $this->response(
+            message: 'Following',
+            data: FollowerResource::collection($data),
+            paginate: true,
+            paginateData: $data
         );
     }
 }
