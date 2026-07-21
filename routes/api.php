@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\Api\FollowController;
+use App\Http\Controllers\Api\FriendController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\Auth\UserController;
 use App\Http\Controllers\Api\Auth\LoginController;
@@ -42,17 +44,41 @@ Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::delete('/profile/delete', [UserController::class, 'destroy']);
 });
 
+Route::middleware('auth:api')->prefix('friends')->group(function () {
+
+    // Friend Request
+    Route::post('/request/{user}', [FriendController::class, 'sendRequest']);
+    Route::post('/accept/{friendRequest}', [FriendController::class, 'accept']);
+    Route::post('/reject/{friendRequest}', [FriendController::class, 'reject']);
+    Route::delete('/cancel/{friendRequest}', [FriendController::class, 'cancel']);
+
+    // Friend
+    Route::delete('/unfriend/{user}', [FriendController::class, 'unfriend']);
+    Route::get('/', [FriendController::class, 'friends']);
+
+    // Requests
+    Route::get('/requests/pending', [FriendController::class, 'pendingRequests']);
+    Route::get('/requests/sent', [FriendController::class, 'sentRequests']);
+});
+
+Route::middleware('auth:api')->group(function () {
+    Route::post('/users/{user}/follow', [FollowController::class, 'follow']);
+    Route::delete('/users/{user}/unfollow', [FollowController::class, 'unfollow']);
+    Route::post('/users/{user}/toggle-follow', [FollowController::class, 'toggle']);
+    Route::get('/users/followers', [FollowController::class, 'followers']);
+    Route::get('/users/followings', [FollowController::class, 'followings']);
+});
+
 Route::middleware('auth:api')->group(function () {
     Route::get('/vehicles/search', [VehicleController::class, 'search']);
     Route::get('/garages/{garageId}/vehicles', [VehicleController::class, 'getByGarage']);
     Route::delete('/vehicles/media/{media}', [VehicleController::class, 'deleteImage']);
-    
-    Route::get('/vehicles', [VehicleController::class,'index']);
-    Route::post('/vehicles/store', [VehicleController::class,'store']);
-    Route::get('/vehicles/{vehicle}/show', [VehicleController::class,'show']);
-    Route::post('/vehicles/{vehicle}/update', [VehicleController::class,'update']);
-    Route::delete('/vehicles/{vehicle}/delete', [VehicleController::class,'destroy']);
 
+    Route::get('/vehicles', [VehicleController::class, 'index']);
+    Route::post('/vehicles/store', [VehicleController::class, 'store']);
+    Route::get('/vehicles/{vehicle}/show', [VehicleController::class, 'show']);
+    Route::post('/vehicles/{vehicle}/update', [VehicleController::class, 'update']);
+    Route::delete('/vehicles/{vehicle}/delete', [VehicleController::class, 'destroy']);
 });
 
 

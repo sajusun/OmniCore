@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Models\User;
 use App\Helpers\Helper;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
@@ -65,6 +65,6 @@ class ProfileController extends Controller
 
         $data = User::select($this->select)->find($this->user->id);
 
-        return Helper::jsonResponse(true, 'Profile updated successfully', 200, $data);
+        return $this->success(message: 'Profile updated successfully', data: $data);
     }
 }

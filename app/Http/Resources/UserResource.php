@@ -18,8 +18,8 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name ?? null,
             'email' => $this->email ?? null,
-            'avatar' => $this->avatar ?? null,
-            'last_activity_at' => $this->last_activity_at ?? null,
+            'avatar' => $this->avatar ? url($this->avatar) : null,
+            'last_activity_at' => $this->last_activity_at ? $this->last_activity_at->diffForHumans() : null,
             'is_online' => $this->when($this->is_online, $this->is_online, null)
         ];
     }

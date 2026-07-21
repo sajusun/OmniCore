@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Traits\HasFriends;
+use App\Traits\HasFollowers;
 use App\Traits\HasNotifications;
+use App\Traits\HasFriendRequests;
 use App\Modules\Media\Traits\HasMedia;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -15,7 +18,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, HasMedia, HasNotifications, HasRoles, Notifiable, SoftDeletes;
+    use HasFactory, HasMedia, HasNotifications, HasRoles, Notifiable, SoftDeletes, HasFollowers, HasFriends, HasFriendRequests;
 
     protected $guard_name = ['api', 'web'];
 
