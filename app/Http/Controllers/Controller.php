@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 abstract class Controller
 {
@@ -40,42 +43,32 @@ abstract class Controller
         return response()->json(['status' => false, 'message' => $message, 'code' => $status, 'errors'  => $errors], $status);
     }
 
-    protected function response(bool $status, string $message, int $code, $data = null, bool $paginate = false, $paginateData = null)
+    protected function response(bool $status = true, string $message = 'Success', int $code = 200, $data = null, bool $paginate = false, $paginateData = null)
     {
         $response = [
-            'status' => $status,
+            'status'  => $status,
             'message' => $message,
-            'code' => $code,
+            'code'    => $code,
         ];
-        if ($paginate && ! empty($paginateData)) {
-            $response['data'] = $data;
+
+        $paginationObject = $paginateData ?? ($paginate ? $data : null);
+
+        if ($paginate && $paginationObject) {
+            $response['data'] = $paginateData ? $data : $paginationObject->items();
+
+            // Pagination metadata mapping
             $response['pagination'] = [
-                'current_page' => $paginateData->currentPage(),
-                'last_page' => $paginateData->lastPage(),
-                'per_page' => $paginateData->perPage(),
-                'total' => $paginateData->total(),
-                'first_page_url' => $paginateData->url(1),
-                'last_page_url' => $paginateData->url($paginateData->lastPage()),
-                'next_page_url' => $paginateData->nextPageUrl(),
-                'prev_page_url' => $paginateData->previousPageUrl(),
-                'from' => $paginateData->firstItem(),
-                'to' => $paginateData->lastItem(),
-                'path' => $paginateData->path(),
-            ];
-        } elseif ($paginate && ! empty($data)) {
-            $response['data'] = $data->items();
-            $response['pagination'] = [
-                'current_page' => $data->currentPage(),
-                'last_page' => $data->lastPage(),
-                'per_page' => $data->perPage(),
-                'total' => $data->total(),
-                'first_page_url' => $data->url(1),
-                'last_page_url' => $data->url($data->lastPage()),
-                'next_page_url' => $data->nextPageUrl(),
-                'prev_page_url' => $data->previousPageUrl(),
-                'from' => $data->firstItem(),
-                'to' => $data->lastItem(),
-                'path' => $data->path(),
+                'current_page'   => $paginationObject->currentPage(),
+                'last_page'      => $paginationObject->lastPage(),
+                'per_page'       => $paginationObject->perPage(),
+                'total'          => $paginationObject->total(),
+                'first_page_url' => $paginationObject->url(1),
+                'last_page_url'  => $paginationObject->url($paginationObject->lastPage()),
+                'next_page_url'  => $paginationObject->nextPageUrl(),
+                'prev_page_url'  => $paginationObject->previousPageUrl(),
+                'from'           => $paginationObject->firstItem(),
+                'to'             => $paginationObject->lastItem(),
+                'path'           => $paginationObject->path(),
             ];
         } elseif ($data !== null) {
             $response['data'] = $data;
@@ -84,7 +77,7 @@ abstract class Controller
         return response()->json($response, $code);
     }
 
-    protected function makeSlug(string $title, ?Model $model=null): string
+    protected function makeSlug(string $title, ?Model $model = null): string
     {
         $slug = Str::slug($title);
         if ($model) {
@@ -96,4 +89,5 @@ abstract class Controller
 
         return $slug;
     }
+
 }

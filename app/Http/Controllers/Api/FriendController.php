@@ -83,7 +83,7 @@ class FriendController extends Controller
         try {
             $friends = $this->friendService->friends($this->user);
 
-            return $this->success(message: 'Friends fetched successfully.', data: FriendResource::collection($friends));
+            return $this->response(message: 'Friends fetched successfully.', data: FriendResource::collection($friends), paginate: true, paginateData: $friends);
         } catch (\Throwable $e) {
             return $this->error(message: $e->getMessage(), status: 400);
         }
@@ -95,7 +95,12 @@ class FriendController extends Controller
         try {
             $requests = $this->friendService->pendingRequests($this->user);
 
-            return $this->success(message: 'Pending requests fetched successfully.', data: FriendResource::collection($requests->items()));
+            return $this->response(
+                message: 'Pending requests fetched successfully.',
+                data: FriendResource::collection($requests),
+                paginate: true,
+                paginateData: $requests
+            );
         } catch (\Throwable $e) {
             return $this->error(message: $e->getMessage(), status: 400);
         }
@@ -108,8 +113,7 @@ class FriendController extends Controller
     {
         try {
             $requests = $this->friendService->sentRequests($this->user);
-
-            return $this->success(message: 'Sent requests fetched successfully.', data: FriendResource::collection($requests->items()));
+            return $this->response(message: 'Sent requests fetched successfully.', data: FriendResource::collection($requests), paginate: true, paginateData: $requests);
         } catch (\Throwable $e) {
             return $this->error(message: $e->getMessage(), status: 400);
         }
