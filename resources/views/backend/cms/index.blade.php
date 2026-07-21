@@ -9,7 +9,8 @@
                     <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Page &gt; {{ str($page)->replace('-', ' ')->title() . ' > ' . str($section)->replace('-', ' ')->title() }}
+                    Page &gt; {{ str($page)->replace('-', ' ')->title() . ' > ' . str($section)->replace('-', '
+                    ')->title() }}
                 </li>
             </ol>
         </nav>
@@ -51,7 +52,7 @@
                 @endif
 
                 @if (in_array('title', $elements))
-                <x-form.textarea name="title" label="Title" rows="2" placeholder="Enter title"
+                <x-form.text name="title" label="Title" rows="2" placeholder="Enter title"
                     value="{{ $data->title ?? (old('title') ?? '') }}" />
                 @endif
 
@@ -67,8 +68,12 @@
 
                 @if (in_array('description', $elements))
                 <x-form.quilleditor name="description" label="Content (Rich Text)" placeholder="Enter Content"
-                    value="{{ $data->description ?? old('description') }}" />
+                    :value="$data->description?? old('description')" />
                 @endif
+                {{-- @if (in_array('description', $elements))
+                <x-form.joditeditor name="description" label="Content (Rich Text)" placeholder="Enter Content"
+                    :value="$data->description ?? old('description')" />
+                @endif --}}
 
                 @if (in_array('short_description', $elements))
                 <x-form.textarea name="short_description" label="Short Description" rows="3"
@@ -76,11 +81,13 @@
                 @endif
 
                 @if (in_array('image', $elements))
-                <x-form.file name="image" label="Hero Image" placeholder="Choose Image" file="{{ $data->image ?? '' }}" />
+                <x-form.file name="image" label="Hero Image" placeholder="Choose Image"
+                    file="{{ $data->image ?? '' }}" />
                 @endif
 
                 @if (in_array('bg', $elements))
-                <x-form.file name="bg" label="Background Image" placeholder="Choose Image" file="{{ $data->bg ?? '' }}" />
+                <x-form.file name="bg" label="Background Image" placeholder="Choose Image"
+                    file="{{ $data->bg ?? '' }}" />
                 @endif
 
                 @if (in_array('video', $elements))
@@ -98,11 +105,13 @@
 
                 <hr class="my-4">
 
-                <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3">
+                <div
+                    class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3">
                     <div>
                         <x-form.select name="status" label="Status" value="{{ $data?->status ?? old('status') }}">
                             <option value="active" {{ $data?->status == 'active' ? 'selected' : '' }}>Active</option>
-                            <option value="inactive" {{ $data?->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                            <option value="inactive" {{ $data?->status == 'inactive' ? 'selected' : '' }}>Inactive
+                            </option>
                         </x-form.select>
                     </div>
                     <x-form.submit>Save Changes</x-form.submit>

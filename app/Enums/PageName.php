@@ -4,9 +4,9 @@ namespace App\Enums;
 
 enum PageName: string
 {
-    case HOME           = 'home';
-    case ABOUT          = 'about';
-    case CONTACT        = 'contact';
+    // case HOME           = 'home';
+    // case ABOUT          = 'about';
+    case CONTACT        = 'help';
         // case SERVICES       = 'services';
     case PRIVACY_POLICY = 'privacy-policy';
     case TERMS          = 'terms-and-conditions';
@@ -14,9 +14,9 @@ enum PageName: string
     public function label(): string
     {
         return match ($this) {
-            self::HOME           => 'Home',
-            self::ABOUT          => 'About Us',
-            self::CONTACT        => 'Contact',
+            // self::HOME           => 'Home',
+            // self::ABOUT          => 'About Us',
+            self::CONTACT        => 'Help',
             // self::SERVICES       => 'Services',
             self::PRIVACY_POLICY => 'Privacy Policy',
             self::TERMS          => 'Terms & Conditions',
@@ -26,19 +26,18 @@ enum PageName: string
     public function sections(): array
     {
         return match ($this) {
-            self::HOME           => [
-                SectionName::HERO,
-                SectionName::FEATURES,
-                SectionName::TESTIMONIALS,
-            ],
-            self::ABOUT          => [
-                SectionName::HERO,
-                SectionName::TEAM,
-                SectionName::MISSION,
-            ],
+            // self::HOME           => [
+            //     SectionName::HERO,
+            //     SectionName::FEATURES,
+            //     SectionName::TESTIMONIALS,
+            // ],
+            // self::ABOUT          => [
+            //     SectionName::HERO,
+            //     SectionName::TEAM,
+            //     SectionName::MISSION,
+            // ],
             self::CONTACT          => [
-                SectionName::HERO_IMAGE,
-                SectionName::CONTECT_INFO,
+                SectionName::CONTENT,
             ],
             self::PRIVACY_POLICY          => [
                 SectionName::CONTENT,

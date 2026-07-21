@@ -22,7 +22,7 @@ enum SectionName: string
             self::TESTIMONIALS      => ['title', 'images'],
             self::TEAM              => ['title', 'description', 'images'],
             self::MISSION           => ['title', 'description', 'image', 'meta'],
-            self::CONTENT           => ['title', 'description', 'image'],
+            self::CONTENT           => ['title', 'description'],
             self::CONTECT_INFO      => ['title', 'meta'],
         };
     }
