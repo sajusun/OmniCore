@@ -79,7 +79,7 @@ class PostController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'content' => ['nullable', 'string'],
-            'visibility' => ['required'],
+            'visibility' => ['nullable'],
         ]);
 
         if ($validator->fails()) {
@@ -109,7 +109,6 @@ class PostController extends Controller
     }
     public function savedPosts(): JsonResponse
     {
-        dd($this->postService->savedPosts());
         $posts = $this->postService->savedPosts();
         return Helper::jsonResponse(true, 'Saved posts fetched successfully.', 200, PostResource::collection($posts));
     }

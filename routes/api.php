@@ -92,16 +92,17 @@ Route::middleware(['auth:api'])->controller(PostController::class)->prefix('/pos
     Route::post('/{post}/like', 'like');
     Route::post('/{post}/repost', 'repost');
     Route::post('/{post}/save', 'toggleSave');
-    Route::get('/saved-posts',  'savedPosts');
+    Route::get('/saved-posts', 'savedPosts');
     Route::get('/share/{share_link}', 'share')->name('post.share');
 
     Route::get('/feeds', 'feed');
 });
+
 Route::middleware('auth:api')->group(function () {
     Route::get('/posts/{post}/comments', [PostCommentController::class, 'index']);
     Route::post('/posts/{post}/comments', [PostCommentController::class, 'store']);
     Route::post('/comments/{comment}/update', [PostCommentController::class, 'update']);
-    Route::post('/comments/{comment}/delete', [PostCommentController::class, 'destroy']);
+    Route::delete('/comments/{comment}/delete', [PostCommentController::class, 'destroy']);
     Route::post('/comments/{comment}/reply', [PostCommentController::class, 'reply']);
     Route::post('/comments/{comment}/like', [PostCommentController::class, 'toggleLike']);
     Route::get('/comments/{comment}/replies', [PostCommentController::class, 'replies']);

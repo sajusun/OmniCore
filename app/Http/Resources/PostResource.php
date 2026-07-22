@@ -21,7 +21,7 @@ class PostResource extends JsonResource
 
             'type' => $this->type,
             'visibility' => $this->visibility,
-            'friend_ids' => $this->visibleUsers->pluck('id')->values(),
+            'friend_ids' => when($this->visibleUsers,$this->visibleUsers->pluck('id')->values() ),
             'friends' => FriendResource::collection($this->whenLoaded('visibleUsers') ?? []),
             'status' => $this->status,
 

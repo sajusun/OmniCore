@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Post;
 use App\Models\User;
-use App\Models\Image;
 use App\Enums\PostType;
 use App\Helpers\Helper;
 use App\Models\PostLike;
@@ -225,12 +224,12 @@ class PostService
                 'slug'           => null,
                 'content'        => $data['content'] ?? null,
                 'thumbnail'      => null,
-                'visibility'     => $data['visibility'],
+                'visibility'     => $data['visibility'] ?? PostVisibilityEnum::PUBLIC->value,
                 'type'           => PostType::SHARED,
                 'status'         => $post->status,
             ]);
 
-            return $sharedPost->load(['user', 'sharedPost.user', 'sharedPost.images',]);
+            return $sharedPost->load(['user', 'sharedPost.user', 'sharedPost.media',]);
         });
     }
 
@@ -254,7 +253,9 @@ class PostService
 
     public function savedPosts()
     {
-        return auth()->user()
-            ->savedPosts()->with(['user', 'media', 'sharedPost.user', 'sharedPost.media'])->latest()->paginate(15);
+        $user = auth()->user();
+
+        $data = $user->savedPosts()->with(['user', 'media', 'media'])->latest()->paginate(15);
+        return $data;
     }
 }

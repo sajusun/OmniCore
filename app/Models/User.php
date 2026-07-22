@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasPost;
 use App\Traits\HasFriends;
 use App\Traits\HasFollowers;
 use App\Traits\HasNotifications;
@@ -18,7 +19,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, HasMedia, HasNotifications, HasRoles, Notifiable, SoftDeletes, HasFollowers, HasFriends, HasFriendRequests;
+    use HasFactory,
+        HasMedia,
+        HasNotifications,
+        HasRoles,
+        Notifiable,
+        SoftDeletes,
+        HasFollowers,
+        HasFriends,
+        HasFriendRequests,
+        HasPost;
 
     protected $guard_name = ['api', 'web'];
 

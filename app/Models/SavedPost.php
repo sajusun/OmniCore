@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Modules\Media\Traits\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 
 class SavedPost extends Model
 {
+    use HasMedia;
     protected $guarded = [];
 
     public function post()
