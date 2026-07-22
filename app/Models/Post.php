@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Enums\PostType;
 use Illuminate\Support\Str;
+use App\Modules\Media\Traits\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    use HasMedia;
     protected $guarded = [];
 
     protected $appends = [
@@ -44,10 +46,6 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function images()
-    {
-        return $this->hasMany(Image::class);
-    }
 
     public function likes()
     {

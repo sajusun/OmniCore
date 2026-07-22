@@ -14,9 +14,11 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\VerificationController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\FirebaseTokenController;
+use App\Http\Controllers\Api\Frontend\PostController;
 use App\Http\Controllers\Api\Auth\SocialLoginController;
 use App\Http\Controllers\Api\Frontend\VehicleController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\Frontend\PostCommentController;
 use App\Http\Controllers\Api\Webhooks\RevenueCatWebhookController;
 
 Route::group(['middleware' => 'guest:api'], function ($router) {
@@ -81,7 +83,29 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/vehicles/{vehicle}/delete', [VehicleController::class, 'destroy']);
 });
 
+Route::middleware(['auth:api'])->controller(PostController::class)->prefix('/posts')->group(function () {
+    Route::get('/', 'index');
+    Route::post('/store', 'store');
+    Route::get('/{post}/show', 'show');
+    Route::post('/{post}/update', 'update');
+    Route::delete('/{post}/delete', 'destroy');
+    Route::post('/{post}/like', 'like');
+    Route::post('/{post}/repost', 'repost');
+    Route::post('/{post}/save', 'toggleSave');
+    Route::get('/saved-posts',  'savedPosts');
+    Route::get('/share/{share_link}', 'share')->name('post.share');
 
+    Route::get('/feeds', 'feed');
+});
+Route::middleware('auth:api')->group(function () {
+    Route::get('/posts/{post}/comments', [PostCommentController::class, 'index']);
+    Route::post('/posts/{post}/comments', [PostCommentController::class, 'store']);
+    Route::post('/comments/{comment}/update', [PostCommentController::class, 'update']);
+    Route::post('/comments/{comment}/delete', [PostCommentController::class, 'destroy']);
+    Route::post('/comments/{comment}/reply', [PostCommentController::class, 'reply']);
+    Route::post('/comments/{comment}/like', [PostCommentController::class, 'toggleLike']);
+    Route::get('/comments/{comment}/replies', [PostCommentController::class, 'replies']);
+});
 /*
 # Firebase Notification Route
 */

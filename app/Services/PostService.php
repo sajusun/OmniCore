@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Image;
 use App\Enums\PostType;
 use App\Helpers\Helper;
@@ -12,29 +13,36 @@ use Illuminate\Support\Str;
 use App\Enums\PostStatusEnum;
 use App\Enums\PostVisibilityEnum;
 use GuzzleHttp\Psr7\UploadedFile;
-use App\Models\PostVisibilityUser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Modules\Media\Traits\HandlesMedia;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class PostService
 {
+    use HandlesMedia;
+    private User $user;
+    private Post $post;
+    public function __construct()
+    {
+        $this->user = auth('api')->user();
+    }
 
     public function index(): LengthAwarePaginator
     {
         return Post::query()
-            ->with(['user', 'images', 'sharedPost.user', 'sharedPost.images',])
+            ->with(['user', 'media', 'sharedPost.user', 'sharedPost.media',])
             ->withCount(['likes', 'comments', 'shares', 'views'])
-            ->where('user_id', auth()->id())->latest()->paginate(15);
+            ->where('user_id', auth('api')->id())->latest()->paginate(15);
     }
 
     public function show(Post $post): Post
     {
         return $post->load([
             'user',
-            'images',
+            'media',
             'sharedPost.user',
-            'sharedPost.images',
+            'sharedPost.media',
             'comments.user',
             'comments.likes',
             'comments.replies.user',
@@ -55,11 +63,7 @@ class PostService
             $thumbnail = null;
 
             if (isset($data['thumbnail']) && $data['thumbnail'] instanceof UploadedFile) {
-                $thumbnail = Helper::fileUpload(
-                    $data['thumbnail'],
-                    'post',
-                    time() . '_' . getFileName($data['thumbnail'])
-                );
+                $thumbnail = Helper::fileUpload($data['thumbnail'], 'post',);
             }
 
             $post = Post::create([
@@ -68,7 +72,7 @@ class PostService
                 'slug'         => Helper::makeSlug(Post::class, $data['title'] ?? Str::random()),
                 'content'      => $data['content'],
                 'thumbnail'    => $thumbnail,
-                'visibility'   => $data['visibility'],
+                'visibility'   => $data['visibility'] ?? PostVisibilityEnum::PUBLIC->value,
                 'type'         => $data['type'] ?? 'post',
                 'status'       => 'published',
                 'shared_post_id' => $data['shared_post_id'] ?? null,
@@ -81,28 +85,11 @@ class PostService
             if (! empty($data['media'])) {
 
                 foreach ($data['media'] as $key => $media) {
-
-
-                    $mimeType = $media->getMimeType();
-                    $type = str_starts_with($mimeType, 'video/') ? 'video' : 'image';
-
-                    $mediaPath = Helper::fileUpload(
-                        $media,
-                        'post',
-                        'post_' . time() . '_' . Str::random(10)
-                    );
-
-
-                    Image::create([
-                        'post_id'       => $post->id,
-                        'path'          => $mediaPath,
-                        'type'          => $type,
-                        'sort_order'    => $key + 1,
-                    ]);
+                    $this->uploadMedia($post, $media);
                 }
             }
 
-            return $post->load(['user', 'images',]);
+            return $post->load(['user', 'media',]);
         });
     }
 
@@ -116,17 +103,13 @@ class PostService
                     Helper::fileDelete($post->thumbnail);
                 }
 
-                $post->thumbnail = Helper::fileUpload(
-                    $data['thumbnail'],
-                    'post',
-                    time() . '_' . getFileName($data['thumbnail'])
-                );
+                $post->thumbnail = Helper::fileUpload($data['thumbnail'], 'post');
             }
 
             $post->update([
                 'title'          => $data['title'] ?? $post->title,
                 'content'        => $data['content'],
-                'visibility'     => $data['visibility'],
+                'visibility'     => $data['visibility'] ?? $post->visibility,
                 'type'           => $data['type'] ?? $post->type,
                 'shared_post_id' => $data['shared_post_id'] ?? $post->shared_post_id,
             ]);
@@ -137,28 +120,13 @@ class PostService
 
             if (!empty($data['media'])) {
 
-                $sortOrder = $post->images()->max('sort_order') ?? 0;
-
                 foreach ($data['media'] as $media) {
 
-                    $mimeType = $media->getMimeType();
-                    $type = str_starts_with($mimeType, 'video/') ? 'video' : 'image';
-
-                    $mediaPath = Helper::fileUpload(
-                        $media,
-                        'post',
-                        'post_' . time() . '_' . Str::random(10)
-                    );
-
-                    $post->images()->create([
-                        'path' => $mediaPath,
-                        'type' => $type,
-                        'sort_order' => ++$sortOrder,
-                    ]);
+                    $this->updateMedia($post, $media);
                 }
             }
 
-            return $post->load(['user', 'images',]);
+            return $post->load(['user', 'media',]);
         });
     }
 
@@ -171,14 +139,11 @@ class PostService
                 Helper::fileDelete($post->thumbnail);
             }
 
-            // Delete Post Images
-            foreach ($post->images as $image) {
+            // Delete All Media
+            $mediaIds = $post->media()->pluck('id')->toArray();
 
-                if (!empty($image->image)) {
-                    Helper::fileDelete($image->image);
-                }
-
-                $image->delete();
+            if (!empty($mediaIds)) {
+                $this->deleteMedia($mediaIds);
             }
 
             // Soft Delete Post
@@ -186,26 +151,6 @@ class PostService
         });
     }
 
-    // public function feed(): LengthAwarePaginator
-    // {
-    //     return Post::query()
-    //         ->with([
-    //             'user',
-    //             'images',
-    //             'sharedPost.user',
-    //             'sharedPost.images',
-    //         ])
-    //         ->withCount([
-    //             'likes',
-    //             'comments',
-    //             'shares',
-    //             'views',
-    //         ])
-    //         ->where('status', 'published')
-    //         ->where('visibility', 'public')
-    //         ->latest()
-    //         ->paginate(15);
-    // }
     public function feed(): LengthAwarePaginator
     {
         $authId = Auth::id();
@@ -213,18 +158,17 @@ class PostService
         return Post::query()
             ->with([
                 'user',
-                'images',
+                'media',
                 'visibleUsers',
                 'sharedPost.user',
-                'sharedPost.images',
+                'sharedPost.media',
             ])
             ->withCount([
                 'likes',
                 'comments',
                 'shares',
                 'views',
-            ])
-            ->where('status', PostStatusEnum::PUBLISHED->value)
+            ])->where('status', PostStatusEnum::PUBLISHED->value)
             ->where(function ($query) use ($authId) {
 
                 $query->where('user_id', $authId);
@@ -311,6 +255,6 @@ class PostService
     public function savedPosts()
     {
         return auth()->user()
-            ->savedPosts()->with(['user', 'images', 'sharedPost.user', 'sharedPost.images'])->latest()->paginate(15);
+            ->savedPosts()->with(['user', 'media', 'sharedPost.user', 'sharedPost.media'])->latest()->paginate(15);
     }
 }
