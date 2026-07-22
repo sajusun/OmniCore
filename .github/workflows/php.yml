@@ -1,21 +1,20 @@
-# name: Deploy project to our server
-# on:
-#   push:
-#     branches:
-#       - main
-# jobs:
-#   FTP-Deploy-Action:
-#     name: FTP-Deploy-Action
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2.1.0
-#         with:
-#           fetch-depth: 2
-#       - name: FTP-Deploy-Action
-#         uses: SamKirkland/FTP-Deploy-Action@4.3.0
-#         with:
-#           server: ftp.thewarriors.team
-#           username: ojasdocs@ojaisdocs.thewarriors.team
-#           password: E~,oExEahNe{PW@33333
-#           port: 21
-
+name: Deploy project to our server
+on:
+  push:
+    branches:
+      - main
+jobs:
+  FTP-Deploy-Action:
+    name: FTP-Deploy-Action
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.1.0
+        with:
+          fetch-depth: 2
+      - name: FTP-Deploy-Action
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: jamieb84.thewarriors.team
+          username: jamieb84@jamieb84.thewarriors.team
+          password: 4KAT24Tn9hK.wZc@
+          port: 21
