@@ -69,8 +69,10 @@ class User extends Authenticatable implements JWTSubject
         return [
             'otp_verified_at' => 'datetime',
             'password' => 'hashed',
+            'last_activity_at' => 'datetime',
         ];
     }
+
 
     protected static function booted(): void
     {
@@ -156,4 +158,35 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Vehicle::class);
     }
+
+    /*
+     |--------------------------------------------------------------------------
+     | Chat Relationships
+     |--------------------------------------------------------------------------
+     */
+
+    public function rooms(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(ChatRoom::class, 'chat_participants', 'user_id', 'chat_room_id')
+            ->withPivot(['role', 'joined_at', 'last_read_message_id', 'last_read_at', 'notification_enabled', 'sound_enabled', 'mute_until', 'settings'])
+            ->withTimestamps();
+    }
+
+    public function messages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function blockedUsers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_blocks', 'user_id', 'blocked_user_id')
+            ->withTimestamps();
+    }
+
+    public function blockedBy(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_blocks', 'blocked_user_id', 'user_id')
+            ->withTimestamps();
+    }
 }
+

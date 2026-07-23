@@ -7,19 +7,24 @@ use App\Http\Controllers\Api\FriendController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\Auth\UserController;
 use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Api\Chat\BlockController;
 use App\Http\Controllers\Api\NewsletterController;
 use App\Http\Controllers\Api\Auth\LogoutController;
+use App\Http\Controllers\Api\Chat\MessageController;
 use App\Http\Controllers\Api\Frontend\CmsController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\VerificationController;
 use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\Chat\ChatRoomController;
 use App\Http\Controllers\Api\FirebaseTokenController;
 use App\Http\Controllers\Api\Frontend\PostController;
 use App\Http\Controllers\Api\Auth\SocialLoginController;
+use App\Http\Controllers\Api\Chat\ChatSettingController;
 use App\Http\Controllers\Api\Frontend\VehicleController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Frontend\PostCommentController;
 use App\Http\Controllers\Api\Webhooks\RevenueCatWebhookController;
+
 
 Route::group(['middleware' => 'guest:api'], function ($router) {
 
@@ -160,4 +165,40 @@ Route::middleware(['auth:api'])->prefix('verification')->name('api.verification.
     Route::post('resend', 'resend')->name('resend');
 });
 
+// Chat Module Routes
+Route::middleware('auth:api')->prefix('chat')->group(function () {
+    // Rooms
+    Route::post('/rooms/single', [ChatRoomController::class, 'single']);
+    Route::post('/rooms/group', [ChatRoomController::class, 'group']);
+    Route::post('/rooms/channel', [ChatRoomController::class, 'channel']);
+    Route::get('/rooms', [ChatRoomController::class, 'index']);
+    Route::get('/rooms/{room}', [ChatRoomController::class, 'show']);
+    Route::patch('/rooms/{room}', [ChatRoomController::class, 'update']);
+    Route::delete('/rooms/{room}', [ChatRoomController::class, 'destroy']);
+
+    // Participants
+    Route::post('/rooms/{room}/participants', [ChatRoomController::class, 'addParticipants']);
+    Route::delete('/rooms/{room}/participants/{user}', [ChatRoomController::class, 'removeParticipant']);
+    Route::post('/rooms/{room}/leave', [ChatRoomController::class, 'leave']);
+    Route::post('/channels/{room}/join', [ChatRoomController::class, 'join']);
+
+    // Messages
+    Route::get('/rooms/{room}/messages', [MessageController::class, 'index']);
+    Route::post('/messages', [MessageController::class, 'send']);
+    Route::patch('/messages/{message}', [MessageController::class, 'update']);
+    Route::delete('/messages/{message}', [MessageController::class, 'destroy']);
+
+    // Blocks
+    Route::post('/block/{user}', [BlockController::class, 'block']);
+    Route::post('/unblock/{user}', [BlockController::class, 'unblock']);
+    Route::get('/blocked-users', [BlockController::class, 'blockedUsers']);
+
+    // Settings
+    Route::post('/rooms/{room}/settings/notification', [ChatSettingController::class, 'updateNotification']);
+    Route::post('/rooms/{room}/settings/sound', [ChatSettingController::class, 'updateSound']);
+    Route::post('/rooms/{room}/settings/mute', [ChatSettingController::class, 'mute']);
+    Route::post('/rooms/{room}/settings/mute', [ChatSettingController::class, 'unmute']);
+});
+
 Route::post('app/webhooks/revenuecat', RevenueCatWebhookController::class);
+
