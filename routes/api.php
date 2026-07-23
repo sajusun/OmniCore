@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Chat\ChatRoomController;
 use App\Http\Controllers\Api\FirebaseTokenController;
 use App\Http\Controllers\Api\Frontend\PostController;
+use App\Http\Controllers\Api\Frontend\ClubController;
 use App\Http\Controllers\Api\Auth\SocialLoginController;
 use App\Http\Controllers\Api\Chat\ChatSettingController;
 use App\Http\Controllers\Api\Frontend\VehicleController;
@@ -85,7 +86,14 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/vehicles/store', [VehicleController::class, 'store']);
     Route::get('/vehicles/{vehicle}/show', [VehicleController::class, 'show']);
     Route::post('/vehicles/{vehicle}/update', [VehicleController::class, 'update']);
-    Route::delete('/vehicles/{vehicle}/delete', [VehicleController::class, 'destroy']);
+});
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/clubs', [ClubController::class, 'index']);
+    Route::post('/clubs/store', [ClubController::class, 'store']);
+    Route::get('/clubs/{id}/show', [ClubController::class, 'show']);
+    Route::post('/clubs/{club}/update', [ClubController::class, 'update']);
+    Route::delete('/clubs/{club}/delete', [ClubController::class, 'destroy']);
 });
 
 Route::middleware(['auth:api'])->controller(PostController::class)->prefix('/posts')->group(function () {
