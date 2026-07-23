@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Club;
+use App\Models\ClubMember;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Modules\Media\Traits\HandlesMedia;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -77,6 +79,17 @@ class ClubService
             if (!empty($data['videos'])) {
                 $this->uploadMedia($club, $data['videos'], 'video');
             }
+
+            // Auto-add creator as admin member
+            ClubMember::create([
+                'club_id'     => $club->id,
+                'user_id'     => $club->created_by,
+                'role'        => 'admin',
+                'status'      => 'approved',
+                'joined_at'   => now(),
+                'approved_at' => now(),
+                'approved_by' => $club->created_by,
+            ]);
 
             return $club->load('media');
         });
@@ -162,5 +175,130 @@ class ClubService
         if (!empty($ids)) {
             $this->deleteMedia($ids);
         }
+    }
+
+    // ── Membership Methods ─────────────────────────────────────────────────────
+
+    /**
+     * Join a club.
+     *
+     * Currently auto-approves.
+     * Future: when club has 'approval_required = true', set status = 'pending'.
+     */
+    public function join(Club $club, User $user): ClubMember
+    {
+        // Already a member?
+        $existing = $club->getMembership($user->id);
+        if ($existing) {
+            return $existing;
+        }
+
+        // Creator is always admin — guard against double-insert
+        if ($club->isCreator($user->id)) {
+            throw new \RuntimeException('You are the creator of this club.');
+        }
+
+        /**
+         * Future hook: swap 'approved' → 'pending' when club enables approval mode.
+         *
+         *   $status = $club->approval_required ? 'pending' : 'approved';
+         */
+        $status = 'approved';
+
+        return ClubMember::create([
+            'club_id'     => $club->id,
+            'user_id'     => $user->id,
+            'role'        => 'member',
+            'status'      => $status,
+            'joined_at'   => now(),
+            'approved_at' => $status === 'approved' ? now() : null,
+        ]);
+    }
+
+    /**
+     * Leave a club.
+     */
+    public function leave(Club $club, User $user): void
+    {
+        if ($club->isCreator($user->id)) {
+            throw new \RuntimeException('The club creator cannot leave. Transfer ownership or delete the club.');
+        }
+
+        $club->memberships()->where('user_id', $user->id)->delete();
+    }
+
+    /**
+     * Approve a pending membership request.
+     * Future admin-approval use.
+     */
+    public function approveMember(Club $club, User $targetUser, User $approver): ClubMember
+    {
+        if (!$club->isCreator($approver->id) && !$club->isMemberAdmin($approver->id)) {
+            throw new \RuntimeException('Only club admins can approve members.');
+        }
+
+        $membership = $club->getMembership($targetUser->id);
+        if (!$membership) {
+            throw new \RuntimeException('No membership request found for this user.');
+        }
+
+        $membership->update([
+            'status'      => 'approved',
+            'approved_at' => now(),
+            'approved_by' => $approver->id,
+        ]);
+
+        return $membership->fresh();
+    }
+
+    /**
+     * Reject a pending membership request.
+     * Future admin-approval use.
+     */
+    public function rejectMember(Club $club, User $targetUser, User $approver): ClubMember
+    {
+        if (!$club->isCreator($approver->id) && !$club->isMemberAdmin($approver->id)) {
+            throw new \RuntimeException('Only club admins can reject members.');
+        }
+
+        $membership = $club->getMembership($targetUser->id);
+        if (!$membership) {
+            throw new \RuntimeException('No membership request found for this user.');
+        }
+
+        $membership->update([
+            'status'      => 'rejected',
+            'approved_by' => $approver->id,
+        ]);
+
+        return $membership->fresh();
+    }
+
+    /**
+     * Admin forcefully removes a member from the club.
+     */
+    public function removeMember(Club $club, User $targetUser, User $admin): void
+    {
+        if (!$club->isCreator($admin->id) && !$club->isMemberAdmin($admin->id)) {
+            throw new \RuntimeException('Only club admins can remove members.');
+        }
+
+        if ($club->isCreator($targetUser->id)) {
+            throw new \RuntimeException('Cannot remove the club creator.');
+        }
+
+        $club->memberships()->where('user_id', $targetUser->id)->delete();
+    }
+
+    /**
+     * List approved members of a club (paginated).
+     */
+    public function members(Club $club, int $perPage = 15): LengthAwarePaginator
+    {
+        return ClubMember::where('club_id', $club->id)
+            ->where('status', 'approved')
+            ->with('user')
+            ->latest('joined_at')
+            ->paginate($perPage);
     }
 }

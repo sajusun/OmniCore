@@ -94,6 +94,16 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/clubs/{id}/show', [ClubController::class, 'show']);
     Route::post('/clubs/{club}/update', [ClubController::class, 'update']);
     Route::delete('/clubs/{club}/delete', [ClubController::class, 'destroy']);
+
+    // ── Membership ──────────────────────────────────────────────────────────
+    Route::post('/clubs/{club}/join', [ClubController::class, 'join']);
+    Route::delete('/clubs/{club}/leave', [ClubController::class, 'leave']);
+    Route::get('/clubs/{club}/members', [ClubController::class, 'members']);
+
+    // Future admin-approval routes (ready to activate when needed)
+    Route::post('/clubs/{club}/members/{user}/approve', [ClubController::class, 'approveMember']);
+    Route::post('/clubs/{club}/members/{user}/reject', [ClubController::class, 'rejectMember']);
+    Route::delete('/clubs/{club}/members/{user}', [ClubController::class, 'removeMember']);
 });
 
 Route::middleware(['auth:api'])->controller(PostController::class)->prefix('/posts')->group(function () {

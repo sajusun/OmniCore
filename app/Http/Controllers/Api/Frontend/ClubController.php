@@ -119,4 +119,111 @@ class ClubController extends Controller
 
         return $this->error('Failed to delete club.', null, 500);
     }
+
+    // ── Membership Endpoints ─────────────────────────────────────────────
+
+    /**
+     * Join a club.
+     * POST /clubs/{club}/join
+     */
+    public function join(Club $club): JsonResponse
+    {
+        try {
+            $membership = $this->clubService->join($club, auth('api')->user());
+
+            return $this->success([
+                'role'    => $membership->role,
+                'status'  => $membership->status,
+                'message' => $membership->status === 'approved'
+                    ? 'You have joined the club successfully!'
+                    : 'Your join request is pending approval.',
+            ], 'Join request processed.', 201);
+        } catch (\RuntimeException $e) {
+            return $this->error($e->getMessage(), null, 422);
+        }
+    }
+
+    /**
+     * Leave a club.
+     * DELETE /clubs/{club}/leave
+     */
+    public function leave(Club $club): JsonResponse
+    {
+        try {
+            $this->clubService->leave($club, auth('api')->user());
+            return $this->success([], 'You have left the club.', 200);
+        } catch (\RuntimeException $e) {
+            return $this->error($e->getMessage(), null, 422);
+        }
+    }
+
+    /**
+     * List approved members.
+     * GET /clubs/{club}/members
+     */
+    public function members(Club $club, Request $request): JsonResponse
+    {
+        $perPage = $request->query('per_page', 15);
+        $members = $this->clubService->members($club, $perPage);
+
+        return $this->response(
+            status: true,
+            message: 'Members retrieved successfully',
+            code: 200,
+            data: $members->map(fn($m) => [
+                'user_id'    => $m->user_id,
+                'name'       => $m->user?->name,
+                'avatar'     => $m->user?->avatar ?? null,
+                'role'       => $m->role,
+                'joined_at'  => $m->joined_at?->toIso8601String(),
+            ]),
+            paginate: true,
+            paginateData: $members
+        );
+    }
+
+    /**
+     * Approve a pending member request.
+     * POST /clubs/{club}/members/{user}/approve
+     * Future use — currently all joins are auto-approved.
+     */
+    public function approveMember(Club $club, \App\Models\User $user): JsonResponse
+    {
+        try {
+            $this->clubService->approveMember($club, $user, auth('api')->user());
+            return $this->success([], 'Member approved successfully.', 200);
+        } catch (\RuntimeException $e) {
+            return $this->error($e->getMessage(), null, 422);
+        }
+    }
+
+    /**
+     * Reject a pending member request.
+     * POST /clubs/{club}/members/{user}/reject
+     * Future use.
+     */
+    public function rejectMember(Club $club, \App\Models\User $user): JsonResponse
+    {
+        try {
+            $this->clubService->rejectMember($club, $user, auth('api')->user());
+            return $this->success([], 'Member rejected.', 200);
+        } catch (\RuntimeException $e) {
+            return $this->error($e->getMessage(), null, 422);
+        }
+    }
+
+    /**
+     * Admin removes a member forcefully.
+     * DELETE /clubs/{club}/members/{user}
+     */
+    public function removeMember(Club $club, \App\Models\User $user): JsonResponse
+    {
+        try {
+            $this->clubService->removeMember($club, $user, auth('api')->user());
+            return $this->success([], 'Member removed successfully.', 200);
+        } catch (\RuntimeException $e) {
+            return $this->error($e->getMessage(), null, 422);
+        }
+    }
 }
+
