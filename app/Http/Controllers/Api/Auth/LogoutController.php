@@ -22,11 +22,8 @@ class LogoutController extends Controller
                 return $this->error(message: 'User not authenticated', status: 401);
             }
 
-            try {
-                // $this->firebaseService->deleteTokens($guard->user());
-            } catch (\Throwable $th) {
-                Log::error('can not get file');
-            }
+            // $this->firebaseService->deleteTokens($guard->user());
+
             $guard->logout();
 
             return $this->success(message: 'Logged out successfully. Token revoked.', status: 200);

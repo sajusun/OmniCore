@@ -27,6 +27,7 @@ class ProfileResource extends JsonResource
             'zip_code' => $this->when($this->zip_code && $this->zip_code !== 'null', $this->zip_code),
             'latitude' => $this->when($this->latitude && $this->latitude !== 'null', $this->latitude),
             'longitude' => $this->when($this->longitude && $this->longitude !== 'null', $this->longitude),
+            'bio' => $this->when($this->bio && $this->bio !== 'null', $this->bio),
 
         ];
     }

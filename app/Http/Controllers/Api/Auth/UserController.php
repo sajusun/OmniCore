@@ -97,6 +97,7 @@ class UserController extends Controller
             'zip_code'  => 'nullable|string|max:255',
             'latitude'  => 'nullable|string|max:255',
             'longitude' => 'nullable|string|max:255',
+            'bio'       => 'nullable|string',
 
         ]);
 
@@ -126,6 +127,7 @@ class UserController extends Controller
             'state'         => $validatedData['state'] ?? null,
             'city'          => $validatedData['city'] ?? null,
             'zip_code'      => $validatedData['zip_code'] ?? null,
+            'bio'           => $validatedData['bio'] ?? null,
         ];
 
         $user->update($validatedData);
