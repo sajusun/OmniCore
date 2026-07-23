@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Models\User;
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
+use App\Services\UserService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -60,11 +60,11 @@ class UserController extends Controller
         }
 
         $user->update([
-            'name' => $validatedData['first_name'] . ' ' . $validatedData['last_name'] ?? '',
+            'name' => $validatedData['first_name'] . ' ' . $validatedData['last_name'] ?? $validatedData['name'],
             'avatar' => $validatedData['avatar'],
         ]);
 
-        $data=[
+        $data = [
             'first_name'    => $validatedData['first_name'],
             'last_name'     => $validatedData['last_name'] ?? null,
             'phone'         => $validatedData['phone'],
@@ -76,7 +76,7 @@ class UserController extends Controller
             'zip_code'      => $validatedData['zip_code'] ?? null,
         ];
 
-        $user->profile()->updateOrCreate($data);
+        $user->profile()->updateOrCreate([], $data);
 
         return $this->success(message: 'Saved successfully', status: 200, data: new UserResource($user));
     }
@@ -84,6 +84,8 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $validatedData = $request->validate([
+            'first_name' => 'nullable|string|max:100',
+            'last_name' => 'nullable|string|max:100',
             'name'      => 'nullable|string|max:100',
             'avatar'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
             'phone'     => 'nullable|string|numeric|max_digits:20',
@@ -114,8 +116,21 @@ class UserController extends Controller
         } else {
             $validatedData['avatar'] = $user->avatar;
         }
+        $data = [
+            'first_name'    => $validatedData['first_name'] ?? null,
+            'last_name'     => $validatedData['last_name'] ?? null,
+            'phone'         => $validatedData['phone'] ?? null,
+            'gender'        => $validatedData['gender'] ?? null,
+            'address'       => $validatedData['address'] ?? null,
+            'country'       => $validatedData['country'] ?? null,
+            'state'         => $validatedData['state'] ?? null,
+            'city'          => $validatedData['city'] ?? null,
+            'zip_code'      => $validatedData['zip_code'] ?? null,
+        ];
 
         $user->update($validatedData);
+        $user->profile()->updateOrCreate([], $data);
+
 
         return $this->success(message: 'Profile updated successfully', status: 200, data: new UserResource($user));
     }

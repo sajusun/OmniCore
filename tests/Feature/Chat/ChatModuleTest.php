@@ -329,4 +329,73 @@ class ChatModuleTest extends TestCase
             'mute_until' => null,
         ]);
     }
+
+    /**
+     * Test sending message using receiver_id auto-creates a room or uses an existing one.
+     */
+    public function test_can_send_message_using_receiver_id_auto_creates_room(): void
+    {
+        // 1. Send message to user2 (no room exists yet)
+        $response = $this->actingAs($this->user1, 'api')
+            ->postJson('/api/chat/messages', [
+                'receiver_id' => $this->user2->id,
+                'message' => 'First message creates room auto',
+            ]);
+
+        $response->assertStatus(201)
+            ->assertJsonPath('data.message', 'First message creates room auto');
+
+        $roomId = $response->json('data.chat_room_id');
+        $this->assertNotNull($roomId);
+
+        // Verify database has room and both participants
+        $this->assertDatabaseHas('chat_rooms', [
+            'id' => $roomId,
+            'type' => ChatRoomTypeEnum::SINGLE->value,
+        ]);
+
+        $this->assertDatabaseHas('chat_participants', [
+            'chat_room_id' => $roomId,
+            'user_id' => $this->user1->id,
+        ]);
+
+        $this->assertDatabaseHas('chat_participants', [
+            'chat_room_id' => $roomId,
+            'user_id' => $this->user2->id,
+        ]);
+
+        // 2. Send another message to user2, it should reuse the same room
+        $response2 = $this->actingAs($this->user1, 'api')
+            ->postJson('/api/chat/messages', [
+                'receiver_id' => $this->user2->id,
+                'message' => 'Second message in same room',
+            ]);
+
+        $response2->assertStatus(201)
+            ->assertJsonPath('data.chat_room_id', $roomId)
+            ->assertJsonPath('data.message', 'Second message in same room');
+
+        // 3. Test validation error when both receiver_id and chat_room_id are missing
+        $response3 = $this->actingAs($this->user1, 'api')
+            ->postJson('/api/chat/messages', [
+                'message' => 'No target room or receiver',
+            ]);
+
+        $response3->assertStatus(422);
+
+        // 4. Test blocked user cannot be messaged directly using receiver_id
+        // User 2 blocks User 1
+        $this->actingAs($this->user2, 'api')
+            ->postJson("/api/chat/block/{$this->user1->id}")
+            ->assertOk();
+
+        // User 1 tries to send message to User 2 using receiver_id (should fail with 403)
+        $response4 = $this->actingAs($this->user1, 'api')
+            ->postJson('/api/chat/messages', [
+                'receiver_id' => $this->user2->id,
+                'message' => 'Hello blocker',
+            ]);
+
+        $response4->assertStatus(403);
+    }
 }

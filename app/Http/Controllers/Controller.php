@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
 abstract class Controller
 {
@@ -80,6 +77,8 @@ abstract class Controller
     protected function makeSlug(string $title, ?Model $model = null): string
     {
         $slug = Str::slug($title);
+        $randomString = Str::random(5);
+        $slug = Str::slug($title) . '-' . $randomString;
         if ($model) {
             while ($model::where('slug', $slug)->exists()) {
                 $randomString = Str::random(5);
@@ -89,5 +88,4 @@ abstract class Controller
 
         return $slug;
     }
-
 }

@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Chat;
 
-use Illuminate\Validation\Rule;
 use App\Enums\Chat\MessageTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SendMessageRequest extends FormRequest
 {
@@ -22,7 +22,14 @@ class SendMessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'chat_room_id' => 'required|integer|exists:chat_rooms,id',
+            'chat_room_id' => 'required_without:receiver_id|nullable|integer|exists:chat_rooms,id',
+            'receiver_id' => [
+                'required_without:chat_room_id',
+                'nullable',
+                'integer',
+                'exists:users,id',
+                'different:'.auth('api')->id(),
+            ],
             'message_type' => ['nullable', Rule::enum(MessageTypeEnum::class)],
             'message' => 'required_without:files|nullable|string|max:5000',
             'reply_to' => 'nullable|integer|exists:messages,id',

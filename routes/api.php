@@ -190,14 +190,14 @@ Route::middleware('auth:api')->prefix('chat')->group(function () {
 
     // Blocks
     Route::post('/block/{user}', [BlockController::class, 'block']);
-    Route::post('/unblock/{user}', [BlockController::class, 'unblock']);
+    Route::delete('/unblock/{user}', [BlockController::class, 'unblock']);
     Route::get('/blocked-users', [BlockController::class, 'blockedUsers']);
 
     // Settings
-    Route::post('/rooms/{room}/settings/notification', [ChatSettingController::class, 'updateNotification']);
-    Route::post('/rooms/{room}/settings/sound', [ChatSettingController::class, 'updateSound']);
-    Route::post('/rooms/{room}/settings/mute', [ChatSettingController::class, 'mute']);
-    Route::post('/rooms/{room}/settings/mute', [ChatSettingController::class, 'unmute']);
+    Route::patch('/rooms/{room}/settings/notification', [ChatSettingController::class, 'updateNotification']);
+    Route::patch('/rooms/{room}/settings/sound', [ChatSettingController::class, 'updateSound']);
+    Route::patch('/rooms/{room}/settings/mute', [ChatSettingController::class, 'mute']);
+    Route::delete('/rooms/{room}/settings/mute', [ChatSettingController::class, 'unmute']);
 });
 
 Route::post('app/webhooks/revenuecat', RevenueCatWebhookController::class);

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Services\FirebaseService;
 use Exception;
+use App\Services\FirebaseService;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 class LogoutController extends Controller
 {
-    public function __construct(private readonly FirebaseService $firebaseService)
+    public function __construct()
     {
         parent::__construct();
     }
@@ -21,7 +22,11 @@ class LogoutController extends Controller
                 return $this->error(message: 'User not authenticated', status: 401);
             }
 
-            $this->firebaseService->deleteTokens($guard->user());
+            try {
+                // $this->firebaseService->deleteTokens($guard->user());
+            } catch (\Throwable $th) {
+                Log::error('can not get file');
+            }
             $guard->logout();
 
             return $this->success(message: 'Logged out successfully. Token revoked.', status: 200);

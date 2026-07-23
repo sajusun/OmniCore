@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ChatRoom;
 use App\Models\Message;
 use App\Services\Chat\MessageService;
+use App\Services\Chat\ChatRoomService;
 use App\Services\Chat\ChatPermissionService;
 use App\Http\Requests\Chat\SendMessageRequest;
 use App\Http\Resources\Chat\MessageResource;
@@ -15,7 +16,8 @@ class MessageController extends Controller
 {
     public function __construct(
         protected MessageService $messageService,
-        protected ChatPermissionService $permissionService
+        protected ChatPermissionService $permissionService,
+        protected ChatRoomService $chatRoomService
     ) {
         parent::__construct();
     }
@@ -49,7 +51,18 @@ class MessageController extends Controller
     {
         $sender = auth('api')->user();
         $validated = $request->validated();
-        $room = ChatRoom::findOrFail($validated['chat_room_id']);
+
+        if (isset($validated['chat_room_id'])) {
+            $room = ChatRoom::findOrFail($validated['chat_room_id']);
+        } else {
+            try {
+                $room = $this->chatRoomService->createSingleRoom($sender->id, $validated['receiver_id']);
+            } catch (\RuntimeException $e) {
+                return $this->error($e->getMessage(), null, 403);
+            } catch (\Exception $e) {
+                return $this->error($e->getMessage(), null, 400);
+            }
+        }
 
         if (!$this->permissionService->canSend($sender, $room)) {
             return $this->error('You do not have permission to send messages to this room.', null, 403);
