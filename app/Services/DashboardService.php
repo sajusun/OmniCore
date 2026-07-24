@@ -144,11 +144,11 @@ class DashboardService
             'recent_events'   => $this->getRecentEvents(5),
             'recent_posts'    => $this->getRecentPosts(5),
             'monthly_signups' => $this->getMonthlySignups(),
-            'system'          => [
-                'php_version'     => PHP_VERSION,
-                'laravel_version' => app()->version(),
-                'env'             => config('app.env'),
-            ],
+            // 'system'          => [
+            //     'php_version'     => PHP_VERSION,
+            //     'laravel_version' => app()->version(),
+            //     'env'             => config('app.env'),
+            // ],
         ];
     }
 }

@@ -45,15 +45,15 @@
 <script src="{{ asset('backend/js/table-data.js') }}"></script>
 
 <!-- INDEX JS -->
-<script src="{{ asset('backend/js/index1.js') }}"></script>
-<script src="{{ asset('backend/js/index.js') }}"></script>
+{{-- <script src="{{ asset('backend/js/index1.js') }}"></script> --}}
+{{-- <script src="{{ asset('backend/js/index.js') }}"></script> --}}
 
 <!-- Reply JS-->
 <script src="{{ asset('backend/js/reply.js') }}"></script>
 
 
 <!-- COLOR THEME JS -->
-<script src="{{ asset('backend/js/themeColors.js') }}"></script>
+{{-- <script src="{{ asset('backend/js/themeColors.js') }}"></script> --}}
 
 <!-- CUSTOM JS -->
 {{-- <script src="{{ asset('backend/js/custom.js') }}"></script> --}}

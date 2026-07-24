@@ -12,15 +12,17 @@
 </div>
 
 @once
+@push('scripts')
+    
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-@endonce
 
 <!-- Separate Alpine component for each chart to avoid conflicts -->
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('chartComponent_{{ str_replace('-', '_', $chartId) }}', () => ({
             chart: null,
-            initChart() {
+        initChart() {
+                console.log('initChart called');
                 let options = {
                     series: @json($series),
                     chart: {
@@ -71,7 +73,9 @@
                 };
 
                 this.chart = new ApexCharts(this.$refs.chart, options);
+                
                 this.chart.render();
+
 
                 // Listen for dark mode toggle if applicable
                 const observer = new MutationObserver(() => {
@@ -90,3 +94,7 @@
         }));
     });
 </script>
+
+@endpush
+
+@endonce
