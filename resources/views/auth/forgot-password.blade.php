@@ -34,7 +34,7 @@
             name="email"
             label="Email Address"
             value="{{ old('email') }}"
-            placeholder="name@company.com"
+            placeholder="name@example.com"
             autofocus
         />
 

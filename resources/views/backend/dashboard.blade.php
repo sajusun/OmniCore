@@ -17,15 +17,20 @@
     </div>
     <!-- PAGE-HEADER END -->
 
-    <!-- ROW-1: User Stats by Type -->
+    <!-- ROW-1: 4 Primary Stat Cards -->
     <div class="row">
+
+        {{-- Total Users --}}
         <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
             <div class="card overflow-hidden">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h3 class="mb-2 fw-semibold">{{ $totalUsers ?? 0 }}</h3>
+                            <h3 class="mb-2 fw-semibold">{{ number_format($totalUsers ?? 0) }}</h3>
                             <p class="text-muted fs-13 mb-0">Total Registered Users</p>
+                            <small class="text-success fw-semibold">
+                                <i class="fe fe-trending-up me-1"></i>{{ $newUsers ?? 0 }} this month
+                            </small>
                         </div>
                         <div class="col col-auto top-icn dash">
                             <div class="counter-icon bg-primary dash ms-auto box-shadow-primary">
@@ -36,13 +41,18 @@
                 </div>
             </div>
         </div>
+
+        {{-- Subscribed Users --}}
         <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
             <div class="card overflow-hidden">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h3 class="mb-2 fw-semibold">{{ $totalSubscribedUsers ?? 0 }}</h3>
+                            <h3 class="mb-2 fw-semibold">{{ number_format($totalSubscribedUsers ?? 0) }}</h3>
                             <p class="text-muted fs-13 mb-0">Subscribed Users</p>
+                            <small class="text-muted">
+                                {{ $verifiedUsers ?? 0 }} email verified
+                            </small>
                         </div>
                         <div class="col col-auto top-icn dash">
                             <div class="counter-icon bg-success dash ms-auto box-shadow-success">
@@ -54,17 +64,21 @@
             </div>
         </div>
 
+        {{-- Total Events --}}
         <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
             <div class="card overflow-hidden">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h3 class="mb-2 fw-semibold">{{ $totalFoodScans ?? 0 }}</h3>
-                            <p class="text-muted fs-13 mb-0">Total Food Scans</p>
+                            <h3 class="mb-2 fw-semibold">{{ number_format($totalEvents ?? 0) }}</h3>
+                            <p class="text-muted fs-13 mb-0">Total Events</p>
+                            <small class="text-warning fw-semibold">
+                                <i class="fe fe-calendar me-1"></i>{{ $upcomingEvents ?? 0 }} upcoming
+                            </small>
                         </div>
                         <div class="col col-auto top-icn dash">
                             <div class="counter-icon bg-warning dash ms-auto box-shadow-warning">
-                                <i class="fe fe-bar-chart-2 text-white"></i>
+                                <i class="fe fe-calendar text-white"></i>
                             </div>
                         </div>
                     </div>
@@ -72,13 +86,17 @@
             </div>
         </div>
 
+        {{-- Total Posts --}}
         <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
             <div class="card overflow-hidden">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h3 class="mb-2 fw-semibold">{{ $totalFoodLogs ?? 0 }}</h3>
-                            <p class="text-muted fs-13 mb-0">Total Food Logs</p>
+                            <h3 class="mb-2 fw-semibold">{{ number_format($totalPosts ?? 0) }}</h3>
+                            <p class="text-muted fs-13 mb-0">Total Posts</p>
+                            <small class="text-info fw-semibold">
+                                <i class="fe fe-file-text me-1"></i>{{ $newPostsMonth ?? 0 }} this month
+                            </small>
                         </div>
                         <div class="col col-auto top-icn dash">
                             <div class="counter-icon bg-info dash ms-auto box-shadow-info">
@@ -91,14 +109,103 @@
         </div>
 
     </div>
+    <!-- ROW-1 END -->
 
-
-    <!-- ROW-3: Recent Data Sections -->
+    <!-- ROW-2: Secondary Stat Cards (Clubs, RSVP, Active Users) -->
     <div class="row">
+
+        {{-- Total Clubs --}}
+        <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
+            <div class="card overflow-hidden">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="mb-2 fw-semibold">{{ number_format($totalClubs ?? 0) }}</h3>
+                            <p class="text-muted fs-13 mb-0">Total Clubs</p>
+                            <small class="text-muted">{{ number_format($totalClubMembers ?? 0) }} members</small>
+                        </div>
+                        <div class="col col-auto top-icn dash">
+                            <div class="counter-icon bg-purple dash ms-auto" style="background: #7c3aed!important;">
+                                <i class="fe fe-shield text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Going RSVPs --}}
+        <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
+            <div class="card overflow-hidden">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="mb-2 fw-semibold">{{ number_format($totalGoing ?? 0) }}</h3>
+                            <p class="text-muted fs-13 mb-0">Going RSVPs</p>
+                            <small class="text-muted">{{ number_format($totalInterested ?? 0) }} interested</small>
+                        </div>
+                        <div class="col col-auto top-icn dash">
+                            <div class="counter-icon dash ms-auto" style="background: #f97316!important;">
+                                <i class="fe fe-check-circle text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Published Posts --}}
+        <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
+            <div class="card overflow-hidden">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="mb-2 fw-semibold">{{ number_format($publishedPosts ?? 0) }}</h3>
+                            <p class="text-muted fs-13 mb-0">Published Posts</p>
+                            <small class="text-muted">of {{ number_format($totalPosts ?? 0) }} total</small>
+                        </div>
+                        <div class="col col-auto top-icn dash">
+                            <div class="counter-icon bg-success dash ms-auto box-shadow-success">
+                                <i class="fe fe-edit text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Online / Active Users --}}
+        <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
+            <div class="card overflow-hidden">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="mb-2 fw-semibold">{{ number_format($activeCount ?? 0) }}</h3>
+                            <p class="text-muted fs-13 mb-0">Online Users <small>(last 5 min)</small></p>
+                            <small class="text-muted">{{ number_format($inactiveCount ?? 0) }} offline</small>
+                        </div>
+                        <div class="col col-auto top-icn dash">
+                            <div class="counter-icon bg-primary dash ms-auto box-shadow-primary">
+                                <i class="fe fe-activity text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- ROW-2 END -->
+
+    <!-- ROW-3: Recent Users + Recent Events -->
+    <div class="row">
+
+        {{-- Recent Registered Users --}}
         <div class="col-sm-12 col-md-12 col-xl-6">
             <div class="card overflow-hidden">
-                <div class="card-header border-bottom">
-                    <h4 class="card-title fw-semibold">Recent Registered Users</h4>
+                <div class="card-header border-bottom d-flex align-items-center justify-content-between">
+                    <h4 class="card-title fw-semibold mb-0">Recent Registered Users</h4>
+                    <span class="badge bg-primary-transparent text-primary fs-12">Last 5</span>
                 </div>
                 <div class="card-body p-0 customers mt-1">
                     <div class="list-group py-1">
@@ -112,16 +219,11 @@
                                     <div class="media-body">
                                         <div class="d-flex align-items-center">
                                             <div class="mt-0">
-                                                <h5 class="mb-1 fs-13 fw-semibold text-dark">
-                                                    {{ $postUser->name }}
-                                                </h5>
-                                                <p class="mb-0 fs-12 text-muted">
-                                                    {{ $postUser->email }}
-                                                </p>
+                                                <h5 class="mb-1 fs-13 fw-semibold text-dark">{{ $postUser->name }}</h5>
+                                                <p class="mb-0 fs-12 text-muted">{{ $postUser->email }}</p>
                                             </div>
-                                            <span class="ms-auto fs-13">
-                                                <span class="float-end text-dark">{{
-                                                    $postUser->created_at->diffForHumans() }}</span>
+                                            <span class="ms-auto fs-12 text-muted">
+                                                {{ $postUser->created_at->diffForHumans() }}
                                             </span>
                                         </div>
                                     </div>
@@ -135,36 +237,151 @@
                 </div>
             </div>
         </div>
+
+        {{-- Recent Events --}}
+        <div class="col-sm-12 col-md-12 col-xl-6">
+            <div class="card overflow-hidden">
+                <div class="card-header border-bottom d-flex align-items-center justify-content-between">
+                    <h4 class="card-title fw-semibold mb-0">Recent Events</h4>
+                    <span class="badge bg-warning-transparent text-warning fs-12">Last 5</span>
+                </div>
+                <div class="card-body p-0 mt-1">
+                    <div class="list-group py-1">
+                        @forelse ($recentEvents as $event)
+                        <div class="list-group-item border-0">
+                            <div class="media mt-0 align-items-center">
+                                <div class="transaction-icon bg-warning-transparent text-warning brround me-3">
+                                    <i class="fe fe-calendar"></i>
+                                </div>
+                                <div class="media-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="mt-0">
+                                            <h5 class="mb-1 fs-13 fw-semibold text-dark">{{ $event->title }}</h5>
+                                            <p class="mb-0 fs-12 text-muted">
+                                                {{ $event->location }}
+                                                &bull;
+                                                <span class="text-primary">
+                                                    {{ \Carbon\Carbon::parse($event->event_date)->format('d M Y') }}
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <span class="ms-auto">
+                                            @if($event->status === 'published')
+                                                <span class="badge bg-success-transparent text-success fs-11">Published</span>
+                                            @elseif($event->status === 'cancelled')
+                                                <span class="badge bg-danger-transparent text-danger fs-11">Cancelled</span>
+                                            @else
+                                                <span class="badge bg-secondary-transparent text-secondary fs-11">{{ ucfirst($event->status) }}</span>
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @empty
+                        <p class="text-muted fs-13 text-center py-3">No Events Found</p>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- ROW-3 END -->
+
+    <!-- ROW-4: Recent Posts + System Info -->
+    <div class="row">
+
+        {{-- Recent Posts --}}
+        <div class="col-sm-12 col-md-12 col-xl-6">
+            <div class="card overflow-hidden">
+                <div class="card-header border-bottom d-flex align-items-center justify-content-between">
+                    <h4 class="card-title fw-semibold mb-0">Recent Posts</h4>
+                    <span class="badge bg-info-transparent text-info fs-12">Last 5</span>
+                </div>
+                <div class="card-body p-0 mt-1">
+                    <div class="list-group py-1">
+                        @forelse ($recentPosts as $post)
+                        <div class="list-group-item border-0">
+                            <div class="media mt-0 align-items-center">
+                                <div class="transaction-icon bg-info-transparent text-info brround me-3">
+                                    <i class="fe fe-file-text"></i>
+                                </div>
+                                <div class="media-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="mt-0">
+                                            <h5 class="mb-1 fs-13 fw-semibold text-dark">
+                                                {{ Str::limit($post->title ?? 'Untitled', 45) }}
+                                            </h5>
+                                            <p class="mb-0 fs-12 text-muted">
+                                                by {{ $post->user?->name ?? 'Unknown' }}
+                                                &bull; {{ $post->created_at->diffForHumans() }}
+                                            </p>
+                                        </div>
+                                        <span class="ms-auto">
+                                            @if($post->status === 'published')
+                                                <span class="badge bg-success-transparent text-success fs-11">Published</span>
+                                            @else
+                                                <span class="badge bg-secondary-transparent text-secondary fs-11">{{ ucfirst($post->status ?? 'Draft') }}</span>
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @empty
+                        <p class="text-muted fs-13 text-center py-3">No Posts Found</p>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- System Info --}}
         <div class="col-sm-12 col-md-12 col-xl-6">
             <div class="card">
                 <div class="card-header border-bottom">
-                    <h4 class="card-title fw-semibold mb-0">System Activity</h4>
+                    <h4 class="card-title fw-semibold mb-0">System Information</h4>
                 </div>
-                {{-- <div class="card-body">
-                    <div class="table-responsive">
-                        @if($activityLogs->count())
-                        <ul class="task-list">
-                            @foreach($activityLogs as $log)
-                            <li class="d-flex align-items-start mb-3">
-                                <i class="task-icon bg-success"></i>
-                                <div class="flex-grow-1">
-                                    <p class="fw-semibold mb-1 fs-13">{{ $log->title }}</p>
-                                    <p class="text-muted fs-12 mb-0">{{ $log->description }}</p>
-                                    <p class="text-muted fs-12 mb-0"><small>{{ $log->created_at->format('Y-m-d H:i')
-                                            }}</small></p>
-                                </div>
-                            </li>
-                            @endforeach
-                        </ul>
-                        @else
-                        <p class="text-muted">No recent system activity.</p>
-                        @endif
-                    </div>
-                </div> --}}
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted fs-13">PHP Version</span>
+                            <span class="fw-semibold fs-13">{{ $metrics['system']['php_version'] }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted fs-13">Laravel Version</span>
+                            <span class="fw-semibold fs-13">{{ $metrics['system']['laravel_version'] }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted fs-13">Environment</span>
+                            <span class="badge bg-{{ $metrics['system']['env'] === 'production' ? 'success' : 'warning' }}-transparent text-{{ $metrics['system']['env'] === 'production' ? 'success' : 'warning' }} fs-12">
+                                {{ ucfirst($metrics['system']['env']) }}
+                            </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted fs-13">Total Clubs</span>
+                            <span class="fw-semibold fs-13">{{ number_format($totalClubs ?? 0) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted fs-13">Club Members</span>
+                            <span class="fw-semibold fs-13">{{ number_format($totalClubMembers ?? 0) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted fs-13">Event RSVPs (Going)</span>
+                            <span class="fw-semibold fs-13">{{ number_format($totalGoing ?? 0) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted fs-13">Verified Users</span>
+                            <span class="fw-semibold fs-13">{{ number_format($verifiedUsers ?? 0) }}</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
+
     </div>
-    <!-- ROW-3 END -->
+    <!-- ROW-4 END -->
 
 </div>
 <!-- CONTAINER CLOSED -->

@@ -1,6 +1,6 @@
 <x-guest-layout>
     <p class="text-muted small mb-4">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+        This is a secure area of the application. Please confirm your password before continuing
     </p>
 
     <form method="POST" action="{{ route('password.confirm') }}">
@@ -14,7 +14,7 @@
         />
 
         <div class="d-flex justify-content-end mt-3">
-            <x-form.submit class="btn btn-primary">{{ __('Confirm') }}</x-form.submit>
+            <x-form.submit class="btn btn-primary">Confirm</x-form.submit>
         </div>
     </form>
 </x-guest-layout>

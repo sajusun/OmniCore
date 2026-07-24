@@ -2,34 +2,34 @@
 
 namespace App\Models;
 
-use App\Traits\HasPost;
-use App\Traits\HasFriends;
-use App\Traits\HasFollowers;
-use App\Traits\HasNotifications;
-use App\Traits\HasFriendRequests;
 use App\Modules\Media\Traits\HasMedia;
-use Spatie\Permission\Traits\HasRoles;
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Traits\HasFollowers;
+use App\Traits\HasFriendRequests;
+use App\Traits\HasFriends;
+use App\Traits\HasNotifications;
+use App\Traits\HasPost;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory,
+        HasFollowers,
+        HasFriendRequests,
+        HasFriends,
         HasMedia,
         HasNotifications,
+        HasPost,
         HasRoles,
         Notifiable,
-        SoftDeletes,
-        HasFollowers,
-        HasFriends,
-        HasFriendRequests,
-        HasPost;
+        SoftDeletes;
 
     protected $guard_name = ['api', 'web'];
 
@@ -49,6 +49,8 @@ class User extends Authenticatable implements JWTSubject
         'avatar',
         'email',
         'password',
+        'is_subscribed',
+        'subscription_ends_at',
         'last_activity_at',
         'remember_token',
         'slug',
@@ -71,9 +73,10 @@ class User extends Authenticatable implements JWTSubject
             'otp_verified_at' => 'datetime',
             'password' => 'hashed',
             'last_activity_at' => 'datetime',
+            'is_subscribed' => 'boolean',
+            'subscription_ends_at' => 'datetime',
         ];
     }
-
 
     protected static function booted(): void
     {
@@ -118,7 +121,7 @@ class User extends Authenticatable implements JWTSubject
         if (request()->is('api/*') && ! empty($value)) {
             // Return the full URL for API requests
             return url($value);
-        } 
+        }
 
         // Return only the path for web requests
         return $value;
@@ -155,6 +158,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Garage::class);
     }
+
     public function vehicles()
     {
         return $this->hasMany(Vehicle::class);
