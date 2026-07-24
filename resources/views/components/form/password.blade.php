@@ -22,19 +22,19 @@
             value="{{ $value }}"
             {{ $attributes->merge(['class' => 'form-control' . ($errors->has($name) ? ' is-invalid' : '')]) }}
         />
-        <button class="btn btn-outline-secondary" type="button" id="toggle_{{ $name }}"
+        <button class="btn btn-outline-primary" type="button" id="toggle_{{ $name }}"
             onclick="
                 var inp = document.getElementById('{{ $name }}');
                 var icon = this.querySelector('i');
                 if (inp.type === 'password') {
                     inp.type = 'text';
-                    icon.classList.replace('bi-eye', 'bi-eye-slash');
+                    icon.classList.replace('fa-eye', 'fa-eye-slash');
                 } else {
                     inp.type = 'password';
-                    icon.classList.replace('bi-eye-slash', 'bi-eye');
+                    icon.classList.replace('fa-eye-slash', 'fa-eye');
                 }
             ">
-            <i class="bi bi-eye"></i>
+            <i class="fa fa-eye"></i>
         </button>
         @error($name)
         <div class="invalid-feedback d-block">{{ $message }}</div>

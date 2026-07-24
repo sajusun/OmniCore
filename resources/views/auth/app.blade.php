@@ -1,5 +1,5 @@
 @php
-$settings = \App\Models\Setting::first();
+    $settings = \App\Models\Setting::first();
 @endphp
 <!doctype html>
 <html lang="en" dir="ltr">
@@ -23,8 +23,8 @@ $settings = \App\Models\Setting::first();
     <link id="style" href="{{ asset('backend') }}/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- STYLE CSS -->
-    <link href="{{ asset('backend') }}/css/style.css" rel="stylesheet" />
-    
+    {{-- <link href="{{ asset('backend') }}/css/style.css" rel="stylesheet" /> --}}
+
     <!--- FONT-ICONS CSS -->
     <link href="{{ asset('backend') }}/plugins/icons/icons.css" rel="stylesheet" />
 
@@ -123,8 +123,8 @@ $settings = \App\Models\Setting::first();
 
         .btn-primary {
             height: 44px;
-            background-color: #0f172a;
-            border-color: #0f172a;
+            background-color: #8fbd56;
+            border-color: #8fbd56;
             border-radius: 8px;
             font-weight: 600;
             font-size: 15px;
@@ -143,7 +143,9 @@ $settings = \App\Models\Setting::first();
         }
 
         /* OTP input centering */
-        .ls-2 { letter-spacing: 3px; }
+        .ls-2 {
+            letter-spacing: 3px;
+        }
     </style>
 
 </head>
@@ -155,14 +157,14 @@ $settings = \App\Models\Setting::first();
         @yield('content')
     </div>
 
-    <!-- JQUERY JS -->
-    <script src="{{ asset('backend') }}/plugins/jquery/jquery.min.js"></script>
 
-    <!-- BOOTSTRAP JS -->
+
+    <script src="{{ asset('backend') }}/plugins/jquery/jquery.min.js"></script>
     <script src="{{ asset('backend') }}/plugins/bootstrap/js/popper.min.js"></script>
     <script src="{{ asset('backend') }}/plugins/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- CUSTOM JS -->
+    
     <script src="{{ asset('backend') }}/js/custom.js"></script>
 
 </body>

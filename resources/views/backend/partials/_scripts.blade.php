@@ -56,7 +56,7 @@
 <script src="{{ asset('backend/js/themeColors.js') }}"></script>
 
 <!-- CUSTOM JS -->
-<script src="{{ asset('backend/js/custom.js') }}"></script>
+{{-- <script src="{{ asset('backend/js/custom.js') }}"></script> --}}
 
 <!-- SWITCHER JS -->
 <script src="{{ asset('backend/switcher/js/switcher.js') }}"></script>

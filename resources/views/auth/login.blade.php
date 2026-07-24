@@ -47,9 +47,9 @@
         <x-form.submit class="btn btn-primary w-100 mt-2">Sign in</x-form.submit>
     </form>
 
-    <div class="auth-links">
+    {{-- <div class="auth-links">
         <span class="text-muted">Don't have an account?</span>
         <a href="{{ route('register') }}">Create an account</a>
-    </div>
+    </div> --}}
 </div>
 @endsection
