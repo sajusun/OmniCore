@@ -23,7 +23,7 @@
     <link id="style" href="{{ asset('backend') }}/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- STYLE CSS -->
-    {{-- <link href="{{ asset('backend') }}/css/style.css" rel="stylesheet" /> --}}
+    <link href="{{ asset('backend') }}/css/style.css" rel="stylesheet" />
 
     <!--- FONT-ICONS CSS -->
     <link href="{{ asset('backend') }}/plugins/icons/icons.css" rel="stylesheet" />

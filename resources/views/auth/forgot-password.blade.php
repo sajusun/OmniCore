@@ -4,7 +4,7 @@
 <div class="auth-card">
     <div class="auth-logo">
         <a href="{{ route('home') }}">
-            <img src="{{ asset($settings->logo ?? 'default/logo.svg') }}" alt="Logo">
+            <img src="{{ asset($settings->logo ?? 'default/logo.png') }}" alt="Logo">
         </a>
     </div>
 
