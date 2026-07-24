@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Chat\ChatRoomController;
 use App\Http\Controllers\Api\FirebaseTokenController;
 use App\Http\Controllers\Api\Frontend\ClubController;
+use App\Http\Controllers\Api\Frontend\EventController;
 use App\Http\Controllers\Api\Frontend\PostController;
 use App\Http\Controllers\Api\Auth\SocialLoginController;
 use App\Http\Controllers\Api\Chat\ChatSettingController;
@@ -104,6 +105,20 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/clubs/{club}/members/{user}/approve', [ClubController::class, 'approveMember']);
     Route::post('/clubs/{club}/members/{user}/reject', [ClubController::class, 'rejectMember']);
     Route::delete('/clubs/{club}/members/{user}', [ClubController::class, 'removeMember']);
+});
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/events/meta', [EventController::class, 'meta']);
+    Route::get('/events', [EventController::class, 'index']);
+    Route::post('/events/store', [EventController::class, 'store']);
+    Route::get('/events/{id}/show', [EventController::class, 'show']);
+    Route::post('/events/{event}/update', [EventController::class, 'update']);
+    Route::delete('/events/{event}/delete', [EventController::class, 'destroy']);
+
+    // RSVP
+    Route::post('/events/{event}/rsvp', [EventController::class, 'rsvp']);
+    Route::delete('/events/{event}/rsvp', [EventController::class, 'cancelRsvp']);
+    Route::get('/events/{event}/rsvps', [EventController::class, 'rsvps']);
 });
 
 Route::middleware(['auth:api'])->controller(PostController::class)->prefix('/posts')->group(function () {

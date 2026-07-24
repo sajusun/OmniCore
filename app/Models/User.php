@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -117,7 +118,7 @@ class User extends Authenticatable implements JWTSubject
         if (request()->is('api/*') && ! empty($value)) {
             // Return the full URL for API requests
             return url($value);
-        }
+        } 
 
         // Return only the path for web requests
         return $value;
@@ -165,28 +166,27 @@ class User extends Authenticatable implements JWTSubject
      |--------------------------------------------------------------------------
      */
 
-    public function rooms(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function rooms(): BelongsToMany
     {
         return $this->belongsToMany(ChatRoom::class, 'chat_participants', 'user_id', 'chat_room_id')
             ->withPivot(['role', 'joined_at', 'last_read_message_id', 'last_read_at', 'notification_enabled', 'sound_enabled', 'mute_until', 'settings'])
             ->withTimestamps();
     }
 
-    public function messages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function messages(): HasMany
     {
         return $this->hasMany(Message::class, 'sender_id');
     }
 
-    public function blockedUsers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function blockedUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_blocks', 'user_id', 'blocked_user_id')
             ->withTimestamps();
     }
 
-    public function blockedBy(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function blockedBy(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_blocks', 'blocked_user_id', 'user_id')
             ->withTimestamps();
     }
 }
-

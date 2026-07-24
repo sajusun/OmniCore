@@ -140,12 +140,12 @@ class UserController extends Controller
     public function updateAvatar(Request $request)
     {
         $validatedData = $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
         $user = $this->user;
 
         if (! empty($user->avatar)) {
-            Helper::fileDelete(public_path($user->getRawOriginal('avatar')));
+            Helper::fileDelete(public_path($user->avatar));
         }
         $validatedData['avatar'] = Helper::fileUpload($request->file('avatar'), 'user/avatar');
         $user->update($validatedData);
