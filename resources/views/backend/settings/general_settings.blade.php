@@ -4,7 +4,8 @@
     @endslot
     @slot('header')
     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
-        <nav class="small fw-medium text-muted d-none d-sm-flex align-items-center bg-light px-3 py-2 rounded-pill shadow-sm border">
+        <nav
+            class="small fw-medium text-muted d-none d-sm-flex align-items-center bg-light px-3 py-2 rounded-pill shadow-sm border">
             <ol class="d-flex list-unstyled m-0 gap-2">
                 <li class="d-flex align-items-center">
                     <a href="javascript:void(0);" class="text-decoration-none text-secondary">Settings</a>
@@ -24,7 +25,8 @@
             <div class="card shadow-sm border overflow-hidden">
                 <div class="card-header bg-light d-flex align-items-center gap-2 py-3 px-4">
                     <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -88,26 +90,12 @@
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <div class="card bg-light p-3 border">
-                                            <x-form.file name="logo" label="Logo" file="{{ $setting->logo ? url($setting->logo): '' }}">
-                                                <p class="text-muted small mt-1 d-flex align-items-center gap-1 mb-0">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                    Max 5MB · jpeg, jpg, png
-                                                </p>
-                                            </x-form.file>
+                                            <x-form.file name="logo" label="Logo" :file=" $setting?->logo ? url($setting->logo) : '' " />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="card bg-light p-3 border">
-                                            <x-form.file name="favicon" label="Favicon" file="{{ $setting->favicon ? url($setting->favicon): '' }}">
-                                                <p class="text-muted small mt-1 d-flex align-items-center gap-1 mb-0">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                    Max 5MB · jpeg, jpg, png, ico
-                                                </p>
-                                            </x-form.file>
+                                            <x-form.file name="favicon" label="Favicon" :file="$setting?->favicon ? url($setting->favicon) : '' " />
                                         </div>
                                     </div>
                                 </div>
@@ -115,7 +103,8 @@
                         </div>
 
                         <!-- Action buttons -->
-                        <div class="mt-4 pt-3 border-top d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <div
+                            class="mt-4 pt-3 border-top d-flex flex-wrap align-items-center justify-content-between gap-3">
                             <div class="small text-muted">
                                 <span class="d-inline-flex align-items-center gap-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
@@ -144,7 +133,8 @@
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
                         <div class="p-2 bg-success bg-opacity-10 text-success rounded-circle">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
@@ -158,7 +148,8 @@
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
                         <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-circle">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
                             </svg>
@@ -172,10 +163,12 @@
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
                         <div class="p-2 bg-warning bg-opacity-10 text-warning rounded-circle">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                         </div>
                         <div>

@@ -1,44 +1,43 @@
-
 @props(['id', 'url', 'columns'])
 
 <div class="card shadow-sm border-light overflow-hidden">
     <!-- Table Header with Search on Right -->
-    <div class="card-header bg-light d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 px-4 py-3 border-bottom border-light">
-        <div class="d-flex align-items-center gap-3">
-            <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-3">
-                <i class="fas fa-users fa-lg"></i>
+    <div class="card-header bg-light border-bottom d-flex flex-wrap align-items-center gap-3 py-3 px-4">
+        <div class="d-flex align-items-center gap-2">
+            <div class=" bg-opacity-10 text-primary p-2 rounded-3">
+                <i class="fas fa-users"></i>
             </div>
-            <div>
-                <p class="text-muted small mb-0">Manage your database records</p>
-            </div>
+            <span class="text-muted small">Manage your database records</span>
         </div>
 
-        <!-- Search Box on Right -->
-        <div class="w-100 w-sm-auto d-flex align-items-center gap-2">
-            <div class="position-relative flex-grow-1 flex-sm-grow-0" style="min-width: 200px;">
-                <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted">
-                    <i class="fas fa-search"></i>
-                </span>
-                <input type="text" id="search-input-{{ $id }}" placeholder="Search..."
-                    class="form-control ps-5 rounded-pill" style="font-size: 0.9rem; py: 0.5rem;">
-            </div>
+        <div class="flex-grow-1"></div>
+
+        <!-- Search Box -->
+        <div class="position-relative" style="width: 250px; max-width: 100%;">
+            <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted">
+                <i class="fas fa-search fa-xs"></i>
+            </span>
+            <input type="text" id="search-input-{{ $id }}" placeholder="Search records..."
+                class="form-control form-control-sm ps-5" style="border-radius: 5px;">
         </div>
     </div>
 
     <!-- Table -->
     <div class="table-responsive p-3">
-        <table id="{{ $id }}" class="table table-hover table-striped align-middle datatable-bootstrap display responsive nowrap w-100" style="width:100%">
+        <table id="{{ $id }}"
+            class="table table-hover table-striped align-middle datatable-bootstrap display responsive nowrap w-100"
+            style="width:100%">
             <thead class="table-light text-uppercase tracking-wider" style="font-size: 0.8rem;">
                 <tr>
                     @foreach($columns as $col)
-                    <th scope="col" class="px-3 py-2.5">
-                        <div class="d-flex align-items-center gap-1">
-                            <span>{{ $col['title'] }}</span>
-                            @if($col['title'] !== 'Action' && $col['title'] !== 'STATUS')
-                            <i class="fas fa-sort text-muted small opacity-50"></i>
-                            @endif
-                        </div>
-                    </th>
+                        <th scope="col" class="px-3 py-2.5">
+                            <div class="d-flex align-items-center gap-1">
+                                <span>{{ $col['title'] }}</span>
+                                @if($col['title'] !== 'Action' && $col['title'] !== 'STATUS')
+                                    <i class="fas fa-sort text-muted small opacity-50"></i>
+                                @endif
+                            </div>
+                        </th>
                     @endforeach
                 </tr>
             </thead>
@@ -46,7 +45,8 @@
     </div>
 
     <!-- Table Footer with Info & Pagination -->
-    <div class="card-footer bg-light d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3 px-4 py-3 border-top border-light">
+    <div
+        class="card-footer bg-light d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3 px-4 py-3 border-top border-light">
         <div class="d-flex align-items-center gap-3 text-muted small">
             <div class="d-flex align-items-center gap-2">
                 <span>Show</span>
@@ -75,202 +75,203 @@
 </div>
 
 @once
-@push('styles')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
-<style>
-    /* Custom Bootstrap Datatable Overrides */
-    .dataTables_wrapper .dataTables_filter,
-    .dataTables_wrapper .dataTables_length,
-    .dataTables_wrapper .dataTables_info,
-    .dataTables_wrapper .dataTables_paginate {
-        display: none !important;
-    }
+    @push('styles')
+        {{--
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"> --}}
+        <style>
+            /* Custom Bootstrap Datatable Overrides */
+            .dataTables_wrapper .dataTables_filter,
+            .dataTables_wrapper .dataTables_length,
+            .dataTables_wrapper .dataTables_info,
+            .dataTables_wrapper .dataTables_paginate {
+                display: none !important;
+            }
 
-    table.dataTable tbody tr {
-        background-color: transparent !important;
-        border-bottom: 1px solid rgba(0,0,0,.05);
-        transition: background-color 0.15s ease;
-    }
+            table.dataTable tbody tr {
+                background-color: transparent !important;
+                border-bottom: 1px solid rgba(0, 0, 0, .05);
+                transition: background-color 0.15s ease;
+            }
 
-    table.dataTable.no-footer {
-        border-bottom: none !important;
-    }
+            table.dataTable.no-footer {
+                border-bottom: none !important;
+            }
 
-    table.dataTable tbody td {
-        padding: 0.75rem 1rem !important;
-        vertical-align: middle;
-    }
+            table.dataTable tbody td {
+                padding: 0.75rem 1rem !important;
+                vertical-align: middle;
+            }
 
-    table.dataTable thead th {
-        padding: 0.75rem 1rem !important;
-    }
+            table.dataTable thead th {
+                padding: 0.75rem 1rem !important;
+            }
 
-    .dataTables_wrapper .dataTables_processing {
-        background: rgba(255, 255, 255, 0.9) !important;
-        border-radius: 0.5rem !important;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
-        padding: 1rem !important;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 1050;
-    }
+            .dataTables_wrapper .dataTables_processing {
+                background: rgba(255, 255, 255, 0.9) !important;
+                border-radius: 0.5rem !important;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+                padding: 1rem !important;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1050;
+            }
 
-    /* Status badge colors compatibility */
-    .badge-active {
-        background-color: #dcfce7 !important;
-        color: #166534 !important;
-        border: 1px solid #86efac !important;
-    }
+            /* Status badge colors compatibility */
+            .badge-active {
+                background-color: #dcfce7 !important;
+                color: #166534 !important;
+                border: 1px solid #86efac !important;
+            }
 
-    .badge-inactive {
-        background-color: #fee2e2 !important;
-        color: #991b1b !important;
-        border: 1px solid #fca5a5 !important;
-    }
-</style>
-@endpush
+            .badge-inactive {
+                background-color: #fee2e2 !important;
+                color: #991b1b !important;
+                border: 1px solid #fca5a5 !important;
+            }
+        </style>
+    @endpush
 
-@push('scripts')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@endpush
+    @push('scripts')
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @endpush
 @endonce
 
 @push('scripts')
-<script>
-    $(document).ready(function() {
-        const tableId = '#{{ $id }}';
-        const searchInput = '#search-input-{{ $id }}';
-        const lengthSelect = '#length-select-{{ $id }}';
-        const paginationContainer = '#pagination-{{ $id }}';
-        const infoText = '#info-text-{{ $id }}';
+    <script>
+        $(document).ready(function () {
+            const tableId = '#{{ $id }}';
+            const searchInput = '#search-input-{{ $id }}';
+            const lengthSelect = '#length-select-{{ $id }}';
+            const paginationContainer = '#pagination-{{ $id }}';
+            const infoText = '#info-text-{{ $id }}';
 
-        // Initialize DataTable
-        const table = $(tableId).DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ $url }}",
-            },
-            columns: @json($columns),
-            language: {
-                search: "",
-                searchPlaceholder: "Search records...",
-                processing: `
-                    <div class="d-flex align-items-center justify-content-center gap-2 py-4">
-                        <div class="spinner-border text-primary spinner-border-sm" role="status">
-                            <span class="visually-hidden">Loading...</span>
+            // Initialize DataTable
+            const table = $(tableId).DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ $url }}",
+                },
+                columns: @json($columns),
+                language: {
+                    search: "",
+                    searchPlaceholder: "Search records...",
+                    processing: `
+                        <div class="d-flex align-items-center justify-content-center gap-2 py-4">
+                            <div class="spinner-border text-primary spinner-border-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <span class="text-muted font-medium small">Loading...</span>
                         </div>
-                        <span class="text-muted font-medium small">Loading...</span>
-                    </div>
-                `,
-                emptyTable: `
-                    <div class="text-center py-5">
-                        <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
-                        <p class="text-muted font-medium mb-1">No records found</p>
-                        <p class="text-muted small">Try adjusting your search or filters</p>
-                    </div>
-                `
-            },
-            dom: 't',
-            pageLength: 10,
-            lengthMenu: [10, 25, 50, 100],
-            drawCallback: function() {
-                updatePaginationAndInfo();
-            }
-        });
-
-        // Custom Search Handler
-        $(searchInput).on('keyup', function() {
-            table.search(this.value).draw();
-        });
-
-        // Custom Length Handler
-        $(lengthSelect).on('change', function() {
-            table.page.len(parseInt(this.value)).draw();
-        });
-
-        // Update Pagination & Info UI
-        function updatePaginationAndInfo() {
-            const info = table.page.info();
-            
-            // Update info text
-            const start = info.recordsTotal > 0 ? info.start + 1 : 0;
-            const end = Math.min(info.end, info.recordsTotal);
-            $(infoText).text(`Showing ${start} to ${end} of ${info.recordsTotal} entries`);
-
-            // Build pagination
-            const totalPages = info.pages;
-            const currentPage = info.page + 1;
-            let paginationHtml = '';
-
-            // Previous button
-            paginationHtml += `
-                <button class="btn btn-sm btn-outline-secondary px-2 py-1 ${currentPage <= 1 ? 'disabled' : ''}" 
-                        onclick="goToPage(${currentPage - 1}, tableId)">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-            `;
-
-            // Page numbers
-            let startPage = Math.max(1, currentPage - 2);
-            let endPage = Math.min(totalPages, currentPage + 2);
-            
-            if (startPage > 1) {
-                paginationHtml += `<button class="btn btn-sm btn-outline-secondary px-3 py-1" onclick="goToPage(1, tableId)">1</button>`;
-                if (startPage > 2) {
-                    paginationHtml += `<span class="px-1 text-muted">...</span>`;
+                    `,
+                    emptyTable: `
+                        <div class="text-center py-5">
+                            <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                            <p class="text-muted font-medium mb-1">No records found</p>
+                            <p class="text-muted small">Try adjusting your search or filters</p>
+                        </div>
+                    `
+                },
+                dom: 't',
+                pageLength: 10,
+                lengthMenu: [10, 25, 50, 100],
+                drawCallback: function () {
+                    updatePaginationAndInfo();
                 }
-            }
+            });
 
-            for (let i = startPage; i <= endPage; i++) {
-                const isActive = i === currentPage;
+            // Custom Search Handler
+            $(searchInput).on('keyup', function () {
+                table.search(this.value).draw();
+            });
+
+            // Custom Length Handler
+            $(lengthSelect).on('change', function () {
+                table.page.len(parseInt(this.value)).draw();
+            });
+
+            // Update Pagination & Info UI
+            function updatePaginationAndInfo() {
+                const info = table.page.info();
+
+                // Update info text
+                const start = info.recordsTotal > 0 ? info.start + 1 : 0;
+                const end = Math.min(info.end, info.recordsTotal);
+                $(infoText).text(`Showing ${start} to ${end} of ${info.recordsTotal} entries`);
+
+                // Build pagination
+                const totalPages = info.pages;
+                const currentPage = info.page + 1;
+                let paginationHtml = '';
+
+                // Previous button
                 paginationHtml += `
-                    <button class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-outline-secondary'} px-3 py-1" 
-                            onclick="goToPage(${i}, tableId)">
-                        ${i}
+                    <button class="btn btn-sm btn-outline-secondary px-2 py-1 ${currentPage <= 1 ? 'disabled' : ''}" 
+                            onclick="goToPage(${currentPage - 1}, tableId)">
+                        <i class="fas fa-chevron-left"></i>
                     </button>
                 `;
-            }
 
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) {
-                    paginationHtml += `<span class="px-1 text-muted">...</span>`;
+                // Page numbers
+                let startPage = Math.max(1, currentPage - 2);
+                let endPage = Math.min(totalPages, currentPage + 2);
+
+                if (startPage > 1) {
+                    paginationHtml += `<button class="btn btn-sm btn-outline-secondary px-3 py-1" onclick="goToPage(1, tableId)">1</button>`;
+                    if (startPage > 2) {
+                        paginationHtml += `<span class="px-1 text-muted">...</span>`;
+                    }
                 }
-                paginationHtml += `<button class="btn btn-sm btn-outline-secondary px-3 py-1" onclick="goToPage(${totalPages}, tableId)">${totalPages}</button>`;
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const isActive = i === currentPage;
+                    paginationHtml += `
+                        <button class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-outline-secondary'} px-3 py-1" 
+                                onclick="goToPage(${i}, tableId)">
+                            ${i}
+                        </button>
+                    `;
+                }
+
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                        paginationHtml += `<span class="px-1 text-muted">...</span>`;
+                    }
+                    paginationHtml += `<button class="btn btn-sm btn-outline-secondary px-3 py-1" onclick="goToPage(${totalPages}, tableId)">${totalPages}</button>`;
+                }
+
+                // Next button
+                paginationHtml += `
+                    <button class="btn btn-sm btn-outline-secondary px-2 py-1 ${currentPage >= totalPages ? 'disabled' : ''}" 
+                            onclick="goToPage(${currentPage + 1}, tableId)">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                `;
+
+                $(paginationContainer).html(paginationHtml);
             }
 
-            // Next button
-            paginationHtml += `
-                <button class="btn btn-sm btn-outline-secondary px-2 py-1 ${currentPage >= totalPages ? 'disabled' : ''}" 
-                        onclick="goToPage(${currentPage + 1}, tableId)">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            `;
+            // Global function for pagination clicks
+            window.goToPage = function (page, tableId) {
+                const table = $(tableId).DataTable();
+                table.page(page - 1).draw('page');
+            };
 
-            $(paginationContainer).html(paginationHtml);
-        }
+            // Store table ID for global access
+            window.tableId = tableId;
 
-        // Global function for pagination clicks
-        window.goToPage = function(page, tableId) {
-            const table = $(tableId).DataTable();
-            table.page(page - 1).draw('page');
-        };
+            // Initial render
+            updatePaginationAndInfo();
 
-        // Store table ID for global access
-        window.tableId = tableId;
-
-        // Initial render
-        updatePaginationAndInfo();
-
-        // Re-render on window resize
-        $(window).on('resize', function() {
-            table.columns.adjust();
+            // Re-render on window resize
+            $(window).on('resize', function () {
+                table.columns.adjust();
+            });
         });
-    });
-</script>
+    </script>
 @endpush

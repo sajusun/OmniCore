@@ -16,7 +16,7 @@
                     <li class="breadcrumb-item active text-dark fw-medium" aria-current="page">Users Table</li>
                 </ol>
             </nav>
-            <h2 class="h4 fw-bold text-dark mb-0">Users Table</h2>
+            {{-- <h2 class="h4 fw-bold text-dark mb-0">Users Table</h2> --}}
         </div>
         <a href="{{ route('admin.users.create') }}"
             class="btn btn-primary d-inline-flex align-items-center gap-2 px-3 py-2 shadow-sm text-uppercase fw-semibold"
@@ -32,7 +32,7 @@
     {{-- Main Card Table Container --}}
     <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
         <div class="card-header bg-transparent border-0 pt-3 pb-0 px-3">
-            <h5 class="card-title mb-0 fw-bold text-dark">Users List</h5>
+            <h5 class="card-title mb-0 fw-bold text-dark">Users Table</h5>
         </div>
         <div class="card-body p-3">
             <!-- Reusable Datatable Component Integration -->
