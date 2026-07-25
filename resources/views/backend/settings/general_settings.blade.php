@@ -88,7 +88,7 @@
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <div class="card bg-light p-3 border">
-                                            <x-form.file name="logo" label="Logo" file="{{ $setting->logo ?? '' }}">
+                                            <x-form.file name="logo" label="Logo" file="{{ $setting->logo ? url($setting->logo): '' }}">
                                                 <p class="text-muted small mt-1 d-flex align-items-center gap-1 mb-0">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -100,7 +100,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="card bg-light p-3 border">
-                                            <x-form.file name="favicon" label="Favicon" file="{{ $setting->favicon ?? '' }}">
+                                            <x-form.file name="favicon" label="Favicon" file="{{ $setting->favicon ? url($setting->favicon): '' }}">
                                                 <p class="text-muted small mt-1 d-flex align-items-center gap-1 mb-0">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />

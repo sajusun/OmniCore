@@ -1,5 +1,18 @@
+@props([
+    'name',
+    'label' => '',
+    'file' => null,
+    'multiple' => false
+])
+
+@php
+    $existingFile = is_string($file) ? $file : null;
+@endphp
+
 <div class="mb-3">
-    <label for="{{ $name }}" class="form-label fw-medium">{!! $label !!}</label>
+    @if($label)
+        <label for="{{ $name }}" class="form-label fw-medium">{!! $label !!}</label>
+    @endif
 
     <div class="border border-2 border-dashed p-4 text-center position-relative" id="drop_zone_{{ $name }}"
         style="cursor: pointer; min-height: 120px;" onclick="document.getElementById('{{ $name }}').click()"
@@ -12,12 +25,12 @@
             document.getElementById('{{ $name }}').dispatchEvent(new Event('change'));
         ">
 
-        <div id="preview_wrapper_{{ $name }}" class="mb-2" style="display:none;">
-            <img id="preview_img_{{ $name }}" src="" class="img-fluid"
+        <div id="preview_wrapper_{{ $name }}" class="mb-2" style="{{ $existingFile ? 'display:block;' : 'display:none;' }}">
+            <img id="preview_img_{{ $name }}" src="{{ $existingFile ?? '' }}" class="img-fluid"
                 style="max-height: 160px; object-fit: contain;" />
         </div>
 
-        <div id="upload_hint_{{ $name }}">
+        <div id="upload_hint_{{ $name }}" style="{{ $existingFile ? 'display:none;' : 'display:block;' }}">
             <i class="bi bi-cloud-arrow-up fs-2 text-secondary"></i>
             <p class="mb-1 text-secondary small">
                 <span class="text-primary fw-semibold">Upload a file</span> or drag and drop
@@ -26,8 +39,7 @@
         </div>
     </div>
 
-    <input type="file" class="d-none" name="{{ $name }}" id="{{ $name }}" {{ isset($multiple) && $multiple ? 'multiple'
-        : '' }} onchange="
+    <input type="file" class="d-none" name="{{ $name }}" id="{{ $name }}" {{ $multiple ? 'multiple' : '' }} onchange="
             var file = this.files[0];
             if (file) {
                 var reader = new FileReader();

@@ -14,8 +14,10 @@
 
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0" style="font-size: 0.875rem;">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none text-muted">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}" class="text-decoration-none text-muted">Users</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"
+                                class="text-decoration-none text-muted">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}"
+                                class="text-decoration-none text-muted">Users</a></li>
                         <li class="breadcrumb-item active text-dark fw-medium" aria-current="page">Edit</li>
                     </ol>
                 </nav>
@@ -27,7 +29,8 @@
                 @method('PUT')
 
                 {{-- Main Form Card Container with Force Flat Edges --}}
-                <div class="card border border-light-subtle shadow-sm overflow-hidden" style="border-radius: 0 !important;">
+                <div class="card border border-light-subtle shadow-sm overflow-hidden"
+                    style="border-radius: 0 !important;">
 
                     {{-- Card Header --}}
                     <div class="card-header border-bottom border-light-subtle bg-transparent px-4 py-3">
@@ -38,7 +41,7 @@
 
                     {{-- Full-width Profile Photo Upload Section --}}
                     <div class="w-full bg-light border-bottom border-light-subtle p-4">
-                        <x-form.file name="image" label="Profile Photo" file="{{ $user->image ?? '' }}">
+                        <x-form.file name="avatar" label="Profile Photo" :file="$user->avatar? url($user->avatar): ''">
                         </x-form.file>
                     </div>
 
@@ -63,7 +66,8 @@
                                 <x-form.select name="role" label="Role" required>
                                     <option value="">Select Role</option>
                                     @foreach($roles as $role)
-                                    <option value="{{ $role->name }}" @selected(old('role', $user->roles->first()?->name) == $role->name)>
+                                    <option value="{{ $role->name }}" @selected(old('role', $user->
+                                        roles->first()?->name) == $role->name)>
                                         {{ ucfirst($role->name) }}
                                     </option>
                                     @endforeach
@@ -87,8 +91,10 @@
                     </div>
 
                     {{-- Card Action Footer with Absolute Flat Corners --}}
-                    <div class="card-footer d-flex justify-content-end gap-2 border-top border-light-subtle bg-light px-4 py-3">
-                        <x-form.cancel href="{{ route('admin.users.index') }}" class="btn btn-light border" style="border-radius: 0 !important;">
+                    <div
+                        class="card-footer d-flex justify-content-end gap-2 border-top border-light-subtle bg-light px-4 py-3">
+                        <x-form.cancel href="{{ route('admin.users.index') }}" class="btn btn-light border"
+                            style="border-radius: 0 !important;">
                             Cancel
                         </x-form.cancel>
 

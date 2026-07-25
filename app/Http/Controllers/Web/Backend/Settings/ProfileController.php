@@ -35,7 +35,7 @@ class ProfileController extends Controller
 
         $user->update($request->only(['name', 'email']));
 
-        return redirect()->back()->with('t-success', 'Profile updated successfully');
+        return redirect()->back()->with('success', 'Profile updated successfully');
     }
 
     public function UpdateProfilePicture(Request $request)

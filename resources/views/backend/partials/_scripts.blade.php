@@ -30,11 +30,11 @@
 <script src="{{ asset('backend/plugins/circle-progress/circle-progress.min.js') }}"></script>
 
 {{-- DATA TABLE JS --}}
-<script src="{{ asset('backend/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
+{{-- <script src="{{ asset('backend/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('backend/plugins/datatable/js/dataTables.bootstrap5.js') }}"></script>
-<script src="{{ asset('backend/plugins/datatable/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('backend/plugins/datatable/js/dataTables.buttons.min.js') }}"></script> --}}
 {{-- <script src="{{ asset('backend/plugins/datatable/js/butsns.bootstrap5.min.js') }}"></script> --}}
-<script src="{{ asset('backend/plugins/datatable/js/jszip.min.js') }}"></script>
+{{-- <script src="{{ asset('backend/plugins/datatable/js/jszip.min.js') }}"></script> --}}
 <script src="{{ asset('backend/plugins/datatable/pdfmake/pdfmake.min.js') }}"></script>
 <script src="{{ asset('backend/plugins/datatable/pdfmake/vfs_fonts.js') }}"></script>
 {{-- <script src="{{ asset('backend/plugins/datatable/js/butsns.html5.min.js') }}"></script> --}}
@@ -49,7 +49,7 @@
 {{-- <script src="{{ asset('backend/js/index.js') }}"></script> --}}
 
 <!-- Reply JS-->
-<script src="{{ asset('backend/js/reply.js') }}"></script>
+{{-- <script src="{{ asset('backend/js/reply.js') }}"></script> --}}
 
 
 <!-- COLOR THEME JS -->
@@ -73,14 +73,14 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 {{-- dropify --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js" integrity="sha512-8QFTrG0oeOiyWo/VM9Y8kgxdlCryqhIxVeRpWSezdRRAvarxVtwLnGroJgnVW9/XBRduxO/z1GblzPrMQoeuew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js" integrity="sha512-8QFTrG0oeOiyWo/VM9Y8kgxdlCryqhIxVeRpWSezdRRAvarxVtwLnGroJgnVW9/XBRduxO/z1GblzPrMQoeuew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $('.dropify').dropify();
-</script>
+</script> --}}
 
 
 {{-- Ckeditor --}}
-<script src="https://cdn.ckeditor.com/ckeditor5/41.2.0/classic/ckeditor.js"></script>
+{{-- <script src="https://cdn.ckeditor.com/ckeditor5/41.2.0/classic/ckeditor.js"></script>
 <script>
     var elements = document.querySelectorAll('.description');
 
@@ -93,7 +93,7 @@
                 console.error(error);
             });
     }
-</script>
+</script> --}}
 
 
 <!-- loader -->
