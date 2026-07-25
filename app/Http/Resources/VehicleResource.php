@@ -53,6 +53,8 @@ class VehicleResource extends JsonResource
 
             'build_story' => $this->build_story,
 
+            'parts' => VehiclePartResource::collection($this->whenLoaded('parts')),
+
             'media' => when($this->media, MediaResource::collection($this->media), null),
 
             'created_at' => $this->created_at,

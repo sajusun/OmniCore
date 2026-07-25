@@ -62,4 +62,9 @@ class Vehicle extends Model
     {
         return $this->belongsTo(Garage::class);
     }
+
+    public function parts()
+    {
+        return $this->hasMany(VehiclePart::class);
+    }
 }

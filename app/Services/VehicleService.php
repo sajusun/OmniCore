@@ -26,7 +26,7 @@ class VehicleService
 
     public function find(int $id): Vehicle
     {
-        return Vehicle::with(['garage', 'media'])->findOrFail($id);
+        return Vehicle::with(['garage', 'media', 'parts.media'])->findOrFail($id);
     }
 
 
@@ -34,7 +34,7 @@ class VehicleService
     {
         return Vehicle::whereHas('garage', function ($query) use ($user) {
             $query->where('user_id', $user->id);
-        })->with(['garage', 'media'])->latest()->paginate(15);
+        })->with(['garage', 'media', 'parts.media'])->latest()->paginate(15);
     }
 
 
@@ -61,7 +61,11 @@ class VehicleService
             $this->uploadImages($vehicle, $data['media']);
         }
 
-        return $vehicle;
+        if (!empty($data['parts']) && is_array($data['parts'])) {
+            $this->syncParts($vehicle, $data['parts']);
+        }
+
+        return $vehicle->load(['garage', 'media', 'parts.media']);
     }
 
 
@@ -80,7 +84,37 @@ class VehicleService
             $this->uploadImages($vehicle, $data['media']);
         }
 
-        return $vehicle;
+        if (isset($data['parts']) && is_array($data['parts'])) {
+            $this->syncParts($vehicle, $data['parts']);
+        }
+
+        return $vehicle->load(['garage', 'media', 'parts.media']);
+    }
+
+    public function syncParts(Vehicle $vehicle, array $partsData): void
+    {
+        foreach ($partsData as $partData) {
+            if (empty($partData['name']) && empty($partData['image'])) {
+                continue;
+            }
+
+            if (!empty($partData['id'])) {
+                $part = $vehicle->parts()->find($partData['id']);
+                if ($part) {
+                    if (isset($partData['name'])) {
+                        $part->update(['name' => $partData['name']]);
+                    }
+                }
+            } else {
+                $part = $vehicle->parts()->create([
+                    'name' => $partData['name'] ?? null,
+                ]);
+            }
+
+            if ($part && !empty($partData['image'])) {
+                $this->updateMedia($part, $partData['image'], 'part_image');
+            }
+        }
     }
 
 
@@ -115,7 +149,7 @@ class VehicleService
             })->when(!empty($filters['garage_id']), fn($q) => $q->where('garage_id', $filters['garage_id']))
             ->when(!empty($filters['brand_id']), fn($q) => $q->where('brand_id', $filters['brand_id']))
             ->when(!empty($filters['status']), fn($q) => $q->where('status', $filters['status']))
-            ->with(['garage', 'media'])
+            ->with(['garage', 'media', 'parts.media'])
             ->latest()
             ->paginate($filters['per_page'] ?? 15);
     }

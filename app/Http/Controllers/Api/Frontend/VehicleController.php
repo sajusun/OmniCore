@@ -48,12 +48,22 @@ class VehicleController extends Controller
             $data['media'] = $request->file('media');
         }
 
+        if ($request->has('parts') && is_array($request->input('parts'))) {
+            $parts = $request->input('parts');
+            foreach ($parts as $index => $part) {
+                if ($request->hasFile("parts.{$index}.image")) {
+                    $parts[$index]['image'] = $request->file("parts.{$index}.image");
+                }
+            }
+            $data['parts'] = $parts;
+        }
+
         $vehicle = $this->vehicleService->create($request->user(), $data);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Vehicle listed successfully!',
-            'data' => $vehicle
+            'data' => new VehicleResource($vehicle)
         ], 201);
     }
 
@@ -70,6 +80,16 @@ class VehicleController extends Controller
 
         if ($request->hasFile('media')) {
             $data['media'] = $request->file('media');
+        }
+
+        if ($request->has('parts') && is_array($request->input('parts'))) {
+            $parts = $request->input('parts');
+            foreach ($parts as $index => $part) {
+                if ($request->hasFile("parts.{$index}.image")) {
+                    $parts[$index]['image'] = $request->file("parts.{$index}.image");
+                }
+            }
+            $data['parts'] = $parts;
         }
 
         $updatedVehicle = $this->vehicleService->update($vehicle, $data);

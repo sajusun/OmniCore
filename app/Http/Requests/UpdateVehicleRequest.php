@@ -52,6 +52,11 @@ class UpdateVehicleRequest extends FormRequest
 
             'media' => ['nullable', 'array'],
             'media.*' => ['file', 'mimetypes:image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/x-msvideo', 'max:51200'],
+
+            'parts' => ['nullable', 'array'],
+            'parts.*.id' => ['nullable', 'integer', 'exists:vehicle_parts,id'],
+            'parts.*.name' => ['nullable', 'string', 'max:255'],
+            'parts.*.image' => ['nullable', 'file', 'image', 'max:10240'],
         ];
     }
 }
