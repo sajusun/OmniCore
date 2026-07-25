@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\Event;
+use App\Models\Vehicle;
 use App\Models\EventRsvp;
 use Illuminate\Support\Facades\DB;
 use App\Modules\Media\Traits\HandlesMedia;
@@ -29,8 +30,8 @@ class EventService
             ->when(isset($filters['search']), function ($q) use ($filters) {
                 $q->where(function ($sub) use ($filters) {
                     $sub->where('title', 'like', '%' . $filters['search'] . '%')
-                       ->orWhere('description', 'like', '%' . $filters['search'] . '%')
-                       ->orWhere('location', 'like', '%' . $filters['search'] . '%');
+                        ->orWhere('description', 'like', '%' . $filters['search'] . '%')
+                        ->orWhere('location', 'like', '%' . $filters['search'] . '%');
                 });
             })
             ->with(['media', 'user', 'club'])
@@ -143,10 +144,13 @@ class EventService
     /**
      * RSVP to an event (going / interested).
      */
-    public function rsvp(Event $event, User $user, string $status): EventRsvp
+    public function rsvp(Event $event, User $user, string $status, int $vehicle_id): EventRsvp
     {
         if (!in_array($status, ['going', 'interested'])) {
             throw new \InvalidArgumentException("Invalid RSVP status. Must be 'going' or 'interested'.");
+        }
+        if (!Vehicle::where("id", $vehicle_id)->where('user_id', $user->id)->exists()) {
+            throw new \InvalidArgumentException("Invalid RSVP Vehicle. Must be 'your own garage vehile'.");
         }
 
         if ($status === 'going' && $event->max_participants) {
@@ -162,7 +166,11 @@ class EventService
 
         return EventRsvp::updateOrCreate(
             ['event_id' => $event->id, 'user_id' => $user->id],
-            ['status' => $status]
+            [
+                'status' => $status,
+                'vehicle_id' => $vehicle_id
+            ],
+
         );
     }
 

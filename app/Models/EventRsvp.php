@@ -12,6 +12,7 @@ class EventRsvp extends Model
     protected $fillable = [
         'event_id',
         'user_id',
+        'vehicle_id',
         'status',
     ];
 
@@ -23,5 +24,9 @@ class EventRsvp extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+    public function vehicle(): BelongsTo
+    {
+        return $this->belongsTo(Vehicle::class);
     }
 }

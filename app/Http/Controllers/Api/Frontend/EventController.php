@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api\Frontend;
 
+use App\Models\User;
 use App\Models\Event;
 use App\Helpers\Helper;
 use App\Enums\EventTypeEnum;
 use Illuminate\Http\Request;
 use App\Services\EventService;
-use App\Enums\VehicleRequiredEnum;
 use Illuminate\Http\JsonResponse;
+use App\Enums\VehicleRequiredEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EventResource;
 use App\Http\Requests\StoreEventRequest;
@@ -16,11 +17,13 @@ use App\Http\Requests\UpdateEventRequest;
 
 class EventController extends Controller
 {
+    private User $user;
     protected EventService $eventService;
 
     public function __construct(EventService $eventService)
     {
         parent::__construct();
+        $this->user = auth('api')->user();
         $this->eventService = $eventService;
     }
 
@@ -30,8 +33,14 @@ class EventController extends Controller
     public function index(Request $request): JsonResponse
     {
         $filters = $request->only([
-            'event_type', 'club_id', 'status', 'is_public',
-            'location', 'user_id', 'upcoming', 'search',
+            'event_type',
+            'club_id',
+            'status',
+            'is_public',
+            'location',
+            'user_id',
+            'upcoming',
+            'search',
         ]);
         $perPage = (int)$request->query('per_page', 15);
 
@@ -120,10 +129,11 @@ class EventController extends Controller
     {
         $request->validate([
             'status' => 'required|string|in:going,interested',
+            'vehicle_id' => 'required|integer|exists:vehicles,id'
         ]);
 
         try {
-            $rsvp = $this->eventService->rsvp($event, auth('api')->user(), $request->input('status'));
+            $rsvp = $this->eventService->rsvp($event, $this->user, $request->input('status'), $request->input('vehicle_id'));
 
             return $this->success([
                 'status'  => $rsvp->status,

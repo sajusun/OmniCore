@@ -4,13 +4,9 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\Garage;
-use App\Helpers\Helper;
 use App\Models\Vehicle;
 use Illuminate\Support\Str;
-use App\Models\VehicleImage;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
-use App\Modules\Media\Traits\HasMedia;
 use App\Modules\Media\Traits\HandlesMedia;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -19,7 +15,7 @@ class VehicleService
     use HandlesMedia;
     private function generateUniqueSlug(string $title, ?int $exceptId = null): string
     {
-        $slug = Str::slug($title);
+        $slug = Str::slug($title) . '-' . Str::random(4);
         return $slug;
     }
 
