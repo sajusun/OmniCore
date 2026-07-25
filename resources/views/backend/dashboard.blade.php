@@ -22,7 +22,6 @@
 
             {{-- Total Users --}}
             <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
-
                 <div class="card overflow-hidden">
                     <div class="card-body">
                         <div class="row">
@@ -42,7 +41,6 @@
                     </div>
                 </div>
             </div>
-
 
             {{-- Subscribed Users --}}
             <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
@@ -199,6 +197,50 @@
         </div>
         <!-- ROW-2 END -->
 
+        <!-- CHARTS ROW -->
+        {{-- <div class="row">
+            <!-- Monthly Growth Overview (Line/Area Chart) -->
+            <div class="col-lg-12 col-xl-8">
+                <div class="card">
+                    <div class="card-header border-bottom">
+                        <h4 class="card-title fw-semibold mb-0">Monthly Activity Growth</h4>
+                    </div>
+                    <div class="card-body">
+                        <x-chart 
+                            type="area" 
+                            :height="320"
+                            chartId="monthly-growth-chart"
+                            :categories="$signupCategories"
+                            :series="[
+                                ['name' => 'Users', 'data' => $signupData],
+                                ['name' => 'Events', 'data' => $eventChartData],
+                                ['name' => 'Posts', 'data' => $postChartData]
+                            ]" 
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <-- Active vs Offline Users Distribution (Pie / Donut Chart) -->
+            <div class="col-lg-12 col-xl-4">
+                <div class="card">
+                    <div class="card-header border-bottom">
+                        <h4 class="card-title fw-semibold mb-0">User Status Overview</h4>
+                    </div>
+                    <div class="card-body">
+                        <x-chart 
+                            type="donut" 
+                            :height="320"
+                            chartId="user-status-chart"
+                            :categories="['Active Users', 'Offline Users']"
+                            :series="[(int)$activeCount, (int)$inactiveCount]" 
+                        />
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+        <!-- CHARTS ROW END -->
+
         <!-- ROW-3: Recent Users + Recent Events -->
         <div class="row">
 
@@ -269,13 +311,11 @@
                                                 </div>
                                                 <span class="ms-auto">
                                                     @if($event->status === 'published')
-                                                        <span
-                                                            class="badge bg-success-transparent text-success fs-11">Published</span>
+                                                        <span class="badge bg-success-transparent text-success fs-11">Published</span>
                                                     @elseif($event->status === 'cancelled')
                                                         <span class="badge bg-danger-transparent text-danger fs-11">Cancelled</span>
                                                     @else
-                                                        <span
-                                                            class="badge bg-secondary-transparent text-secondary fs-11">{{ ucfirst($event->status) }}</span>
+                                                        <span class="badge bg-secondary-transparent text-secondary fs-11">{{ ucfirst($event->status) }}</span>
                                                     @endif
                                                 </span>
                                             </div>
@@ -293,11 +333,10 @@
         </div>
         <!-- ROW-3 END -->
 
-        <!-- ROW-4: Recent Posts + System Info -->
+        <!-- ROW-4: Recent Posts -->
         <div class="row">
-
             {{-- Recent Posts --}}
-            <div class="col-sm-12 col-md-12 col-xl-6">
+            <div class="col-sm-12 col-md-12 col-xl-12">
                 <div class="card overflow-hidden">
                     <div class="card-header border-bottom d-flex align-items-center justify-content-between">
                         <h4 class="card-title fw-semibold mb-0">Recent Posts</h4>
@@ -324,11 +363,9 @@
                                                 </div>
                                                 <span class="ms-auto">
                                                     @if($post->status === 'published')
-                                                        <span
-                                                            class="badge bg-success-transparent text-success fs-11">Published</span>
+                                                        <span class="badge bg-success-transparent text-success fs-11">Published</span>
                                                     @else
-                                                        <span
-                                                            class="badge bg-secondary-transparent text-secondary fs-11">{{ ucfirst($post->status ?? 'Draft') }}</span>
+                                                        <span class="badge bg-secondary-transparent text-secondary fs-11">{{ ucfirst($post->status ?? 'Draft') }}</span>
                                                     @endif
                                                 </span>
                                             </div>
@@ -342,63 +379,8 @@
                     </div>
                 </div>
             </div>
-
-            {{-- System Info --}}
-            {{-- <div class="col-sm-12 col-md-12 col-xl-6">
-                <div class="card">
-                    <div class="card-header border-bottom">
-                        <h4 class="card-title fw-semibold mb-0">System Information</h4>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between px-0">
-                                <span class="text-muted fs-13">PHP Version</span>
-                                <span class="fw-semibold fs-13">{{ $metrics['system']['php_version'] }}</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between px-0">
-                                <span class="text-muted fs-13">Laravel Version</span>
-                                <span class="fw-semibold fs-13">{{ $metrics['system']['laravel_version'] }}</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between px-0">
-                                <span class="text-muted fs-13">Environment</span>
-                                <span
-                                    class="badge bg-{{ $metrics['system']['env'] === 'production' ? 'success' : 'warning' }}-transparent text-{{ $metrics['system']['env'] === 'production' ? 'success' : 'warning' }} fs-12">
-                                    {{ ucfirst($metrics['system']['env']) }}
-                                </span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between px-0">
-                                <span class="text-muted fs-13">Total Clubs</span>
-                                <span class="fw-semibold fs-13">{{ number_format($totalClubs ?? 0) }}</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between px-0">
-                                <span class="text-muted fs-13">Club Members</span>
-                                <span class="fw-semibold fs-13">{{ number_format($totalClubMembers ?? 0) }}</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between px-0">
-                                <span class="text-muted fs-13">Event RSVPs (Going)</span>
-                                <span class="fw-semibold fs-13">{{ number_format($totalGoing ?? 0) }}</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between px-0">
-                                <span class="text-muted fs-13">Verified Users</span>
-                                <span class="fw-semibold fs-13">{{ number_format($verifiedUsers ?? 0) }}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div> --}}
-
         </div>
         <!-- ROW-4 END -->
-
-        {{-- <div class="row">
-            <x-chart type="line" title="Monthly Users" :categories="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']"
-                :series="[
-            [
-                'name' => 'Users',
-                'data' => [120, 150, 180, 220, 280, 310]
-            ]
-        ]" >asr</x-chart>
-        </div> --}}
 
     </div>
     <!-- CONTAINER CLOSED -->

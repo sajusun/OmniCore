@@ -9,7 +9,7 @@
 
 
 // disable submit button
-<script>
+{{-- <script>
     const form = document.querySelector('.form');
     const submitBtn = document.querySelector('.submit');
 
@@ -17,4 +17,4 @@
         submitBtn.disabled = true;
         submitBtn.innerText = 'Submitting...';
     });
-</script>
+</script> --}}

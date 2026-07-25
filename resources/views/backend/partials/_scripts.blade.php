@@ -21,7 +21,7 @@
 
 
 <!-- APEXCHART JS -->
-<script src="{{ asset('backend/js/apexcharts.js') }}"></script>
+{{-- <script src="{{ asset('backend/js/apexcharts.js') }}"></script> --}}
 
 <!-- INTERNAL SELECT2 JS -->
 <script src="{{ asset('backend/plugins/select2/select2.full.min.js') }}"></script>
@@ -59,7 +59,7 @@
 {{-- <script src="{{ asset('backend/js/custom.js') }}"></script> --}}
 
 <!-- SWITCHER JS -->
-<script src="{{ asset('backend/switcher/js/switcher.js') }}"></script>
+{{-- <script src="{{ asset('backend/switcher/js/switcher.js') }}"></script> --}}
 
 <!-- INTERNAL Summernote Editor js -->
 <script src="{{ asset('backend/plugins/summernote-editor/summernote1.js') }}"></script>
