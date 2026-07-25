@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Web\Backend\Settings;
 use App\Models\User;
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
+use App\Services\FileService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
+    public function __construct(private FileService $fileService) {}
+
     public function index()
     {
         $user = auth()->user();
@@ -48,9 +51,9 @@ class ProfileController extends Controller
 
         if ($request->hasFile('profile_picture')) {
             if ($user->avatar && $user->avatar != 'default/profile.jpg') {
-                Helper::fileDelete(public_path($user->avatar));
+                $this->fileService->delete(public_path($user->avatar));
             }
-            $path = Helper::fileUpload($request->file('profile_picture'), 'users', $user->name);
+            $path = $this->fileService->upload($request->file('profile_picture'), 'profile');
             $user->update(['avatar' => $path]);
 
             return response()->json([
