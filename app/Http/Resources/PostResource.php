@@ -21,7 +21,7 @@ class PostResource extends JsonResource
 
             'type' => $this->type,
             'visibility' => $this->visibility,
-            'friend_ids' => when($this->visibleUsers,$this->visibleUsers->pluck('id')->values() ),
+            'friend_ids' => when($this->visibleUsers, $this->visibleUsers->pluck('id')->values()),
             'friends' => FriendResource::collection($this->whenLoaded('visibleUsers') ?? []),
             'status' => $this->status,
 
@@ -46,6 +46,7 @@ class PostResource extends JsonResource
 
             'is_liked' => auth('api')->check() ? $this->likes->contains('user_id', auth('api')->id()) : false,
             'is_saved' => auth('api')->check() ? $this->saves->contains('user_id', auth('api')->id()) : false,
+            'is_following' => auth('api')->user()->isFollowing($this->user),
 
             'created_at' => $this->created_at,
             'created_at_human' => $this->created_at?->diffForHumans(),
