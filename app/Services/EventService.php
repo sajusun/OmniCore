@@ -26,7 +26,7 @@ class EventService
             ->when(isset($filters['is_public']), fn($q) => $q->where('is_public', filter_var($filters['is_public'], FILTER_VALIDATE_BOOLEAN)))
             ->when(isset($filters['location']), fn($q) => $q->where('location', 'like', '%' . $filters['location'] . '%'))
             ->when(isset($filters['user_id']), fn($q) => $q->where('user_id', $filters['user_id']))
-            ->when(!empty($filters['upcoming']), fn($q) => $q->where('event_date', '>=', now()->toDateString()))
+            ->when(! empty($filters['upcoming']), fn($q) => $q->where('event_date', '>=', now()->toDateString()))
             ->when(isset($filters['search']), function ($q) use ($filters) {
                 $q->where(function ($sub) use ($filters) {
                     $sub->where('title', 'like', '%' . $filters['search'] . '%')
@@ -54,29 +54,29 @@ class EventService
     {
         return DB::transaction(function () use ($data) {
             $event = Event::create([
-                'user_id'           => $data['user_id'] ?? auth('api')->id(),
-                'club_id'           => $data['club_id'] ?? null,
-                'title'             => $data['title'],
-                'description'       => $data['description'] ?? null,
-                'event_type'        => $data['event_type'],
-                'location'          => $data['location'],
-                'latitude'          => $data['latitude'] ?? null,
-                'longitude'         => $data['longitude'] ?? null,
-                'event_date'        => $data['event_date'],
-                'event_time'        => $data['event_time'],
-                'max_participants'  => $data['max_participants'] ?? null,
+                'user_id' => $data['user_id'] ?? auth('api')->id(),
+                'club_id' => $data['club_id'] ?? null,
+                'title' => $data['title'],
+                'description' => $data['description'] ?? null,
+                'event_type' => $data['event_type'],
+                'location' => $data['location'],
+                'latitude' => $data['latitude'] ?? null,
+                'longitude' => $data['longitude'] ?? null,
+                'event_date' => $data['event_date'],
+                'event_time' => $data['event_time'],
+                'max_participants' => $data['max_participants'] ?? null,
                 'vehicles_required' => $data['vehicles_required'] ?? [],
-                'is_public'         => $data['is_public'] ?? true,
-                'status'            => $data['status'] ?? 'published',
+                'is_public' => $data['is_public'] ?? true,
+                'status' => $data['status'] ?? 'published',
             ]);
 
             // Single thumbnail
-            if (!empty($data['thumbnail'])) {
+            if (! empty($data['thumbnail'])) {
                 $this->uploadMedia($event, $data['thumbnail'], 'thumbnail');
             }
 
             // Multiple images
-            if (!empty($data['images'])) {
+            if (! empty($data['images'])) {
                 $this->uploadMedia($event, $data['images'], 'images');
             }
 
@@ -91,20 +91,20 @@ class EventService
     {
         return DB::transaction(function () use ($event, $data) {
             $event->update(array_filter([
-                'club_id'           => $data['club_id'] ?? null,
-                'title'             => $data['title'] ?? null,
-                'description'       => $data['description'] ?? null,
-                'event_type'        => $data['event_type'] ?? null,
-                'location'          => $data['location'] ?? null,
-                'latitude'          => $data['latitude'] ?? null,
-                'longitude'         => $data['longitude'] ?? null,
-                'event_date'        => $data['event_date'] ?? null,
-                'event_time'        => $data['event_time'] ?? null,
-                'max_participants'  => $data['max_participants'] ?? null,
+                'club_id' => $data['club_id'] ?? null,
+                'title' => $data['title'] ?? null,
+                'description' => $data['description'] ?? null,
+                'event_type' => $data['event_type'] ?? null,
+                'location' => $data['location'] ?? null,
+                'latitude' => $data['latitude'] ?? null,
+                'longitude' => $data['longitude'] ?? null,
+                'event_date' => $data['event_date'] ?? null,
+                'event_time' => $data['event_time'] ?? null,
+                'max_participants' => $data['max_participants'] ?? null,
                 'vehicles_required' => $data['vehicles_required'] ?? null,
-                'is_public'         => isset($data['is_public']) ? filter_var($data['is_public'], FILTER_VALIDATE_BOOLEAN) : null,
-                'status'            => $data['status'] ?? null,
-            ], fn($val) => !is_null($val)));
+                'is_public' => isset($data['is_public']) ? filter_var($data['is_public'], FILTER_VALIDATE_BOOLEAN) : null,
+                'status' => $data['status'] ?? null,
+            ], fn($val) => ! is_null($val)));
 
             if (isset($data['thumbnail'])) {
                 if ($data['thumbnail']) {
@@ -133,7 +133,7 @@ class EventService
     {
         return DB::transaction(function () use ($event) {
             $mediaIds = $event->media()->pluck('id')->toArray();
-            if (!empty($mediaIds)) {
+            if (! empty($mediaIds)) {
                 $this->deleteMedia($mediaIds);
             }
 
@@ -146,10 +146,10 @@ class EventService
      */
     public function rsvp(Event $event, User $user, string $status, int $vehicle_id): EventRsvp
     {
-        if (!in_array($status, ['going', 'interested'])) {
+        if (! in_array($status, ['going', 'interested'])) {
             throw new \InvalidArgumentException("Invalid RSVP status. Must be 'going' or 'interested'.");
         }
-        if (!Vehicle::where("id", $vehicle_id)->where('user_id', $user->id)->exists()) {
+        if (! Vehicle::where('id', $vehicle_id)->where('user_id', $user->id)->exists()) {
             throw new \InvalidArgumentException("Invalid RSVP Vehicle. Must be 'your own garage vehile'.");
         }
 
@@ -160,7 +160,7 @@ class EventService
                 ->count();
 
             if ($currentGoingCount >= $event->max_participants) {
-                throw new \RuntimeException("Event maximum capacity limit reached.");
+                throw new \RuntimeException('Event maximum capacity limit reached.');
             }
         }
 
@@ -168,7 +168,7 @@ class EventService
             ['event_id' => $event->id, 'user_id' => $user->id],
             [
                 'status' => $status,
-                'vehicle_id' => $vehicle_id
+                'vehicle_id' => $vehicle_id,
             ],
 
         );
@@ -181,7 +181,7 @@ class EventService
     {
         return EventRsvp::where([
             'event_id' => $event->id,
-            'user_id'  => $user->id,
+            'user_id' => $user->id,
         ])->delete() > 0;
     }
 
@@ -192,7 +192,7 @@ class EventService
     {
         return EventRsvp::where('event_id', $event->id)
             ->when($status, fn($q) => $q->where('status', $status))
-            ->with(['user'])
+            ->with(['user', 'vehicle.parts.media'])
             ->latest()
             ->paginate($perPage);
     }
@@ -203,8 +203,139 @@ class EventService
     protected function deleteCollectionMedia(Event $event, string $collection): void
     {
         $ids = $event->media()->where('collection_name', $collection)->pluck('id')->toArray();
-        if (!empty($ids)) {
+        if (! empty($ids)) {
             $this->deleteMedia($ids);
         }
     }
+
+    public function matchingParts(Event $event, User $user)
+    {
+        $goingPersons = EventRsvp::where('event_id', $event->id)->where('status', 'going')->get();
+
+        $mySelectedVehicle = $goingPersons->firstWhere('user_id', $user->id)->vehicle;
+
+        $matchedPersons = [];
+
+        dd($mySelectedVehicle);
+        foreach ($goingPersons as $goingPerson) {
+            $goingPersonCar = $goingPerson->vehicle;
+            // dd($goingPersonCar->parts);
+
+            if ($goingPersonCar) {
+                $matchedParts = [];
+
+                foreach ($goingPersonCar->parts as $part) {
+                    if (in_array($part->slug, $event->vehicles_required)) {
+                        $matchedParts[] = [
+                            'part_id' => $part->id,
+                            'part_name' => $part->name,
+                            'part_image' => $part->image,
+                        ];
+                    }
+                }
+
+                if (! empty($matchedParts)) {
+                    $matchedPersons[] = [
+                        'user_id' => $goingPerson->user->id,
+                        'user_name' => $goingPerson->user->name,
+                        'user_avatar' => $goingPerson->user->avatar,
+                        'car_id' => $goingPersonCar->id,
+                        'car_name' => $goingPersonCar->name,
+                        'car_image' => $goingPersonCar->image,
+                        'matched_parts' => $matchedParts,
+                    ];
+                }
+            }
+        }
+
+        return $matchedPersons;
+    }
+
+
+    public function matchingParts2(Event $event, User $user)
+    {
+        // Get current user's RSVP with vehicle
+        $myRsvp = EventRsvp::where('event_id', $event->id)
+            ->where('user_id', $user->id)
+            ->where('status', 'going')
+            ->with('vehicle')
+            ->first();
+
+        if (!$myRsvp || !$myRsvp->vehicle) {
+            return []; // User hasn't selected a vehicle or doesn't have one
+        }
+
+        $myVehicle = $myRsvp->vehicle;
+        $myBrand = $myVehicle->brand; // This is a string
+        $myModel = $myVehicle->model; // This is a string
+
+        // Get all going persons with their vehicles
+        $goingPersons = EventRsvp::where('event_id', $event->id)
+            ->where('status', 'going')
+            ->where('user_id', '!=', $user->id) // Exclude current user
+            ->with(['user', 'vehicle.parts'])
+            ->get();
+
+        $matchedPersons = [];
+
+        foreach ($goingPersons as $goingPerson) {
+            $personVehicle = $goingPerson->vehicle;
+
+            // Skip if no vehicle
+            if (!$personVehicle) {
+                continue;
+            }
+
+            // Check if brand AND model match (string comparison)
+            $brandMatches = strtolower($personVehicle->brand) === strtolower($myBrand);
+            $modelMatches = strtolower($personVehicle->model) === strtolower($myModel);
+
+            // Only proceed if both brand and model match
+            if ($brandMatches && $modelMatches) {
+                $matchedParts = [];
+
+                // Check matching parts
+                foreach ($personVehicle->parts as $part) {
+                    if (in_array($part->slug, $event->vehicles_required)) {
+                        $matchedParts[] = [
+                            'part_id' => $part->id,
+                            'part_name' => $part->name,
+                            'part_image' => $part->image,
+                            'part_slug' => $part->slug,
+                        ];
+                    }
+                }
+
+                // Only add if there are matching parts
+                if (!empty($matchedParts)) {
+                    $matchedPersons[] = [
+                        'user' => [
+                            'id' => $goingPerson->user->id,
+                            'name' => $goingPerson->user->name,
+                            'avatar' => $goingPerson->user->avatar,
+                        ],
+                        'vehicle' => [
+                            'id' => $personVehicle->id,
+                            'name' => $personVehicle->name,
+                            'brand' => $personVehicle->brand,
+                            'model' => $personVehicle->model,
+                            'image' => $personVehicle->image,
+                            'year' => $personVehicle->year ?? null,
+                        ],
+                        'matched_parts' => $matchedParts,
+                        'total_parts_matched' => count($matchedParts),
+                    ];
+                }
+            }
+        }
+
+        // Sort by most matching parts first
+        usort($matchedPersons, function ($a, $b) {
+            return $b['total_parts_matched'] - $a['total_parts_matched'];
+        });
+
+        return $matchedPersons;
+    }
+
+    protected function notify($goingPerson, $matchPerson) {}
 }

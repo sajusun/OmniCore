@@ -18,8 +18,8 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Chat\ChatRoomController;
 use App\Http\Controllers\Api\FirebaseTokenController;
 use App\Http\Controllers\Api\Frontend\ClubController;
-use App\Http\Controllers\Api\Frontend\EventController;
 use App\Http\Controllers\Api\Frontend\PostController;
+use App\Http\Controllers\Api\Frontend\EventController;
 use App\Http\Controllers\Api\Auth\SocialLoginController;
 use App\Http\Controllers\Api\Chat\ChatSettingController;
 use App\Http\Controllers\Api\Frontend\VehicleController;
@@ -119,6 +119,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/events/{event}/rsvp', [EventController::class, 'rsvp']);
     Route::delete('/events/{event}/rsvp', [EventController::class, 'cancelRsvp']);
     Route::get('/events/{event}/rsvps', [EventController::class, 'rsvps']);
+    Route::get('/events/{event}/rsvps/matching', [EventController::class,'matchingParts']);
 });
 
 Route::middleware(['auth:api'])->controller(PostController::class)->prefix('/posts')->group(function () {

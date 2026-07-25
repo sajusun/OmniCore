@@ -12,13 +12,15 @@ use Illuminate\Http\JsonResponse;
 use App\Enums\VehicleRequiredEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EventResource;
+use App\Http\Resources\VehicleResource;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 
 class EventController extends Controller
 {
     private User $user;
-    protected EventService $eventService;
+
+    private EventService $eventService;
 
     public function __construct(EventService $eventService)
     {
@@ -42,7 +44,7 @@ class EventController extends Controller
             'upcoming',
             'search',
         ]);
-        $perPage = (int)$request->query('per_page', 15);
+        $perPage = (int) $request->query('per_page', 15);
 
         $events = $this->eventService->list($filters, $perPage);
 
@@ -66,9 +68,9 @@ class EventController extends Controller
         $event = $this->eventService->store($data);
 
         return response()->json([
-            'status'  => 'success',
+            'status' => 'success',
             'message' => 'Event created successfully!',
-            'data'    => new EventResource($event),
+            'data' => new EventResource($event),
         ], 201);
     }
 
@@ -78,6 +80,7 @@ class EventController extends Controller
     public function show(int $id): JsonResponse
     {
         $event = $this->eventService->find($id);
+
         return $this->success(new EventResource($event), 'Event retrieved successfully', 200);
     }
 
@@ -129,14 +132,14 @@ class EventController extends Controller
     {
         $request->validate([
             'status' => 'required|string|in:going,interested',
-            'vehicle_id' => 'required|integer|exists:vehicles,id'
+            'vehicle_id' => 'required|integer|exists:vehicles,id',
         ]);
 
         try {
             $rsvp = $this->eventService->rsvp($event, $this->user, $request->input('status'), $request->input('vehicle_id'));
 
             return $this->success([
-                'status'  => $rsvp->status,
+                'status' => $rsvp->status,
                 'message' => "You marked yourself as '{$rsvp->status}' for this event.",
             ], 'RSVP updated successfully', 200);
         } catch (\RuntimeException $e) {
@@ -152,6 +155,7 @@ class EventController extends Controller
     public function cancelRsvp(Event $event): JsonResponse
     {
         $this->eventService->cancelRsvp($event, auth('api')->user());
+
         return $this->success([], 'RSVP cancelled successfully', 200);
     }
 
@@ -161,7 +165,7 @@ class EventController extends Controller
     public function rsvps(Event $event, Request $request): JsonResponse
     {
         $status = $request->query('status'); // 'going' or 'interested' or null
-        $perPage = (int)$request->query('per_page', 15);
+        $perPage = (int) $request->query('per_page', 15);
 
         $rsvps = $this->eventService->rsvps($event, $status, $perPage);
 
@@ -169,11 +173,12 @@ class EventController extends Controller
             status: true,
             message: 'RSVPs retrieved successfully',
             code: 200,
-            data: $rsvps->map(fn($item) => [
-                'user_id'    => $item->user_id,
-                'user_name'  => $item->user?->name,
-                'avatar'     => $item->user?->avatar ?? null,
-                'status'     => $item->status,
+            data: $rsvps->map(fn ($item) => [
+                'user_id' => $item->user_id,
+                'name' => $item->user?->name,
+                'avatar' => $item->user?->avatar ?? null,
+                'status' => $item->status,
+                'vehicle' => new VehicleResource($item->vehicle),
                 'created_at' => $item->created_at?->toIso8601String(),
             ]),
             paginate: true,
@@ -187,8 +192,13 @@ class EventController extends Controller
     public function meta(): JsonResponse
     {
         return $this->success([
-            'event_types'          => EventTypeEnum::toArray(),
+            'event_types' => EventTypeEnum::toArray(),
             'vehicle_requirements' => VehicleRequiredEnum::toArray(),
         ], 'Metadata retrieved successfully', 200);
+    }
+
+    public function matchingParts(Event $event)
+    {
+        return $this->eventService->matchingParts($event, $this->user);
     }
 }
