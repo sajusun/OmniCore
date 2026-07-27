@@ -271,7 +271,7 @@ class EventService
 
                 // Check matching parts
                 foreach ($personVehicle->parts as $part) {
-                    // return $part->name .'-' .$myParts[0];
+
                     if (in_array($part->name, $myParts)) {
                         $matchedParts[] = [
                             'id' => $part->id,
@@ -305,6 +305,76 @@ class EventService
         usort($matchedPersons, function ($a, $b) {
             return $b['total_parts_matched'] - $a['total_parts_matched'];
         });
+
+        return $matchedPersons;
+    }
+
+    public function allParts(Event $event, User $user)
+    {
+        // Get current user's RSVP with vehicle
+        $myRsvp = EventRsvp::where('event_id', $event->id)
+            ->where('user_id', $user->id)
+            // ->where('status', 'going')
+            ->with('vehicle')
+            ->first();
+
+        if (! $myRsvp || ! $myRsvp->vehicle) {
+            return []; // User hasn't selected a vehicle or doesn't have one
+        }
+
+        $myVehicle = $myRsvp->vehicle;
+        $myBrand = $myVehicle->brand; // This is a string
+        $myModel = $myVehicle->model; // This is a string
+        $myParts = $myVehicle->parts->pluck('name')->toArray();
+
+
+        // Get all going persons with their vehicles
+        $goingPersons = EventRsvp::where('event_id', $event->id)
+            // ->where('status', 'going')
+            ->where('user_id', '!=', $user->id) // Exclude current user
+            ->with(['user', 'vehicle.parts'])
+            ->get();
+
+        // return $goingPersons;
+
+        $matchedPersons = [];
+
+        foreach ($goingPersons as $goingPerson) {
+            $personVehicle = $goingPerson->vehicle;
+
+            // Skip if no vehicle
+            if (! $personVehicle) {
+                continue;
+            }
+
+
+            // Check matching parts
+            foreach ($personVehicle->parts as $part) {
+
+                $matchedParts[] = [
+                    'id' => $part->id,
+                    'name' => $part->name,
+                    'image' => $part->media->first()->url,
+                ];
+            }
+
+            if (! empty($matchedParts)) {
+                $matchedPersons[] = [
+                    'user' => [
+                        'id' => $goingPerson->user->id,
+                        'name' => $goingPerson->user->name,
+                        'avatar' => $goingPerson->user->avatar,
+                    ],
+                    'vehicle' => [
+                        'id' => $personVehicle->id,
+                        'name' => $personVehicle->name,
+                    ],
+                    'parts' => $matchedParts,
+                    'total_parts' => count($matchedParts),
+                    'status' => $goingPerson->status,
+                ];
+            }
+        }
 
         return $matchedPersons;
     }

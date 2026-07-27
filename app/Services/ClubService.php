@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\Models\Club;
-use App\Models\User;
 use App\Models\ClubMember;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use App\Modules\Media\Traits\HandlesMedia;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class ClubService
 {
@@ -19,17 +19,17 @@ class ClubService
     public function list(array $filters = [], int $perPage = 15, ?User $user = null): LengthAwarePaginator
     {
         return Club::query()
-            ->when($user, fn($q) => $q->where('created_by', $user->id))
-            ->when(isset($filters['type']), fn($q) => $q->where('type', $filters['type']))
-            ->when(isset($filters['country']), fn($q) => $q->where('country', $filters['country']))
-            ->when(isset($filters['state']), fn($q) => $q->where('state', $filters['state']))
-            ->when(isset($filters['city']), fn($q) => $q->where('city', $filters['city']))
-            ->when(isset($filters['status']), fn($q) => $q->where('status', $filters['status']))
-            ->when(isset($filters['created_by']), fn($q) => $q->where('created_by', $filters['created_by']))
+            ->when($user, fn ($q) => $q->where('created_by', $user->id))
+            ->when(isset($filters['type']), fn ($q) => $q->where('type', $filters['type']))
+            ->when(isset($filters['country']), fn ($q) => $q->where('country', $filters['country']))
+            ->when(isset($filters['state']), fn ($q) => $q->where('state', $filters['state']))
+            ->when(isset($filters['city']), fn ($q) => $q->where('city', $filters['city']))
+            ->when(isset($filters['status']), fn ($q) => $q->where('status', $filters['status']))
+            ->when(isset($filters['created_by']), fn ($q) => $q->where('created_by', $filters['created_by']))
             ->when(isset($filters['search']), function ($q) use ($filters) {
                 $q->where(function ($sub) use ($filters) {
-                    $sub->where('name', 'like', '%' . $filters['search'] . '%')
-                        ->orWhere('description', 'like', '%' . $filters['search'] . '%');
+                    $sub->where('name', 'like', '%'.$filters['search'].'%')
+                        ->orWhere('description', 'like', '%'.$filters['search'].'%');
                 });
             })
             ->with(['media', 'creator'])
@@ -52,42 +52,42 @@ class ClubService
     {
         return DB::transaction(function () use ($data) {
             $club = Club::create([
-                'name'        => $data['name'] ?? $data['club_name'] ?? null,
-                'type'        => $data['type'] ?? $data['club_type'] ?? null,
-                'country'     => $data['country'] ?? null,
-                'state'       => $data['state'] ?? null,
-                'city'        => $data['city'] ?? null,
+                'name' => $data['name'] ?? $data['club_name'] ?? null,
+                'type' => $data['type'] ?? $data['club_type'] ?? null,
+                'country' => $data['country'] ?? null,
+                'state' => $data['state'] ?? null,
+                'city' => $data['city'] ?? null,
                 'description' => $data['description'] ?? null,
-                'status'      => $data['status'] ?? 'draft',
-                'created_by'  => $data['created_by'] ?? auth('api')->id(),
+                'status' => $data['status'] ?? 'draft',
+                'created_by' => $data['created_by'] ?? auth('api')->id(),
             ]);
 
             // Handle Thumbnail (single)
-            if (!empty($data['thumbnail'])) {
+            if (! empty($data['thumbnail'])) {
                 $this->uploadMedia($club, $data['thumbnail'], 'thumbnail');
             }
 
             // Handle Images (multiple/single)
-            if (!empty($data['images'])) {
+            if (! empty($data['images'])) {
                 $this->uploadMedia($club, $data['images'], 'images');
             }
 
             // Handle Videos (multiple/single)
-            if (!empty($data['video'])) {
+            if (! empty($data['video'])) {
                 $this->uploadMedia($club, $data['video'], 'video');
             }
 
-            if (!empty($data['videos'])) {
+            if (! empty($data['videos'])) {
                 $this->uploadMedia($club, $data['videos'], 'video');
             }
 
             // Auto-add creator as admin member
             ClubMember::create([
-                'club_id'     => $club->id,
-                'user_id'     => $club->created_by,
-                'role'        => 'admin',
-                'status'      => 'approved',
-                'joined_at'   => now(),
+                'club_id' => $club->id,
+                'user_id' => $club->created_by,
+                'role' => 'admin',
+                'status' => 'approved',
+                'joined_at' => now(),
                 'approved_at' => now(),
                 'approved_by' => $club->created_by,
             ]);
@@ -103,14 +103,14 @@ class ClubService
     {
         return DB::transaction(function () use ($club, $data) {
             $club->update(array_filter([
-                'name'        => $data['name'] ?? $data['club_name'] ?? null,
-                'type'        => $data['type'] ?? $data['club_type'] ?? null,
-                'country'     => $data['country'] ?? null,
-                'state'       => $data['state'] ?? null,
-                'city'        => $data['city'] ?? null,
+                'name' => $data['name'] ?? $data['club_name'] ?? null,
+                'type' => $data['type'] ?? $data['club_type'] ?? null,
+                'country' => $data['country'] ?? null,
+                'state' => $data['state'] ?? null,
+                'city' => $data['city'] ?? null,
                 'description' => $data['description'] ?? null,
-                'status'      => $data['status'] ?? null,
-            ], fn($value) => !is_null($value)));
+                'status' => $data['status'] ?? null,
+            ], fn ($value) => ! is_null($value)));
 
             // Handle Thumbnail (single)
             if (isset($data['thumbnail'])) {
@@ -159,7 +159,7 @@ class ClubService
         return DB::transaction(function () use ($club) {
             // Retrieve all media IDs associated with this club
             $mediaIds = $club->media()->pluck('id')->toArray();
-            if (!empty($mediaIds)) {
+            if (! empty($mediaIds)) {
                 $this->deleteMedia($mediaIds);
             }
 
@@ -173,7 +173,7 @@ class ClubService
     protected function deleteCollectionMedia(Club $club, string $collection): void
     {
         $ids = $club->media()->where('collection_name', $collection)->pluck('id')->toArray();
-        if (!empty($ids)) {
+        if (! empty($ids)) {
             $this->deleteMedia($ids);
         }
     }
@@ -207,11 +207,11 @@ class ClubService
         $status = 'approved';
 
         return ClubMember::create([
-            'club_id'     => $club->id,
-            'user_id'     => $user->id,
-            'role'        => 'member',
-            'status'      => $status,
-            'joined_at'   => now(),
+            'club_id' => $club->id,
+            'user_id' => $user->id,
+            'role' => 'member',
+            'status' => $status,
+            'joined_at' => now(),
             'approved_at' => $status === 'approved' ? now() : null,
         ]);
     }
@@ -234,17 +234,17 @@ class ClubService
      */
     public function approveMember(Club $club, User $targetUser, User $approver): ClubMember
     {
-        if (!$club->isCreator($approver->id) && !$club->isMemberAdmin($approver->id)) {
+        if (! $club->isCreator($approver->id) && ! $club->isMemberAdmin($approver->id)) {
             throw new \RuntimeException('Only club admins can approve members.');
         }
 
         $membership = $club->getMembership($targetUser->id);
-        if (!$membership) {
+        if (! $membership) {
             throw new \RuntimeException('No membership request found for this user.');
         }
 
         $membership->update([
-            'status'      => 'approved',
+            'status' => 'approved',
             'approved_at' => now(),
             'approved_by' => $approver->id,
         ]);
@@ -258,17 +258,17 @@ class ClubService
      */
     public function rejectMember(Club $club, User $targetUser, User $approver): ClubMember
     {
-        if (!$club->isCreator($approver->id) && !$club->isMemberAdmin($approver->id)) {
+        if (! $club->isCreator($approver->id) && ! $club->isMemberAdmin($approver->id)) {
             throw new \RuntimeException('Only club admins can reject members.');
         }
 
         $membership = $club->getMembership($targetUser->id);
-        if (!$membership) {
+        if (! $membership) {
             throw new \RuntimeException('No membership request found for this user.');
         }
 
         $membership->update([
-            'status'      => 'rejected',
+            'status' => 'rejected',
             'approved_by' => $approver->id,
         ]);
 
@@ -280,7 +280,7 @@ class ClubService
      */
     public function removeMember(Club $club, User $targetUser, User $admin): void
     {
-        if (!$club->isCreator($admin->id) && !$club->isMemberAdmin($admin->id)) {
+        if (! $club->isCreator($admin->id) && ! $club->isMemberAdmin($admin->id)) {
             throw new \RuntimeException('Only club admins can remove members.');
         }
 

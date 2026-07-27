@@ -122,7 +122,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/events/{event}/rsvp', [EventController::class, 'rsvp']);
     Route::delete('/events/{event}/rsvp', [EventController::class, 'cancelRsvp']);
     Route::get('/events/{event}/rsvps', [EventController::class, 'rsvps']);
+
     Route::get('/events/{event}/rsvps/matching', [EventController::class,'matchingParts']);
+    Route::get('/events/{event}/rsvps/all-parts', [EventController::class,'allParts']);
 });
 
 Route::middleware(['auth:api'])->controller(PostController::class)->prefix('/posts')->group(function () {

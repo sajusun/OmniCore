@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedTinyInteger('brand');
             $table->string('model');
-            $table->year('year');
+            $table->bigInteger('year')->nullable();
 
             $table->unsignedTinyInteger('vehicle_type');
             $table->unsignedTinyInteger('transmission');

@@ -23,7 +23,7 @@ class EventResource extends JsonResource
             'description'              => $this->description,
 
             'event_type'               => $this->event_type,
-            'event_type_label'         => $this->event_type_label,
+            // 'event_type_label'         => $this->event_type_label,
 
             'location'                 => $this->location,
             'latitude'                 => $this->latitude,

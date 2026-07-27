@@ -206,4 +206,8 @@ class EventController extends Controller
     {
         return $this->eventService->matchingParts($event, $this->user);
     }
+    public function allParts(Event $event)
+    {
+        return $this->eventService->allParts($event, $this->user);
+    }
 }
