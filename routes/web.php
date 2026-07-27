@@ -29,4 +29,8 @@ Route::get('/broadcast-test', function () {
     return 'Broadcast Sent!';
 });
 
+Route::get('/notification-test', function () {
+    return view('notification-test');
+});
+
 require __DIR__ . '/auth.php';

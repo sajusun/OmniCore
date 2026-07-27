@@ -2,11 +2,13 @@
 
 namespace App\Services\Chat;
 
-use App\Models\ChatRoom;
 use App\Models\Message;
-use App\Enums\Chat\MessageTypeEnum;
-use App\Modules\Media\Traits\HandlesMedia;
+use App\Models\ChatRoom;
+use App\Events\Chat\MessageSent;
 use Illuminate\Support\Facades\DB;
+use App\Enums\Chat\MessageTypeEnum;
+use Illuminate\Support\Facades\Log;
+use App\Modules\Media\Traits\HandlesMedia;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class MessageService
@@ -22,7 +24,7 @@ class MessageService
             $messageType = $data['message_type'] ?? MessageTypeEnum::TEXT->value;
 
             // Handle file attachments if present, modifying type if not already media
-            $hasFiles = !empty($data['files']);
+            $hasFiles = ! empty($data['files']);
             if ($hasFiles && $messageType === MessageTypeEnum::TEXT->value) {
                 // Infer type from first file or default to image/document
                 $firstFile = is_array($data['files']) ? $data['files'][0] : $data['files'];
@@ -59,7 +61,15 @@ class MessageService
                     'last_read_at' => now(),
                 ]);
 
-            return $message->load(['sender', 'media', 'replyMessage']);
+            $loadedMessage = $message->load(['sender', 'media', 'replyMessage']);
+
+            try {
+                broadcast(new MessageSent($loadedMessage))->toOthers();
+            } catch (\Throwable $th) {
+                Log::error($th->getMessage());
+            }
+
+            return $loadedMessage;
         });
     }
 

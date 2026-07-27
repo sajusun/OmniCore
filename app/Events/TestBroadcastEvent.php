@@ -24,7 +24,7 @@ class TestBroadcastEvent implements ShouldBroadcastNow
 
     public function broadcastAs(): string
     {
-        return 'test-message';
+        return 'test-event';
     }
 
     public function broadcastWith(): array

@@ -14,34 +14,40 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
-    console.log('DOM Loaded');
+            console.log('DOM Loaded');
 
-    if (typeof Echo === 'undefined') {
-        console.error('Echo not loaded');
-        return;
-    }
-    Echo.channel('test-channel')
-    .listen('.test-event', (e) => {
-        console.log('Event received:', e);
-    });
-    const userId = 9;
+            if (typeof Echo === 'undefined') {
+                console.error('Echo not loaded');
+                return;
+            }
+            Echo.channel('test-channel')
+                .listen('.test-event', (e) => {
+                    console.log('Event received:', e);
+                });
+            const userId = 1;
 
-    console.log('Subscribing to:', `notifications.${userId}`);
+            console.log('Subscribing to:', `notifications.${userId}`);
 
-    Echo.private(`notifications.${userId}`)
-        .subscribed(() => {
-            console.log('Successfully subscribed');
-        })
-        .error((error) => {
-            console.error('Subscription error:', error);
-        })
-        .listen('.notification.created', (e) => {
-            console.log('Notification Received:', e);
+            Echo.private('chat.room.1')
+                .listen('.message.sent', (data) => {
+                    console.log('New real-time message received:', data.message);
+                    // এখানে আপনার UI আপডেট করুন (যেমন message array-তে push করা)
+                });
+
+            // Echo.private(`notifications.${userId}`)
+            //     .subscribed(() => {
+            //         console.log('Successfully subscribed');
+            //     })
+            //     .error((error) => {
+            //         console.error('Subscription error:', error);
+            //     })
+            //     .listen('.notification.created', (e) => {
+            //         console.log('Notification Received:', e);
+            //     });
+
+
+
         });
-
-    
-
-});
     </script>
 
 </body>
