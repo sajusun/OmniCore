@@ -95,7 +95,20 @@ class RegisterController extends Controller
                 return $this->error(message: 'Invalid OTP code. Please try again.', status: 422);
             }
 
-            return $this->success(message: 'Email verified successfully.', status: 200);
+            return $this->success(
+                message: 'Email verified successfully.',
+                status: 200,
+                data: [
+                    'token_type' => 'bearer',
+                    'token'      => auth('api')->login($user),
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'avatar' => $user->avatar ? url($user->avatar) : null,
+                    'last_activity_at' => $user->last_activity_at,
+
+                ]
+            );
         } catch (RuntimeException $e) {
             Log::error('Email verification failed: ' . $e->getMessage(), ['exception' => $e]);
             return $this->error(message: $e->getMessage(), status: 422);
