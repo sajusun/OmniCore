@@ -58,6 +58,7 @@ class VehicleResource extends JsonResource
             'media' => when($this->media, MediaResource::collection($this->media), null),
 
             'created_at' => $this->created_at,
+            'owner' => $this->user->name,
         ];
     }
 }
