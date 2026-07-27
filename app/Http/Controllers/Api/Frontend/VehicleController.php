@@ -4,10 +4,15 @@ namespace App\Http\Controllers\Api\Frontend;
 
 use App\Helpers\Helper;
 use App\Models\Vehicle;
-use App\Traits\ApiResponse; // Request rules validator wrapper
+use App\Enums\BrandEnum;
+use App\Traits\ApiResponse;
+use App\Enums\DriveTypeEnum;
 use Illuminate\Http\Request;
+use App\Enums\VehicleTypeEnum;
+use App\Enums\TransmissionEnum; // Request rules validator wrapper
 use App\Services\VehicleService;
 use Illuminate\Http\JsonResponse;
+use App\Enums\VehicleRequiredEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VehicleResource;
 use App\Http\Requests\StoreVehicleRequest;
@@ -120,5 +125,15 @@ class VehicleController extends Controller
     {
         $vehicles = $this->vehicleService->byGarage($garageId);
         return response()->json(['status' => true, 'data' => $vehicles]);
+    }
+
+    public function meta(): JsonResponse
+    {
+        return $this->success([
+            'vehicle_types' => VehicleTypeEnum::options(),
+            'vehicle_Brands' => BrandEnum::options(),
+            'transmissions' => TransmissionEnum::options(),
+            'drive_types' => DriveTypeEnum::options(),
+        ], 'Metadata retrieved successfully', 200);
     }
 }

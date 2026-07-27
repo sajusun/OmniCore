@@ -87,6 +87,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/vehicles/store', [VehicleController::class, 'store']);
     Route::get('/vehicles/{vehicle}/show', [VehicleController::class, 'show']);
     Route::post('/vehicles/{vehicle}/update', [VehicleController::class, 'update']);
+    Route::get('/vehicles/meta', [VehicleController::class, 'meta']);
+
 });
 
 Route::middleware('auth:api')->group(function () {
