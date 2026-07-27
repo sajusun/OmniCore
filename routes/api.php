@@ -91,6 +91,7 @@ Route::middleware('auth:api')->group(function () {
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/clubs', [ClubController::class, 'index']);
+    Route::get('/my-clubs', [ClubController::class, 'myClub']);
     Route::post('/clubs/store', [ClubController::class, 'store']);
     Route::get('/clubs/{id}/show', [ClubController::class, 'show']);
     Route::post('/clubs/{club}/update', [ClubController::class, 'update']);

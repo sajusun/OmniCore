@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Club;
-use App\Models\ClubMember;
 use App\Models\User;
+use App\Models\ClubMember;
 use Illuminate\Support\Facades\DB;
 use App\Modules\Media\Traits\HandlesMedia;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -16,9 +16,10 @@ class ClubService
     /**
      * Get a paginated list of clubs with optional filters.
      */
-    public function list(array $filters = [], int $perPage = 15): LengthAwarePaginator
+    public function list(array $filters = [], int $perPage = 15, ?User $user = null): LengthAwarePaginator
     {
         return Club::query()
+            ->when($user, fn($q) => $q->where('created_by', $user->id))
             ->when(isset($filters['type']), fn($q) => $q->where('type', $filters['type']))
             ->when(isset($filters['country']), fn($q) => $q->where('country', $filters['country']))
             ->when(isset($filters['state']), fn($q) => $q->where('state', $filters['state']))
@@ -28,7 +29,7 @@ class ClubService
             ->when(isset($filters['search']), function ($q) use ($filters) {
                 $q->where(function ($sub) use ($filters) {
                     $sub->where('name', 'like', '%' . $filters['search'] . '%')
-                       ->orWhere('description', 'like', '%' . $filters['search'] . '%');
+                        ->orWhere('description', 'like', '%' . $filters['search'] . '%');
                 });
             })
             ->with(['media', 'creator'])

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Frontend;
 
 use App\Models\Club;
+use App\Models\User;
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use App\Services\ClubService;
+use App\Services\EventService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ClubResource;
@@ -15,11 +17,14 @@ use App\Http\Requests\UpdateClubRequest;
 class ClubController extends Controller
 {
     protected ClubService $clubService;
+    protected EventService $eventService;
+    protected User $user;
 
-    public function __construct(ClubService $clubService)
+    public function __construct(ClubService $clubService, EventService $eventService)
     {
         parent::__construct();
         $this->clubService = $clubService;
+        $this->user = auth('api')->user();
     }
 
     /**
@@ -31,6 +36,16 @@ class ClubController extends Controller
         $perPage = $request->query('per_page', 15);
 
         $clubs = $this->clubService->list($filters, $perPage);
+
+        return Helper::jsonResponse(true, 'Clubs retrieved successfully', 200, ClubResource::collection($clubs), true, $clubs);
+    }
+
+    public function myClub(Request $request): JsonResponse
+    {
+        $filters = $request->only(['type', 'country', 'state', 'city', 'status', 'created_by', 'search']);
+        $perPage = $request->query('per_page', 15);
+
+        $clubs = $this->clubService->list($filters, $perPage, auth('api')->user());
 
         return Helper::jsonResponse(true, 'Clubs retrieved successfully', 200, ClubResource::collection($clubs), true, $clubs);
     }
@@ -70,6 +85,10 @@ class ClubController extends Controller
     public function show(int $id): JsonResponse
     {
         $club = $this->clubService->find($id);
+        $clubAdmin = $club->creator;
+        $events = $clubAdmin->events;
+        $club->events = $events;
+
         return $this->success(new ClubResource($club), 'Club retrieved successfully', 200);
     }
 
@@ -112,7 +131,7 @@ class ClubController extends Controller
         }
 
         $result = $this->clubService->delete($club);
-        
+
         if ($result) {
             return $this->success([], 'Club successfully deleted!', 200);
         }
@@ -226,4 +245,3 @@ class ClubController extends Controller
         }
     }
 }
-

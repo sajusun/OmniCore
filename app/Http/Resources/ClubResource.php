@@ -46,6 +46,8 @@ class ClubResource extends JsonResource
 
             'created_at'      => $this->created_at?->toIso8601String(),
             'updated_at'      => $this->updated_at?->toIso8601String(),
+            // optional to show curren user events
+            'events' => when($this->events, EventResourceMini::collection($this->events)),
         ];
     }
 }
