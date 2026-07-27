@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\Event;
 use Illuminate\Database\Eloquent\Builder;
 
 class LocationService

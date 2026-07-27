@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Services\LocationService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EventResource extends JsonResource
@@ -9,13 +10,14 @@ class EventResource extends JsonResource
     public function toArray($request): array
     {
         $authId = auth('api')->id();
+        
 
         return [
             'id'                       => $this->id,
             'user_id'                  => $this->user_id,
             'user'                     => new UserResource($this->whenLoaded('user')),
-            'club_id'                  => $this->club_id,
-            'club'                     => new ClubResource($this->whenLoaded('club')),
+            // 'club_id'                  => $this->club_id,
+            // 'club'                     => new ClubResource($this->whenLoaded('club')),
 
             'title'                    => $this->title,
             'description'              => $this->description,
@@ -50,6 +52,7 @@ class EventResource extends JsonResource
 
             'created_at'               => $this->created_at ? $this->created_at->toIso8601String() : null,
             'updated_at'               => $this->updated_at ? $this->updated_at->toIso8601String() : null,
+            'distance'                => $this->when($this->distance !== null, $this->distance),
         ];
     }
 }

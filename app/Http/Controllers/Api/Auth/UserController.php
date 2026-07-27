@@ -117,18 +117,35 @@ class UserController extends Controller
         } else {
             $validatedData['avatar'] = $user->avatar;
         }
-        $data = [
-            'first_name'    => $validatedData['first_name'] ?? null,
-            'last_name'     => $validatedData['last_name'] ?? null,
-            'phone'         => $validatedData['phone'] ?? null,
-            'gender'        => $validatedData['gender'] ?? null,
-            'address'       => $validatedData['address'] ?? null,
-            'country'       => $validatedData['country'] ?? null,
-            'state'         => $validatedData['state'] ?? null,
-            'city'          => $validatedData['city'] ?? null,
-            'zip_code'      => $validatedData['zip_code'] ?? null,
-            'bio'           => $validatedData['bio'] ?? null,
-        ];
+        // $data = [
+        //     'first_name'    => $validatedData['first_name'] ?? null,
+        //     'last_name'     => $validatedData['last_name'] ?? null,
+        //     'phone'         => $validatedData['phone'] ?? null,
+        //     'gender'        => $validatedData['gender'] ?? null,
+        //     'address'       => $validatedData['address'] ?? null,
+        //     'country'       => $validatedData['country'] ?? null,
+        //     'state'         => $validatedData['state'] ?? null,
+        //     'city'          => $validatedData['city'] ?? null,
+        //     'zip_code'      => $validatedData['zip_code'] ?? null,
+        //     'bio'           => $validatedData['bio'] ?? null,
+        //     'latitude'     => $validatedData['latitude'] ?? null,
+        //     'longitude'     => $validatedData['longitude'] ?? null,
+        // ];
+        $data = collect($validatedData)
+            ->only([
+                'first_name',
+                'last_name',
+                'phone',
+                'gender',
+                'address',
+                'country',
+                'state',
+                'city',
+                'zip_code',
+                'bio',
+                'latitude',
+                'longitude',
+            ])->toArray();
 
         $user->update($validatedData);
         $user->profile()->updateOrCreate([], $data);

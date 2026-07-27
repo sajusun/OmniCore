@@ -39,6 +39,20 @@ class EventService
             ->paginate($perPage);
     }
 
+    public function getDistance(Event $event)
+    {
+        $user = auth('api')->user();
+        if (!$user->profile->latitude && !$user->profile->longitude) {
+            return 0;
+        }
+        return app(LocationService::class)->getDistance(
+            $user->profile->latitude,
+            $user->profile->longitude,
+            $event->latitude,
+            $event->longitude
+        );
+    }
+
     /**
      * Find an event by ID.
      */

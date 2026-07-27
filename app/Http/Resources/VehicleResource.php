@@ -17,35 +17,24 @@ class VehicleResource extends JsonResource
 
             'name' => $this->name,
 
-            'brand' => [
-                'value' => $this->brand?->value,
-                'label' => $this->brand?->label(),
-            ],
+            'brand' => $this->brand?->label() ?? NULL,
 
             'model' => $this->model,
             'year' => $this->year,
 
-            'vehicle_type' => [
-                'value' => $this->vehicle_type?->value,
-                'label' => $this->vehicle_type?->label(),
-            ],
+            'vehicle_type' => $this->vehicle_type?->label() ?? null,
 
-            'transmission' => [
-                'value' => $this->transmission?->value,
-                'label' => $this->transmission?->label(),
-            ],
+            'transmission' => $this->transmission?->label() ?? null,
 
-            'drive_type' => [
-                'value' => $this->drive_type?->value,
-                'label' => $this->drive_type?->label(),
-            ],
+
+            'drive_type' => $this->drive_type?->label() ?? null,
 
             'horsepower' => $this->horsepower,
             'mileage' => $this->mileage,
 
             'engine' => $this->engine,
             'color' => $this->color,
-            'vin' => $this->vin,
+            // 'vin' => $this->vin,
 
             'performance_mods' => $this->performance_mods,
             'exterior_mods' => $this->exterior_mods,
@@ -59,7 +48,7 @@ class VehicleResource extends JsonResource
 
             'created_at' => $this->created_at,
             'owner' => new UserResource($this->user),
-            
+
         ];
     }
 }

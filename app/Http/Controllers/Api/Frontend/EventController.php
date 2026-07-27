@@ -8,6 +8,7 @@ use App\Helpers\Helper;
 use App\Enums\EventTypeEnum;
 use Illuminate\Http\Request;
 use App\Services\EventService;
+use App\Services\LocationService;
 use Illuminate\Http\JsonResponse;
 use App\Enums\VehicleRequiredEnum;
 use App\Http\Controllers\Controller;
@@ -22,7 +23,7 @@ class EventController extends Controller
 
     private EventService $eventService;
 
-    public function __construct(EventService $eventService)
+    public function __construct(EventService $eventService, private LocationService $loansService)
     {
         parent::__construct();
         $this->user = auth('api')->user();
@@ -47,6 +48,9 @@ class EventController extends Controller
         $perPage = (int) $request->query('per_page', 15);
 
         $events = $this->eventService->list($filters, $perPage);
+        $events->each(function ($event) {
+            $event->distance = $this->eventService->getDistance($event);
+        });
 
         return Helper::jsonResponse(true, 'Events retrieved successfully', 200, EventResource::collection($events), true, $events);
     }
@@ -80,6 +84,7 @@ class EventController extends Controller
     public function show(int $id): JsonResponse
     {
         $event = $this->eventService->find($id);
+        $event->distance = $this->eventService->getDistance($event);
 
         return $this->success(new EventResource($event), 'Event retrieved successfully', 200);
     }
@@ -173,7 +178,7 @@ class EventController extends Controller
             status: true,
             message: 'RSVPs retrieved successfully',
             code: 200,
-            data: $rsvps->map(fn ($item) => [
+            data: $rsvps->map(fn($item) => [
                 'user_id' => $item->user_id,
                 'name' => $item->user?->name,
                 'avatar' => $item->user?->avatar ?? null,
