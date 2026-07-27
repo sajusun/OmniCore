@@ -208,73 +208,34 @@ class EventService
         }
     }
 
+
     public function matchingParts(Event $event, User $user)
-    {
-        $goingPersons = EventRsvp::where('event_id', $event->id)->where('status', 'going')->get();
-
-        $mySelectedVehicle = $goingPersons->firstWhere('user_id', $user->id)->vehicle;
-
-        $matchedPersons = [];
-
-        dd($mySelectedVehicle);
-        foreach ($goingPersons as $goingPerson) {
-            $goingPersonCar = $goingPerson->vehicle;
-            // dd($goingPersonCar->parts);
-
-            if ($goingPersonCar) {
-                $matchedParts = [];
-
-                foreach ($goingPersonCar->parts as $part) {
-                    if (in_array($part->slug, $event->vehicles_required)) {
-                        $matchedParts[] = [
-                            'part_id' => $part->id,
-                            'part_name' => $part->name,
-                            'part_image' => $part->image,
-                        ];
-                    }
-                }
-
-                if (! empty($matchedParts)) {
-                    $matchedPersons[] = [
-                        'user_id' => $goingPerson->user->id,
-                        'user_name' => $goingPerson->user->name,
-                        'user_avatar' => $goingPerson->user->avatar,
-                        'car_id' => $goingPersonCar->id,
-                        'car_name' => $goingPersonCar->name,
-                        'car_image' => $goingPersonCar->image,
-                        'matched_parts' => $matchedParts,
-                    ];
-                }
-            }
-        }
-
-        return $matchedPersons;
-    }
-
-
-    public function matchingParts2(Event $event, User $user)
     {
         // Get current user's RSVP with vehicle
         $myRsvp = EventRsvp::where('event_id', $event->id)
             ->where('user_id', $user->id)
-            ->where('status', 'going')
+            // ->where('status', 'going')
             ->with('vehicle')
             ->first();
 
-        if (!$myRsvp || !$myRsvp->vehicle) {
+        if (! $myRsvp || ! $myRsvp->vehicle) {
             return []; // User hasn't selected a vehicle or doesn't have one
         }
 
         $myVehicle = $myRsvp->vehicle;
         $myBrand = $myVehicle->brand; // This is a string
         $myModel = $myVehicle->model; // This is a string
+        $myParts = $myVehicle->parts->pluck('name')->toArray();
+
 
         // Get all going persons with their vehicles
         $goingPersons = EventRsvp::where('event_id', $event->id)
-            ->where('status', 'going')
+            // ->where('status', 'going')
             ->where('user_id', '!=', $user->id) // Exclude current user
             ->with(['user', 'vehicle.parts'])
             ->get();
+
+        // return $goingPersons;
 
         $matchedPersons = [];
 
@@ -282,12 +243,12 @@ class EventService
             $personVehicle = $goingPerson->vehicle;
 
             // Skip if no vehicle
-            if (!$personVehicle) {
+            if (! $personVehicle) {
                 continue;
             }
 
             // Check if brand AND model match (string comparison)
-            $brandMatches = strtolower($personVehicle->brand) === strtolower($myBrand);
+            $brandMatches = strtolower($personVehicle->brand->value) === strtolower($myBrand->value);
             $modelMatches = strtolower($personVehicle->model) === strtolower($myModel);
 
             // Only proceed if both brand and model match
@@ -296,18 +257,18 @@ class EventService
 
                 // Check matching parts
                 foreach ($personVehicle->parts as $part) {
-                    if (in_array($part->slug, $event->vehicles_required)) {
+                    // return $part->name .'-' .$myParts[0];
+                    if (in_array($part->name, $myParts)) {
                         $matchedParts[] = [
-                            'part_id' => $part->id,
-                            'part_name' => $part->name,
-                            'part_image' => $part->image,
-                            'part_slug' => $part->slug,
+                            'id' => $part->id,
+                            'name' => $part->name,
+                            'image' => $part->media->first()->url,
                         ];
                     }
                 }
 
                 // Only add if there are matching parts
-                if (!empty($matchedParts)) {
+                if (! empty($matchedParts)) {
                     $matchedPersons[] = [
                         'user' => [
                             'id' => $goingPerson->user->id,
@@ -317,13 +278,10 @@ class EventService
                         'vehicle' => [
                             'id' => $personVehicle->id,
                             'name' => $personVehicle->name,
-                            'brand' => $personVehicle->brand,
-                            'model' => $personVehicle->model,
-                            'image' => $personVehicle->image,
-                            'year' => $personVehicle->year ?? null,
                         ],
                         'matched_parts' => $matchedParts,
                         'total_parts_matched' => count($matchedParts),
+                        'status' => $goingPerson->status,
                     ];
                 }
             }
