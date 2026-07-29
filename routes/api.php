@@ -50,6 +50,7 @@ Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::post('/update-profile', [UserController::class, 'updateProfile']);
     Route::post('/onboarding-fill', [UserController::class, 'onboardingUpdate']);
     Route::post('/update-avatar', [UserController::class, 'updateAvatar']);
+    Route::post('/update-password', [UserController::class, 'updatePassword']);
     Route::delete('/profile/delete', [UserController::class, 'destroy']);
 });
 

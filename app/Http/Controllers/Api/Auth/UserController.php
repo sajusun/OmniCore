@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Models\User;
 use App\Helpers\Helper;
-use Illuminate\Http\Request;
-use App\Services\UserService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Services\UserService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public array $select;
+
     public User $user;
 
     public function __construct(private UserService $userService)
@@ -34,7 +35,7 @@ class UserController extends Controller
     public function onboardingUpdate(Request $request)
     {
         $validatedData = $request->validate([
-            'first_name'    => 'required|string|max:100',
+            'first_name' => 'required|string|max:100',
             'last_name' => 'nullable|string|max:100',
             'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240',
             'phone' => 'required|string|numeric|max_digits:20',
@@ -60,20 +61,20 @@ class UserController extends Controller
         }
 
         $user->update([
-            'name' => $validatedData['first_name'] . ' ' . $validatedData['last_name'] ?? $validatedData['name'],
+            'name' => $validatedData['first_name'].' '.$validatedData['last_name'] ?? $validatedData['name'],
             'avatar' => $validatedData['avatar'],
         ]);
 
         $data = [
-            'first_name'    => $validatedData['first_name'],
-            'last_name'     => $validatedData['last_name'] ?? null,
-            'phone'         => $validatedData['phone'],
-            'gender'        => $validatedData['gender'],
-            'address'       => $validatedData['address'] ?? null,
-            'country'       => $validatedData['country'] ?? null,
-            'state'         => $validatedData['state'] ?? null,
-            'city'          => $validatedData['city'] ?? null,
-            'zip_code'      => $validatedData['zip_code'] ?? null,
+            'first_name' => $validatedData['first_name'],
+            'last_name' => $validatedData['last_name'] ?? null,
+            'phone' => $validatedData['phone'],
+            'gender' => $validatedData['gender'],
+            'address' => $validatedData['address'] ?? null,
+            'country' => $validatedData['country'] ?? null,
+            'state' => $validatedData['state'] ?? null,
+            'city' => $validatedData['city'] ?? null,
+            'zip_code' => $validatedData['zip_code'] ?? null,
         ];
 
         $user->profile()->updateOrCreate([], $data);
@@ -86,18 +87,18 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'first_name' => 'nullable|string|max:100',
             'last_name' => 'nullable|string|max:100',
-            'name'      => 'nullable|string|max:100',
-            'avatar'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'phone'     => 'nullable|string|numeric|max_digits:20',
-            'password'  => 'nullable|string|min:6|confirmed',
-            'address'   => 'nullable|string|max:255',
-            'country'   => 'nullable|string|max:255',
-            'state'     => 'nullable|string|max:255',
-            'city'      => 'nullable|string|max:255',
-            'zip_code'  => 'nullable|string|max:255',
-            'latitude'  => 'nullable|string|max:255',
+            'name' => 'nullable|string|max:100',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'phone' => 'nullable|string|numeric|max_digits:20',
+            'password' => 'nullable|string|min:6|confirmed',
+            'address' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'zip_code' => 'nullable|string|max:255',
+            'latitude' => 'nullable|string|max:255',
             'longitude' => 'nullable|string|max:255',
-            'bio'       => 'nullable|string',
+            'bio' => 'nullable|string',
 
         ]);
 
@@ -117,41 +118,47 @@ class UserController extends Controller
         } else {
             $validatedData['avatar'] = $user->avatar;
         }
-        // $data = [
-        //     'first_name'    => $validatedData['first_name'] ?? null,
-        //     'last_name'     => $validatedData['last_name'] ?? null,
-        //     'phone'         => $validatedData['phone'] ?? null,
-        //     'gender'        => $validatedData['gender'] ?? null,
-        //     'address'       => $validatedData['address'] ?? null,
-        //     'country'       => $validatedData['country'] ?? null,
-        //     'state'         => $validatedData['state'] ?? null,
-        //     'city'          => $validatedData['city'] ?? null,
-        //     'zip_code'      => $validatedData['zip_code'] ?? null,
-        //     'bio'           => $validatedData['bio'] ?? null,
-        //     'latitude'     => $validatedData['latitude'] ?? null,
-        //     'longitude'     => $validatedData['longitude'] ?? null,
-        // ];
+        $data = [
+            'first_name',
+            'last_name',
+            'phone',
+            'gender',
+            'address',
+            'country',
+            'state',
+            'city',
+            'zip_code',
+            'bio',
+            'latitude',
+            'longitude',
+        ];
         $data = collect($validatedData)
-            ->only([
-                'first_name',
-                'last_name',
-                'phone',
-                'gender',
-                'address',
-                'country',
-                'state',
-                'city',
-                'zip_code',
-                'bio',
-                'latitude',
-                'longitude',
-            ])->toArray();
+            ->only($data)->toArray();
 
         $user->update($validatedData);
         $user->profile()->updateOrCreate([], $data);
 
-
         return $this->success(message: 'Profile updated successfully', status: 200, data: new UserResource($user));
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required_without:old_password|nullable|string',
+            'old_password' => 'required_without:current_password|nullable|string',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $currentPassword = $request->input('current_password') ?? $request->input('old_password');
+        $user = auth('api')->user() ?? $this->user;
+
+        if (! Hash::check($currentPassword, $user->password)) {
+            return $this->error(message: 'Current password does not match.', status: 400);
+        }
+
+        $this->userService->updatePassword($user, $request->input('password'));
+
+        return $this->success(message: 'Password updated successfully', status: 200);
     }
 
     public function updateAvatar(Request $request)
