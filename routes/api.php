@@ -113,6 +113,7 @@ Route::middleware('auth:api')->group(function () {
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/events/meta', [EventController::class, 'meta']);
+    Route::get('/events/bookmarked', [EventController::class, 'bookmarkedEvents']);
     Route::get('/events', [EventController::class, 'index']);
     Route::get('/my-events', [EventController::class, 'myEvent']);
     Route::post('/events/store', [EventController::class, 'store']);
@@ -127,6 +128,9 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/events/{event}/rsvps/matching', [EventController::class,'matchingParts']);
     Route::get('/events/{event}/rsvps/all-parts', [EventController::class,'allParts']);
+
+    // Bookmark
+    Route::post('/events/{event}/bookmark', [EventController::class, 'toggleBookmark']);
 });
 
 Route::middleware(['auth:api'])->controller(PostController::class)->prefix('/posts')->group(function () {

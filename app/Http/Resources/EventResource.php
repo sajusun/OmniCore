@@ -49,6 +49,7 @@ class EventResource extends JsonResource
             'going_count'              => $this->rsvps()->where('status', 'going')->count(),
             'interested_count'         => $this->rsvps()->where('status', 'interested')->count(),
             'user_rsvp_status'         => $authId ? $this->getUserRsvpStatus($authId) : null,
+            'is_bookmarked'            => $authId ? $this->isBookmarkedBy($authId) : false,
 
             'created_at'               => $this->created_at ? $this->created_at->toIso8601String() : null,
             'updated_at'               => $this->updated_at ? $this->updated_at->toIso8601String() : null,

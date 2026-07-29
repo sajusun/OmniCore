@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Event;
 use App\Models\Vehicle;
 use App\Models\EventRsvp;
+use App\Models\EventBookmark;
 use Illuminate\Support\Facades\DB;
 use App\Modules\Media\Traits\HandlesMedia;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -381,4 +382,45 @@ class EventService
     }
 
     protected function notify($goingPerson, $matchPerson) {}
+
+    /**
+     * Toggle bookmark for an event.
+     */
+    public function toggleBookmark(Event $event, User $user): array
+    {
+        $bookmark = EventBookmark::where('event_id', $event->id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if ($bookmark) {
+            $bookmark->delete();
+
+            return [
+                'is_bookmarked' => false,
+                'message' => 'Event removed from bookmarks successfully',
+            ];
+        }
+
+        EventBookmark::create([
+            'event_id' => $event->id,
+            'user_id' => $user->id,
+        ]);
+
+        return [
+            'is_bookmarked' => true,
+            'message' => 'Event bookmarked successfully',
+        ];
+    }
+
+    /**
+     * Get paginated bookmarked events for a user.
+     */
+    public function getBookmarkedEvents(User $user, int $perPage = 15): LengthAwarePaginator
+    {
+        return Event::query()
+            ->whereHas('bookmarks', fn($q) => $q->where('user_id', $user->id))
+            ->with(['media', 'user', 'club'])
+            ->latest('event_date')
+            ->paginate($perPage);
+    }
 }

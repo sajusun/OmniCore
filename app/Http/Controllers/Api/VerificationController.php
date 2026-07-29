@@ -125,8 +125,13 @@ class VerificationController extends Controller
     }
 
 
-    private function success(string $message, ?array $data = null, int $status = 200): JsonResponse
+    protected function success($data = null, $message = 'Success', $status = 200): JsonResponse
     {
+        if (is_string($data) && $message === 'Success') {
+            $message = $data;
+            $data = null;
+        }
+
         $payload = ['success' => true, 'message' => $message];
 
         if ($data !== null) {
@@ -137,11 +142,12 @@ class VerificationController extends Controller
     }
 
 
-    private function error(string $message, int $status = 422): JsonResponse
+    protected function error($message = 'Something went wrong', $errors = null, $status = 422): JsonResponse
     {
         return response()->json([
             'success' => false,
             'message' => $message,
+            'errors'  => $errors,
         ], $status);
     }
 }

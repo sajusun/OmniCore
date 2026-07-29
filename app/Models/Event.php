@@ -59,6 +59,11 @@ class Event extends Model
         return $this->hasMany(EventRsvp::class);
     }
 
+    public function bookmarks(): HasMany
+    {
+        return $this->hasMany(EventBookmark::class);
+    }
+
     public function goingUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'event_rsvps')
@@ -140,5 +145,13 @@ class Event extends Model
     public function isUserInterested(int $userId): bool
     {
         return $this->rsvps()->where('user_id', $userId)->where('status', 'interested')->exists();
+    }
+
+    public function isBookmarkedBy(?int $userId): bool
+    {
+        if (!$userId) {
+            return false;
+        }
+        return $this->bookmarks()->where('user_id', $userId)->exists();
     }
 }

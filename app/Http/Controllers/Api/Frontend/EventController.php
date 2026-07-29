@@ -231,4 +231,29 @@ class EventController extends Controller
     {
         return $this->eventService->allParts($event, $this->user);
     }
+
+    /**
+     * Bookmark or remove bookmark from an event.
+     */
+    public function toggleBookmark(Event $event): JsonResponse
+    {
+        $result = $this->eventService->toggleBookmark($event, auth('api')->user());
+
+        return $this->success($result, $result['message'], 200);
+    }
+
+    /**
+     * Get paginated bookmarked events for the authenticated user.
+     */
+    public function bookmarkedEvents(Request $request): JsonResponse
+    {
+        $perPage = (int) $request->query('per_page', 15);
+        $events = $this->eventService->getBookmarkedEvents(auth('api')->user(), $perPage);
+
+        $events->each(function ($event) {
+            $event->distance = $this->eventService->getDistance($event);
+        });
+
+        return Helper::jsonResponse(true, 'Bookmarked events retrieved successfully', 200, EventResource::collection($events), true, $events);
+    }
 }

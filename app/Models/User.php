@@ -199,4 +199,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany(User::class, 'user_blocks', 'blocked_user_id', 'user_id')
             ->withTimestamps();
     }
+
+    public function eventBookmarks(): HasMany
+    {
+        return $this->hasMany(EventBookmark::class);
+    }
 }
