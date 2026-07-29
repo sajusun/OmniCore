@@ -114,6 +114,7 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::get('/events/meta', [EventController::class, 'meta']);
     Route::get('/events', [EventController::class, 'index']);
+    Route::get('/my-events', [EventController::class, 'myEvent']);
     Route::post('/events/store', [EventController::class, 'store']);
     Route::get('/events/{id}/show', [EventController::class, 'show']);
     Route::post('/events/{event}/update', [EventController::class, 'update']);

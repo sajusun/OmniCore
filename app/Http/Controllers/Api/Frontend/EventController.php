@@ -54,6 +54,27 @@ class EventController extends Controller
 
         return Helper::jsonResponse(true, 'Events retrieved successfully', 200, EventResource::collection($events), true, $events);
     }
+    public function myEvent(Request $request): JsonResponse
+    {
+        $filters = $request->only([
+            'event_type',
+            'club_id',
+            'status',
+            'is_public',
+            'location',
+            'user_id',
+            'upcoming',
+            'search',
+        ]);
+        $perPage = (int) $request->query('per_page', 15);
+
+        $events = $this->eventService->list($filters, $perPage, auth('api')->user());
+        // $events->each(function ($event) {
+        //     $event->distance = $this->eventService->getDistance($event);
+        // });
+
+        return Helper::jsonResponse(true, 'Events retrieved successfully', 200, EventResource::collection($events), true, $events);
+    }
 
     /**
      * Store a newly created event.

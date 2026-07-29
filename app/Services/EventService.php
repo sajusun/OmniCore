@@ -17,9 +17,10 @@ class EventService
     /**
      * Get paginated events with optional filters.
      */
-    public function list(array $filters = [], int $perPage = 15): LengthAwarePaginator
+    public function list(array $filters = [], int $perPage = 15, ?User $user = null): LengthAwarePaginator
     {
         return Event::query()
+            ->when($user, fn($q) => $q->where('user_id', $user->id))
             ->when(isset($filters['event_type']), fn($q) => $q->where('event_type', $filters['event_type']))
             ->when(isset($filters['club_id']), fn($q) => $q->where('club_id', $filters['club_id']))
             ->when(isset($filters['status']), fn($q) => $q->where('status', $filters['status']))
