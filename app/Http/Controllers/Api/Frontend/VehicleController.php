@@ -31,9 +31,14 @@ class VehicleController extends Controller
     public function index(Request $request): JsonResponse
     {
         $vehicles = $this->vehicleService->list($request->user());
-        return Helper::jsonResponse('success', 'success', 200, VehicleResource::collection($vehicles), true, $vehicles);
+        return Helper::jsonResponse(true, 'success', 200, VehicleResource::collection($vehicles), true, $vehicles);
     }
 
+    public function miniVehicleData(Request $request): JsonResponse
+    {
+        $vehicles = $this->vehicleService->vehicleListRSVP($request->user());
+        return Helper::jsonResponse(true, 'success', 200, $vehicles);
+    }
 
     public function search(Request $request): JsonResponse
     {

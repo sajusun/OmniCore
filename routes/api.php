@@ -84,6 +84,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/vehicles/media/{media}', [VehicleController::class, 'deleteImage']);
 
     Route::get('/vehicles', [VehicleController::class, 'index']);
+    Route::get('/vehicle-list-for-rsvp', [VehicleController::class, 'miniVehicleData']);
     Route::post('/vehicles/store', [VehicleController::class, 'store']);
     Route::get('/vehicles/{vehicle}/show', [VehicleController::class, 'show']);
     Route::post('/vehicles/{vehicle}/update', [VehicleController::class, 'update']);

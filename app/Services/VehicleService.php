@@ -32,6 +32,19 @@ class VehicleService
             $query->where('user_id', $user->id);
         })->with(['garage', 'media', 'parts.media'])->latest()->paginate(15);
     }
+    public function vehicleListRSVP(User $user)
+    {
+        return Vehicle::select(['id','name', 'brand', 'year'])
+            ->whereHas('garage', fn($q) => $q->where('user_id', $user->id))
+            ->with('media:id,mediable_id,mediable_type,url,path')
+            ->latest()
+            ->get()
+            ->map(function ($vehicle) {
+                $vehicle->image = optional($vehicle->media->first())->url;
+                unset($vehicle->media);
+                return $vehicle;
+            });
+    }
 
 
     public function create(User $user, array $data): Vehicle
