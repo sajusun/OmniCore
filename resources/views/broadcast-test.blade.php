@@ -30,11 +30,6 @@
 
             console.log('Subscribing to:', `notifications.${userId}`);
 
-            // Echo.private('chat.room.1')
-            //     .listen('.message.sent', (data) => {
-            //         console.log('New real-time message received:', data.message);
-                    
-            //     });
 
             Echo.private(`user.${userId}`)
                 .subscribed(() => {

@@ -116,8 +116,7 @@
 
 @include('backend.partials._ajax')
 
-@include('backend.partials._notification')
-
 @include('backend.partials._custom-script')
+
 
 @stack('scripts')

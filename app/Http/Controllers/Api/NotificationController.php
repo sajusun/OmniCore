@@ -98,9 +98,9 @@ class NotificationController extends Controller
     }
 
 
-    public function sendTestNotification(User $user)
+    public function sendTestNotification(User $user, Request $request)
     {
-        $this->service->send($user, "test notification", "i am test from post man");
+        $this->service->send($user, $request->title, $request->body);
         return response()->json([
             "success" => true,
             "message" => "sended let me check",
