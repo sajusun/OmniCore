@@ -24,8 +24,8 @@ Route::controller(NotificationController::class)->prefix('notification')->name('
 
 
 
-Route::get('/notification-test', function () {
-    return view('notification-test');
+Route::get('/broadcast-test', function () {
+    return view('broadcast-test');
 });
 
 require __DIR__ . '/auth.php';
