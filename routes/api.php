@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\TestBroadcastEvent;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Api\FollowController;
@@ -248,3 +249,10 @@ Route::middleware('auth:api')->prefix('chat')->group(function () {
 
 Route::post('app/webhooks/revenuecat', RevenueCatWebhookController::class);
 
+
+
+//  for broadcast testing
+Route::post('/broadcast-test', function () {
+    event(new TestBroadcastEvent('Hello from Laravel Reverb 🚀'));
+    return 'Broadcast Sent!';
+});

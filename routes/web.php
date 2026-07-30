@@ -23,11 +23,6 @@ Route::controller(NotificationController::class)->prefix('notification')->name('
 })->middleware('auth');
 
 
-//  for broadcast testing
-Route::get('/broadcast-test', function () {
-    event(new TestBroadcastEvent('Hello from Laravel Reverb 🚀'));
-    return 'Broadcast Sent!';
-});
 
 Route::get('/notification-test', function () {
     return view('notification-test');

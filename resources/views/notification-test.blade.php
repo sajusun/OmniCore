@@ -24,7 +24,7 @@
                 .listen('.test-event', (e) => {
                     console.log('Event received:', e);
                 });
-            const userId = 1;
+            const userId = auth()->id();
 
             console.log('Subscribing to:', `notifications.${userId}`);
 
