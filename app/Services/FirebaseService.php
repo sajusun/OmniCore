@@ -3,23 +3,25 @@
 namespace App\Services;
 
 use Exception;
+use App\Models\User;
 use Illuminate\Support\Str;
 use App\Models\Notification;
 use Kreait\Firebase\Factory;
 use App\Models\FirebaseToken;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Messaging\CloudMessage;
+use Illuminate\Database\Eloquent\Collection;
 use Kreait\Firebase\Messaging\Notification as FirebaseNotification;
 
 class FirebaseService
 {
-    protected  $messaging;
+    protected  $messaging = null;
 
     public function __construct()
     {
-        $this->messaging = (new Factory)->withServiceAccount(storage_path(config('firebase.credentials_path')))->createMessaging();
+        if (config('notifications.channels.firebase')) {
+            $this->messaging = (new Factory)->withServiceAccount(storage_path(config('firebase.credentials_path')))->createMessaging();
+        }
     }
 
     public function send(Notification $notification): void

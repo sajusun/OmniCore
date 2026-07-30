@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use App\Models\Notification;
 use Illuminate\Http\Request;
-use App\Services\NotificationService;
 use App\Http\Controllers\Controller;
+use App\Services\NotificationService;
 use App\Http\Resources\NotificationResource;
 use App\Repositories\Contracts\NotificationRepositoryInterface;
 
@@ -74,27 +75,35 @@ class NotificationController extends Controller
     /**
      * Delete Notification
      */
-public function destroy(Notification $notification)
-{
-    abort_if($notification->user_id !== auth()->id(), 403);
+    public function destroy(Notification $notification)
+    {
+        abort_if($notification->user_id !== auth()->id(), 403);
 
-    $deleted = $this->service->delete(
-        $notification->id,
-        auth()->id()
-    );
+        $deleted = $this->service->delete(
+            $notification->id,
+            auth()->id()
+        );
 
-    if (! $deleted) {
+        if (! $deleted) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Notification not found.',
+            ], 404);
+        }
+
         return response()->json([
-            'success' => false,
-            'message' => 'Notification not found.',
-        ], 404);
+            'success' => true,
+            'message' => 'Notification deleted successfully.',
+        ]);
     }
 
-    return response()->json([
-        'success' => true,
-        'message' => 'Notification deleted successfully.',
-    ]);
-}
 
-
+    public function sendTestNotification(User $user)
+    {
+        $this->service->send($user, "test notification", "i am test from post man");
+        return response()->json([
+            "success" => true,
+            "message" => "sended let me check",
+        ]);
+    }
 }

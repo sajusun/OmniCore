@@ -91,7 +91,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/vehicles/{vehicle}/show', [VehicleController::class, 'show']);
     Route::post('/vehicles/{vehicle}/update', [VehicleController::class, 'update']);
     Route::get('/vehicles/meta', [VehicleController::class, 'meta']);
-
 });
 
 Route::middleware('auth:api')->group(function () {
@@ -128,8 +127,8 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/events/{event}/rsvp', [EventController::class, 'cancelRsvp']);
     Route::get('/events/{event}/rsvps', [EventController::class, 'rsvps']);
 
-    Route::get('/events/{event}/rsvps/matching', [EventController::class,'matchingParts']);
-    Route::get('/events/{event}/rsvps/all-parts', [EventController::class,'allParts']);
+    Route::get('/events/{event}/rsvps/matching', [EventController::class, 'matchingParts']);
+    Route::get('/events/{event}/rsvps/all-parts', [EventController::class, 'allParts']);
 
     // Bookmark
     Route::post('/events/{event}/bookmark', [EventController::class, 'toggleBookmark']);
@@ -256,3 +255,4 @@ Route::post('/broadcast-test', function () {
     event(new TestBroadcastEvent('Hello from Laravel Reverb 🚀'));
     return 'Broadcast Sent!';
 });
+Route::post('/notification-test/{user}', [NotificationController::class, 'sendTestNotification']);
