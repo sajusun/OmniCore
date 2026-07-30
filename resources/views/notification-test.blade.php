@@ -2,14 +2,16 @@
 <html>
 
 <head>
-    <title>Reverb Test</title>
+    <title>Broadcast Test</title>
     @vite(['resources/js/app.js'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>
 
-    <h2>Reverb Notification Test</h2>
+    <center>
+        <h2>Broadcast Notification Test</h2>
+    </center>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -24,14 +26,14 @@
                 .listen('.test-event', (e) => {
                     console.log('Event received:', e);
                 });
-            const userId = auth()->id();
+            let userId = @json(auth()->id());
 
             console.log('Subscribing to:', `notifications.${userId}`);
 
             Echo.private('chat.room.1')
                 .listen('.message.sent', (data) => {
                     console.log('New real-time message received:', data.message);
-                    // এখানে আপনার UI আপডেট করুন (যেমন message array-তে push করা)
+                    
                 });
 
             // Echo.private(`notifications.${userId}`)
