@@ -36,7 +36,7 @@
                     
                 });
 
-            Echo.private(`notifications.${userId}`)
+            Echo.private(`user.${userId}`)
                 .subscribed(() => {
                     console.log('Successfully subscribed');
                 })
