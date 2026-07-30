@@ -36,18 +36,16 @@
                     
                 });
 
-            // Echo.private(`notifications.${userId}`)
-            //     .subscribed(() => {
-            //         console.log('Successfully subscribed');
-            //     })
-            //     .error((error) => {
-            //         console.error('Subscription error:', error);
-            //     })
-            //     .listen('.notification.created', (e) => {
-            //         console.log('Notification Received:', e);
-            //     });
-
-
+            Echo.private(`notifications.${userId}`)
+                .subscribed(() => {
+                    console.log('Successfully subscribed');
+                })
+                .error((error) => {
+                    console.error('Subscription error:', error);
+                })
+                .listen('.notification.created', (e) => {
+                    console.log('Notification Received:', e);
+                });
 
         });
     </script>
