@@ -1,6 +1,6 @@
 <?php
 
-use App\Events\TestBroadcastEvent;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\NotificationController;
 use App\Http\Controllers\Api\Auth\SocialLoginController;
