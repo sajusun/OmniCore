@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Models\User;
 use App\Helpers\Helper;
+use Illuminate\Http\Request;
+use App\Services\UserService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Models\User;
-use App\Services\UserService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -25,6 +25,17 @@ class UserController extends Controller
 
     public function me()
     {
+        $vehicle=$this->user->vehicles()->count();
+        $post=$this->user->posts()->count();
+        $club=$this->user->clubs()->count();
+        $event=$this->user->events()->count();
+        $data=[
+            'vehicles'=>$vehicle,
+            'posts'=>$post,
+            'clubs'=>$club,
+            'events'=>$event
+        ];
+        $this->user->info=$data;
         return $this->success(
             message: 'User details fetched successfully',
             status: 200,
