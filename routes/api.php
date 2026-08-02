@@ -54,6 +54,12 @@ Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::post('/update-password', [UserController::class, 'updatePassword']);
     Route::delete('/profile/delete', [UserController::class, 'destroy']);
 });
+Route::get('/header-test', function (Illuminate\Http\Request $request) {
+    return response()->json([
+        'authorization' => $request->header('Authorization'),
+        'bearer'       => $request->bearerToken(),
+    ]);
+});
 
 Route::middleware('auth:api')->prefix('friends')->group(function () {
 

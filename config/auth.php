@@ -44,10 +44,6 @@ return [
             'driver' => 'jwt',
             'provider' => 'users',
         ],
-        'post_user_api' => [
-            'driver' => 'jwt',
-            'provider' => 'post_users',
-        ],
         
     ],
 
