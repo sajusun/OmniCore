@@ -23,15 +23,8 @@ class UserController extends Controller
         $this->select = ['id', 'name', 'email', 'avatar', 'last_activity_at'];
     }
 
-    public function me(Request $request)
+    public function me()
     {
-
-    dd([
-        'bearer' => $request->bearerToken(),
-        'authorization' => $request->header('Authorization'),
-        'guard_check' => auth('api')->check(),
-        'user' => auth('api')->user(),
-    ]);
 
         $vehicle=$this->user->vehicles()->count();
         $post=$this->user->posts()->count();
