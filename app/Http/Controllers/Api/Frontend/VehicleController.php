@@ -68,6 +68,8 @@ class VehicleController extends Controller
             $data['parts'] = $parts;
         }
 
+        // dd($data);
+
         $vehicle = $this->vehicleService->create($request->user(), $data);
 
         return response()->json([
