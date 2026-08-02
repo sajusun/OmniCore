@@ -4,10 +4,10 @@ namespace App\Http\Requests;
 
 use App\Enums\BrandEnum;
 use App\Enums\DriveTypeEnum;
-use App\Enums\VehicleTypeEnum;
 use App\Enums\TransmissionEnum;
-use Illuminate\Validation\Rules\Enum;
+use App\Enums\VehicleTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreVehicleRequest extends FormRequest
 {
@@ -49,9 +49,8 @@ class StoreVehicleRequest extends FormRequest
 
             'build_story' => ['nullable', 'string'],
 
-
             'media' => ['nullable', 'array'],
-            'media.*' => ['file','mimetypes:image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/x-msvideo','max:51200'],
+            'media.*' => ['file', 'mimetypes:image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/x-msvideo', 'max:51200'],
 
             'parts' => ['nullable', 'array'],
             'parts.*.name' => ['nullable', 'string', 'max:255'],
