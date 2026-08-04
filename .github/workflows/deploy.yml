@@ -3,7 +3,7 @@ name: Deploy to admin panel
 on:
   push:
     branches:
-      - main  # main branch এ push হলে auto deploy হবে
+      - main
 
 jobs:
   deploy:
@@ -26,8 +26,16 @@ jobs:
 
             git fetch origin main
             git reset --hard origin/main
+
+            npm run build
+
             php artisan optimize:clear
+            php artisan migrate --force
             php artisan optimize
+
+            php artisan queue:restart
+            php artisan reverb:restart
+
             echo "✅ Deploy done"
             # git pull origin main
 
