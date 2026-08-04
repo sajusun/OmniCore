@@ -29,3 +29,4 @@ Route::get('/broadcast-test', function () {
 });
 
 require __DIR__ . '/auth.php';
+
