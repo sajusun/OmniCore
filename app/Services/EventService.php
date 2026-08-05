@@ -36,7 +36,7 @@ class EventService
                         ->orWhere('location', 'like', '%' . $filters['search'] . '%');
                 });
             })
-            ->with(['media', 'user', 'club'])->where('status','published')->latest('event_date');
+            ->with(['media', 'user', 'club'])->where('status','published')->where('is_public',1)->latest('event_date');
 
         return $paginate ? $query->paginate($perPage) : $query;
     }

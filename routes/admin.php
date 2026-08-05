@@ -96,7 +96,7 @@ Route::prefix('events')->name('events.')->group(function () {
     Route::post('/store', [EventController::class, 'store'])->name('store');
     Route::get('/{event}/edit', [EventController::class, 'edit'])->name('edit');
     Route::put('/{event}/update', [EventController::class, 'update'])->name('update');
-    Route::delete('/{event_id}/destroy', [EventController::class, 'destroy'])->name('destroy');
+    Route::delete('/{event}/destroy', [EventController::class, 'destroy'])->name('destroy');
     Route::get('/status/{event_id}', [EventController::class, 'status'])->name('status');
 });
 

@@ -66,58 +66,6 @@ class EventController extends Controller
     }
 
 
-    public function create()
-    {
-        $roles = Role::all();
-
-        return view('backend.access.user.create', compact('roles'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-        ]);
-
-        $avatarPath = null;
-        if ($request->hasFile('avatar')) {
-            $avatarPath = $this->fileService->upload($request->file('avatar'), 'profile', 'public', $request->name);
-        }
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'avatar' => $avatarPath,
-            'slug' => Helper::makeSlug(User::class, $request->name),
-            'status' => 'active',
-        ]);
-
-        $user->assignRole($request->role);
-
-        return redirect()->route('admin.users.index')->with('t-success', 'User created successfully');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $user = User::findOrFail($id);
-
-        return view('backend.access.user.show', compact('user'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Event $event)
     {
         $users = User::select('id', 'name', 'email')->get();
@@ -135,35 +83,22 @@ class EventController extends Controller
         $event = Event::findOrFail($event_id);
         $event = $this->eventService->update($event, $request->all());
 
-
-        // if ($request->hasFile('avatar')) {
-        //     $data['avatar'] = $this->fileService->replace($request->file('avatar'), $user->getRawOriginal('avatar'), 'profile');
-        // }
-
-
         return redirect()->route('admin.events.index')->with('t-success', 'updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        $user = User::findOrFail($id);
-        if ($user->id == auth()->id()) {
-            return response()->json(['status' => false, 'message' => 'You cannot delete yourself!']);
+        $event = Event::findOrFail($id);
+        $result = $this->eventService->delete($event);
+        if (!$result) {
+            return response()->json(['status' => false, 'message' => 'Operation Failed!']);
         }
-        $user->delete();
 
-        return response()->json(['status' => true, 'message' => 'User deleted successfully']);
+        return response()->json(['status' => true, 'message' => 'Operation Successful!']);
     }
 
-    public function status($id)
-    {
-        $user = User::findOrFail($id);
-        $user->status = $user->status == 'active' ? 'inactive' : 'active';
-        $user->save();
 
-        return response()->json(['status' => true, 'message' => 'User status updated successfully']);
-    }
 }
