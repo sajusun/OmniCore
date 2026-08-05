@@ -5,19 +5,16 @@ namespace App\Http\Controllers\Web\Backend\Event;
 use App\Models\Club;
 use App\Models\User;
 use App\Models\Event;
-use App\Helpers\Helper;
 use App\Enums\EventTypeEnum;
 use Illuminate\Http\Request;
-use App\Services\FileService;
 use App\Services\EventService;
 use App\Enums\VehicleRequiredEnum;
-use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 
 class EventController extends Controller
 {
-    public function __construct(private FileService $fileService, private EventService $eventService) {}
+    public function __construct(private EventService $eventService) {}
 
     public function index(Request $request)
     {
