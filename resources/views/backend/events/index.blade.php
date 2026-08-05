@@ -1,9 +1,9 @@
 <x-admin-layout>
 
-    <x-slot name="title">Users Table</x-slot>
+    <x-slot name="title">Event Table</x-slot>
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Users Table</h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Event Table</h2>
     </x-slot>
 
     {{-- Page Header / Breadcrumb Component Area --}}
@@ -13,20 +13,10 @@
                 <ol class="breadcrumb mb-0" style="font-size: 0.875rem;">
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"
                             class="text-decoration-none text-muted">Dashboard</a></li>
-                    <li class="breadcrumb-item active text-dark fw-medium" aria-current="page">Users Table</li>
+                    <li class="breadcrumb-item active text-dark fw-medium" aria-current="page">Event Table</li>
                 </ol>
             </nav>
-            {{-- <h2 class="h4 fw-bold text-dark mb-0">Users Table</h2> --}}
         </div>
-        <a href="{{ route('admin.users.create') }}"
-            class="btn btn-primary d-inline-flex align-items-center gap-2 px-3 py-2 shadow-sm text-uppercase fw-semibold"
-            style="font-size: 0.75rem; letter-spacing: 0.05em; border-radius: 0;">
-            <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
-                </path>
-            </svg>
-            Add New User
-        </a>
     </div>
 
     {{-- Main Card Table Container --}}
