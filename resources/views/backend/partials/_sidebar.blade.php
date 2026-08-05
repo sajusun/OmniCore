@@ -34,6 +34,12 @@ use Illuminate\Support\Facades\Route;
                         <span class="side-menu__label">Users</span>
                     </a>
                 </li>
+                <li class="slide {{ request()->routeIs('admin.events.*') ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="{{ route('admin.events.index') }}">
+                        <i class="fa-solid fa-users side-menu__icon"></i>
+                        <span class="side-menu__label">Events</span>
+                    </a>
+                </li>
 
                 @if(env('ENABLE_ROLE_MANAGEMENT'))
                 <li

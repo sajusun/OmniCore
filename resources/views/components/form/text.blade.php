@@ -4,12 +4,13 @@
     'value' => '',
     'placeholder' => '',
     'readonly' => false,
+    'type' => 'text'
 ])
 
 <div class="mb-3">
     <label for="{{ $name }}" class="form-label fw-medium">{!! $label !!}</label>
     <input
-        type="text"
+        type={{ $type }}
         name="{{ $name }}"
         placeholder="{{ $placeholder }}"
         id="{{ $name }}"

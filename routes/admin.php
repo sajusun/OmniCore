@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\Backend\TicketController;
 use App\Http\Controllers\Web\Backend\DashboardController;
 use App\Http\Controllers\Web\Backend\Access\RoleController;
 use App\Http\Controllers\Web\Backend\Access\UserController;
+use App\Http\Controllers\Web\Backend\Event\EventController;
 use App\Http\Controllers\Web\Backend\Access\AdminController;
 use App\Http\Controllers\Web\Backend\NotificationController;
 use App\Http\Controllers\Web\Backend\Settings\ProfileController;
@@ -87,6 +88,16 @@ Route::prefix('setting/profile')->name('setting.profile.')->group(function () {
     Route::put('/update', [ProfileController::class, 'UpdateProfile'])->name('update');
     Route::put('/update/password', [ProfileController::class, 'UpdatePassword'])->name('update.password');
     Route::post('/update/avatar', [ProfileController::class, 'UpdateProfilePicture'])->name('avatar.update');
+});
+
+Route::prefix('events')->name('events.')->group(function () {
+    Route::get('/', [EventController::class, 'index'])->name('index');
+    Route::get('/create', [EventController::class, 'create'])->name('create');
+    Route::post('/store', [EventController::class, 'store'])->name('store');
+    Route::get('/{event}/edit', [EventController::class, 'edit'])->name('edit');
+    Route::put('/{event}/update', [EventController::class, 'update'])->name('update');
+    Route::delete('/{event_id}/destroy', [EventController::class, 'destroy'])->name('destroy');
+    Route::get('/status/{event_id}', [EventController::class, 'status'])->name('status');
 });
 
 // ─── General Settings ─────────────────────────────────────────────────────────

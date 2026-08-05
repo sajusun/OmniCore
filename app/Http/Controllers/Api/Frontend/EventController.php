@@ -23,7 +23,7 @@ class EventController extends Controller
 
     private EventService $eventService;
 
-    public function __construct(EventService $eventService, private LocationService $loansService)
+    public function __construct(EventService $eventService)
     {
         parent::__construct();
         $this->user = auth('api')->user();

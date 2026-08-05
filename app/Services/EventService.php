@@ -18,9 +18,9 @@ class EventService
     /**
      * Get paginated events with optional filters.
      */
-    public function list(array $filters = [], int $perPage = 15, ?User $user = null): LengthAwarePaginator
+    public function list(array $filters = [], int $perPage = 15, ?User $user = null, $paginate = true)
     {
-        return Event::query()
+        $query= Event::query()
             ->when($user, fn($q) => $q->where('user_id', $user->id))
             ->when(isset($filters['event_type']), fn($q) => $q->where('event_type', $filters['event_type']))
             ->when(isset($filters['club_id']), fn($q) => $q->where('club_id', $filters['club_id']))
@@ -36,10 +36,12 @@ class EventService
                         ->orWhere('location', 'like', '%' . $filters['search'] . '%');
                 });
             })
-            ->with(['media', 'user', 'club'])
-            ->latest('event_date')
-            ->paginate($perPage);
+            ->with(['media', 'user', 'club'])->where('status','published')->latest('event_date');
+
+        return $paginate ? $query->paginate($perPage) : $query;
     }
+
+
 
     public function getDistance(Event $event)
     {
@@ -83,7 +85,7 @@ class EventService
                 'max_participants' => $data['max_participants'] ?? null,
                 'vehicles_required' => $data['vehicles_required'] ?? [],
                 'is_public' => $data['is_public'] ?? true,
-                'status' => $data['status'] ?? 'published',
+                'status' => $data['status'] ?? 'draft',
             ]);
 
             // Single thumbnail
