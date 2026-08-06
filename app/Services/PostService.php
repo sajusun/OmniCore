@@ -2,26 +2,29 @@
 
 namespace App\Services;
 
-use App\Models\Post;
-use App\Models\User;
+use App\Enums\PostStatusEnum;
 use App\Enums\PostType;
+use App\Enums\PostVisibilityEnum;
 use App\Helpers\Helper;
+use App\Models\Post;
 use App\Models\PostLike;
 use App\Models\SavedPost;
-use Illuminate\Support\Str;
-use App\Enums\PostStatusEnum;
-use App\Enums\PostVisibilityEnum;
-use GuzzleHttp\Psr7\UploadedFile;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\Modules\Media\Traits\HandlesMedia;
+use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class PostService
 {
     use HandlesMedia;
+
     private User $user;
+
     private Post $post;
+
     public function __construct()
     {
         $this->user = auth('api')->user();
@@ -30,7 +33,7 @@ class PostService
     public function index(): LengthAwarePaginator
     {
         return Post::query()
-            ->with(['user', 'media', 'sharedPost.user', 'sharedPost.media',])
+            ->with(['user', 'media', 'sharedPost.user', 'sharedPost.media'])
             ->withCount(['likes', 'comments', 'shares', 'views'])
             ->where('user_id', auth('api')->id())->latest()->paginate(15);
     }
@@ -62,22 +65,22 @@ class PostService
             $thumbnail = null;
 
             if (isset($data['thumbnail']) && $data['thumbnail'] instanceof UploadedFile) {
-                $thumbnail = Helper::fileUpload($data['thumbnail'], 'post',);
+                $thumbnail = Helper::fileUpload($data['thumbnail'], 'post');
             }
 
             $post = Post::create([
-                'user_id'      => Auth::id(),
-                'title'        => $data['title'] ?? null,
-                'slug'         => Helper::makeSlug(Post::class, $data['title'] ?? Str::random()),
-                'content'      => $data['content'],
-                'thumbnail'    => $thumbnail,
-                'visibility'   => $data['visibility'] ?? PostVisibilityEnum::PUBLIC->value,
-                'type'         => $data['type'] ?? 'post',
-                'status'       => 'published',
+                'user_id' => Auth::id(),
+                'title' => $data['title'] ?? null,
+                'slug' => Helper::makeSlug(Post::class, $data['title'] ?? Str::random()),
+                'content' => $data['content'],
+                'thumbnail' => $thumbnail,
+                'visibility' => $data['visibility'] ?? PostVisibilityEnum::PUBLIC->value,
+                'type' => $data['type'] ?? 'post',
+                'status' => 'published',
                 'shared_post_id' => $data['shared_post_id'] ?? null,
             ]);
 
-            if ($post->visibility === PostVisibilityEnum::FRIENDS->value && !empty($data['friend_ids'])) {
+            if ($post->visibility === PostVisibilityEnum::FRIENDS->value && ! empty($data['friend_ids'])) {
                 $post->visibleUsers()->sync($data['friend_ids']);
             }
 
@@ -88,7 +91,7 @@ class PostService
                 }
             }
 
-            return $post->load(['user', 'media',]);
+            return $post->load(['user', 'media']);
         });
     }
 
@@ -98,7 +101,7 @@ class PostService
 
             if (isset($data['thumbnail']) && $data['thumbnail'] instanceof UploadedFile) {
 
-                if (!empty($post->thumbnail)) {
+                if (! empty($post->thumbnail)) {
                     Helper::fileDelete($post->thumbnail);
                 }
 
@@ -106,18 +109,18 @@ class PostService
             }
 
             $post->update([
-                'title'          => $data['title'] ?? $post->title,
-                'content'        => $data['content'],
-                'visibility'     => $data['visibility'] ?? $post->visibility,
-                'type'           => $data['type'] ?? $post->type,
+                'title' => $data['title'] ?? $post->title,
+                'content' => $data['content'],
+                'visibility' => $data['visibility'] ?? $post->visibility,
+                'type' => $data['type'] ?? $post->type,
                 'shared_post_id' => $data['shared_post_id'] ?? $post->shared_post_id,
             ]);
 
-            if ($post->visibility === PostVisibilityEnum::FRIENDS->value && !empty($data['friend_ids'])) {
+            if ($post->visibility === PostVisibilityEnum::FRIENDS->value && ! empty($data['friend_ids'])) {
                 $post->visibleUsers()->sync($data['friend_ids']);
             }
 
-            if (!empty($data['media'])) {
+            if (! empty($data['media'])) {
 
                 foreach ($data['media'] as $media) {
 
@@ -125,7 +128,7 @@ class PostService
                 }
             }
 
-            return $post->load(['user', 'media',]);
+            return $post->load(['user', 'media']);
         });
     }
 
@@ -134,14 +137,14 @@ class PostService
         return DB::transaction(function () use ($post) {
 
             // Delete Thumbnail
-            if (!empty($post->thumbnail)) {
+            if (! empty($post->thumbnail)) {
                 Helper::fileDelete($post->thumbnail);
             }
 
             // Delete All Media
             $mediaIds = $post->media()->pluck('id')->toArray();
 
-            if (!empty($mediaIds)) {
+            if (! empty($mediaIds)) {
                 $this->deleteMedia($mediaIds);
             }
 
@@ -199,6 +202,7 @@ class PostService
 
         if ($like) {
             $like->delete();
+
             return false;
         }
 
@@ -211,13 +215,14 @@ class PostService
         return true;
     }
 
-
-    public function LikedUsers(int $postId)
+    public function LikedUsers(Post|int $post)
     {
-        $post = Post::findOrFail($postId);
-        return $post->likes()->with('user')->get();
-    }
+        if (is_int($post)) {
+            $post = Post::findOrFail($post);
+        }
 
+        return $post->likedUsers()->get();
+    }
 
     public function share(Post $post, array $data): Post
     {
@@ -226,21 +231,20 @@ class PostService
             $originalPostId = $post->type === PostType::SHARED ? $post->shared_post_id : $post->id;
 
             $sharedPost = Post::create([
-                'user_id'        => auth()->id(),
+                'user_id' => auth()->id(),
                 'shared_post_id' => $originalPostId,
-                'title'          => null,
-                'slug'           => null,
-                'content'        => $data['content'] ?? null,
-                'thumbnail'      => null,
-                'visibility'     => $data['visibility'] ?? PostVisibilityEnum::PUBLIC->value,
-                'type'           => PostType::SHARED,
-                'status'         => $post->status,
+                'title' => null,
+                'slug' => null,
+                'content' => $data['content'] ?? null,
+                'thumbnail' => null,
+                'visibility' => $data['visibility'] ?? PostVisibilityEnum::PUBLIC->value,
+                'type' => PostType::SHARED,
+                'status' => $post->status,
             ]);
 
-            return $sharedPost->load(['user', 'sharedPost.user', 'sharedPost.media',]);
+            return $sharedPost->load(['user', 'sharedPost.user', 'sharedPost.media']);
         });
     }
-
 
     public function toggleSave(Post $post): bool
     {
@@ -248,6 +252,7 @@ class PostService
 
         if ($saved) {
             $saved->delete();
+
             return false;
         }
 
@@ -264,6 +269,7 @@ class PostService
         $user = auth()->user();
 
         $data = $user->savedPosts()->with(['user', 'media', 'media'])->latest()->paginate(15);
+
         return $data;
     }
 }

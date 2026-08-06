@@ -52,6 +52,16 @@ class Post extends Model
         return $this->hasMany(PostLike::class);
     }
 
+    public function likedUsers()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'post_likes',
+            'post_id',
+            'user_id'
+        )->withTimestamps();
+    }
+
     public function comments()
     {
         return $this->hasMany(PostComment::class)->whereNull('parent_id');
