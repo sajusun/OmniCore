@@ -211,6 +211,14 @@ class PostService
         return true;
     }
 
+
+    public function LikedUsers(int $postId)
+    {
+        $post = Post::findOrFail($postId);
+        return $post->likes()->with('user')->get();
+    }
+
+
     public function share(Post $post, array $data): Post
     {
         return DB::transaction(function () use ($post, $data) {

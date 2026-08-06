@@ -159,6 +159,7 @@ Route::middleware(['auth:api'])->controller(PostController::class)->prefix('/pos
 Route::middleware('auth:api')->group(function () {
     Route::get('/posts/{post}/comments', [PostCommentController::class, 'index']);
     Route::post('/posts/{post}/comments', [PostCommentController::class, 'store']);
+    Route::get('/posts/{post}/liked', [PostController::class, 'likedUser']);
     Route::post('/comments/{comment}/update', [PostCommentController::class, 'update']);
     Route::delete('/comments/{comment}/delete', [PostCommentController::class, 'destroy']);
     Route::post('/comments/{comment}/reply', [PostCommentController::class, 'reply']);

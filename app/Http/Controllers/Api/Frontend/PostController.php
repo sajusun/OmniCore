@@ -12,6 +12,7 @@ use App\Services\PostService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Post\StorePostRequest;
 use App\Http\Requests\Post\UpdatePostRequest;
@@ -73,6 +74,11 @@ class PostController extends Controller
     {
         $liked = $this->postService->toggleLike($post);
         return Helper::jsonResponse(true, $liked ? 'Post liked successfully.' : 'Post unliked successfully.', 200);
+    }
+    public function likedUser(Post $post): JsonResponse
+    {
+        $users = $this->postService->LikedUsers($post->id);
+        return Helper::jsonResponse(true, 'Liked Uses List', 200, UserResource::collection($users));
     }
 
     public function repost(Request $request, Post $post): JsonResponse
