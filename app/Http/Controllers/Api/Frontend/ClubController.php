@@ -86,7 +86,8 @@ class ClubController extends Controller
     {
         $club = $this->clubService->find($id);
         $clubAdmin = $club->creator;
-        $events = $clubAdmin->events;
+        
+        $events = $clubAdmin->events->where('status', 'published')->sortByDesc('created_at')->values();
         $club->events = $events;
 
         return $this->success(new ClubResource($club), 'Club retrieved successfully', 200);
