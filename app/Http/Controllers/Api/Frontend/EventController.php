@@ -47,7 +47,7 @@ class EventController extends Controller
         ]);
         $perPage = (int) $request->query('per_page', 15);
 
-        $events = $this->eventService->list($filters, $perPage);
+        $events = $this->eventService->list($filters, $perPage, for_public: true);
         $events->each(function ($event) {
             $event->distance = $this->eventService->getDistance($event);
         });

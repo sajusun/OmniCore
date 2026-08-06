@@ -77,7 +77,7 @@ class PostController extends Controller
     }
     public function likedUser(Post $post): JsonResponse
     {
-        $users = $this->postService->LikedUsers($post->id);
+        $liked = $this->postService->LikedUsers($post->id);
         return Helper::jsonResponse(true, 'Liked Uses List', 200, UserResource::collection($users));
     }
 

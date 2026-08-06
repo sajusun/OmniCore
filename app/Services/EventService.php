@@ -18,9 +18,9 @@ class EventService
     /**
      * Get paginated events with optional filters.
      */
-    public function list(array $filters = [], int $perPage = 15, ?User $user = null, $paginate = true)
+    public function list(array $filters = [], int $perPage = 15, ?User $user = null, $paginate = true, mixed $for_public=null): LengthAwarePaginator|array
     {
-        $query= Event::query()
+        $query = Event::query()
             ->when($user, fn($q) => $q->where('user_id', $user->id))
             ->when(isset($filters['event_type']), fn($q) => $q->where('event_type', $filters['event_type']))
             ->when(isset($filters['club_id']), fn($q) => $q->where('club_id', $filters['club_id']))
@@ -35,8 +35,8 @@ class EventService
                         ->orWhere('description', 'like', '%' . $filters['search'] . '%')
                         ->orWhere('location', 'like', '%' . $filters['search'] . '%');
                 });
-            })
-            ->with(['media', 'user', 'club'])->where('status','published')->where('is_public',1)->latest('event_date');
+            })->when(isset($for_public), fn($q) => $q->where('is_public', 1)->where('status', 'published'))
+            ->with(['media', 'user', 'club'])->latest('event_date');
 
         return $paginate ? $query->paginate($perPage) : $query;
     }
