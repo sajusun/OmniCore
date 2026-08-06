@@ -27,7 +27,7 @@ class NotificationService
         array $meta = []
     ): Notification {
         $meta = array_merge([
-            'icon' => asset('storage/system/icons/bell.png'),
+            'icon' => asset('default/icons/bell.png'),
             'type' => $type,
         ], $meta);
 
