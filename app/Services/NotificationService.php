@@ -15,8 +15,21 @@ class NotificationService
     ) {}
 
 
-    public function send(User|int $user, string $title, string $body, string $type = 'general', ?string $referenceType = null, string|int|null $referenceId = null, ?string $action = null, ?string $link = null, array $meta = []): Notification
-    {
+    public function send(
+        User|int $user,
+        string $title,
+        string $body,
+        string $type = 'general',
+        ?string $referenceType = null,
+        string|int|null $referenceId = null,
+        ?string $action = null,
+        ?string $link = null,
+        array $meta = []
+    ): Notification {
+        $meta = array_merge([
+            'icon' => asset('storage/system/icons/bell.png'),
+            'type' => $type,
+        ], $meta);
 
         $notification = $this->notifications->create([
             'user_id'        => $user instanceof User ? $user->id : $user,
