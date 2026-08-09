@@ -21,6 +21,8 @@ class UserResource extends JsonResource
             'avatar' => $this->avatar ? url($this->avatar) : url('default/profile.png'),
             'last_activity_at' => $this->last_activity_at ? $this->last_activity_at->diffForHumans() : null,
             'is_online' => $this->when($this->is_online, $this->is_online, null),
+            'is_subscribed' => $this->is_subscribed ?? null,
+            'subscription_ends_at' => $this->subscription_ends_at ? $this->subscription_ends_at->toDateString() : null,
             'profile' => $this->when($this->profile, new ProfileResource($this->profile), null),
             'info' => $this->when($this->info, $this->info),
 
