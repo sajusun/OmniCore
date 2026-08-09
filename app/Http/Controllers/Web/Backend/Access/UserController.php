@@ -117,13 +117,17 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'role' => 'required',
+            'role' => 'nullable|exists:roles,name',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'is_subscribed' => 'nullable|boolean',
+            'subscription_ends_at' => 'nullable|date',
         ]);
 
         $data = [
             'name' => $request->name,
             'email' => $request->email,
+            'is_subscribed' => $request->has('is_subscribed') ? $request->is_subscribed : $user->is_subscribed,
+            'subscription_ends_at' => $request->has('subscription_ends_at') ? $request->subscription_ends_at : $user->subscription_ends_at,
         ];
 
         if ($request->hasFile('avatar')) {

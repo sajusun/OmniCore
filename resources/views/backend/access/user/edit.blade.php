@@ -88,6 +88,20 @@
                             </div>
 
                         </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <x-form.select label="Subscription" name="is_subscribed" :options="[
+                                    1=>'Enable',
+                                    0=>'Disable',
+                                ]" :value="$user->is_subscribed"/>
+
+                            </div>
+                            <div class="col-6">
+                                <x-form.datetime label="Duration" name="subscription_ends_at" :value="$user->subscription_ends_at"/>
+                            </div>
+
+
+                        </div>
                     </div>
 
                     {{-- Card Action Footer with Absolute Flat Corners --}}

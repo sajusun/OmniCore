@@ -1,7 +1,15 @@
+@props([
+    'name',
+    'label',
+    'value' => '',
+    'placeholder' => '',
+    'readonly' => false,
+])
 <div class="mb-3">
     <label for="{{ $name }}" class="form-label fw-medium">{!! $label !!}</label>
     <input
         type="date"
+        placeholder="{{ $placeholder }}"
         class="form-control @error($name) is-invalid @enderror"
         name="{{ $name }}"
         id="{{ $name }}"
