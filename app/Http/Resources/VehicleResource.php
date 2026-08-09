@@ -41,6 +41,7 @@ class VehicleResource extends JsonResource
             'suspension' => $this->suspension,
 
             'build_story' => $this->build_story,
+            'status' => $this->status,
 
             'parts' => VehiclePartResource::collection($this->whenLoaded('parts')),
 

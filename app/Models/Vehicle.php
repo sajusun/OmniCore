@@ -8,7 +8,6 @@ use App\Enums\VehicleTypeEnum;
 use App\Enums\TransmissionEnum;
 use App\Modules\Media\Traits\HasMedia;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Vehicle extends Model
 {
@@ -36,6 +35,7 @@ class Vehicle extends Model
         'suspension',
 
         'build_story',
+        'status',
     ];
 
     protected $casts = [

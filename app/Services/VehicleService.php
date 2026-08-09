@@ -34,7 +34,7 @@ class VehicleService
     }
     public function vehicleListRSVP(User $user)
     {
-        return Vehicle::select(['id','name', 'brand', 'year'])
+        return Vehicle::select(['id', 'name', 'brand', 'year'])
             ->whereHas('garage', fn($q) => $q->where('user_id', $user->id))
             ->with('media:id,mediable_id,mediable_type,url,path')
             ->latest()
@@ -75,6 +75,12 @@ class VehicleService
         }
 
         return $vehicle->load(['garage', 'media', 'parts.media']);
+    }
+    public function updateStatus(Vehicle $vehicle, string $status): Vehicle
+    {
+        $vehicle->update(['status' => $status]);
+        $vehicle->save();
+        return $vehicle;
     }
 
 

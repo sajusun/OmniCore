@@ -109,6 +109,17 @@ class VehicleController extends Controller
         return $this->success(new VehicleResource($updatedVehicle), 'Vehicle metrics updated successfully!', 200);
     }
 
+    public function toggleStatus(Request $request, Vehicle $vehicle): JsonResponse
+    {
+        $request->validate([
+            'status' => 'nullable|string|in:private,public,archived',
+        ]);
+        $status = $request->input('status', 'public');
+        $updatedVehicle = $this->vehicleService->updateStatus($vehicle, $status);
+
+        return $this->success(new VehicleResource($updatedVehicle), 'Vehicle status updated successfully!', 200);
+    }
+
 
     public function destroy(Vehicle $vehicle): JsonResponse
     {
