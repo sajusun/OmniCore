@@ -81,6 +81,7 @@
                                 </a>
                             </div>
                             <!-- FULL-SCREEN -->
+
                             <!-- NOTIFICATIONS-->
                             @include('backend.partials._notification')
 

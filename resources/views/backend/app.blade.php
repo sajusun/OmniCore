@@ -29,7 +29,7 @@
 </head>
 
 <body class="ltr app sidebar-mini">
-    @include('backend.partials._switcher')
+    {{-- @include('backend.partials._switcher') --}}
 
 
     <!-- PAGE -->
