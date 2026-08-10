@@ -8,12 +8,14 @@ use App\Helpers\Helper;
 use App\Enums\EventTypeEnum;
 use Illuminate\Http\Request;
 use App\Services\EventService;
+use App\Enums\VehicleCarTypeEnum;
 use App\Services\LocationService;
 use Illuminate\Http\JsonResponse;
 use App\Enums\VehicleRequiredEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EventResource;
 use App\Http\Resources\VehicleResource;
+use App\Enums\VehicleMotorcycleTypeEnum;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 
@@ -220,6 +222,8 @@ class EventController extends Controller
         return $this->success([
             'event_types' => EventTypeEnum::toArray(),
             'vehicle_requirements' => VehicleRequiredEnum::toArray(),
+            'car_types' => VehicleCarTypeEnum::toArray(),
+            'motorcycle_types' => VehicleMotorcycleTypeEnum::toArray(),
         ], 'Metadata retrieved successfully', 200);
     }
 
@@ -255,5 +259,14 @@ class EventController extends Controller
         });
 
         return Helper::jsonResponse(true, 'Bookmarked events retrieved successfully', 200, EventResource::collection($events), true, $events);
+    }
+
+
+    public function filterTypes()
+    {
+        return Helper::jsonResponse(true, "fetch filters types", 200, [
+            'car_types' => VehicleCarTypeEnum::toArray(),
+            'motorcycle_types' => VehicleMotorcycleTypeEnum::toArray(),
+        ]);
     }
 }
