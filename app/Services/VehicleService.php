@@ -164,7 +164,7 @@ class VehicleService
             })->when(!empty($filters['garage_id']), fn($q) => $q->where('garage_id', $filters['garage_id']))
             ->when(!empty($filters['brand_id']), fn($q) => $q->where('brand_id', $filters['brand_id']))
             ->when(!empty($filters['status']), fn($q) => $q->where('status', $filters['status']))
-            ->with(['garage', 'media', 'parts.media'])
+            ->with(['garage', 'media', 'parts.media'])->where('status', 'public')
             ->latest()
             ->paginate($filters['per_page'] ?? 15);
     }
