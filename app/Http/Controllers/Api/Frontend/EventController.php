@@ -221,7 +221,7 @@ class EventController extends Controller
     {
         return $this->success([
             'event_types' => EventTypeEnum::toArray(),
-            'vehicle_requirements' => VehicleRequiredEnum::toArray(),
+            // 'vehicle_requirements' => VehicleRequiredEnum::toArray(),
             'car_types' => VehicleCarTypeEnum::toArray(),
             'motorcycle_types' => VehicleMotorcycleTypeEnum::toArray(),
         ], 'Metadata retrieved successfully', 200);
