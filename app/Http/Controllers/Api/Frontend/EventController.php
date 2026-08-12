@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers\Api\Frontend;
 
-use App\Models\User;
-use App\Models\Event;
-use App\Helpers\Helper;
 use App\Enums\EventTypeEnum;
-use Illuminate\Http\Request;
-use App\Services\EventService;
 use App\Enums\VehicleCarTypeEnum;
-use App\Services\LocationService;
-use Illuminate\Http\JsonResponse;
-use App\Enums\VehicleRequiredEnum;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\EventResource;
-use App\Http\Resources\VehicleResource;
 use App\Enums\VehicleMotorcycleTypeEnum;
+use App\Enums\VehicleRequiredEnum;
+use App\Helpers\Helper;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
+use App\Http\Resources\EventResource;
+use App\Http\Resources\VehicleResource;
+use App\Models\Event;
+use App\Models\User;
+use App\Services\EventService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
@@ -46,6 +45,7 @@ class EventController extends Controller
             'user_id',
             'upcoming',
             'search',
+            'vehicles_required',
         ]);
         $perPage = (int) $request->query('per_page', 15);
 
@@ -56,6 +56,7 @@ class EventController extends Controller
 
         return Helper::jsonResponse(true, 'Events retrieved successfully', 200, EventResource::collection($events), true, $events);
     }
+
     public function myEvent(Request $request): JsonResponse
     {
         $filters = $request->only([
@@ -201,7 +202,7 @@ class EventController extends Controller
             status: true,
             message: 'RSVPs retrieved successfully',
             code: 200,
-            data: $rsvps->map(fn($item) => [
+            data: $rsvps->map(fn ($item) => [
                 'user_id' => $item->user_id,
                 'name' => $item->user?->name,
                 'avatar' => $item->user?->avatar ?? null,
@@ -231,6 +232,7 @@ class EventController extends Controller
     {
         return $this->eventService->matchingParts($event, $this->user);
     }
+
     public function allParts(Event $event)
     {
         return $this->eventService->allParts($event, $this->user);
@@ -261,10 +263,9 @@ class EventController extends Controller
         return Helper::jsonResponse(true, 'Bookmarked events retrieved successfully', 200, EventResource::collection($events), true, $events);
     }
 
-
     public function filterTypes()
     {
-        return Helper::jsonResponse(true, "fetch filters types", 200, [
+        return Helper::jsonResponse(true, 'fetch filters types', 200, [
             'car_types' => VehicleCarTypeEnum::toArray(),
             'motorcycle_types' => VehicleMotorcycleTypeEnum::toArray(),
         ]);

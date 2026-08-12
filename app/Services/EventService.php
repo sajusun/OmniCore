@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Models\Event;
-use App\Models\Vehicle;
-use App\Models\EventRsvp;
 use App\Models\EventBookmark;
-use Illuminate\Support\Facades\DB;
+use App\Models\EventRsvp;
+use App\Models\User;
+use App\Models\Vehicle;
 use App\Modules\Media\Traits\HandlesMedia;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class EventService
 {
@@ -18,37 +18,45 @@ class EventService
     /**
      * Get paginated events with optional filters.
      */
-    public function list(array $filters = [], int $perPage = 15, ?User $user = null, $paginate = true, mixed $for_public=null): LengthAwarePaginator|array
+    public function list(array $filters = [], int $perPage = 15, ?User $user = null, $paginate = true, mixed $for_public = null): LengthAwarePaginator|array
     {
         $query = Event::query()
-            ->when($user, fn($q) => $q->where('user_id', $user->id))
-            ->when(isset($filters['event_type']), fn($q) => $q->where('event_type', $filters['event_type']))
-            ->when(isset($filters['club_id']), fn($q) => $q->where('club_id', $filters['club_id']))
-            ->when(isset($filters['status']), fn($q) => $q->where('status', $filters['status']))
-            ->when(isset($filters['is_public']), fn($q) => $q->where('is_public', filter_var($filters['is_public'], FILTER_VALIDATE_BOOLEAN)))
-            ->when(isset($filters['location']), fn($q) => $q->where('location', 'like', '%' . $filters['location'] . '%'))
-            ->when(isset($filters['user_id']), fn($q) => $q->where('user_id', $filters['user_id']))
-            ->when(! empty($filters['upcoming']), fn($q) => $q->where('event_date', '>=', now()->toDateString()))
+            ->when($user, fn ($q) => $q->where('user_id', $user->id))
+            ->when(isset($filters['event_type']), fn ($q) => $q->where('event_type', $filters['event_type']))
+            ->when(isset($filters['vehicles_required']), function ($q) use ($filters) {
+                $vehicles = (array) $filters['vehicles_required'];
+
+                $q->where(function ($query) use ($vehicles) {
+                    foreach ($vehicles as $vehicle) {
+                        $query->orWhereJsonContains('vehicles_required', $vehicle);
+                    }
+                });
+            })
+            ->when(isset($filters['club_id']), fn ($q) => $q->where('club_id', $filters['club_id']))
+            ->when(isset($filters['status']), fn ($q) => $q->where('status', $filters['status']))
+            ->when(isset($filters['is_public']), fn ($q) => $q->where('is_public', filter_var($filters['is_public'], FILTER_VALIDATE_BOOLEAN)))
+            ->when(isset($filters['location']), fn ($q) => $q->where('location', 'like', '%'.$filters['location'].'%'))
+            ->when(isset($filters['user_id']), fn ($q) => $q->where('user_id', $filters['user_id']))
+            ->when(! empty($filters['upcoming']), fn ($q) => $q->where('event_date', '>=', now()->toDateString()))
             ->when(isset($filters['search']), function ($q) use ($filters) {
                 $q->where(function ($sub) use ($filters) {
-                    $sub->where('title', 'like', '%' . $filters['search'] . '%')
-                        ->orWhere('description', 'like', '%' . $filters['search'] . '%')
-                        ->orWhere('location', 'like', '%' . $filters['search'] . '%');
+                    $sub->where('title', 'like', '%'.$filters['search'].'%')
+                        ->orWhere('description', 'like', '%'.$filters['search'].'%')
+                        ->orWhere('location', 'like', '%'.$filters['search'].'%');
                 });
-            })->when(isset($for_public), fn($q) => $q->where('is_public', 1)->where('status', 'published'))
+            })->when(isset($for_public), fn ($q) => $q->where('is_public', 1)->where('status', 'published'))
             ->with(['media', 'user', 'club'])->latest('event_date');
 
         return $paginate ? $query->paginate($perPage) : $query;
     }
 
-
-
     public function getDistance(Event $event)
     {
         $user = auth('api')->user();
-        if (!$user->profile->latitude && !$user->profile->longitude) {
+        if (! $user->profile->latitude && ! $user->profile->longitude) {
             return 0;
         }
+
         return app(LocationService::class)->getDistance(
             $user->profile->latitude,
             $user->profile->longitude,
@@ -122,7 +130,7 @@ class EventService
                 'vehicles_required' => $data['vehicles_required'] ?? null,
                 'is_public' => isset($data['is_public']) ? filter_var($data['is_public'], FILTER_VALIDATE_BOOLEAN) : null,
                 'status' => $data['status'] ?? null,
-            ], fn($val) => ! is_null($val)));
+            ], fn ($val) => ! is_null($val)));
 
             if (isset($data['thumbnail'])) {
                 if ($data['thumbnail']) {
@@ -209,7 +217,7 @@ class EventService
     public function rsvps(Event $event, ?string $status = null, int $perPage = 15): LengthAwarePaginator
     {
         return EventRsvp::where('event_id', $event->id)
-            ->when($status, fn($q) => $q->where('status', $status))
+            ->when($status, fn ($q) => $q->where('status', $status))
             ->with(['user', 'vehicle.parts.media'])
             ->latest()
             ->paginate($perPage);
@@ -225,7 +233,6 @@ class EventService
             $this->deleteMedia($ids);
         }
     }
-
 
     public function matchingParts(Event $event, User $user)
     {
@@ -244,7 +251,6 @@ class EventService
         $myBrand = $myVehicle->brand; // This is a string
         $myModel = $myVehicle->model; // This is a string
         $myParts = $myVehicle->parts->pluck('name')->toArray();
-
 
         // Get all going persons with their vehicles
         $goingPersons = EventRsvp::where('event_id', $event->id)
@@ -331,7 +337,6 @@ class EventService
         $myModel = $myVehicle->model; // This is a string
         $myParts = $myVehicle->parts->pluck('name')->toArray();
 
-
         // Get all going persons with their vehicles
         $goingPersons = EventRsvp::where('event_id', $event->id)
             // ->where('status', 'going')
@@ -350,7 +355,6 @@ class EventService
             if (! $personVehicle) {
                 continue;
             }
-
 
             // Check matching parts
             foreach ($personVehicle->parts as $part) {
@@ -420,7 +424,7 @@ class EventService
     public function getBookmarkedEvents(User $user, int $perPage = 15): LengthAwarePaginator
     {
         return Event::query()
-            ->whereHas('bookmarks', fn($q) => $q->where('user_id', $user->id))
+            ->whereHas('bookmarks', fn ($q) => $q->where('user_id', $user->id))
             ->with(['media', 'user', 'club'])
             ->latest('event_date')
             ->paginate($perPage);
