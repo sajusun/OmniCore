@@ -18,7 +18,7 @@ class SocialLoginController extends Controller
 {
     public array $select;
 
-    public function __construct( private readonly AppleIdentityTokenService $appleService)
+    public function __construct(private readonly AppleIdentityTokenService $appleService)
     {
         parent::__construct();
         $this->select = ['id', 'name', 'email', 'avatar'];
@@ -114,7 +114,7 @@ class SocialLoginController extends Controller
                 'name'             => $this->deriveAppleName($lookupEmail),
                 'avatar'           => null,
                 'password'         => bcrypt($payload['apple_id']),
-                'status'=>'active',
+                'status' => 'active',
             ]
         );
 
@@ -123,15 +123,16 @@ class SocialLoginController extends Controller
         Auth::login($user);
         $jwtToken = auth('api')->login($user);
 
-        $response = [
-            'id'       => $user->id,
-            'name'     => $user->name,
-            'email'    => $user->email,
-            'avatar'   => $user->avatar,
-            'token'    => $jwtToken,
-        ];
+        $data = User::select($this->select)->find($user->id);
 
-        return $this->success($response, 'Successfully Logged In', 200);
+        return response()->json([
+            'status' => true,
+            'message' => 'User logged in successfully.',
+            'code' => 200,
+            'token_type' => 'bearer',
+            'token' => $jwtToken,
+            'data' => $data,
+        ], 200);
     }
 
     private function deriveAppleName(string $email): string
