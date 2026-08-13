@@ -10,8 +10,12 @@ use App\Services\UserService;
 use App\Services\EventService;
 use App\Services\VehicleService;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ClubResource;
+use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\EventResource;
+use App\Http\Resources\VehicleResource;
 
 class UserController extends Controller
 {
@@ -55,17 +59,20 @@ class UserController extends Controller
     public function publicProfile(User $user)
     {
 
-        $events=$user->events()->where('status','published')->where('is_public', 1)->get();
-        $vehicles=$user->vehicles()->where('status','public')->get();
-        $clubs= $user->clubs()->where('status','published')->get();
+        $events = $user->events()->where('status', 'published')->where('is_public', 1)->get();
+        $vehicles = $user->vehicles()->where('status', 'public')->get();
+        $clubs = $user->clubs()->where('status', 'published')->get();
+        $posts = $user->posts()->where('status', 'published')->where('visibility', 'public')->get();
         $data = [
-            'user'=> $user,
-            'events' => $events,
-            'vehicles' =>$vehicles,
-            'clubs'=> $clubs,
-            'event_count'=>$events->count(),
-            'vehicle_count'=>$vehicles->count(),
-            'club_count'=>$clubs->count(),
+            'user' => new UserResource($user),
+            'events' => EventResource::collection($events),
+            'vehicles' => VehicleResource::collection($vehicles),
+            'clubs' => ClubResource::collection($clubs),
+            'posts'=> PostResource::collection($posts),
+            'event_count' => $events->count(),
+            'vehicle_count' => $vehicles->count(),
+            'club_count' => $clubs->count(),
+            'post_count'=> $posts->count(),
         ];
 
         return $this->success(data: $data, message: "profile data fetch success", status: 200);
