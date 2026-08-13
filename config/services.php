@@ -40,6 +40,26 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
+        'apple' => [
+        // The App ID / Service ID registered in the Apple Developer Portal.
+        // Used as the `aud` claim in the identity token.
+        'client_id'        => env('APPLE_CLIENT_ID'),
+
+        // Legacy Socialite key (kept for compatibility, not used by AppleIdentityTokenService).
+        'client_secret'    => env('APPLE_CLIENT_SECRET'),
+        'redirect'         => env('APPLE_REDIRECT_URI'),
+
+        // Apple Developer Portal values (needed if you later generate client secrets).
+        'team_id'          => env('APPLE_TEAM_ID'),
+        'key_id'           => env('APPLE_KEY_ID', '8ZNZ6UJ29L'),
+
+        // Absolute path to the downloaded .p8 private key file.
+        'private_key_path' => env(
+            'APPLE_PRIVATE_KEY_PATH',
+            storage_path('app/private/AuthKey_8ZNZ6UJ29L.p8')
+        ),
+    ],
+    
     'revenuecat' => [
         'webhook_secret' => env('REVENUECAT_WEBHOOK_SECRET'),
     ],
