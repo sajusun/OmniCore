@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Helpers\Helper;
-use App\Http\Controllers\Controller;
-use App\Mail\NewSignUpMail;
-use App\Models\User;
 use Exception;
+use App\Models\User;
+use App\Helpers\Helper;
+use App\Mail\NewSignUpMail;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
+use App\Services\AppleIdentityTokenService;
 
 class SocialLoginController extends Controller
 {
     public array $select;
 
-    public function __construct()
+    public function __construct( private readonly AppleIdentityTokenService $appleService)
     {
         parent::__construct();
         $this->select = ['id', 'name', 'email', 'avatar'];
@@ -44,6 +45,11 @@ class SocialLoginController extends Controller
 
         try {
             $provider = $request->provider;
+
+            if ($provider === 'apple') {
+                // dd($request->email);
+                return $this->handleAppleLogin($request->token);
+            }
             $socialUser = Socialite::driver($provider)->stateless()->userFromToken($request->token);
 
             if ($socialUser) {
@@ -60,7 +66,7 @@ class SocialLoginController extends Controller
                         'email' => $socialUser->getEmail(),
                         'password' => bcrypt($password),
                         'avatar' => $socialUser->getAvatar(),
-                        'status' => true,
+                        'status' => 'active',
                     ]);
 
                     // Mail::to(config('app.support_mail'))->send(new NewSignUpMail($user, $provider));
@@ -85,5 +91,59 @@ class SocialLoginController extends Controller
         } catch (Exception $e) {
             return Helper::jsonResponse(false, 'Something went wrong', 500, ['error' => $e->getMessage()]);
         }
+    }
+
+
+    private function handleAppleLogin(string $identityToken)
+    {
+        $payload = $this->appleService->verify($identityToken);
+
+        $email = $payload['email'];
+
+        // Apple hides the email after first sign-in; fall back to apple_id-based
+        // synthetic address so updateOrCreate can always match on a stable key.
+        $lookupEmail = $email ?? ($payload['apple_id'] . '@privaterelay.appleid.com');
+
+        do {
+            $slug = "user_" . rand(1000000000, 9999999999);
+        } while (User::where('slug', $slug)->exists());
+
+        $user = User::updateOrCreate(
+            ['email' => $lookupEmail],
+            [
+                'name'             => $this->deriveAppleName($lookupEmail),
+                'avatar'           => null,
+                'password'         => bcrypt($payload['apple_id']),
+                'status'=>'active',
+            ]
+        );
+
+        $user->update(['is_social_logged' => true]);
+
+        Auth::login($user);
+        $jwtToken = auth('api')->login($user);
+
+        $response = [
+            'id'       => $user->id,
+            'name'     => $user->name,
+            'email'    => $user->email,
+            'avatar'   => $user->avatar,
+            'token'    => $jwtToken,
+        ];
+
+        return $this->success($response, 'Successfully Logged In', 200);
+    }
+
+    private function deriveAppleName(string $email): string
+    {
+        $local = explode('@', $email)[0] ?? 'User';
+
+        // Apple private-relay addresses look like random hex strings; use a
+        // generic label instead of surfacing the opaque identifier to the UI.
+        if (str_ends_with($email, '@privaterelay.appleid.com')) {
+            return 'Apple User';
+        }
+
+        return ucfirst($local);
     }
 }
