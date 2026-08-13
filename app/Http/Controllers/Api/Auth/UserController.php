@@ -5,19 +5,27 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Models\User;
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
+use App\Services\ClubService;
 use App\Services\UserService;
+use App\Services\EventService;
+use App\Services\VehicleService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
     public array $select;
 
     public User $user;
 
-    public function __construct(private UserService $userService)
-    {
+    public function __construct(
+        private UserService $userService,
+        private EventService $eventService,
+        private VehicleService $vehicleService,
+        private ClubService $clubService,
+    ) {
         parent::__construct();
         $this->user = auth('api')->user();
         $this->select = ['id', 'name', 'email', 'avatar', 'last_activity_at'];
@@ -26,22 +34,41 @@ class UserController extends Controller
     public function me()
     {
 
-        $vehicle=$this->user->vehicles()->count();
-        $post=$this->user->posts()->count();
-        $club=$this->user->clubs()->count();
-        $event=$this->user->events()->count();
-        $data=[
-            'vehicles'=>$vehicle,
-            'posts'=>$post,
-            'clubs'=>$club,
-            'events'=>$event
+        $vehicle = $this->user->vehicles()->count();
+        $post = $this->user->posts()->count();
+        $club = $this->user->clubs()->count();
+        $event = $this->user->events()->count();
+        $data = [
+            'vehicles' => $vehicle,
+            'posts' => $post,
+            'clubs' => $club,
+            'events' => $event
         ];
-        $this->user->info=$data;
+        $this->user->info = $data;
         return $this->success(
             message: 'User details fetched successfully',
             status: 200,
             data: new UserResource($this->user)
         );
+    }
+
+    public function publicProfile(User $user)
+    {
+
+        $events=$user->events()->where('status','published')->where('is_public', 1)->get();
+        $vehicles=$user->vehicles()->where('status','public')->get();
+        $clubs= $user->clubs()->where('status','published')->get();
+        $data = [
+            'user'=> $user,
+            'events' => $events,
+            'vehicles' =>$vehicles,
+            'clubs'=> $clubs,
+            'event_count'=>$events->count(),
+            'vehicle_count'=>$vehicles->count(),
+            'club_count'=>$clubs->count(),
+        ];
+
+        return $this->success(data: $data, message: "profile data fetch success", status: 200);
     }
 
     public function onboardingUpdate(Request $request)
@@ -73,7 +100,7 @@ class UserController extends Controller
         }
 
         $user->update([
-            'name' => $validatedData['first_name'].' '.$validatedData['last_name'] ?? $validatedData['name'],
+            'name' => $validatedData['first_name'] . ' ' . $validatedData['last_name'] ?? $validatedData['name'],
             'avatar' => $validatedData['avatar'],
         ]);
 

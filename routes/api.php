@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::get('/refresh-token', [LoginController::class, 'refreshToken']);
     Route::post('/logout', [LogoutController::class, 'logout']);
     Route::get('/me', [UserController::class, 'me']);
+    Route::get('/profile/{user}', [UserController::class, 'publicProfile']);
     Route::post('/update-profile', [UserController::class, 'updateProfile']);
     Route::post('/onboarding-fill', [UserController::class, 'onboardingUpdate']);
     Route::post('/update-avatar', [UserController::class, 'updateAvatar']);

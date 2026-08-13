@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\Models\Club;
-use App\Models\ClubMember;
 use App\Models\User;
+use App\Models\ClubMember;
+use Illuminate\Support\Facades\DB;
 use App\Modules\Media\Traits\HandlesMedia;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
 
 class ClubService
 {
@@ -58,7 +58,7 @@ class ClubService
                 'state' => $data['state'] ?? null,
                 'city' => $data['city'] ?? null,
                 'description' => $data['description'] ?? null,
-                'status' => $data['status'] ?? 'draft',
+                'status' => $data['status'] ?? 'published',
                 'created_by' => $data['created_by'] ?? auth('api')->id(),
             ]);
 
