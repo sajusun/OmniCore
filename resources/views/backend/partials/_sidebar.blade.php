@@ -34,6 +34,12 @@ use Illuminate\Support\Facades\Route;
                         <span class="side-menu__label">Users</span>
                     </a>
                 </li>
+                <li class="slide {{ request()->routeIs('admin.notifications.*') ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item {{ request()->routeIs('admin.notifications.*') ? 'active' : '' }}" href="{{ route('admin.notifications.index') }}">
+                        <i class="fa-solid fa-paper-plane side-menu__icon"></i>
+                        <span class="side-menu__label">Mail & Notification</span>
+                    </a>
+                </li>
                 <li class="slide {{ request()->routeIs('admin.events.*') ? 'is-expanded' : '' }}">
                     <a class="side-menu__item" data-bs-toggle="slide" href="{{ route('admin.events.index') }}">
                         <i class="fa-solid fa-users side-menu__icon"></i>

@@ -1,13 +1,15 @@
 <div class="mb-3">
+    @if(isset($label) && $label)
     <label for="{{ $name }}" class="form-label">
         {!! $label !!}
     </label>
+    @endif
 
     <div id="quill_editor_{{ $name }}"></div>
 
     <input type="hidden" id="{{ $name }}" name="{{ $name }}" value="{{ old($name, $value ?? '') }}">
 
-    {{ $slot }}
+    {{ $slot ?? '' }}
 
     @error($name)
     <div class="text-danger small mt-1">
@@ -17,22 +19,19 @@
 </div>
 
 @once
-
 @push('styles')
-
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
 <style>
     .ql-toolbar.ql-snow {
         border: 1px solid #ced4da;
-        border-radius: .375rem .375rem 0 0;
+        border-radius: 0 !important;
         background: #fff;
     }
 
     .ql-container.ql-snow {
         border: 1px solid #ced4da;
         border-top: 0;
-        border-radius: 0 0 .375rem .375rem;
+        border-radius: 0 !important;
         min-height: 220px;
     }
 
@@ -83,75 +82,49 @@
         height: auto;
     }
 </style>
-
 @endpush
 
 @push('scripts')
-
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+@endpush
+@endonce
 
-
+@push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const editor = document.querySelector('#quill_editor_{{ $name }}');
+        if (!editor) return;
 
-    const editor = document.querySelector('#quill_editor_{{ $name }}');
+        const hidden = document.getElementById('{{ $name }}');
 
-    if (!editor) return;
+        const quill = new Quill(editor, {
+            theme: 'snow',
+            placeholder: "{{ $placeholder ?? 'Enter Content' }}",
+            modules: {
+                toolbar: [
+                    [{ header: [1,2,3,false] }],
+                    ['bold','italic','underline','strike'],
+                    ['blockquote','code-block'],
+                    [{ list:'ordered' },{ list:'bullet' }],
+                    [{ color:[] },{ background:[] }],
+                    ['link','image'],
+                    ['clean']
+                ]
+            }
+        });
 
-    const hidden = document.getElementById('{{ $name }}');
-
-    const quill = new Quill(editor, {
-
-        theme: 'snow',
-
-        placeholder: "{{ $placeholder ?? 'Enter Content' }}",
-
-        modules: {
-
-            toolbar: [
-
-                [{ header: [1,2,3,false] }],
-
-                ['bold','italic','underline','strike'],
-
-                ['blockquote','code-block'],
-
-                [{ list:'ordered' },{ list:'bullet' }],
-
-                [{ color:[] },{ background:[] }],
-
-                ['link','image'],
-
-                ['clean']
-
-            ]
-
+        if (hidden.value) {
+            quill.clipboard.dangerouslyPasteHTML(0, hidden.value);
         }
-
-    });
-
-  if (hidden.value) {
-    quill.clipboard.dangerouslyPasteHTML(0, hidden.value);
-}
-
-    hidden.value = quill.root.innerHTML;
-
-    quill.on('text-change', function () {
 
         hidden.value = quill.root.innerHTML;
 
+        quill.on('text-change', function () {
+            hidden.value = quill.root.innerHTML;
+        });
+
+        window.quill_editors = window.quill_editors || {};
+        window.quill_editors['{{ $name }}'] = quill;
     });
-
-    document.addEventListener('shown.bs.modal', function () {
-
-        quill.resize;
-        quill.update();
-
-    });
-
-});
-
 </script>
-
 @endpush
-@endonce

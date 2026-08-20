@@ -9,6 +9,10 @@ class BroadcastService
 {
     public function send(Notification $notification): void
     {
-        broadcast(new NotificationCreated($notification))->toOthers();
+        try {
+            broadcast(new NotificationCreated($notification))->toOthers();
+        } catch (\Throwable $th) {
+            \Illuminate\Support\Facades\Log::warning('Broadcast notification skipped or failed: ' . $th->getMessage());
+        }
     }
 }

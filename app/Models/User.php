@@ -31,7 +31,7 @@ class User extends Authenticatable implements JWTSubject
         Notifiable,
         SoftDeletes;
 
-    protected $guard_name = ['api', 'web'];
+    protected $guard_name = 'web';
 
     public function getJWTIdentifier()
     {

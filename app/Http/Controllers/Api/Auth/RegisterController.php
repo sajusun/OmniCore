@@ -48,6 +48,9 @@ class RegisterController extends Controller
                 'last_activity_at' => now(),
             ]);
 
+            // Automatically assign 'user' role for API registration
+            $user->assignRole('user');
+
             // Send OTP via the Verification Module (stores in verifications table)
             $verifcation = $this->verificationService->send(user: $user, purpose: Verification::PURPOSE_EMAIL_VERIFICATION);
 

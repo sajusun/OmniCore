@@ -30,43 +30,33 @@ class UserSeeder extends Seeder
         Role::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        // ── Create permissions (web + api) from the Permission enum ──────────
-        $allPermissions = PermissionEnum::forSeeding();  // [ ['name' => '...', 'display_name' => '...'], ... ]
+        // ── Create permissions (single default guard) from the Permission enum ───
+        $allPermissions = PermissionEnum::forSeeding();
 
         foreach ($allPermissions as $pData) {
-            Permission::create(['name' => $pData['name'], 'display_name' => $pData['display_name'], 'guard_name' => 'web']);
-            Permission::create(['name' => $pData['name'], 'display_name' => $pData['display_name'], 'guard_name' => 'api']);
+            Permission::create([
+                'name' => $pData['name'],
+                'display_name' => $pData['display_name'],
+                'guard_name' => 'web'
+            ]);
         }
 
-        // ── Create roles (web + api) ──────────────────────────────────────────
-        $superAdminWeb = Role::create(['name' => 'super_admin', 'display_name' => 'Super Admin', 'guard_name' => 'web']);
-        $superAdminApi = Role::create(['name' => 'super_admin', 'display_name' => 'Super Admin', 'guard_name' => 'api']);
-
-        $adminWeb = Role::create(['name' => 'admin', 'display_name' => 'Admin',  'guard_name' => 'web']);
-        $adminApi = Role::create(['name' => 'admin', 'display_name' => 'Admin',  'guard_name' => 'api']);
-
-        $userWeb = Role::create(['name' => 'user', 'display_name' => 'User',  'guard_name' => 'web']);
-        $userApi = Role::create(['name' => 'user', 'display_name' => 'User',  'guard_name' => 'api']);
+        // ── Create unique single roles ─────────────────────────────────────────
+        $superAdminRole = Role::create(['name' => 'super_admin', 'display_name' => 'Super Admin', 'guard_name' => 'web']);
+        $adminRole      = Role::create(['name' => 'admin', 'display_name' => 'Admin', 'guard_name' => 'web']);
+        $userRole       = Role::create(['name' => 'user', 'display_name' => 'User', 'guard_name' => 'web']);
 
         // ── Assign permissions to roles ───────────────────────────────────────
-
-        // Super Admin: all permissions
         $webPermissions = Permission::where('guard_name', 'web')->get();
-        $apiPermissions = Permission::where('guard_name', 'api')->get();
 
-        $superAdminWeb->syncPermissions($webPermissions);
-        $superAdminApi->syncPermissions($apiPermissions);
+        // Super Admin & Admin get all permissions
+        $superAdminRole->syncPermissions($webPermissions);
+        $adminRole->syncPermissions($webPermissions);
 
-        // Admin: all permissions (same as Super Admin per requirements)
-        $adminWeb->syncPermissions($webPermissions);
-        $adminApi->syncPermissions($apiPermissions);
+        // User gets minimal dashboard access
+        $userRole->syncPermissions(Permission::where('guard_name', 'web')->where('name', 'dashboard.access')->get());
 
-        // User: only dashboard access (minimal)
-        $userWeb->syncPermissions(Permission::where('guard_name', 'web')->where('name', 'dashboard.access')->get());
-        $userApi->syncPermissions(Permission::where('guard_name', 'api')->where('name', 'dashboard.access')->get());
-
-        // ── Create users ──────────────────────────────────────────────────────
-
+        // ── Create users & assign roles ──────────────────────────────────────
         $superAdmin = User::firstOrCreate(
             ['email' => 'superadmin@example.com'],
             [
@@ -118,11 +108,6 @@ class UserSeeder extends Seeder
             $testUser->syncRoles(['user']);
         }
 
-        $this->command->info('✅ Permissions seeded: '.count($allPermissions).' permissions × 2 guards');
-        $this->command->info('✅ Roles: Super Admin, Admin (all permissions), User (dashboard.access only)');
-        $this->command->info('──────────────────────────────────────────────');
-        $this->command->info('  Super Admin : superadmin@example.com / password');
-        $this->command->info('  Admin       : admin@example.com / password');
-        $this->command->info('  User        : user@example.com / password');
+        $this->command->info('✅ Single Guard Permissions & Roles Seeded Successfully!');
     }
 }

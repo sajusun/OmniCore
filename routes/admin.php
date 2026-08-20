@@ -27,10 +27,13 @@ use App\Http\Controllers\Web\Backend\Pages\PageContentController;
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 Route::middleware('permission:dashboard.access')->get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-// ─── Bulk Notifications ───────────────────────────────────────────────────────
+// ─── Bulk Notifications & Mail ────────────────────────────────────────────────
 Route::middleware('permission:notification.send')->prefix('notifications')->name('notifications.')->group(function () {
-    Route::get('/create', [NotificationController::class, 'create'])->name('create');
-    Route::post('/store', [NotificationController::class, 'store'])->name('store');
+    Route::get('/', [NotificationController::class, 'index'])->name('index');
+    Route::get('/create', [NotificationController::class, 'index'])->name('create');
+    Route::post('/send-inapp', [NotificationController::class, 'sendInApp'])->name('send-inapp');
+    Route::post('/send-email', [NotificationController::class, 'sendEmail'])->name('send-email');
+    Route::post('/store', [NotificationController::class, 'sendInApp'])->name('store');
 });
 
 // ─── Support Tickets ──────────────────────────────────────────────────────────

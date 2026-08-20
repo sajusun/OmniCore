@@ -70,10 +70,9 @@ class AuthService
                 'last_activity_at' => now(),
             ]);
 
-            // 3. Assign role when provided (uses Spatie/Permission)
-            if (!empty($data['role'])) {
-                $this->assignRole($user, $data['role']);
-            }
+            // 3. Assign role (defaults to 'user' if not specified)
+            $roleToAssign = !empty($data['role']) ? $data['role'] : 'user';
+            $this->assignRole($user, $roleToAssign);
 
             // 4. Send email verification (OTP by default, or 'token')
             $verificationType = $data['verification_type'] ?? 'otp';
