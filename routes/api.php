@@ -1,33 +1,33 @@
 <?php
 
 use App\Events\TestBroadcastEvent;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Api\Auth\LogoutController;
+use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\Auth\SocialLoginController;
+use App\Http\Controllers\Api\Auth\UserController;
+use App\Http\Controllers\Api\Chat\BlockController;
+use App\Http\Controllers\Api\Chat\ChatRoomController;
+use App\Http\Controllers\Api\Chat\ChatSettingController;
+use App\Http\Controllers\Api\Chat\MessageController;
+use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\FirebaseTokenController;
 use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\FriendController;
-use App\Http\Controllers\Api\ContactController;
-use App\Http\Controllers\Api\Auth\UserController;
-use App\Http\Controllers\Api\Auth\LoginController;
-use App\Http\Controllers\Api\Chat\BlockController;
-use App\Http\Controllers\Api\NewsletterController;
-use App\Http\Controllers\Api\Auth\LogoutController;
-use App\Http\Controllers\Api\Chat\MessageController;
+use App\Http\Controllers\Api\Frontend\ClubController;
 use App\Http\Controllers\Api\Frontend\CmsController;
+use App\Http\Controllers\Api\Frontend\EventController;
+use App\Http\Controllers\Api\Frontend\PostCommentController;
+use App\Http\Controllers\Api\Frontend\PostController;
+use App\Http\Controllers\Api\Frontend\VehicleController;
+use App\Http\Controllers\Api\NewsletterController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\VerificationController;
-use App\Http\Controllers\Api\Auth\RegisterController;
-use App\Http\Controllers\Api\Chat\ChatRoomController;
-use App\Http\Controllers\Api\FirebaseTokenController;
-use App\Http\Controllers\Api\Frontend\ClubController;
-use App\Http\Controllers\Api\Frontend\PostController;
-use App\Http\Controllers\Api\Frontend\EventController;
-use App\Http\Controllers\Api\Auth\SocialLoginController;
-use App\Http\Controllers\Api\Chat\ChatSettingController;
-use App\Http\Controllers\Api\Frontend\VehicleController;
-use App\Http\Controllers\Api\Auth\ResetPasswordController;
-use App\Http\Controllers\Api\Frontend\PostCommentController;
 use App\Http\Controllers\Api\Webhooks\RevenueCatWebhookController;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'guest:api'], function ($router) {
 
@@ -55,10 +55,10 @@ Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::post('/update-password', [UserController::class, 'updatePassword']);
     Route::delete('/profile/delete', [UserController::class, 'destroy']);
 });
-Route::get('/header-test', function (Illuminate\Http\Request $request) {
+Route::get('/header-test', function (Request $request) {
     return response()->json([
         'authorization' => $request->header('Authorization'),
-        'bearer'       => $request->bearerToken(),
+        'bearer' => $request->bearerToken(),
     ]);
 });
 
@@ -133,6 +133,7 @@ Route::middleware('auth:api')->group(function () {
 
     // RSVP
     Route::post('/events/{event}/rsvp', [EventController::class, 'rsvp']);
+    Route::get('/events/{event}/attendee-list', [EventController::class, 'attendeeList']);
     Route::delete('/events/{event}/rsvp', [EventController::class, 'cancelRsvp']);
     Route::get('/events/{event}/rsvps', [EventController::class, 'rsvps']);
 
@@ -260,11 +261,10 @@ Route::middleware('auth:api')->prefix('chat')->group(function () {
 
 Route::post('app/webhooks/revenuecat', RevenueCatWebhookController::class);
 
-
-
 //  for broadcast testing
 Route::post('/broadcast-test', function () {
     event(new TestBroadcastEvent('Hello from Laravel Reverb 🚀'));
+
     return 'Broadcast Sent!';
 });
 Route::post('/notification-test/{user}', [NotificationController::class, 'sendTestNotification']);

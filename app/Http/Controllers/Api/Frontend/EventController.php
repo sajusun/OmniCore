@@ -215,6 +215,30 @@ class EventController extends Controller
         );
     }
 
+    public function attendeeList(Event $event, Request $request): JsonResponse
+    {
+        $status = $request->query('status'); // 'going' or 'interested' or null
+        $perPage = (int) $request->query('per_page', 100);
+
+        $rsvps = $this->eventService->rsvps($event, $status, $perPage);
+
+        return $this->response(
+            status: true,
+            message: 'attendee list fetched successfully',
+            code: 200,
+            data: $rsvps->map(fn ($item) => [
+                'user_id' => $item->user_id,
+                'name' => $item->user?->name,
+                'avatar' => $item->user?->avatar ?? null,
+                'status' => $item->status,
+
+                'created_at' => $item->created_at?->toIso8601String(),
+            ]),
+            paginate: true,
+            paginateData: $rsvps
+        );
+    }
+
     /**
      * Get event metadata (Event Types & Vehicle Requirements list).
      */
