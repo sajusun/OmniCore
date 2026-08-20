@@ -111,7 +111,7 @@
         </div>
         <!-- ROW-1 END -->
 
-        <!-- ROW-2: Secondary Stat Cards (Clubs, RSVP, Active Users) -->
+        <!-- ROW-2: Secondary Stat Cards (Clubs, Vehicles, Published Posts, Active Users) -->
         <div class="row">
 
             {{-- Total Clubs --}}
@@ -134,19 +134,19 @@
                 </div>
             </div>
 
-            {{-- Going RSVPs --}}
+            {{-- Total Vehicles --}}
             <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
                 <div class="card overflow-hidden">
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <h3 class="mb-2 fw-semibold">{{ number_format($totalGoing ?? 0) }}</h3>
-                                <p class="text-muted fs-13 mb-0">Going RSVPs</p>
-                                <small class="text-muted">{{ number_format($totalInterested ?? 0) }} interested</small>
+                                <h3 class="mb-2 fw-semibold">{{ number_format($totalVehicles ?? 0) }}</h3>
+                                <p class="text-muted fs-13 mb-0">Total Vehicles</p>
+                                <small class="text-muted">Registered in Garages</small>
                             </div>
                             <div class="col col-auto top-icn dash">
-                                <div class="counter-icon dash ms-auto" style="background: #f97316!important;">
-                                    <i class="fe fe-check-circle text-white"></i>
+                                <div class="counter-icon dash ms-auto" style="background: #f59e0b!important;">
+                                    <i class="fe fe-truck text-white"></i>
                                 </div>
                             </div>
                         </div>
@@ -197,13 +197,15 @@
         </div>
         <!-- ROW-2 END -->
 
-        <!-- CHARTS ROW -->
-        {{-- <div class="row">
-            <!-- Monthly Growth Overview (Line/Area Chart) -->
+        <!-- CHARTS ROW 1: Monthly Growth & Subscription Ratio -->
+        <div class="row">
+            <!-- Monthly Growth & Subscriptions Overview (Area Chart) -->
             <div class="col-lg-12 col-xl-8">
-                <div class="card">
-                    <div class="card-header border-bottom">
-                        <h4 class="card-title fw-semibold mb-0">Monthly Activity Growth</h4>
+                <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
+                    <div class="card-header border-bottom bg-transparent py-3">
+                        <h5 class="card-title fw-bold mb-0 text-dark">
+                            <i class="fe fe-trending-up me-2" style="color: #8fbd56;"></i> Monthly Activity & Subscription Growth
+                        </h5>
                     </div>
                     <div class="card-body">
                         <x-chart 
@@ -212,33 +214,81 @@
                             chartId="monthly-growth-chart"
                             :categories="$signupCategories"
                             :series="[
-                                ['name' => 'Users', 'data' => $signupData],
-                                ['name' => 'Events', 'data' => $eventChartData],
-                                ['name' => 'Posts', 'data' => $postChartData]
+                                ['name' => 'New Users', 'data' => $signupData],
+                                ['name' => 'Paid Subscriptions', 'data' => $subscriptionChartData],
+                                ['name' => 'Events Created', 'data' => $eventChartData],
+                                ['name' => 'Posts Published', 'data' => $postChartData]
                             ]" 
                         />
                     </div>
                 </div>
             </div>
 
-            <-- Active vs Offline Users Distribution (Pie / Donut Chart) -->
+            <!-- Subscription Ratio (Donut Chart) -->
             <div class="col-lg-12 col-xl-4">
-                <div class="card">
-                    <div class="card-header border-bottom">
-                        <h4 class="card-title fw-semibold mb-0">User Status Overview</h4>
+                <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
+                    <div class="card-header border-bottom bg-transparent py-3">
+                        <h5 class="card-title fw-bold mb-0 text-dark">
+                            <i class="fe fe-pie-chart me-2" style="color: #10b981;"></i> Subscription Plan Ratio
+                        </h5>
                     </div>
                     <div class="card-body">
                         <x-chart 
                             type="donut" 
                             :height="320"
-                            chartId="user-status-chart"
-                            :categories="['Active Users', 'Offline Users']"
-                            :series="[(int)$activeCount, (int)$inactiveCount]" 
+                            chartId="subscription-ratio-chart"
+                            :categories="['Subscribed Users', 'Free Plan Users']"
+                            :series="[(int)$totalSubscribedUsers, (int)$freeUsersCount]" 
                         />
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
+
+        <!-- CHARTS ROW 2: Resource Breakdown & Active Status -->
+        <div class="row">
+            <!-- System Resources Breakdown (Bar Chart) -->
+            <div class="col-lg-12 col-xl-6">
+                <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
+                    <div class="card-header border-bottom bg-transparent py-3">
+                        <h5 class="card-title fw-bold mb-0 text-dark">
+                            <i class="fe fe-bar-chart-2 me-2" style="color: #4f46e5;"></i> System Resources Distribution
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <x-chart 
+                            type="bar" 
+                            :height="300"
+                            chartId="system-resources-chart"
+                            :categories="['Users', 'Posts', 'Events', 'Clubs', 'Vehicles']"
+                            :series="[
+                                ['name' => 'Total Count', 'data' => [(int)$totalUsers, (int)$totalPosts, (int)$totalEvents, (int)$totalClubs, (int)$totalVehicles]]
+                            ]" 
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Verification Status Overview (Donut Chart) -->
+            <div class="col-lg-12 col-xl-6">
+                <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
+                    <div class="card-header border-bottom bg-transparent py-3">
+                        <h5 class="card-title fw-bold mb-0 text-dark">
+                            <i class="fe fe-check-circle me-2" style="color: #10b981;"></i> User Account Verification Status
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <x-chart 
+                            type="donut" 
+                            :height="300"
+                            chartId="user-verification-chart"
+                            :categories="['Email Verified Users', 'Unverified Users']"
+                            :series="[(int)$verifiedUsers, (int)$unverifiedUsersCount]" 
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- CHARTS ROW END -->
 
         <!-- ROW-3: Recent Users + Recent Events -->
@@ -246,7 +296,7 @@
 
             {{-- Recent Registered Users --}}
             <div class="col-sm-12 col-md-12 col-xl-6">
-                <div class="card overflow-hidden">
+                <div class="card overflow-hidden border-0 shadow-sm mb-4" style="border-radius: 0;">
                     <div class="card-header border-bottom d-flex align-items-center justify-content-between">
                         <h4 class="card-title fw-semibold mb-0">Recent Registered Users</h4>
                         <span class="badge bg-primary-transparent text-primary fs-12">Last 5</span>
@@ -254,7 +304,7 @@
                     <div class="card-body p-0 customers mt-1">
                         <div class="list-group py-1">
                             @forelse ($latestpostUsers as $postUser)
-                                <a href="javascript:void(0);" class="border-0">
+                                <a href="{{ route('admin.users.show', $postUser->id) }}" class="border-0">
                                     <div class="list-group-item border-0">
                                         <div class="media mt-0 align-items-center">
                                             <div class="transaction-icon bg-primary-transparent text-primary brround me-3">
@@ -284,7 +334,7 @@
 
             {{-- Recent Events --}}
             <div class="col-sm-12 col-md-12 col-xl-6">
-                <div class="card overflow-hidden">
+                <div class="card overflow-hidden border-0 shadow-sm mb-4" style="border-radius: 0;">
                     <div class="card-header border-bottom d-flex align-items-center justify-content-between">
                         <h4 class="card-title fw-semibold mb-0">Recent Events</h4>
                         <span class="badge bg-warning-transparent text-warning fs-12">Last 5</span>
@@ -337,7 +387,7 @@
         <div class="row">
             {{-- Recent Posts --}}
             <div class="col-sm-12 col-md-12 col-xl-12">
-                <div class="card overflow-hidden">
+                <div class="card overflow-hidden border-0 shadow-sm mb-4" style="border-radius: 0;">
                     <div class="card-header border-bottom d-flex align-items-center justify-content-between">
                         <h4 class="card-title fw-semibold mb-0">Recent Posts</h4>
                         <span class="badge bg-info-transparent text-info fs-12">Last 5</span>
@@ -361,7 +411,8 @@
                                                         &bull; {{ $post->created_at->diffForHumans() }}
                                                     </p>
                                                 </div>
-                                                <span class="ms-auto">
+                                                <span class="ms-auto d-flex align-items-center gap-2">
+                                                    <a href="{{ route('admin.posts.show', $post->id) }}" class="btn btn-sm btn-outline-info" title="View Details"><i class="fa fa-eye"></i></a>
                                                     @if($post->status === 'published')
                                                         <span class="badge bg-success-transparent text-success fs-11">Published</span>
                                                     @else

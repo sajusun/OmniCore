@@ -104,6 +104,7 @@ class DashboardService
     {
         $categories = [];
         $userData   = [];
+        $subData    = [];
         $eventData  = [];
         $postData   = [];
 
@@ -112,6 +113,10 @@ class DashboardService
             $categories[] = $month->format('M Y');
 
             $userData[]  = User::whereMonth('created_at', $month->month)
+                ->whereYear('created_at', $month->year)
+                ->count();
+            $subData[]   = User::where('is_subscribed', true)
+                ->whereMonth('created_at', $month->month)
                 ->whereYear('created_at', $month->year)
                 ->count();
             $eventData[] = Event::whereMonth('created_at', $month->month)
@@ -123,11 +128,12 @@ class DashboardService
         }
 
         return [
-            'categories' => $categories,
-            'data'       => $userData,       // backward-compat (signup line)
-            'users'      => $userData,
-            'events'     => $eventData,
-            'posts'      => $postData,
+            'categories'    => $categories,
+            'data'          => $userData,
+            'users'         => $userData,
+            'subscriptions' => $subData,
+            'events'        => $eventData,
+            'posts'         => $postData,
         ];
     }
 
@@ -140,15 +146,11 @@ class DashboardService
             'events'          => $this->getEventStats(),
             'posts'           => $this->getPostStats(),
             'clubs'           => $this->getClubStats(),
+            'vehicles'        => ['total_vehicles' => \App\Models\Vehicle::count()],
             'recent_users'    => $this->getRecentUsers(5),
             'recent_events'   => $this->getRecentEvents(5),
             'recent_posts'    => $this->getRecentPosts(5),
             'monthly_signups' => $this->getMonthlySignups(),
-            // 'system'          => [
-            //     'php_version'     => PHP_VERSION,
-            //     'laravel_version' => app()->version(),
-            //     'env'             => config('app.env'),
-            // ],
         ];
     }
 }

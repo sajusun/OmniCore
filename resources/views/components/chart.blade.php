@@ -73,7 +73,11 @@
                             theme: {
                                 mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light'
                             },
-                            colors: ['#0d6efd', '#198754', '#ffc107', '#dc3545', '#6f42c1', '#0dcaf0'],
+                            stroke: {
+                                curve: 'smooth',
+                                width: '{{ $type }}' === 'area' || '{{ $type }}' === 'line' ? 3 : 1
+                            },
+                            colors: ['#8fbd56', '#4f46e5', '#10b981', '#f59e0b', '#06b6d4', '#ec4899'],
                             dataLabels: {
                                 enabled: false
                             }

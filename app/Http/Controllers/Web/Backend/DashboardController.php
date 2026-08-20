@@ -38,6 +38,7 @@ class DashboardController extends Controller
         $newPostsMonth       = $metrics['posts']['new_posts_month'];
         $totalClubs          = $metrics['clubs']['total_clubs'];
         $totalClubMembers    = $metrics['clubs']['total_members'];
+        $totalVehicles       = $metrics['vehicles']['total_vehicles'] ?? 0;
 
         // ── Recent Lists ─────────────────────────────────────────────────────
         $latestpostUsers     = $metrics['recent_users'];
@@ -45,14 +46,17 @@ class DashboardController extends Controller
         $recentPosts         = $metrics['recent_posts'];
 
         // ── Chart Data ───────────────────────────────────────────────────────
-        $signupCategories    = $metrics['monthly_signups']['categories'];
-        $signupData          = $metrics['monthly_signups']['users'];
-        $eventChartData      = $metrics['monthly_signups']['events'];
-        $postChartData       = $metrics['monthly_signups']['posts'];
+        $signupCategories       = $metrics['monthly_signups']['categories'];
+        $signupData             = $metrics['monthly_signups']['users'];
+        $subscriptionChartData  = $metrics['monthly_signups']['subscriptions'];
+        $eventChartData         = $metrics['monthly_signups']['events'];
+        $postChartData          = $metrics['monthly_signups']['posts'];
 
-        // ── Pie Chart (active vs inactive) ───────────────────────────────────
-        $activeCount         = $activeUsers;
-        $inactiveCount       = max(0, $totalUsers - $activeCount);
+        // ── Pie / Donut Chart Datasets ────────────────────────────────────────
+        $activeCount            = $activeUsers;
+        $inactiveCount          = max(0, $totalUsers - $activeCount);
+        $freeUsersCount         = max(0, $totalUsers - $totalSubscribedUsers);
+        $unverifiedUsersCount   = max(0, $totalUsers - $verifiedUsers);
 
         // ── Activity Log ─────────────────────────────────────────────────────
         $recentActivities    = ActivityLog::latest()->take(5)->get();
@@ -63,6 +67,7 @@ class DashboardController extends Controller
             'totalSubscribedUsers',
             'totalEvents',
             'totalPosts',
+            'totalVehicles',
             // secondary
             'newUsers',
             'verifiedUsers',
@@ -74,6 +79,8 @@ class DashboardController extends Controller
             'newPostsMonth',
             'totalClubs',
             'totalClubMembers',
+            'freeUsersCount',
+            'unverifiedUsersCount',
             // recent lists
             'latestpostUsers',
             'recentEvents',
@@ -82,6 +89,7 @@ class DashboardController extends Controller
             'metrics',
             'signupCategories',
             'signupData',
+            'subscriptionChartData',
             'eventChartData',
             'postChartData',
             'activeCount',
