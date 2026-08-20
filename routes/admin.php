@@ -9,6 +9,9 @@ use App\Http\Controllers\Web\Backend\DashboardController;
 use App\Http\Controllers\Web\Backend\Access\RoleController;
 use App\Http\Controllers\Web\Backend\Access\UserController;
 use App\Http\Controllers\Web\Backend\Event\EventController;
+use App\Http\Controllers\Web\Backend\Post\PostController;
+use App\Http\Controllers\Web\Backend\Club\ClubController;
+use App\Http\Controllers\Web\Backend\Vehicle\VehicleController;
 use App\Http\Controllers\Web\Backend\Access\AdminController;
 use App\Http\Controllers\Web\Backend\NotificationController;
 use App\Http\Controllers\Web\Backend\Settings\ProfileController;
@@ -49,6 +52,7 @@ Route::prefix('users')->name('users.')->group(function () {
     Route::get('/', [UserController::class, 'index'])->middleware('permission:user.list')->name('index');
     Route::get('/create', [UserController::class, 'create'])->middleware('permission:user.create')->name('create');
     Route::post('/store', [UserController::class, 'store'])->middleware('permission:user.create')->name('store');
+    Route::get('/{user}', [UserController::class, 'show'])->middleware('permission:user.list')->name('show');
     Route::get('/{user}/edit', [UserController::class, 'edit'])->middleware('permission:user.edit')->name('edit');
     Route::put('/{user}/update', [UserController::class, 'update'])->middleware('permission:user.edit')->name('update');
     Route::delete('/{user}/destroy', [UserController::class, 'destroy'])->middleware('permission:user.delete')->name('destroy');
@@ -101,6 +105,24 @@ Route::prefix('events')->name('events.')->group(function () {
     Route::put('/{event}/update', [EventController::class, 'update'])->name('update');
     Route::delete('/{event}/destroy', [EventController::class, 'destroy'])->name('destroy');
     Route::get('/status/{event_id}', [EventController::class, 'status'])->name('status');
+});
+
+Route::prefix('posts')->name('posts.')->group(function () {
+    Route::get('/', [PostController::class, 'index'])->name('index');
+    Route::get('/{post}', [PostController::class, 'show'])->name('show');
+    Route::delete('/{post}/destroy', [PostController::class, 'destroy'])->name('destroy');
+});
+
+Route::prefix('clubs')->name('clubs.')->group(function () {
+    Route::get('/', [ClubController::class, 'index'])->name('index');
+    Route::get('/{club}', [ClubController::class, 'show'])->name('show');
+    Route::delete('/{club}/destroy', [ClubController::class, 'destroy'])->name('destroy');
+});
+
+Route::prefix('vehicles')->name('vehicles.')->group(function () {
+    Route::get('/', [VehicleController::class, 'index'])->name('index');
+    Route::get('/{vehicle}', [VehicleController::class, 'show'])->name('show');
+    Route::delete('/{vehicle}/destroy', [VehicleController::class, 'destroy'])->name('destroy');
 });
 
 // ─── General Settings ─────────────────────────────────────────────────────────

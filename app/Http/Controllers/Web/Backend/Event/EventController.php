@@ -18,20 +18,15 @@ class EventController extends Controller
 
     public function index(Request $request)
     {
-        $filters = $request->only([
-            'event_type',
-            'club_id',
-            'status',
-            'is_public',
-            'location',
-            'user_id',
-            'upcoming',
-            'search',
-        ]);
+        $userId = $request->query('user') ?? $request->query('user_id');
+        $selectedUser = $userId ? User::find($userId) : null;
 
         if ($request->ajax()) {
-
-            $data = Event::with(['media', 'user', 'club'])->latest('event_date');
+            $data = Event::with(['media', 'user', 'club'])
+                ->when($userId, function ($query, $userId) {
+                    return $query->where('user_id', $userId);
+                })
+                ->latest('event_date');
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -55,14 +50,14 @@ class EventController extends Controller
                 ->addColumn('action', function ($row) {
                     return '<div class="flex items-center gap-1.5">
                                 <a href="' . route('admin.events.edit', $row->id) . '" class="inline-flex items-center justify-center p-2 text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors duration-150" title="Edit"><i class="fa fa-edit text-sm leading-none"></i></a>
-                                <button type="button" onclick="confirmDeleteUser(' . $row->id . ', \'' . addslashes($row->name) . '\')" class="inline-flex items-center justify-center p-2 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors duration-150" title="Delete"><i class="fa fa-trash text-sm leading-none"></i></button>
+                                <button type="button" onclick="confirmDeleteUser(' . $row->id . ', \'' . addslashes($row->name ?? $row->title) . '\')" class="inline-flex items-center justify-center p-2 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors duration-150" title="Delete"><i class="fa fa-trash text-sm leading-none"></i></button>
                             </div>';
                 })
                 ->rawColumns(['status', 'user', 'action'])
                 ->make(true);
         }
 
-        return view('backend.events.index');
+        return view('backend.events.index', compact('selectedUser', 'userId'));
     }
 
 

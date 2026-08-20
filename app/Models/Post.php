@@ -23,6 +23,13 @@ class Post extends Model
         ];
     }
 
+    public function scopeFilterByUser($query, $userId = null)
+    {
+        return $query->when($userId, function ($q, $userId) {
+            return $q->where('user_id', $userId);
+        });
+    }
+
 
     protected static function booted(): void
     {

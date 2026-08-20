@@ -21,13 +21,13 @@ class PostService
 {
     use HandlesMedia;
 
-    private User $user;
+    private ?User $user = null;
 
-    private Post $post;
+    private ?Post $post = null;
 
     public function __construct()
     {
-        $this->user = auth('api')->user();
+        $this->user = auth('api')->user() ?? auth()->user();
     }
 
     public function index(): LengthAwarePaginator
@@ -36,6 +36,20 @@ class PostService
             ->with(['user', 'media', 'sharedPost.user', 'sharedPost.media'])
             ->withCount(['likes', 'comments', 'shares', 'views'])
             ->where('user_id', auth('api')->id())->latest()->paginate(15);
+    }
+
+    public function getPostsForAdmin(array $filters = [])
+    {
+        $userId = $filters['user_id'] ?? $filters['user'] ?? null;
+
+        return Post::query()
+            ->with(['user', 'media', 'sharedPost.user', 'sharedPost.media'])
+            ->withCount(['likes', 'comments', 'shares', 'views'])
+            ->filterByUser($userId)
+            ->when(!empty($filters['status']), function ($q) use ($filters) {
+                return $q->where('status', $filters['status']);
+            })
+            ->latest();
     }
 
     public function show(Post $post): Post

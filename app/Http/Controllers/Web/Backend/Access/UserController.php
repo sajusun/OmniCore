@@ -34,9 +34,10 @@ class UserController extends Controller
                     return '<span class="badge bg-' . $status . '">' . ucfirst($row->status) . '</span>';
                 })
                 ->addColumn('action', function ($row) {
-                    return '<div class="flex items-center gap-1.5">
-                                <a href="' . route('admin.users.edit', $row->id) . '" class="inline-flex items-center justify-center p-2 text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors duration-150" title="Edit"><i class="fa fa-edit text-sm leading-none"></i></a>
-                                <button type="button" onclick="confirmDeleteUser(' . $row->id . ', \'' . addslashes($row->name) . '\')" class="inline-flex items-center justify-center p-2 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors duration-150" title="Delete"><i class="fa fa-trash text-sm leading-none"></i></button>
+                    return '<div class="d-flex align-items-center gap-1.5">
+                                <a href="' . route('admin.users.show', $row->id) . '" class="btn btn-sm btn-outline-primary" title="View Profile Hub"><i class="fa fa-eye"></i></a>
+                                <a href="' . route('admin.users.edit', $row->id) . '" class="btn btn-sm btn-outline-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                <button type="button" onclick="confirmDeleteUser(' . $row->id . ', \'' . addslashes($row->name) . '\')" class="btn btn-sm btn-outline-danger" title="Delete"><i class="fa fa-trash"></i></button>
                             </div>';
                 })
                 ->rawColumns(['status', 'action'])
@@ -91,9 +92,10 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::withCount(['events', 'clubs', 'vehicles'])->findOrFail($id);
+        $postsCount = \App\Models\Post::where('user_id', $user->id)->count();
 
-        return view('backend.access.user.show', compact('user'));
+        return view('backend.access.user.show', compact('user', 'postsCount'));
     }
 
     /**
