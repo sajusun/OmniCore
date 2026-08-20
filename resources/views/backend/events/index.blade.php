@@ -31,6 +31,7 @@
             ['data' => 'title', 'name' => 'title', 'title' => 'Title'],
             ['data' => 'event_type', 'name' => 'event_type', 'title' => 'Type'],
             ['data' => 'user', 'name' => 'user', 'title' => 'User'],
+            ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Created Date'],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status'],
             ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false]
         ]" />

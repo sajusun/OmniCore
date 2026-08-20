@@ -103,4 +103,9 @@ class NotificationService
     {
         return $this->notifications->delete($notificationId, $userId);
     }
+
+    public function deleteAll(int $userId): bool
+    {
+        return $this->notifications->deleteAll($userId);
+    }
 }

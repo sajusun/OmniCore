@@ -49,6 +49,64 @@
                             :file="$event->thumbnail_url ? $event->thumbnail_url : ''" />
                     </div>
 
+                    {{-- Event Media Gallery Section --}}
+                    <div class="w-full bg-white border-bottom border-light-subtle p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h4 class="h6 fw-bold text-dark mb-0">
+                                <i class="fa fa-images me-2 text-indigo"></i> Event Media Gallery
+                                <span class="badge bg-secondary ms-1">{{ $event->media ? $event->media->count() : 0 }} Files</span>
+                            </h4>
+                        </div>
+
+                        @if($event->media && $event->media->isNotEmpty())
+                            <div class="row g-3 mb-4">
+                                @foreach($event->media as $media)
+                                    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                        <div class="card h-100 border shadow-sm overflow-hidden text-center position-relative">
+                                            <span class="position-absolute top-0 start-0 m-1 badge bg-dark opacity-75" style="font-size: 0.65rem; z-index: 2;">
+                                                {{ ucfirst($media->collection_name ?? 'media') }}
+                                            </span>
+                                            
+                                            <div class="ratio ratio-1x1 bg-light border-bottom d-flex align-items-center justify-content-center overflow-hidden">
+                                                @if(str_contains($media->mime_type ?? '', 'image') || in_array(strtolower($media->extension ?? ''), ['jpg','jpeg','png','gif','webp','svg']))
+                                                    <img src="{{ $media->url }}" alt="{{ $media->original_name ?? 'Media' }}" class="img-fluid object-fit-cover w-100 h-100">
+                                                @elseif(str_contains($media->mime_type ?? '', 'video') || in_array(strtolower($media->extension ?? ''), ['mp4','webm','ogg']))
+                                                    <video src="{{ $media->url }}" class="w-100 h-100 object-fit-cover" muted></video>
+                                                @else
+                                                    <div class="d-flex align-items-center justify-content-center h-100 w-100 bg-light text-secondary">
+                                                        <i class="fa fa-file text-2xl"></i>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            
+                                            <div class="card-body p-2 d-flex flex-column justify-content-between">
+                                                <p class="card-text small text-truncate mb-1 fw-medium" title="{{ $media->original_name ?? $media->file_name }}">
+                                                    {{ $media->original_name ?? $media->file_name }}
+                                                </p>
+                                                <div class="d-flex align-items-center justify-content-between text-muted" style="font-size: 0.75rem;">
+                                                    <span>{{ $media->size ? number_format($media->size / 1024, 1) . ' KB' : '' }}</span>
+                                                    <a href="{{ $media->url }}" target="_blank" class="text-indigo text-decoration-none" title="View full media">
+                                                        <i class="fa fa-external-link-alt ms-1"></i> View
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="alert alert-light border py-2 px-3 mb-3 text-muted small" role="alert">
+                                <i class="fa fa-info-circle me-1"></i> No additional media files are attached to this event.
+                            </div>
+                        @endif
+
+                        <div class="mt-3">
+                            <label class="form-label fw-medium text-dark small">Add / Replace Gallery Images</label>
+                            <input type="file" name="images[]" multiple class="form-control" accept="image/*">
+                            <small class="text-muted" style="font-size: 0.75rem;">Select one or multiple image files to update the event's photo gallery.</small>
+                        </div>
+                    </div>
+
                     {{-- Card Body Inputs Grid --}}
                     <div class="card-body p-4">
                         <div class="row g-4">

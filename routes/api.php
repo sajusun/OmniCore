@@ -183,6 +183,8 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/unread-count', [NotificationController::class, 'unreadCount']);
         Route::post('/{notification}/read', [NotificationController::class, 'markAsRead']);
         Route::post('/read-all', [NotificationController::class, 'markAllAsRead']);
+        Route::delete('/destroy-all', [NotificationController::class, 'destroyAll']);
+        Route::delete('/delete-all', [NotificationController::class, 'destroyAll']);
         Route::delete('/{notification}', [NotificationController::class, 'destroy']);
     });
 });

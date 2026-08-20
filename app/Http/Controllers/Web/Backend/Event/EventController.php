@@ -44,6 +44,9 @@ class EventController extends Controller
                 ->addColumn('user', function ($row) {
                     return $row->user->name ?? 'N/A';
                 })
+                ->addColumn('created_at', function ($row) {
+                    return $row->created_at ? $row->created_at->format('d M, Y') : 'N/A';
+                })
                 ->addColumn('status', function ($row) {
                     $status = $row->status == 'Published' ? 'success' : 'danger';
 
@@ -65,6 +68,7 @@ class EventController extends Controller
 
     public function edit(Event $event)
     {
+        $event->load('media');
         $users = User::select('id', 'name', 'email')->get();
         $clubs = Club::select('id', 'name')->get();
         $eventTypes = EventTypeEnum::cases();

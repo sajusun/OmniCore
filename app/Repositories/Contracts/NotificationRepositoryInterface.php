@@ -23,5 +23,7 @@ interface NotificationRepositoryInterface
 
     public function delete(string $id, int $userId): bool;
 
+    public function deleteAll(int $userId): bool;
+
     public function latest(int $userId, int $limit = 10): Collection;
 }

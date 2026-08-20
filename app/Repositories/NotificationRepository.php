@@ -72,4 +72,11 @@ class NotificationRepository implements NotificationRepositoryInterface
             ->where('user_id', $userId)
             ->delete() > 0;
     }
+
+    public function deleteAll(int $userId): bool
+    {
+        Notification::where('user_id', $userId)->delete();
+
+        return true;
+    }
 }

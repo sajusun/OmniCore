@@ -97,6 +97,19 @@ class NotificationController extends Controller
         ]);
     }
 
+    /**
+     * Delete All Notifications
+     */
+    public function destroyAll()
+    {
+        $this->service->deleteAll(auth()->id());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'All notifications deleted successfully.',
+        ]);
+    }
+
 
     public function sendTestNotification(User $user, Request $request)
     {
