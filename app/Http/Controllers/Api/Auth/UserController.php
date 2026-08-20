@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Models\User;
 use App\Helpers\Helper;
-use Illuminate\Http\Request;
-use App\Services\ClubService;
-use App\Services\UserService;
-use App\Services\EventService;
-use App\Services\VehicleService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ClubResource;
+use App\Http\Resources\EventResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Resources\EventResource;
 use App\Http\Resources\VehicleResource;
+use App\Models\User;
+use App\Services\ClubService;
+use App\Services\EventService;
+use App\Services\UserService;
+use App\Services\VehicleService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-
     public array $select;
 
     public User $user;
@@ -46,9 +45,10 @@ class UserController extends Controller
             'vehicles' => $vehicle,
             'posts' => $post,
             'clubs' => $club,
-            'events' => $event
+            'events' => $event,
         ];
         $this->user->info = $data;
+
         return $this->success(
             message: 'User details fetched successfully',
             status: 200,
@@ -68,14 +68,14 @@ class UserController extends Controller
             'events' => EventResource::collection($events),
             'vehicles' => VehicleResource::collection($vehicles),
             'clubs' => ClubResource::collection($clubs),
-            'posts'=> PostResource::collection($posts),
+            'posts' => PostResource::collection($posts),
             'event_count' => $events->count(),
             'vehicle_count' => $vehicles->count(),
             'club_count' => $clubs->count(),
-            'post_count'=> $posts->count(),
+            'post_count' => $posts->count(),
         ];
 
-        return $this->success(data: $data, message: "profile data fetch success", status: 200);
+        return $this->success(data: $data, message: 'profile data fetch success', status: 200);
     }
 
     public function onboardingUpdate(Request $request)
@@ -107,7 +107,7 @@ class UserController extends Controller
         }
 
         $user->update([
-            'name' => $validatedData['first_name'] . ' ' . $validatedData['last_name'] ?? $validatedData['name'],
+            'name' => $validatedData['first_name'].' '.$validatedData['last_name'] ?? $validatedData['name'],
             'avatar' => $validatedData['avatar'],
         ]);
 
@@ -134,8 +134,11 @@ class UserController extends Controller
             'first_name' => 'nullable|string|max:100',
             'last_name' => 'nullable|string|max:100',
             'name' => 'nullable|string|max:100',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'phone' => 'nullable|string|numeric|max_digits:20',
+            'gender' => 'nullable|string|max:50',
             'password' => 'nullable|string|min:6|confirmed',
             'address' => 'nullable|string|max:255',
             'country' => 'nullable|string|max:255',
@@ -145,7 +148,6 @@ class UserController extends Controller
             'latitude' => 'nullable|string|max:255',
             'longitude' => 'nullable|string|max:255',
             'bio' => 'nullable|string',
-
         ]);
 
         if (! empty($validatedData['password'])) {
@@ -154,17 +156,38 @@ class UserController extends Controller
             unset($validatedData['password']);
         }
 
-        $user = $this->user;
+        $user = auth('api')->user() ?? $this->user;
+
+        // Automatically update name if first_name / last_name provided
+        if (!empty($validatedData['first_name']) || !empty($validatedData['last_name'])) {
+            $firstName = $validatedData['first_name'] ?? ($user->profile?->first_name ?? '');
+            $lastName = $validatedData['last_name'] ?? ($user->profile?->last_name ?? '');
+            $validatedData['name'] = trim($firstName . ' ' . $lastName);
+        }
 
         if ($request->hasFile('avatar')) {
             if (! empty($user->avatar)) {
                 Helper::fileDelete(public_path($user->getRawOriginal('avatar')));
             }
             $validatedData['avatar'] = Helper::fileUpload($request->file('avatar'), 'user/avatar');
-        } else {
-            $validatedData['avatar'] = $user->avatar;
         }
-        $data = [
+
+        $coverPhotoFile = $request->file('cover_photo') ?? $request->file('cover_image');
+        if ($coverPhotoFile) {
+            if (! empty($user->profile?->cover_photo)) {
+                Helper::fileDelete(public_path($user->profile->getRawOriginal('cover_photo')));
+            }
+            $validatedData['cover_photo'] = Helper::fileUpload($coverPhotoFile, 'user/cover_photo');
+        }
+
+        // Update User model fields
+        $userData = collect($validatedData)->only(['name', 'avatar', 'password'])->toArray();
+        if (!empty($userData)) {
+            $user->update($userData);
+        }
+
+        // Update Profile model fields
+        $profileFields = [
             'first_name',
             'last_name',
             'phone',
@@ -177,12 +200,14 @@ class UserController extends Controller
             'bio',
             'latitude',
             'longitude',
+            'cover_photo',
         ];
-        $data = collect($validatedData)
-            ->only($data)->toArray();
+        $profileData = collect($validatedData)->only($profileFields)->toArray();
+        if (!empty($profileData)) {
+            $user->profile()->updateOrCreate([], $profileData);
+        }
 
-        $user->update($validatedData);
-        $user->profile()->updateOrCreate([], $data);
+        $user->load('profile');
 
         return $this->success(message: 'Profile updated successfully', status: 200, data: new UserResource($user));
     }

@@ -20,6 +20,7 @@ class Profile extends Model
         'date_of_birth',
         'gender',
         'profile_photo',
+        'cover_photo',
         'bio',
         'country',
         'state',
@@ -35,6 +36,20 @@ class Profile extends Model
         'latitude' => 'float',
         'longitude' => 'float',
     ];
+
+    public function getCoverPhotoAttribute($value): ?string
+    {
+        if (empty($value)) {
+            return null;
+        }
+        if (filter_var($value, FILTER_VALIDATE_URL)) {
+            return $value;
+        }
+        if (request()->is('api/*')) {
+            return url($value);
+        }
+        return $value;
+    }
 
     public function user(): BelongsTo
     {
