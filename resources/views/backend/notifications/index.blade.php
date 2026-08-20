@@ -307,10 +307,10 @@
                                     <input type="text" name="title" id="inapp_title" class="form-control" placeholder="e.g. Special Announcement" required>
                                 </div>
 
-                                <div class="col-12 col-md-6">
+                                {{-- <div class="col-12 col-md-6">
                                     <label for="inapp_link" class="form-label fw-semibold text-dark">Action URL / Link <small class="text-muted">(Optional)</small></label>
                                     <input type="text" name="link" id="inapp_link" class="form-control" placeholder="e.g. https://example.com/events">
-                                </div>
+                                </div> --}}
 
                                 <div class="col-12">
                                     <label for="inapp_body" class="form-label fw-semibold text-dark">Notification Message Body <span class="text-danger">*</span></label>
