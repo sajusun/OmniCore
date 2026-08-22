@@ -19,26 +19,28 @@ class VehicleController extends Controller
             $data = Vehicle::with('user')
                 ->when($userId, function ($query, $userId) {
                     return $query->where('user_id', $userId);
-                })
-                ->latest();
+                });
 
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('name', function ($row) {
+                ->editColumn('name', function ($row) {
                     return $row->name ?: ($row->model ? ($row->year . ' ' . $row->model) : 'N/A');
                 })
-                ->addColumn('brand', function ($row) {
+                ->editColumn('brand', function ($row) {
                     $brandVal = is_object($row->brand) ? ($row->brand->value ?? $row->brand->name ?? '') : ($row->brand ?? '');
                     return !empty($brandVal) ? ucfirst((string) $brandVal) : 'N/A';
                 })
-                ->addColumn('model', function ($row) {
+                ->editColumn('model', function ($row) {
                     return $row->model ?? 'N/A';
                 })
-                ->addColumn('year', function ($row) {
+                ->editColumn('year', function ($row) {
                     return $row->year ?? 'N/A';
                 })
                 ->addColumn('user', function ($row) {
                     return $row->user->name ?? 'N/A';
+                })
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at ? $row->created_at->diffForHumans() : 'N/A';
                 })
                 ->addColumn('action', function ($row) {
                     $showUrl = route('admin.vehicles.show', $row->id);
@@ -46,6 +48,21 @@ class VehicleController extends Controller
                                 <a href="' . $showUrl . '" class="btn btn-sm btn-info" title="View Details"><i class="fa fa-eye"></i></a>
                                 <button type="button" onclick="confirmDeleteVehicle(' . $row->id . ', \'' . addslashes($row->name ?? 'Vehicle') . '\')" class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-trash"></i></button>
                             </div>';
+                })
+                ->orderColumn('user', function ($query, $orderId) {
+                    $query->orderBy(
+                        User::select('name')->whereColumn('users.id', 'vehicles.user_id'),
+                        $orderId
+                    );
+                })
+                ->orderColumn('user.name', function ($query, $orderId) {
+                    $query->orderBy(
+                        User::select('name')->whereColumn('users.id', 'vehicles.user_id'),
+                        $orderId
+                    );
+                })
+                ->orderColumn('created_at', function ($query, $orderId) {
+                    $query->orderBy('vehicles.created_at', $orderId);
                 })
                 ->rawColumns(['action'])
                 ->make(true);

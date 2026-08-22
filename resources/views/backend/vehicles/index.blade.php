@@ -45,13 +45,14 @@
         </div>
         <div class="card-body p-3">
             <!-- Reusable Datatable Component Integration -->
-            <x-datatable id="vehicle-datatable" :url="route('admin.vehicles.index', request()->query())" :columns="[
+            <x-datatable id="vehicle-datatable" :url="route('admin.vehicles.index', request()->query())" :order="[[6, 'desc']]" :columns="[
                 ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'SL', 'orderable' => false, 'searchable' => false],
                 ['data' => 'name', 'name' => 'name', 'title' => 'Vehicle Name'],
                 ['data' => 'brand', 'name' => 'brand', 'title' => 'Brand'],
                 ['data' => 'model', 'name' => 'model', 'title' => 'Model'],
                 ['data' => 'year', 'name' => 'year', 'title' => 'Year'],
                 ['data' => 'user', 'name' => 'user.name', 'title' => 'Owner User'],
+                ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Created Date'],
                 ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false]
             ]" />
         </div>
