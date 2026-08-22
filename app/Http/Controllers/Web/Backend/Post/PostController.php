@@ -47,22 +47,22 @@ class PostController extends Controller
                 ->addColumn('user', function ($row) {
                     return $row->user ? $row->user->name : 'N/A';
                 })
-                ->addColumn('title', function ($row) {
+                ->editColumn('title', function ($row) {
                     if (!empty($row->title)) {
                         return Str::limit($row->title, 40);
                     }
                     $text = strip_tags($row->content ?? '');
                     return !empty($text) ? Str::limit($text, 50) : 'Post #' . $row->id;
                 })
-                ->addColumn('type', function ($row) {
+                ->editColumn('type', function ($row) {
                     $typeVal = is_object($row->type) ? ($row->type->value ?? $row->type->name ?? 'post') : ($row->type ?? 'post');
                     return '<span class="badge bg-info">' . ucfirst((string) $typeVal) . '</span>';
                 })
-                ->addColumn('visibility', function ($row) {
+                ->editColumn('visibility', function ($row) {
                     return '<span class="badge bg-secondary">' . ucfirst((string) ($row->visibility ?? 'public')) . '</span>';
                 })
-                ->addColumn('created_at', function ($row) {
-                    return $row->created_at ? $row->created_at->format('d M, Y H:i') : 'N/A';
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at ? $row->created_at->diffForHumans() : 'N/A';
                 })
                 ->addColumn('action', function ($row) {
                     $showUrl = route('admin.posts.show', $row->id);
@@ -70,6 +70,21 @@ class PostController extends Controller
                                 <a href="' . $showUrl . '" class="btn btn-sm btn-info" title="View Details"><i class="fa fa-eye"></i></a>
                                 <button type="button" onclick="confirmDeletePost(' . $row->id . ')" class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-trash"></i></button>
                             </div>';
+                })
+                ->orderColumn('user', function ($query, $orderId) {
+                    $query->orderBy(
+                        User::select('name')->whereColumn('users.id', 'posts.user_id'),
+                        $orderId
+                    );
+                })
+                ->orderColumn('user.name', function ($query, $orderId) {
+                    $query->orderBy(
+                        User::select('name')->whereColumn('users.id', 'posts.user_id'),
+                        $orderId
+                    );
+                })
+                ->orderColumn('created_at', function ($query, $orderId) {
+                    $query->orderBy('posts.created_at', $orderId);
                 })
                 ->rawColumns(['media', 'type', 'visibility', 'action'])
                 ->make(true);

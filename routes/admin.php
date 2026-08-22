@@ -116,6 +116,7 @@ Route::prefix('posts')->name('posts.')->group(function () {
 Route::prefix('clubs')->name('clubs.')->group(function () {
     Route::get('/', [ClubController::class, 'index'])->name('index');
     Route::get('/{club}', [ClubController::class, 'show'])->name('show');
+    Route::put('/{club}/status', [ClubController::class, 'updateStatus'])->name('status.update');
     Route::delete('/{club}/destroy', [ClubController::class, 'destroy'])->name('destroy');
 });
 

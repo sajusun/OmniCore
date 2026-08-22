@@ -48,8 +48,7 @@ class PostService
             ->filterByUser($userId)
             ->when(!empty($filters['status']), function ($q) use ($filters) {
                 return $q->where('status', $filters['status']);
-            })
-            ->latest();
+            });
     }
 
     public function show(Post $post): Post

@@ -45,7 +45,7 @@
         </div>
         <div class="card-body p-3">
             <!-- Reusable Datatable Component Integration -->
-            <x-datatable id="post-datatable" :url="route('admin.posts.index', request()->query())" :columns="[
+            <x-datatable id="post-datatable" :url="route('admin.posts.index', request()->query())" :order="[[6, 'desc']]" :columns="[
                 ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'SL', 'orderable' => false, 'searchable' => false],
                 ['data' => 'media', 'name' => 'media', 'title' => 'Media', 'orderable' => false, 'searchable' => false],
                 ['data' => 'title', 'name' => 'title', 'title' => 'Title / Excerpt'],

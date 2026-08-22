@@ -38,11 +38,47 @@
                         </p>
                     </div>
                 </div>
-                <div class="d-flex gap-2">
+                <div class="d-flex align-items-center gap-2">
                     <span class="badge bg-info px-3 py-2 fs-6">{{ ucfirst($club->type ?? 'Club') }}</span>
-                    <span class="badge bg-{{ in_array(strtolower($club->status ?? ''), ['published', 'active']) ? 'success' : 'secondary' }} px-3 py-2 fs-6">
-                        {{ ucfirst($club->status ?? 'Draft') }}
+                    @php
+                        $curStatus = strtolower($club->status ?? 'pending');
+                        $statusBadge = match($curStatus) {
+                            'published', 'active' => 'success',
+                            'pending' => 'warning text-dark',
+                            default => 'secondary'
+                        };
+                    @endphp
+                    <span class="badge bg-{{ $statusBadge }} px-3 py-2 fs-6">
+                        {{ ucfirst($curStatus) }}
                     </span>
+                </div>
+            </div>
+
+            {{-- Admin Status Management Section --}}
+            <div class="card border mb-4 shadow-none bg-light" style="border-radius: 0;">
+                <div class="card-body p-3">
+                    <div class="row align-items-center g-3">
+                        <div class="col-12 col-md-6">
+                            <h6 class="fw-bold text-dark mb-1">
+                                <i class="fa fa-sliders-h me-2 text-primary"></i> Club Status Management
+                            </h6>
+                            <small class="text-muted">Review club details and update approval status.</small>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <form action="{{ route('admin.clubs.status.update', $club->id) }}" method="POST" class="d-flex flex-wrap align-items-center justify-content-md-end gap-2 m-0">
+                                @csrf
+                                @method('PUT')
+                                <select name="status" class="form-select form-select-sm fw-semibold" style="width: auto; max-width: 200px;">
+                                    <option value="pending" {{ $curStatus === 'pending' ? 'selected' : '' }}>Pending Approval</option>
+                                    <option value="published" {{ in_array($curStatus, ['published', 'active']) ? 'selected' : '' }}>Approve & Publish</option>
+                                    <option value="draft" {{ $curStatus === 'draft' ? 'selected' : '' }}>Draft / Reject</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary text-nowrap fw-semibold px-3">
+                                    <i class="fa fa-check-circle me-1"></i> Update Status
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 

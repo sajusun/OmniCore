@@ -20,6 +20,7 @@ class ClubService
     {
         return Club::query()
             ->when($user, fn ($q) => $q->where('created_by', $user->id))
+            ->when(!$user && !isset($filters['status']), fn ($q) => $q->where('status', 'published'))
             ->when(isset($filters['type']), fn ($q) => $q->where('type', $filters['type']))
             ->when(isset($filters['country']), fn ($q) => $q->where('country', $filters['country']))
             ->when(isset($filters['state']), fn ($q) => $q->where('state', $filters['state']))
@@ -58,7 +59,7 @@ class ClubService
                 'state' => $data['state'] ?? null,
                 'city' => $data['city'] ?? null,
                 'description' => $data['description'] ?? null,
-                'status' => $data['status'] ?? 'published',
+                'status' => $data['status'] ?? 'pending',
                 'created_by' => $data['created_by'] ?? auth('api')->id(),
             ]);
 
