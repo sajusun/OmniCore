@@ -85,6 +85,10 @@ class NotificationController extends Controller
             return redirect()->back()->with('t-error', 'Email message content cannot be empty.');
         }
 
+        if (strip_tags($messageContent) === $messageContent) {
+            $messageContent = nl2br(e($messageContent));
+        }
+
         $sentCount = 0;
 
         if ($request->recipient_type === 'registered') {
