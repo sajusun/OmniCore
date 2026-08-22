@@ -1,4 +1,4 @@
-@props(['id', 'url', 'columns'])
+@props(['id', 'url', 'columns', 'order' => null])
 
 <div class="card shadow-sm border-light overflow-hidden">
     <!-- Table Header with Search on Right -->
@@ -30,13 +30,16 @@
             <thead class="table-light text-uppercase tracking-wider" style="font-size: 0.8rem;">
                 <tr>
                     @foreach($columns as $col)
-                        <th scope="col" class="px-3 py-2.5">
-                            <div class="d-flex align-items-center gap-1">
-                                <span>{{ $col['title'] }}</span>
-                                @if($col['title'] !== 'Action' && $col['title'] !== 'STATUS')
-                                    <i class="fas fa-sort text-muted small opacity-50"></i>
-                                @endif
-                            </div>
+                        @php
+                            $orderable = !isset($col['orderable']) || ($col['orderable'] !== false && $col['orderable'] !== 'false');
+                            $titleLower = strtolower($col['title'] ?? '');
+                            $dataLower = strtolower($col['data'] ?? '');
+                            if (in_array($titleLower, ['action', 'actions', 'sl']) || in_array($dataLower, ['action', 'dt_rowindex'])) {
+                                $orderable = false;
+                            }
+                        @endphp
+                        <th scope="col" class="px-3 py-2.5 {{ !$orderable ? 'no-sort sorting_disabled' : '' }}" {!! !$orderable ? 'data-orderable="false"' : '' !!}>
+                            <span>{{ $col['title'] }}</span>
                         </th>
                     @endforeach
                 </tr>
@@ -106,6 +109,34 @@
                 padding: 0.75rem 1rem !important;
             }
 
+            /* Completely hide DataTables sort arrows and cursor for Action (last-child), SL (first-child), and non-orderable headers */
+            table.dataTable thead > tr > th:last-child::before,
+            table.dataTable thead > tr > th:last-child::after,
+            table.dataTable thead > tr > th:first-child::before,
+            table.dataTable thead > tr > th:first-child::after,
+            table.dataTable thead > tr > th.sorting_disabled::before,
+            table.dataTable thead > tr > th.sorting_disabled::after,
+            table.dataTable thead > tr > th.no-sort::before,
+            table.dataTable thead > tr > th.no-sort::after,
+            table.dataTable thead > tr > th[data-orderable="false"]::before,
+            table.dataTable thead > tr > th[data-orderable="false"]::after {
+                display: none !important;
+                content: "" !important;
+                opacity: 0 !important;
+                visibility: hidden !important;
+                width: 0 !important;
+                height: 0 !important;
+            }
+
+            table.dataTable thead > tr > th:last-child,
+            table.dataTable thead > tr > th:first-child,
+            table.dataTable thead > tr > th.sorting_disabled,
+            table.dataTable thead > tr > th.no-sort,
+            table.dataTable thead > tr > th[data-orderable="false"] {
+                cursor: default !important;
+                background-image: none !important;
+            }
+
             .dataTables_wrapper .dataTables_processing {
                 background: rgba(255, 255, 255, 0.9) !important;
                 border-radius: 0.5rem !important;
@@ -150,6 +181,28 @@
             const paginationContainer = '#pagination-{{ $id }}';
             const infoText = '#info-text-{{ $id }}';
 
+            const rawColumns = @json($columns);
+            const nonOrderableIndices = [];
+
+            const processedColumns = rawColumns.map(function(col, idx) {
+                const titleLower = (col.title || '').toLowerCase();
+                const dataLower = (col.data || '').toLowerCase();
+                if (col.orderable === false || col.orderable === 'false' || titleLower === 'action' || titleLower === 'actions' || titleLower === 'sl' || dataLower === 'action' || dataLower === 'dt_rowindex') {
+                    col.orderable = false;
+                    nonOrderableIndices.push(idx);
+                }
+                return col;
+            });
+
+            // Always ensure first (SL) and last (Action) columns are in nonOrderableIndices if named accordingly
+            if (rawColumns.length > 0) {
+                const lastIdx = rawColumns.length - 1;
+                const lastTitle = (rawColumns[lastIdx].title || '').toLowerCase();
+                if (lastTitle === 'action' || lastTitle === 'actions' || rawColumns[lastIdx].orderable === false) {
+                    if (!nonOrderableIndices.includes(lastIdx)) nonOrderableIndices.push(lastIdx);
+                }
+            }
+
             // Initialize DataTable
             const table = $(tableId).DataTable({
                 processing: true,
@@ -157,7 +210,13 @@
                 ajax: {
                     url: "{{ $url }}",
                 },
-                columns: @json($columns),
+                @if(isset($order) && !empty($order))
+                order: @json($order),
+                @endif
+                columns: processedColumns,
+                columnDefs: [
+                    { orderable: false, targets: nonOrderableIndices }
+                ],
                 language: {
                     search: "",
                     searchPlaceholder: "Search records...",

@@ -22,18 +22,19 @@
 
     {{-- Filter Alert Banner --}}
     @if(isset($selectedUser) && $selectedUser)
-        <div class="alert alert-info border-0 shadow-sm d-flex align-items-center justify-content-between mb-4 p-3" style="border-radius: 0;">
-            <div class="d-flex align-items-center">
-                <i class="fa fa-user-circle fs-4 me-3 text-info"></i>
-                <div>
-                    <h6 class="fw-bold mb-0">Filtered by User: {{ $selectedUser->name }} ({{ $selectedUser->email }})</h6>
-                    <small class="text-muted">Showing events created by this specific user.</small>
-                </div>
+    <div class="alert alert-info border-0 shadow-sm d-flex align-items-center justify-content-between mb-4 p-3"
+        style="border-radius: 0;">
+        <div class="d-flex align-items-center">
+            <i class="fa fa-user-circle fs-4 me-3 text-info"></i>
+            <div>
+                <h6 class="fw-bold mb-0">Filtered by User: {{ $selectedUser->name }} ({{ $selectedUser->email }})</h6>
+                <small class="text-muted">Showing events created by this specific user.</small>
             </div>
-            <a href="{{ route('admin.events.index') }}" class="btn btn-sm btn-outline-secondary">
-                <i class="fa fa-times me-1"></i> Clear User Filter
-            </a>
         </div>
+        <a href="{{ route('admin.events.index') }}" class="btn btn-sm btn-outline-secondary">
+            <i class="fa fa-times me-1"></i> Clear User Filter
+        </a>
+    </div>
     @endif
 
     {{-- Main Card Table Container --}}
@@ -45,7 +46,8 @@
         </div>
         <div class="card-body p-3">
             <!-- Reusable Datatable Component Integration -->
-            <x-datatable id="user-datatable" :url="route('admin.events.index', request()->query())" :columns="[
+            <x-datatable id="user-datatable" :url="route('admin.events.index', request()->query())"
+                :order="[[4, 'desc']]" :columns="[
             ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'SL', 'orderable' => false, 'searchable' => false],
             ['data' => 'title', 'name' => 'title', 'title' => 'Title'],
             ['data' => 'event_type', 'name' => 'event_type', 'title' => 'Type'],
