@@ -13,7 +13,7 @@ class FirebaseToken extends Model
         'device_id',
         'device_name',
         'platform',
-        'jwt_token',
+        'jwt_hash',
         'ip_address',
         'user_agent',
         'last_activity_at',

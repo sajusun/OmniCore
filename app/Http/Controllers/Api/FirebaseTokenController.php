@@ -21,6 +21,9 @@ class FirebaseTokenController extends Controller
             'platform' => 'nullable|string|max:50',
         ]);
 
+        $bearerToken = request()->bearerToken();
+        $jwtHash = $bearerToken ? hash('sha256', $bearerToken) : null;
+
         $firebaseToken = FirebaseToken::updateOrCreate(
             [
                 'device_id' => $request->device_id,
@@ -30,7 +33,7 @@ class FirebaseTokenController extends Controller
                 'token'            => $request->token,
                 'device_name'      => $request->device_name,
                 'platform'         => $request->platform,
-                'jwt_token'        => request()->bearerToken(),
+                'jwt_hash'         => $jwtHash,
                 'ip_address'       => $request->ip(),
                 'user_agent'       => $request->userAgent(),
                 'last_activity_at' => now(),
@@ -62,12 +65,15 @@ class FirebaseTokenController extends Controller
             'device_id' => 'required|string',
         ]);
 
+        $bearerToken = request()->bearerToken();
+        $jwtHash = $bearerToken ? hash('sha256', $bearerToken) : null;
+
         FirebaseToken::where('device_id', $request->device_id)
             ->update([
                 'last_activity_at' => now(),
-                'jwt_token' => request()->bearerToken(),
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent(),
+                'jwt_hash'         => $jwtHash,
+                'ip_address'       => $request->ip(),
+                'user_agent'       => $request->userAgent(),
             ]);
 
         return Helper::jsonResponse(true,'Activity updated.',200);
