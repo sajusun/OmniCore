@@ -44,9 +44,9 @@
 
             {{-- Post Thumbnail (If direct thumbnail exists) --}}
             @if(!empty($post->thumbnail))
-                <div class="mb-4 text-center bg-light p-2 border" style="border-radius: 0;">
-                    <a href="{{ asset($post->thumbnail) }}" target="_blank">
-                        <img src="{{ asset($post->thumbnail) }}" class="img-fluid" style="max-height: 350px; object-fit: contain; border-radius: 0;" alt="Post Thumbnail">
+                <div class="mb-4 text-center bg-light p-2 border position-relative" style="border-radius: 0;">
+                    <a href="javascript:void(0);" onclick="openPhotoModal('{{ asset($post->thumbnail) }}', 'Post Thumbnail')" class="d-inline-block text-decoration-none" title="Click to enlarge">
+                        <img src="{{ asset($post->thumbnail) }}" class="img-fluid" style="max-height: 350px; object-fit: contain; cursor: zoom-in; border-radius: 0;" alt="Post Thumbnail">
                     </a>
                 </div>
             @endif
@@ -68,7 +68,7 @@
                         <i class="fa fa-photo-video text-primary me-2"></i> Attached Media Gallery ({{ $post->media->count() }})
                     </h6>
                     <div class="row g-3 mb-4">
-                        @foreach($post->media as $media)
+                        @foreach($post->media as $index => $media)
                             @php
                                 $mediaUrl = !empty($media->full_url) ? $media->full_url : (!empty($media->url) ? $media->url : asset($media->path));
                                 $ext = strtolower(pathinfo($media->path ?? $media->url ?? '', PATHINFO_EXTENSION));
@@ -78,8 +78,8 @@
                             <div class="col-12 col-sm-6 col-md-4">
                                 <div class="border p-2 bg-light text-center h-100 d-flex flex-column justify-content-center align-items-center" style="border-radius: 0;">
                                     @if($isImage)
-                                        <a href="{{ $mediaUrl }}" target="_blank" class="w-100">
-                                            <img src="{{ $mediaUrl }}" class="img-fluid" style="max-height: 220px; width: 100%; object-fit: cover; border-radius: 0;" alt="Post Media" onError="this.onerror=null;this.src='{{ asset('default/profile.png') }}';">
+                                        <a href="javascript:void(0);" onclick="openPhotoModal('{{ $mediaUrl }}', 'Attachment #{{ $index + 1 }}', {{ $index }})" class="w-100 d-block text-decoration-none" title="Click to enlarge">
+                                            <img src="{{ $mediaUrl }}" class="img-fluid post-gallery-img" data-src="{{ $mediaUrl }}" style="max-height: 220px; width: 100%; object-fit: cover; border-radius: 0; cursor: zoom-in;" alt="Post Media" onError="this.onerror=null;this.src='{{ asset('default/profile.png') }}';">
                                         </a>
                                     @elseif($isVideo)
                                         <video controls style="max-height: 220px; width: 100%; border-radius: 0;">
@@ -107,4 +107,101 @@
             </div>
         </div>
     </div>
+
+    {{-- Interactive Photo Lightbox Modal with Back Icon --}}
+    <div class="modal fade" id="photoViewerModal" tabindex="-1" aria-labelledby="photoViewerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content bg-white text-dark border-0 shadow-lg" style="border-radius: 0;">
+                {{-- Header with High-Visibility Back Icon Button and Close Button --}}
+                <div class="modal-header border-bottom py-2 px-3 bg-light d-flex align-items-center justify-content-between">
+                    <button type="button" class="btn btn-dark text-white fw-bold btn-sm d-inline-flex align-items-center px-3 py-1.5 shadow-sm" style="border-radius: 0;" data-bs-dismiss="modal" aria-label="Back">
+                        <i class="fa fa-arrow-left me-2"></i> Back
+                    </button>
+                    <span id="photoViewerTitle" class="modal-title small fw-bold text-dark text-truncate mx-2">Photo View</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                {{-- Body Container --}}
+                <div class="modal-body p-3 text-center position-relative d-flex align-items-center justify-content-center bg-dark" style="min-height: 400px; max-height: 80vh; overflow: hidden;">
+                    <button type="button" id="prevPhotoBtn" class="btn btn-light position-absolute start-0 ms-3 shadow opacity-75" style="z-index: 10; display: none; width: 44px; height: 44px; border-radius: 0;">
+                        <i class="fa fa-chevron-left"></i>
+                    </button>
+
+                    <img id="photoViewerImage" src="" class="img-fluid" style="max-height: 75vh; max-width: 100%; object-fit: contain; border-radius: 0; transition: transform 0.2s ease-in-out;" alt="Enlarged Photo">
+
+                    <button type="button" id="nextPhotoBtn" class="btn btn-light position-absolute end-0 me-3 shadow opacity-75" style="z-index: 10; display: none; width: 44px; height: 44px; border-radius: 0;">
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @push('scripts')
+    <script>
+        let galleryImages = [];
+        let currentPhotoIndex = 0;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Collect all gallery images
+            const imgEls = document.querySelectorAll('.post-gallery-img');
+            imgEls.forEach((img, idx) => {
+                galleryImages.push({
+                    src: img.getAttribute('data-src') || img.src,
+                    title: `Media Attachment #${idx + 1}`
+                });
+            });
+        });
+
+        function openPhotoModal(src, title = 'Enlarged Photo', index = -1) {
+            const modalEl = document.getElementById('photoViewerModal');
+            const imgEl = document.getElementById('photoViewerImage');
+            const titleEl = document.getElementById('photoViewerTitle');
+            const prevBtn = document.getElementById('prevPhotoBtn');
+            const nextBtn = document.getElementById('nextPhotoBtn');
+
+            if (!modalEl || !imgEl) return;
+
+            imgEl.src = src;
+            if (titleEl) titleEl.innerText = title;
+
+            if (index >= 0 && galleryImages.length > 1) {
+                currentPhotoIndex = index;
+                updateNavButtons();
+            } else {
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+            }
+
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        }
+
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prevPhotoBtn');
+            const nextBtn = document.getElementById('nextPhotoBtn');
+            if (prevBtn) prevBtn.style.display = currentPhotoIndex > 0 ? 'block' : 'none';
+            if (nextBtn) nextBtn.style.display = currentPhotoIndex < galleryImages.length - 1 ? 'block' : 'none';
+        }
+
+        document.getElementById('prevPhotoBtn')?.addEventListener('click', function () {
+            if (currentPhotoIndex > 0) {
+                currentPhotoIndex--;
+                const img = galleryImages[currentPhotoIndex];
+                document.getElementById('photoViewerImage').src = img.src;
+                document.getElementById('photoViewerTitle').innerText = img.title;
+                updateNavButtons();
+            }
+        });
+
+        document.getElementById('nextPhotoBtn')?.addEventListener('click', function () {
+            if (currentPhotoIndex < galleryImages.length - 1) {
+                currentPhotoIndex++;
+                const img = galleryImages[currentPhotoIndex];
+                document.getElementById('photoViewerImage').src = img.src;
+                document.getElementById('photoViewerTitle').innerText = img.title;
+                updateNavButtons();
+            }
+        });
+    </script>
+    @endpush
 </x-admin-layout>
