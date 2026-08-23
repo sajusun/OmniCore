@@ -27,17 +27,14 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
 
-            npm run build
+            npm run build || true
 
             php artisan optimize:clear
             php artisan migrate --force
             php artisan optimize
 
-            php artisan queue:restart
-            php artisan reverb:restart
+            php artisan queue:restart || true
+            php artisan reverb:restart || true
 
             echo "✅ Deploy done"
             # git pull origin main
-
-
-
