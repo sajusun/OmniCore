@@ -4,44 +4,29 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
-use App\Models\FirebaseToken;
+use App\Services\FirebaseService;
 use App\Http\Controllers\Controller;
 
 class FirebaseTokenController extends Controller
 {
+    public function __construct(protected FirebaseService $firebaseService) {}
+
     /**
      * Save / Update Firebase Token
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'token' => 'required|string',
-            'device_id' => 'required|string',
+        $data = $request->validate([
+            'token'       => 'required|string',
+            'device_id'   => 'required|string',
             'device_name' => 'nullable|string|max:255',
-            'platform' => 'nullable|string|max:50',
+            'platform'    => 'nullable|string|max:50',
         ]);
 
-        $bearerToken = request()->bearerToken();
-        $jwtHash = $bearerToken ? hash('sha256', $bearerToken) : null;
+        $user = auth('api')->user();
+        $firebaseToken = $this->firebaseService->registerDevice($user, $data);
 
-        $firebaseToken = FirebaseToken::updateOrCreate(
-            [
-                'device_id' => $request->device_id,
-            ],
-            [
-                'user_id'          => auth('api')->id(),
-                'token'            => $request->token,
-                'device_name'      => $request->device_name,
-                'platform'         => $request->platform,
-                'jwt_hash'         => $jwtHash,
-                'ip_address'       => $request->ip(),
-                'user_agent'       => $request->userAgent(),
-                'last_activity_at' => now(),
-                'status'           => 'active',
-            ]
-        );
-
-        return Helper::jsonResponse( true,'Firebase token saved successfully.', 200,$firebaseToken);
+        return Helper::jsonResponse(true, 'Firebase token saved successfully.', 200, $firebaseToken);
     }
 
     /**
@@ -52,7 +37,14 @@ class FirebaseTokenController extends Controller
         $request->validate([
             'device_id' => 'required|string',
         ]);
-        FirebaseToken::where('device_id', $request->device_id)->where('user_id', auth('api')->id())->delete();
+
+        $user = auth('api')->user();
+        if ($user) {
+            $this->firebaseService->deleteByDeviceId($user, $request->device_id);
+        } else {
+            $this->firebaseService->deactivateDevice($request->device_id);
+        }
+
         return Helper::jsonResponse(true, 'Firebase token removed successfully.', 200);
     }
 
@@ -65,17 +57,13 @@ class FirebaseTokenController extends Controller
             'device_id' => 'required|string',
         ]);
 
-        $bearerToken = request()->bearerToken();
-        $jwtHash = $bearerToken ? hash('sha256', $bearerToken) : null;
+        $jwtToken = request()->bearerToken();
+        if ($jwtToken) {
+            $this->firebaseService->updateLastActivity($jwtToken);
+        }
 
-        FirebaseToken::where('device_id', $request->device_id)
-            ->update([
-                'last_activity_at' => now(),
-                'jwt_hash'         => $jwtHash,
-                'ip_address'       => $request->ip(),
-                'user_agent'       => $request->userAgent(),
-            ]);
+        $this->firebaseService->updateDeviceInformation($request->device_id, $request->all());
 
-        return Helper::jsonResponse(true,'Activity updated.',200);
+        return Helper::jsonResponse(true, 'Activity updated.', 200);
     }
 }

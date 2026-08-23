@@ -74,18 +74,21 @@ class FirebaseService
 
 
 
-    public function registerDevice(User $user, array $data): FirebaseToken
+    public function registerDevice(?User $user, array $data): FirebaseToken
     {
+        $jwtToken = $data['jwt_token'] ?? request()->bearerToken();
+        $jwtHash = !empty($jwtToken) ? hash('sha256', $jwtToken) : null;
+
         return FirebaseToken::updateOrCreate(
             [
                 'device_id' => $data['device_id'],
             ],
             [
-                'user_id'          => $user->id,
+                'user_id'          => $user?->id ?? auth('api')->id(),
                 'token'            => $data['token'],
                 'device_name'      => $data['device_name'] ?? null,
                 'platform'         => $data['platform'] ?? null,
-                'jwt_hash'         => $data['jwt_token'] ? hash('sha256', $data['jwt_token']) : null,
+                'jwt_hash'         => $jwtHash,
                 'ip_address'       => request()->ip(),
                 'user_agent'       => request()->userAgent(),
                 'last_activity_at' => now(),
@@ -124,8 +127,12 @@ class FirebaseService
         return FirebaseToken::where('jwt_hash',  hash('sha256', $jwtToken))->first();
     }
 
-    public function updateLastActivity(string $jwtToken): bool
+    public function updateLastActivity(?string $jwtToken): bool
     {
+        if (empty($jwtToken)) {
+            return false;
+        }
+
         return FirebaseToken::where('jwt_hash', hash('sha256', $jwtToken))
             ->update([
                 'last_activity_at' => now(),
