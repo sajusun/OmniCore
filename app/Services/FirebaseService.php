@@ -2,20 +2,20 @@
 
 namespace App\Services;
 
-use Exception;
-use App\Models\User;
-use Illuminate\Support\Str;
-use App\Models\Notification;
-use Kreait\Firebase\Factory;
 use App\Models\FirebaseToken;
-use Illuminate\Support\Facades\Log;
-use Kreait\Firebase\Messaging\CloudMessage;
+use App\Models\Notification;
+use App\Models\User;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification as FirebaseNotification;
 
 class FirebaseService
 {
-    protected  $messaging = null;
+    protected $messaging = null;
 
     public function __construct()
     {
@@ -72,27 +72,25 @@ class FirebaseService
         $query->delete();
     }
 
-
-
     public function registerDevice(?User $user, array $data): FirebaseToken
     {
         $jwtToken = $data['jwt_token'] ?? request()->bearerToken();
-        $jwtHash = !empty($jwtToken) ? hash('sha256', $jwtToken) : null;
+        $jwtHash = ! empty($jwtToken) ? hash('sha256', $jwtToken) : null;
 
         return FirebaseToken::updateOrCreate(
             [
                 'device_id' => $data['device_id'],
             ],
             [
-                'user_id'          => $user?->id ?? auth('api')->id(),
-                'token'            => $data['token'],
-                'device_name'      => $data['device_name'] ?? null,
-                'platform'         => $data['platform'] ?? null,
-                'jwt_hash'         => $jwtHash,
-                'ip_address'       => request()->ip(),
-                'user_agent'       => request()->userAgent(),
+                'user_id' => $user?->id ?? auth('api')->id(),
+                'token' => $data['token'],
+                'device_name' => $data['device_name'] ?? null,
+                'platform' => $data['platform'] ?? null,
+                'jwt_hash' => $jwtHash,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
                 'last_activity_at' => now(),
-                'status'           => 'active',
+                'status' => 'active',
             ]
         );
     }
@@ -105,6 +103,7 @@ class FirebaseService
                 'last_activity_at' => now(),
             ]) > 0;
     }
+
     public function getDevices(User $user): Collection
     {
         return FirebaseToken::where('user_id', $user->id)
@@ -124,7 +123,7 @@ class FirebaseService
 
     public function getCurrentDevice(string $jwtToken): ?FirebaseToken
     {
-        return FirebaseToken::where('jwt_hash',  hash('sha256', $jwtToken))->first();
+        return FirebaseToken::where('jwt_hash', hash('sha256', $jwtToken))->first();
     }
 
     public function updateLastActivity(?string $jwtToken): bool
@@ -138,60 +137,71 @@ class FirebaseService
                 'last_activity_at' => now(),
             ]) > 0;
     }
+
     public function logoutCurrentDevice(User $user, string $jwtToken): bool
     {
         return FirebaseToken::where('user_id', $user->id)
             ->where('jwt_hash', hash('sha256', $jwtToken))
             ->delete() > 0;
     }
+
     public function logoutOtherDevices(User $user, string $currentJwt): int
     {
         return FirebaseToken::where('user_id', $user->id)
             ->where('jwt_hash', '!=', hash('sha256', $currentJwt))
             ->delete();
     }
+
     public function logoutAllDevices(User $user): int
     {
         return FirebaseToken::where('user_id', $user->id)
             ->delete();
     }
+
     public function deleteByDeviceId(User $user, string $deviceId): bool
     {
         return FirebaseToken::where('user_id', $user->id)
             ->where('device_id', $deviceId)
             ->delete() > 0;
     }
+
     public function activateDevice(string $deviceId): bool
     {
         return FirebaseToken::where('device_id', $deviceId)
             ->update([
-                'status' => 'active'
+                'status' => 'active',
             ]) > 0;
     }
+
     public function deactivateDevice(string $deviceId): bool
     {
         return FirebaseToken::where('device_id', $deviceId)
             ->update([
-                'status' => 'inactive'
+                'status' => 'inactive',
             ]) > 0;
     }
+
     public function findByDeviceId(string $deviceId): ?FirebaseToken
     {
         return FirebaseToken::where('device_id', $deviceId)->first();
     }
+
     public function findByJwt(string $jwt): ?FirebaseToken
     {
         return FirebaseToken::where('jwt_hash', hash('sha256', $jwt))->first();
     }
+
     public function deviceExists(string $deviceId): bool
     {
         return FirebaseToken::where('device_id', $deviceId)->exists();
     }
+
     public function cleanupInactiveDevices(int $days = 30): int
     {
         return FirebaseToken::where('last_activity_at', '<', now()->subDays($days))
             ->delete();
     }
+
     public function updateDeviceInformation(string $deviceId, array $data): bool
     {
         return FirebaseToken::where('device_id', $deviceId)
@@ -202,6 +212,7 @@ class FirebaseService
                 'user_agent' => $data['user_agent'] ?? request()->userAgent(),
             ]) > 0;
     }
+
     public function isCurrentDevice(string $deviceId, string $jwt): bool
     {
         return FirebaseToken::where('device_id', $deviceId)->where('jwt_hash', hash('sha256', $jwt))->exists();
