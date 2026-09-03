@@ -37,5 +37,10 @@ class AppSupportServiceProvider extends ServiceProvider
                 ->middleware(['web', 'auth'])
                 ->group(__DIR__ . '/../Routes/admin.php');
         }
+
+        // 4. Auto-load Module Views ('app_support::view_name')
+        if (is_dir(__DIR__ . '/../Views')) {
+            $this->loadViewsFrom(__DIR__ . '/../Views', 'app_support');
+        }
     }
 }

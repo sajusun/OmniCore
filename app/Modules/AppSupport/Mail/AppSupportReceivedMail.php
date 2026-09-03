@@ -32,8 +32,10 @@ class AppSupportReceivedMail extends Mailable
      */
     public function content(): Content
     {
+        $viewName = view()->exists('app_support::emails.received') ? 'app_support::emails.received' : 'emails.app_support_received';
+
         return new Content(
-            view: 'emails.app_support_received',
+            view: $viewName,
             with: [
                 'support' => $this->support,
                 'user' => $this->support->user,

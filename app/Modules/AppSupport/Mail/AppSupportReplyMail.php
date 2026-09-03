@@ -34,8 +34,10 @@ class AppSupportReplyMail extends Mailable
      */
     public function content(): Content
     {
+        $viewName = view()->exists('app_support::emails.reply') ? 'app_support::emails.reply' : 'emails.app_support_reply';
+
         return new Content(
-            view: 'emails.app_support_reply',
+            view: $viewName,
             with: [
                 'support' => $this->support,
                 'reply'   => $this->reply,
