@@ -252,4 +252,18 @@ class ChatRoomController extends Controller
             return $this->error($e->getMessage(), null, 400);
         }
     }
+
+    /**
+     * Get total unread messages count across all chat rooms for badge counter.
+     */
+    public function unreadCount()
+    {
+        $userId = auth('api')->id();
+        $totalUnread = $this->roomService->getTotalUnreadCount($userId);
+
+        return $this->success(
+            data: ['total_unread' => $totalUnread],
+            message: 'Unread count retrieved successfully'
+        );
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Modules\Chat\Services;
 
+use App\Modules\Chat\Enums\MuteDurationEnum;
 use App\Modules\Chat\Models\ChatParticipant;
 use App\Modules\Chat\Models\ChatRoom;
 use Carbon\Carbon;
@@ -52,11 +53,14 @@ class ChatSettingService
     }
 
     /**
-     * Mute the chat room until a specific time.
+     * Mute the chat room using presets or custom timestamp.
      */
-    public function mute(ChatRoom $room, int $userId, Carbon $until): void
+    public function mute(ChatRoom $room, int $userId, MuteDurationEnum $duration, ?string $customTime = null): Carbon
     {
+        $until = $duration->toCarbon($customTime) ?? now()->addDay();
         $this->getParticipant($room, $userId)->update(['mute_until' => $until]);
+
+        return $until;
     }
 
     /**
@@ -114,38 +118,6 @@ class ChatSettingService
         $participant = $this->getParticipant($room, $userId);
         $settings = $participant->settings ?? [];
         $settings['pinned'] = false;
-        $participant->update(['settings' => $settings]);
-    }
-
-    public function nickname(ChatRoom $room, int $userId, string $nickname): void
-    {
-        $participant = $this->getParticipant($room, $userId);
-        $settings = $participant->settings ?? [];
-        $settings['nickname'] = $nickname;
-        $participant->update(['settings' => $settings]);
-    }
-
-    public function wallpaper(ChatRoom $room, int $userId, string $wallpaper): void
-    {
-        $participant = $this->getParticipant($room, $userId);
-        $settings = $participant->settings ?? [];
-        $settings['wallpaper'] = $wallpaper;
-        $participant->update(['settings' => $settings]);
-    }
-
-    public function autoDelete(ChatRoom $room, int $userId, int $seconds): void
-    {
-        $participant = $this->getParticipant($room, $userId);
-        $settings = $participant->settings ?? [];
-        $settings['auto_delete_after'] = $seconds;
-        $participant->update(['settings' => $settings]);
-    }
-
-    public function messageTranslation(ChatRoom $room, int $userId, string $locale): void
-    {
-        $participant = $this->getParticipant($room, $userId);
-        $settings = $participant->settings ?? [];
-        $settings['translation_locale'] = $locale;
         $participant->update(['settings' => $settings]);
     }
 }

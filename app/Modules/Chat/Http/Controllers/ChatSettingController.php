@@ -2,12 +2,15 @@
 
 namespace App\Modules\Chat\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Modules\Chat\Enums\MuteDurationEnum;
 use App\Modules\Chat\Http\Requests\ChatSettingRequest;
+use App\Modules\Chat\Http\Requests\MuteRoomRequest;
 use App\Modules\Chat\Models\ChatRoom;
 use App\Modules\Chat\Services\ChatPermissionService;
 use App\Modules\Chat\Services\ChatSettingService;
-use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 
 class ChatSettingController extends Controller
 {
@@ -31,7 +34,7 @@ class ChatSettingController extends Controller
     /**
      * Update notification settings.
      */
-    public function updateNotification(ChatRoom $room, ChatSettingRequest $request)
+    public function updateNotification(ChatRoom $room, ChatSettingRequest $request): JsonResponse
     {
         $this->checkMembership($room);
         $userId = auth('api')->id();
@@ -43,15 +46,13 @@ class ChatSettingController extends Controller
             $this->settingService->disableNotification($room, $userId);
         }
 
-        return $this->success(
-            message: 'Notification settings updated successfully'
-        );
+        return Helper::jsonResponse(true, 'Notification settings updated successfully', 200);
     }
 
     /**
      * Update sound settings.
      */
-    public function updateSound(ChatRoom $room, ChatSettingRequest $request)
+    public function updateSound(ChatRoom $room, ChatSettingRequest $request): JsonResponse
     {
         $this->checkMembership($room);
         $userId = auth('api')->id();
@@ -63,43 +64,38 @@ class ChatSettingController extends Controller
             $this->settingService->disableSound($room, $userId);
         }
 
-        return $this->success(
-            message: 'Sound settings updated successfully'
-        );
+        return Helper::jsonResponse(true, 'Sound settings updated successfully', 200);
     }
 
     /**
-     * Mute the chat room.
+     * Mute the chat room with Telegram-style presets.
      */
-    public function mute(ChatRoom $room, ChatSettingRequest $request)
+    public function mute(ChatRoom $room, MuteRoomRequest $request): JsonResponse
     {
         $this->checkMembership($room);
         $userId = auth('api')->id();
-        $untilInput = $request->validated('mute_until');
+        $duration = MuteDurationEnum::from($request->validated('duration'));
+        $customTime = $request->validated('mute_until');
 
-        if (!$untilInput) {
-            return $this->error('The mute_until field is required for muting.', null, 422);
-        }
+        $until = $this->settingService->mute($room, $userId, $duration, $customTime);
 
-        $until = Carbon::parse($untilInput);
-        $this->settingService->mute($room, $userId, $until);
-
-        return $this->success(
-            message: 'Chat room muted successfully'
+        return Helper::jsonResponse(
+            true,
+            'Chat room muted successfully',
+            200,
+            ['mute_until' => $until->toIso8601String()]
         );
     }
 
     /**
      * Unmute the chat room.
      */
-    public function unmute(ChatRoom $room)
+    public function unmute(ChatRoom $room): JsonResponse
     {
         $this->checkMembership($room);
         $userId = auth('api')->id();
         $this->settingService->unmute($room, $userId);
 
-        return $this->success(
-            message: 'Chat room unmuted successfully'
-        );
+        return Helper::jsonResponse(true, 'Chat room unmuted successfully', 200);
     }
 }

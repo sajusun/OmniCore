@@ -217,4 +217,23 @@ class ChatRoomService
             })
             ->first();
     }
+
+    /**
+     * Get total unread messages count across all rooms for a user.
+     */
+    public function getTotalUnreadCount(int $userId): int
+    {
+        $participants = \App\Modules\Chat\Models\ChatParticipant::where('user_id', $userId)->get();
+        $totalUnread = 0;
+
+        foreach ($participants as $participant) {
+            $lastReadId = $participant->last_read_message_id ?? 0;
+            $totalUnread += \App\Modules\Chat\Models\Message::where('chat_room_id', $participant->chat_room_id)
+                ->where('id', '>', $lastReadId)
+                ->where('sender_id', '!=', $userId)
+                ->count();
+        }
+
+        return $totalUnread;
+    }
 }

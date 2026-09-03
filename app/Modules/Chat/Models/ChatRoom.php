@@ -41,10 +41,38 @@ class ChatRoom extends Model
         return $this->hasMany(Message::class, 'chat_room_id');
     }
 
+    public function latestMessage(): HasMany
+    {
+        return $this->hasMany(Message::class, 'chat_room_id')->latest();
+    }
+
+    public function pinnedMessages(): HasMany
+    {
+        return $this->hasMany(PinnedMessage::class, 'chat_room_id');
+    }
+
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'chat_participants', 'chat_room_id', 'user_id')
             ->withPivot(['role', 'joined_at', 'last_read_message_id', 'last_read_at', 'notification_enabled', 'sound_enabled', 'mute_until', 'settings'])
             ->withTimestamps();
+    }
+
+    /**
+     * Calculate unread messages count for a specific user in this room.
+     */
+    public function unreadCountFor(int $userId): int
+    {
+        $participant = $this->participants()->where('user_id', $userId)->first();
+        if (!$participant) {
+            return 0;
+        }
+
+        $lastReadId = $participant->last_read_message_id ?? 0;
+
+        return $this->messages()
+            ->where('id', '>', $lastReadId)
+            ->where('sender_id', '!=', $userId)
+            ->count();
     }
 }

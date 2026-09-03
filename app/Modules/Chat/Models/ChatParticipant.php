@@ -46,4 +46,9 @@ class ChatParticipant extends Model
     {
         return $this->belongsTo(Message::class, 'last_read_message_id');
     }
+
+    public function isMuted(): bool
+    {
+        return $this->mute_until && $this->mute_until->isFuture();
+    }
 }
