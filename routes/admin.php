@@ -167,3 +167,7 @@ Route::middleware('permission:activity.log.view')->group(function () {
     Route::get('activity-logs/{activityLog}', [ActivityLogController::class, 'show'])->name('activity-logs.show');
     Route::get('users/{user}/activity-logs', [ActivityLogController::class, 'userIndex'])->name('users.activity-logs');
 });
+
+// ─── App Support & Feedback Module ───────────────────────────────────────────
+require app_path('Modules/AppSupport/Routes/admin.php');
+

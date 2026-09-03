@@ -44,6 +44,11 @@ enum Permission: string
     case TICKET_REPLY = 'ticket.reply';
     case TICKET_CLOSE = 'ticket.close';
 
+    // ─── App Support & Feedback ───────────────────────────────────
+    case APP_SUPPORT_LIST   = 'app.support.list';
+    case APP_SUPPORT_REPLY  = 'app.support.reply';
+    case APP_SUPPORT_STATUS = 'app.support.status';
+
     // ─── Contact Us ───────────────────────────────────────────────
     case SUPPORT_CENTER_MANAGE = 'support.center.manage';
 
@@ -97,6 +102,10 @@ enum Permission: string
             self::TICKET_REPLY        => 'Ticket Reply',
             self::TICKET_CLOSE        => 'Ticket Close',
 
+            self::APP_SUPPORT_LIST    => 'App Support List',
+            self::APP_SUPPORT_REPLY   => 'App Support Reply',
+            self::APP_SUPPORT_STATUS  => 'App Support Status',
+
             self::SUPPORT_CENTER_MANAGE => 'Support Center Manage',
 
             self::NOTIFICATION_SEND   => 'Notification Send',
@@ -129,6 +138,8 @@ enum Permission: string
             self::MEDIA_MANAGE                                   => 'Media',
             self::TICKET_LIST, self::TICKET_REPLY,
             self::TICKET_CLOSE                                   => 'Tickets',
+            self::APP_SUPPORT_LIST, self::APP_SUPPORT_REPLY,
+            self::APP_SUPPORT_STATUS                             => 'App Support',
             self::SUPPORT_CENTER_MANAGE                          => 'Support Center',
             self::NOTIFICATION_SEND                              => 'Notifications',
             self::ACTIVITY_LOG_VIEW                              => 'Activity Logs',

@@ -64,6 +64,12 @@ use Illuminate\Support\Facades\Route;
                         <span class="side-menu__label">Vehicles</span>
                     </a>
                 </li>
+                <li class="slide {{ request()->routeIs('admin.app-supports.*') ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item {{ request()->routeIs('admin.app-supports.*') ? 'active' : '' }}" href="{{ route('admin.app-supports.index') }}">
+                        <i class="fa-solid fa-headset side-menu__icon"></i>
+                        <span class="side-menu__label">App Support & Feedback</span>
+                    </a>
+                </li>
 
                 @if(env('ENABLE_ROLE_MANAGEMENT'))
                 <li

@@ -213,6 +213,7 @@ Route::get('/cache_clear', function () {
 
 // others loaded routes
 require app_path('Modules/Media/Routes/api.php');
+require app_path('Modules/AppSupport/Routes/api.php');
 
 // Public – token link click (no auth required, user clicks from email)
 Route::get('/verification/verify-token', [VerificationController::class, 'verifyToken'])->name('verification.token.verify');
