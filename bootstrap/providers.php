@@ -12,4 +12,5 @@ return [
     App\Modules\Chat\Providers\ChatServiceProvider::class,
     App\Modules\ActivityLog\Providers\ActivityLogServiceProvider::class,
     App\Modules\Post\Providers\PostServiceProvider::class,
+    App\Modules\Social\Providers\SocialServiceProvider::class,
 ];

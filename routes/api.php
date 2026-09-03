@@ -13,8 +13,6 @@ use App\Http\Controllers\Api\Chat\ChatSettingController;
 use App\Http\Controllers\Api\Chat\MessageController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\FirebaseTokenController;
-use App\Http\Controllers\Api\FollowController;
-use App\Http\Controllers\Api\FriendController;
 use App\Http\Controllers\Api\Frontend\ClubController;
 use App\Http\Controllers\Api\Frontend\CmsController;
 use App\Http\Controllers\Api\Frontend\EventController;
@@ -58,31 +56,6 @@ Route::get('/header-test', function (Request $request) {
         'authorization' => $request->header('Authorization'),
         'bearer' => $request->bearerToken(),
     ]);
-});
-
-Route::middleware('auth:api')->prefix('friends')->group(function () {
-
-    // Friend Request
-    Route::post('/request/{user}', [FriendController::class, 'sendRequest']);
-    Route::post('/accept/{friendRequest}', [FriendController::class, 'accept']);
-    Route::post('/reject/{friendRequest}', [FriendController::class, 'reject']);
-    Route::delete('/cancel/{friendRequest}', [FriendController::class, 'cancel']);
-
-    // Friend
-    Route::delete('/unfriend/{user}', [FriendController::class, 'unfriend']);
-    Route::get('/', [FriendController::class, 'friends']);
-
-    // Requests
-    Route::get('/requests/pending', [FriendController::class, 'pendingRequests']);
-    Route::get('/requests/sent', [FriendController::class, 'sentRequests']);
-});
-
-Route::middleware('auth:api')->group(function () {
-    Route::post('/users/{user}/follow', [FollowController::class, 'follow']);
-    Route::delete('/users/{user}/unfollow', [FollowController::class, 'unfollow']);
-    Route::post('/users/{user}/toggle-follow', [FollowController::class, 'toggle']);
-    Route::get('/users/followers', [FollowController::class, 'followers']);
-    Route::get('/users/followings', [FollowController::class, 'followings']);
 });
 
 Route::middleware('auth:api')->group(function () {

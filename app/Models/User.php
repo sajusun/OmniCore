@@ -3,10 +3,8 @@
 namespace App\Models;
 
 use App\Traits\HasPost;
-use App\Traits\HasFriends;
-use App\Traits\HasFollowers;
 use App\Traits\HasNotifications;
-use App\Traits\HasFriendRequests;
+use App\Modules\Social\Traits\HasSocialRelations;
 use App\Modules\Media\Traits\HasMedia;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -21,9 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory,
-        HasFollowers,
-        HasFriendRequests,
-        HasFriends,
+        HasSocialRelations,
         HasMedia,
         HasNotifications,
         HasPost,
@@ -190,18 +186,6 @@ class User extends Authenticatable implements JWTSubject
     public function messages(): HasMany
     {
         return $this->hasMany(Message::class, 'sender_id');
-    }
-
-    public function blockedUsers(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'user_blocks', 'user_id', 'blocked_user_id')
-            ->withTimestamps();
-    }
-
-    public function blockedBy(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'user_blocks', 'blocked_user_id', 'user_id')
-            ->withTimestamps();
     }
 
     public function eventBookmarks(): HasMany
