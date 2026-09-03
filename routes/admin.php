@@ -148,19 +148,9 @@ Route::middleware('permission:system.optimize')->get('/optimize', function () {
     return redirect()->back()->with('t-success', 'System Optimized Successfully');
 })->name('optimize');
 
-// ─── CMS / Page Content ───────────────────────────────────────────────────────
-Route::middleware('permission:cms.manage')->prefix('admin')->group(function () {
-    Route::get('page/{page}/{section}', [PageContentController::class, 'edit'])->name('cms.page.edit');
-    Route::post('page/{page}/{section}', [PageContentController::class, 'update'])->name('cms.page.update');
-});
 
-// ─── Activity Logs ────────────────────────────────────────────────────────────
-Route::middleware('permission:activity.log.view')->group(function () {
-    Route::get('activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
-    Route::get('activity-logs/{activityLog}', [ActivityLogController::class, 'show'])->name('activity-logs.show');
-    Route::get('users/{user}/activity-logs', [ActivityLogController::class, 'userIndex'])->name('users.activity-logs');
-});
 
-// ─── App Support & Feedback Module ───────────────────────────────────────────
-require app_path('Modules/AppSupport/Routes/admin.php');
+
+
+
 

@@ -194,11 +194,7 @@ Route::middleware('auth:api')->group(function () {
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe']);
 Route::post('/contact-us', [ContactController::class, 'store']);
 
-Route::prefix('cms')->name('cms.')->group(function () {
-    Route::get('/', [CmsController::class, 'index'])->name('index');   // All pages & their sections
-    Route::get('{page}', [CmsController::class, 'page'])->name('page');    // All sections of a page
-    Route::get('{page}/{section}', [CmsController::class, 'section'])->name('section'); // Single section
-});
+
 
 Route::get('/cache_clear', function () {
     Artisan::call('cache:clear');
@@ -211,9 +207,7 @@ Route::get('/cache_clear', function () {
     return response()->json(['message' => 'Cache cleared.']);
 });
 
-// others loaded routes
-require app_path('Modules/Media/Routes/api.php');
-require app_path('Modules/AppSupport/Routes/api.php');
+
 
 // Public – token link click (no auth required, user clicks from email)
 Route::get('/verification/verify-token', [VerificationController::class, 'verifyToken'])->name('verification.token.verify');
@@ -225,40 +219,7 @@ Route::middleware(['auth:api'])->prefix('verification')->name('api.verification.
     Route::post('resend', 'resend')->name('resend');
 });
 
-// Chat Module Routes
-Route::middleware('auth:api')->prefix('chat')->group(function () {
-    // Rooms
-    Route::post('/rooms/single', [ChatRoomController::class, 'single']);
-    Route::post('/rooms/group', [ChatRoomController::class, 'group']);
-    Route::post('/rooms/channel', [ChatRoomController::class, 'channel']);
-    Route::get('/rooms', [ChatRoomController::class, 'index']);
-    Route::get('/rooms/{room}', [ChatRoomController::class, 'show']);
-    Route::patch('/rooms/{room}', [ChatRoomController::class, 'update']);
-    Route::delete('/rooms/{room}', [ChatRoomController::class, 'destroy']);
 
-    // Participants
-    Route::post('/rooms/{room}/participants', [ChatRoomController::class, 'addParticipants']);
-    Route::delete('/rooms/{room}/participants/{user}', [ChatRoomController::class, 'removeParticipant']);
-    Route::post('/rooms/{room}/leave', [ChatRoomController::class, 'leave']);
-    Route::post('/channels/{room}/join', [ChatRoomController::class, 'join']);
-
-    // Messages
-    Route::get('/rooms/{room}/messages', [MessageController::class, 'index']);
-    Route::post('/messages', [MessageController::class, 'send']);
-    Route::patch('/messages/{message}', [MessageController::class, 'update']);
-    Route::delete('/messages/{message}', [MessageController::class, 'destroy']);
-
-    // Blocks
-    Route::post('/block/{user}', [BlockController::class, 'block']);
-    Route::delete('/unblock/{user}', [BlockController::class, 'unblock']);
-    Route::get('/blocked-users', [BlockController::class, 'blockedUsers']);
-
-    // Settings
-    Route::patch('/rooms/{room}/settings/notification', [ChatSettingController::class, 'updateNotification']);
-    Route::patch('/rooms/{room}/settings/sound', [ChatSettingController::class, 'updateSound']);
-    Route::patch('/rooms/{room}/settings/mute', [ChatSettingController::class, 'mute']);
-    Route::delete('/rooms/{room}/settings/mute', [ChatSettingController::class, 'unmute']);
-});
 
 Route::post('app/webhooks/revenuecat', RevenueCatWebhookController::class);
 

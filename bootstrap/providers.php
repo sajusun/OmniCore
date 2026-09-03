@@ -8,4 +8,7 @@ return [
     App\Modules\AppSupport\Providers\AppSupportServiceProvider::class,
     App\Modules\Media\Providers\MediaServiceProvider::class,
     App\Modules\BulkNotification\Providers\BulkNotificationServiceProvider::class,
+    App\Modules\CMS\Providers\CMSServiceProvider::class,
+    App\Modules\Chat\Providers\ChatServiceProvider::class,
+    App\Modules\ActivityLog\Providers\ActivityLogServiceProvider::class,
 ];
