@@ -170,6 +170,57 @@ class AppSupportService
     }
 
     /**
+     * Send a user follow-up reply to an existing support report.
+     */
+    public function sendUserReply(AppSupport $support, string $message, User $user, $attachments = null): AppSupportReply
+    {
+        return DB::transaction(function () use ($support, $message, $user, $attachments) {
+            // Create user reply record
+            $reply = AppSupportReply::create([
+                'app_support_id' => $support->id,
+                'sender_type'    => 'user',
+                'user_id'        => $user->id,
+                'message'        => $message,
+            ]);
+
+            // Upload any reply attachments
+            if (!empty($attachments)) {
+                $this->uploadMedia($reply, $attachments, 'app_support');
+            }
+
+            // Update status back to 'in_progress' or 'pending' if it was resolved/closed
+            if (in_array($support->status?->value ?? $support->status, ['resolved', 'closed', 'replied'])) {
+                $support->update(['status' => SupportStatus::IN_PROGRESS]);
+            }
+
+            // Notify Admin team that user sent a follow-up response
+            try {
+                $adminUsers = User::role(['super_admin', 'admin'])->get();
+                if ($adminUsers->isNotEmpty()) {
+                    $this->notificationService->sendMany(
+                        users: $adminUsers,
+                        title: 'User Replied to Support Request',
+                        body: "User {$user->name} replied to report (#{$support->ticket_no}): " . Str::limit($message, 80),
+                        type: 'app_support_admin',
+                        referenceType: 'AppSupport',
+                        referenceId: $support->id,
+                        action: 'VIEW_ADMIN_SUPPORT_REPORT',
+                        meta: [
+                            'ticket_no' => $support->ticket_no,
+                            'reply_id'  => $reply->id,
+                            'user_id'   => $user->id,
+                        ]
+                    );
+                }
+            } catch (Exception $e) {
+                Log::error('AppSupport User Reply Notification Error: ' . $e->getMessage());
+            }
+
+            return $reply->fresh(['media', 'author']);
+        });
+    }
+
+    /**
      * Change status of a support report (e.g. resolve or close).
      */
     public function updateStatus(AppSupport $support, string $status): bool

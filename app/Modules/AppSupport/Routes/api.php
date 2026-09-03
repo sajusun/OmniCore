@@ -17,4 +17,5 @@ Route::middleware('auth:api')->prefix('app-support')->group(function () {
     Route::post('/', [AppSupportApiController::class, 'store']); // Submit issue/report
     Route::get('/my-reports', [AppSupportApiController::class, 'index']); // List user's reports
     Route::get('/{id}', [AppSupportApiController::class, 'show']); // View specific report details
+    Route::post('/{id}/reply', [AppSupportApiController::class, 'reply']); // Send follow-up reply
 });
