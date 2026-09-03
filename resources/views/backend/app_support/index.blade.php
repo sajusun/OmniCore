@@ -1,81 +1,103 @@
 <x-admin-layout>
-    @slot('title')
-        App Support & Feedback
-    @endslot
-    @slot('header')
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-                <h2 class="font-bold text-2xl text-gray-800 dark:text-gray-200 leading-tight">
-                    App Support & Feedback
-                </h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Manage issue reports, bug tickets, and service feedback submitted by mobile app users.
-                </p>
-            </div>
+    <x-slot name="title">App Support & Feedback</x-slot>
+
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">App Support & Feedback</h2>
+    </x-slot>
+
+    <!-- Page Header / Breadcrumb -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <nav aria-label="breadcrumb" class="mb-1">
+                <ol class="breadcrumb mb-0" style="font-size: 0.875rem;">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none text-muted">Dashboard</a></li>
+                    <li class="breadcrumb-item active text-dark fw-medium" aria-current="page">App Support</li>
+                </ol>
+            </nav>
+            <h4 class="fw-bold text-dark mb-0">App Support & Issue Reports</h4>
         </div>
-    @endslot
+    </div>
 
-    <div class="max-w-7xl mx-auto mt-6 space-y-6">
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert" style="border-radius: 0;">
+            <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-        @if(session('success'))
-            <div class="p-4 text-green-700 bg-green-100 border border-green-200 rounded-lg dark:bg-green-900/30 dark:border-green-800 dark:text-green-300">
-                {{ session('success') }}
-            </div>
-        @endif
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4" role="alert" style="border-radius: 0;">
+            <i class="fa fa-exclamation-circle me-2"></i> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-        @if(session('error'))
-            <div class="p-4 text-red-700 bg-red-100 border border-red-200 rounded-lg dark:bg-red-900/30 dark:border-red-800 dark:text-red-300">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        <!-- Filter Tabs / Stats Cards -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            <a href="{{ route('admin.app-supports.index') }}" 
-               class="p-4 rounded-xl border transition-all text-center {{ empty($filters['status']) ? 'bg-indigo-600 text-white border-indigo-600 shadow-md' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-indigo-400' }}">
-                <div class="text-xs font-semibold uppercase tracking-wider opacity-80">All Reports</div>
-                <div class="text-2xl font-bold mt-1">{{ $counts['all'] ?? 0 }}</div>
-            </a>
-            <a href="{{ route('admin.app-supports.index', ['status' => 'pending']) }}" 
-               class="p-4 rounded-xl border transition-all text-center {{ ($filters['status'] ?? '') === 'pending' ? 'bg-amber-500 text-white border-amber-500 shadow-md' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-amber-400' }}">
-                <div class="text-xs font-semibold uppercase tracking-wider opacity-80">Pending</div>
-                <div class="text-2xl font-bold mt-1">{{ $counts['pending'] ?? 0 }}</div>
-            </a>
-            <a href="{{ route('admin.app-supports.index', ['status' => 'in_progress']) }}" 
-               class="p-4 rounded-xl border transition-all text-center {{ ($filters['status'] ?? '') === 'in_progress' ? 'bg-blue-600 text-white border-blue-600 shadow-md' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-blue-400' }}">
-                <div class="text-xs font-semibold uppercase tracking-wider opacity-80">In Progress</div>
-                <div class="text-2xl font-bold mt-1">{{ $counts['in_progress'] ?? 0 }}</div>
-            </a>
-            <a href="{{ route('admin.app-supports.index', ['status' => 'replied']) }}" 
-               class="p-4 rounded-xl border transition-all text-center {{ ($filters['status'] ?? '') === 'replied' ? 'bg-indigo-600 text-white border-indigo-600 shadow-md' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-indigo-400' }}">
-                <div class="text-xs font-semibold uppercase tracking-wider opacity-80">Replied</div>
-                <div class="text-2xl font-bold mt-1">{{ $counts['replied'] ?? 0 }}</div>
-            </a>
-            <a href="{{ route('admin.app-supports.index', ['status' => 'resolved']) }}" 
-               class="p-4 rounded-xl border transition-all text-center {{ ($filters['status'] ?? '') === 'resolved' ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-emerald-400' }}">
-                <div class="text-xs font-semibold uppercase tracking-wider opacity-80">Resolved</div>
-                <div class="text-2xl font-bold mt-1">{{ $counts['resolved'] ?? 0 }}</div>
-            </a>
-            <a href="{{ route('admin.app-supports.index', ['status' => 'closed']) }}" 
-               class="p-4 rounded-xl border transition-all text-center {{ ($filters['status'] ?? '') === 'closed' ? 'bg-gray-700 text-white border-gray-700 shadow-md' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-400' }}">
-                <div class="text-xs font-semibold uppercase tracking-wider opacity-80">Closed</div>
-                <div class="text-2xl font-bold mt-1">{{ $counts['closed'] ?? 0 }}</div>
+    <!-- Status Tabs / Counters -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-sm-4 col-lg-2">
+            <a href="{{ route('admin.app-supports.index') }}" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center py-3 {{ empty($filters['status']) ? 'bg-primary text-white' : 'bg-white text-dark' }}" style="border-radius: 0;">
+                    <small class="text-uppercase fw-semibold opacity-75" style="font-size: 11px;">All Reports</small>
+                    <h3 class="fw-bold mb-0 mt-1">{{ $counts['all'] ?? 0 }}</h3>
+                </div>
             </a>
         </div>
+        <div class="col-6 col-sm-4 col-lg-2">
+            <a href="{{ route('admin.app-supports.index', ['status' => 'pending']) }}" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center py-3 {{ ($filters['status'] ?? '') === 'pending' ? 'bg-warning text-dark' : 'bg-white text-dark' }}" style="border-radius: 0;">
+                    <small class="text-uppercase fw-semibold opacity-75" style="font-size: 11px;">Pending</small>
+                    <h3 class="fw-bold mb-0 mt-1">{{ $counts['pending'] ?? 0 }}</h3>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2">
+            <a href="{{ route('admin.app-supports.index', ['status' => 'in_progress']) }}" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center py-3 {{ ($filters['status'] ?? '') === 'in_progress' ? 'bg-info text-white' : 'bg-white text-dark' }}" style="border-radius: 0;">
+                    <small class="text-uppercase fw-semibold opacity-75" style="font-size: 11px;">In Progress</small>
+                    <h3 class="fw-bold mb-0 mt-1">{{ $counts['in_progress'] ?? 0 }}</h3>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2">
+            <a href="{{ route('admin.app-supports.index', ['status' => 'replied']) }}" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center py-3 {{ ($filters['status'] ?? '') === 'replied' ? 'bg-primary text-white' : 'bg-white text-dark' }}" style="border-radius: 0;">
+                    <small class="text-uppercase fw-semibold opacity-75" style="font-size: 11px;">Replied</small>
+                    <h3 class="fw-bold mb-0 mt-1">{{ $counts['replied'] ?? 0 }}</h3>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2">
+            <a href="{{ route('admin.app-supports.index', ['status' => 'resolved']) }}" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center py-3 {{ ($filters['status'] ?? '') === 'resolved' ? 'bg-success text-white' : 'bg-white text-dark' }}" style="border-radius: 0;">
+                    <small class="text-uppercase fw-semibold opacity-75" style="font-size: 11px;">Resolved</small>
+                    <h3 class="fw-bold mb-0 mt-1">{{ $counts['resolved'] ?? 0 }}</h3>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2">
+            <a href="{{ route('admin.app-supports.index', ['status' => 'closed']) }}" class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center py-3 {{ ($filters['status'] ?? '') === 'closed' ? 'bg-secondary text-white' : 'bg-white text-dark' }}" style="border-radius: 0;">
+                    <small class="text-uppercase fw-semibold opacity-75" style="font-size: 11px;">Closed</small>
+                    <h3 class="fw-bold mb-0 mt-1">{{ $counts['closed'] ?? 0 }}</h3>
+                </div>
+            </a>
+        </div>
+    </div>
 
-        <!-- Search & Filter Bar -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
-            <form method="GET" action="{{ route('admin.app-supports.index') }}" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 items-end">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Search Keyword / Ticket</label>
+    <!-- Filter Card -->
+    <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
+        <div class="card-body p-3">
+            <form method="GET" action="{{ route('admin.app-supports.index') }}" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label text-muted fw-semibold small mb-1">Search Keyword / Ticket</label>
                     <input type="text" name="search" value="{{ $filters['search'] ?? '' }}" 
                            placeholder="Ticket #, subject, or user name..." 
-                           class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                           class="form-control" style="border-radius: 0;">
                 </div>
 
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Category</label>
-                    <select name="category" class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <div class="col-md-3">
+                    <label class="form-label text-muted fw-semibold small mb-1">Category</label>
+                    <select name="category" class="form-select" style="border-radius: 0;">
                         <option value="">All Categories</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->value }}" {{ ($filters['category'] ?? '') === $category->value ? 'selected' : '' }}>
@@ -85,9 +107,9 @@
                     </select>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Status</label>
-                    <select name="status" class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <div class="col-md-3">
+                    <label class="form-label text-muted fw-semibold small mb-1">Status</label>
+                    <select name="status" class="form-select" style="border-radius: 0;">
                         <option value="">All Statuses</option>
                         @foreach($statuses as $status)
                             <option value="{{ $status->value }}" {{ ($filters['status'] ?? '') === $status->value ? 'selected' : '' }}>
@@ -97,111 +119,115 @@
                     </select>
                 </div>
 
-                <div class="flex gap-2">
-                    <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg text-sm transition">
-                        Filter
+                <div class="col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-fill" style="border-radius: 0;">
+                        <i class="fa fa-filter me-1"></i> Filter
                     </button>
-                    <a href="{{ route('admin.app-supports.index') }}" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium py-2 px-4 rounded-lg text-sm transition text-center">
+                    <a href="{{ route('admin.app-supports.index') }}" class="btn btn-outline-secondary" style="border-radius: 0;">
                         Reset
                     </a>
                 </div>
             </form>
         </div>
+    </div>
 
-        <!-- Reports Data Table -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-50 dark:bg-gray-900/60">
+    <!-- Reports Table Card -->
+    <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
+        <div class="card-header bg-transparent border-0 pt-3 pb-0 px-3 d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0 fw-bold text-dark">
+                {{ !empty($filters['status']) ? ucfirst(str_replace('_', ' ', $filters['status'])) . ' Reports' : 'All Support Reports' }}
+            </h5>
+            <span class="badge bg-light text-dark" style="border-radius: 0;">{{ $reports->total() }} Total</span>
+        </div>
+        <div class="card-body p-3">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover text-nowrap border-bottom mb-0 align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Ticket #</th>
-                            <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">User</th>
-                            <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Category & Subject</th>
-                            <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Device Info</th>
-                            <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
-                            <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
-                            <th scope="col" class="px-6 py-3.5 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Action</th>
+                            <th style="width: 130px;">Ticket #</th>
+                            <th>User</th>
+                            <th>Category & Subject</th>
+                            <th>Device Info</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th class="text-end" style="width: 100px;">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
+                    <tbody>
                         @forelse($reports as $report)
-                            <tr class="hover:bg-gray-50/60 dark:hover:bg-gray-700/30 transition">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                            <tr>
+                                <td>
+                                    <span class="fw-bold text-primary font-monospace">
                                         {{ $report->ticket_no }}
                                     </span>
                                     @if($report->media->count() > 0)
-                                        <span class="ml-1 inline-flex items-center text-xs text-gray-500" title="{{ $report->media->count() }} attachment(s)">
-                                            📎 {{ $report->media->count() }}
+                                        <span class="badge bg-secondary ms-1" style="border-radius: 0;" title="{{ $report->media->count() }} attachment(s)">
+                                            <i class="fa fa-paperclip"></i> {{ $report->media->count() }}
                                         </span>
                                     @endif
                                 </td>
 
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-semibold text-gray-900 dark:text-white">
+                                <td>
+                                    <div class="fw-semibold text-dark">
                                         {{ $report->user->name ?? 'Deleted User' }}
                                     </div>
-                                    <div class="text-xs text-gray-500 dark:text-gray-400">
+                                    <small class="text-muted">
                                         {{ $report->user->email ?? 'N/A' }}
-                                    </div>
+                                    </small>
                                 </td>
 
-                                <td class="px-6 py-4">
-                                    <div class="inline-block px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 mb-1">
+                                <td>
+                                    <span class="badge bg-light text-dark border mb-1" style="border-radius: 0;">
                                         {{ $report->category?->label() ?? ucfirst($report->category) }}
-                                    </div>
-                                    <div class="text-sm font-medium text-gray-900 dark:text-white truncate max-w-xs">
+                                    </span>
+                                    <div class="fw-medium text-dark text-truncate" style="max-width: 280px;">
                                         {{ $report->subject }}
                                     </div>
                                 </td>
 
-                                <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500 dark:text-gray-400">
+                                <td>
                                     @if($report->device_os || $report->app_version)
-                                        <div>{{ $report->device_os ?? 'OS N/A' }} ({{ $report->app_version ?? 'v?' }})</div>
-                                        <div class="text-gray-400">{{ $report->device_model ?? '' }}</div>
+                                        <div class="small fw-semibold text-dark">{{ $report->device_os ?? 'OS N/A' }} ({{ $report->app_version ?? 'v?' }})</div>
+                                        <small class="text-muted">{{ $report->device_model ?? '' }}</small>
                                     @else
-                                        <span class="text-gray-400">N/A</span>
+                                        <span class="text-muted small">N/A</span>
                                     @endif
                                 </td>
 
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td>
                                     @php
-                                        $statusClass = match($report->status?->value ?? $report->status) {
-                                            'pending'     => 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-                                            'in_progress' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-                                            'replied'     => 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300',
-                                            'resolved'    => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
-                                            'closed'      => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-                                            default       => 'bg-gray-100 text-gray-800',
+                                        $badgeBg = match($report->status?->value ?? $report->status) {
+                                            'pending'     => 'bg-warning text-dark',
+                                            'in_progress' => 'bg-info text-white',
+                                            'replied'     => 'bg-primary text-white',
+                                            'resolved'    => 'bg-success text-white',
+                                            'closed'      => 'bg-secondary text-white',
+                                            default       => 'bg-light text-dark',
                                         };
                                     @endphp
-                                    <span class="px-2.5 py-1 inline-flex text-xs leading-4 font-semibold rounded-full {{ $statusClass }}">
+                                    <span class="badge {{ $badgeBg }} px-2 py-1" style="border-radius: 0;">
                                         {{ $report->status?->label() ?? ucfirst($report->status) }}
                                     </span>
                                 </td>
 
-                                <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500 dark:text-gray-400">
-                                    <div>{{ $report->created_at->format('M d, Y') }}</div>
-                                    <div class="text-gray-400">{{ $report->created_at->format('h:i A') }}</div>
+                                <td>
+                                    <div class="small text-dark">{{ $report->created_at->format('M d, Y') }}</div>
+                                    <small class="text-muted">{{ $report->created_at->format('h:i A') }}</small>
                                 </td>
 
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <td class="text-end">
                                     <a href="{{ route('admin.app-supports.show', $report->id) }}" 
-                                       class="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-semibold text-xs py-1.5 px-3 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 transition">
-                                        Review & Reply &rarr;
+                                       class="btn btn-sm btn-primary d-inline-flex align-items-center gap-1" style="border-radius: 0;">
+                                        <span>Review & Reply</span>
+                                        <i class="fa fa-arrow-right"></i>
                                     </a>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                                    <div class="max-w-xs mx-auto">
-                                        <svg class="mx-auto h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
-                                        </svg>
-                                        <p class="mt-2 text-sm font-medium">No support reports found.</p>
-                                        <p class="text-xs text-gray-400 mt-1">When users report issues in the app, they will appear here.</p>
-                                    </div>
+                                <td colspan="7" class="text-center py-5 text-muted">
+                                    <i class="fa fa-inbox fs-1 d-block mb-2 opacity-50"></i>
+                                    No support reports found.
                                 </td>
                             </tr>
                         @endforelse
@@ -210,11 +236,10 @@
             </div>
 
             @if($reports->hasPages())
-                <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                <div class="d-flex justify-content-end mt-3">
                     {{ $reports->withQueryString()->links() }}
                 </div>
             @endif
         </div>
-
     </div>
 </x-admin-layout>

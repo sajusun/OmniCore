@@ -78,6 +78,28 @@ class AppSupportService
                 Log::error('AppSupport Notification Error: ' . $e->getMessage());
             }
 
+            // Also Notify Admins about new incoming support report
+            try {
+                $adminUsers = User::role(['super_admin', 'admin'])->get();
+                if ($adminUsers->isNotEmpty()) {
+                    $this->notificationService->sendMany(
+                        users: $adminUsers,
+                        title: 'New Support Request Submitted',
+                        body: "User {$user->name} submitted a support report (#{$support->ticket_no}): {$support->subject}",
+                        type: 'app_support_admin',
+                        referenceType: 'AppSupport',
+                        referenceId: $support->id,
+                        action: 'VIEW_ADMIN_SUPPORT_REPORT',
+                        meta: [
+                            'ticket_no' => $support->ticket_no,
+                            'user_id'   => $user->id,
+                        ]
+                    );
+                }
+            } catch (Exception $e) {
+                Log::error('AppSupport Admin Notification Error: ' . $e->getMessage());
+            }
+
             // Dispatch Confirmation Email to User
             try {
                 if (!empty($user->email)) {
