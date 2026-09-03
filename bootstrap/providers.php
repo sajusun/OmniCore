@@ -13,4 +13,5 @@ return [
     App\Modules\ActivityLog\Providers\ActivityLogServiceProvider::class,
     App\Modules\Post\Providers\PostServiceProvider::class,
     App\Modules\Social\Providers\SocialServiceProvider::class,
+    App\Modules\Call\Providers\CallServiceProvider::class,
 ];
