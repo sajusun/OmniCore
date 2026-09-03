@@ -9,7 +9,6 @@ use App\Http\Controllers\Web\Backend\DashboardController;
 use App\Http\Controllers\Web\Backend\Access\RoleController;
 use App\Http\Controllers\Web\Backend\Access\UserController;
 use App\Http\Controllers\Web\Backend\Event\EventController;
-use App\Http\Controllers\Web\Backend\Post\PostController;
 use App\Http\Controllers\Web\Backend\Club\ClubController;
 use App\Http\Controllers\Web\Backend\Vehicle\VehicleController;
 use App\Http\Controllers\Web\Backend\Access\AdminController;
@@ -98,12 +97,6 @@ Route::prefix('events')->name('events.')->group(function () {
     Route::put('/{event}/update', [EventController::class, 'update'])->name('update');
     Route::delete('/{event}/destroy', [EventController::class, 'destroy'])->name('destroy');
     Route::get('/status/{event_id}', [EventController::class, 'status'])->name('status');
-});
-
-Route::prefix('posts')->name('posts.')->group(function () {
-    Route::get('/', [PostController::class, 'index'])->name('index');
-    Route::get('/{post}', [PostController::class, 'show'])->name('show');
-    Route::delete('/{post}/destroy', [PostController::class, 'destroy'])->name('destroy');
 });
 
 Route::prefix('clubs')->name('clubs.')->group(function () {

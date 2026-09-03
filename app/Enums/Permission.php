@@ -58,6 +58,12 @@ enum Permission: string
     // ─── Activity Logs ────────────────────────────────────────────
     case ACTIVITY_LOG_VIEW = 'activity.log.view';
 
+    // ─── Post Management ──────────────────────────────────────────
+    case POST_LIST   = 'post.list';
+    case POST_SHOW   = 'post.show';
+    case POST_DELETE = 'post.delete';
+    case POST_STATUS = 'post.status';
+
     // ─── CMS / Pages ──────────────────────────────────────────────
     case CMS_MANAGE = 'cms.manage';
 
@@ -112,6 +118,11 @@ enum Permission: string
 
             self::ACTIVITY_LOG_VIEW   => 'Activity Log View',
 
+            self::POST_LIST           => 'Post List',
+            self::POST_SHOW           => 'Post Show',
+            self::POST_DELETE         => 'Post Delete',
+            self::POST_STATUS         => 'Post Status',
+
             self::CMS_MANAGE          => 'CMS Manage',
 
             self::SYSTEM_OPTIMIZE     => 'System Optimize',
@@ -143,6 +154,8 @@ enum Permission: string
             self::SUPPORT_CENTER_MANAGE                          => 'Support Center',
             self::NOTIFICATION_SEND                              => 'Notifications',
             self::ACTIVITY_LOG_VIEW                              => 'Activity Logs',
+            self::POST_LIST, self::POST_SHOW,
+            self::POST_DELETE, self::POST_STATUS                 => 'Posts',
             self::CMS_MANAGE                                     => 'CMS',
             self::SYSTEM_OPTIMIZE                                => 'System',
         };

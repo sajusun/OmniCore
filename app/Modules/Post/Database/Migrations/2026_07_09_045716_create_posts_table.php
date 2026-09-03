@@ -1,10 +1,8 @@
 <?php
 
-use App\Enums\PostStatusEnum;
-use App\Enums\PostVisibilityEnum;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -23,7 +21,7 @@ return new class extends Migration
             $table->string('slug')->nullable()->unique();
             $table->longText('content')->nullable();
             $table->string('thumbnail')->nullable();
-            $table->enum('type', ['post', 'shared',])->default('post');
+            $table->enum('type', ['post', 'shared'])->default('post');
             $table->string('visibility')->default('public');
             $table->string('status')->default('published');
 

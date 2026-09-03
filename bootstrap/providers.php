@@ -11,4 +11,5 @@ return [
     App\Modules\CMS\Providers\CMSServiceProvider::class,
     App\Modules\Chat\Providers\ChatServiceProvider::class,
     App\Modules\ActivityLog\Providers\ActivityLogServiceProvider::class,
+    App\Modules\Post\Providers\PostServiceProvider::class,
 ];

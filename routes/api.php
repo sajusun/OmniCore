@@ -18,8 +18,6 @@ use App\Http\Controllers\Api\FriendController;
 use App\Http\Controllers\Api\Frontend\ClubController;
 use App\Http\Controllers\Api\Frontend\CmsController;
 use App\Http\Controllers\Api\Frontend\EventController;
-use App\Http\Controllers\Api\Frontend\PostCommentController;
-use App\Http\Controllers\Api\Frontend\PostController;
 use App\Http\Controllers\Api\Frontend\VehicleController;
 use App\Http\Controllers\Api\NewsletterController;
 use App\Http\Controllers\Api\NotificationController;
@@ -142,32 +140,6 @@ Route::middleware('auth:api')->group(function () {
 
     // Bookmark
     Route::post('/events/{event}/bookmark', [EventController::class, 'toggleBookmark']);
-});
-
-Route::middleware(['auth:api'])->controller(PostController::class)->prefix('/posts')->group(function () {
-    Route::get('/', 'index');
-    Route::post('/store', 'store');
-    Route::get('/{post}/show', 'show');
-    Route::post('/{post}/update', 'update');
-    Route::delete('/{post}/delete', 'destroy');
-    Route::post('/{post}/like', 'like');
-    Route::post('/{post}/repost', 'repost');
-    Route::post('/{post}/save', 'toggleSave');
-    Route::get('/saved-posts', 'savedPosts');
-    Route::get('/share/{share_link}', 'share')->name('post.share');
-
-    Route::get('/feeds', 'feed');
-});
-
-Route::middleware('auth:api')->group(function () {
-    Route::get('/posts/{post}/comments', [PostCommentController::class, 'index']);
-    Route::post('/posts/{post}/comments', [PostCommentController::class, 'store']);
-    Route::get('/posts/{post}/liked', [PostController::class, 'likedUser']);
-    Route::post('/comments/{comment}/update', [PostCommentController::class, 'update']);
-    Route::delete('/comments/{comment}/delete', [PostCommentController::class, 'destroy']);
-    Route::post('/comments/{comment}/reply', [PostCommentController::class, 'reply']);
-    Route::post('/comments/{comment}/like', [PostCommentController::class, 'toggleLike']);
-    Route::get('/comments/{comment}/replies', [PostCommentController::class, 'replies']);
 });
 /*
 # Firebase Notification Route
