@@ -1,2 +1,0 @@
-copy the media table from migrations folder and pase it laravel default migrations folder.
-ensure do prevent duplicate table

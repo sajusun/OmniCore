@@ -2,77 +2,94 @@
 
 namespace App\Modules\Media\Traits;
 
-use App\Modules\Media\Models\Media;
-use Illuminate\Support\Facades\Storage;
+use App\Modules\Media\Enums\MediaCollection;
+use App\Modules\Media\Services\MediaService;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 
 trait HandlesMedia
 {
-
-    protected function uploadMedia($model, $files, $collection = 'default', $disk = 'public')
+    /**
+     * Get or resolve MediaService instance.
+     */
+    protected function mediaService(): MediaService
     {
-
-        $files = is_array($files) ? $files : [$files];
-        $uploadedMedia = [];
-        foreach ($files as $file) {
-            if (!$file) {
-                continue;
-            }
-            $path = $file->store($collection, $disk);
-
-            $media = $model->media()->create([
-
-                'disk' => $disk,
-                'collection_name' => $collection,
-                'original_name' => $file->getClientOriginalName(),
-                'file_name' => basename($path),
-                'mime_type' => $file->getMimeType(),
-                'extension' => $file->getClientOriginalExtension(),
-                'size' => $file->getSize(),
-                'path' => 'storage/' . $path,
-                'url' => asset('storage/' . $path),
-                'status' => 'active',
-            ]);
-
-            $uploadedMedia[] = $media;
-        }
-
-        return collect($uploadedMedia);
+        return app(MediaService::class);
     }
 
-
-    protected function updateMedia(mixed $model, mixed $files, $collection = 'default', $disk = 'public')
-    {
-
-        $existingMedia = $model->media()->where('collection_name', $collection)->get();
-
-        if ($existingMedia->isNotEmpty()) {
-            $this->deleteMedia($existingMedia->pluck('id')->toArray());
-        }
-
-        return $this->uploadMedia($model, $files, $collection, $disk);
+    /**
+     * Upload single or multiple media files for a model.
+     */
+    protected function uploadMedia(
+        Model $model,
+        mixed $files,
+        string $collection = MediaCollection::DEFAULT,
+        ?string $disk = null,
+        array $meta = [],
+        bool $isPrimary = false
+    ): Collection {
+        return $this->mediaService()->upload($model, $files, $collection, $disk, $meta, $isPrimary);
     }
 
+    /**
+     * Replace existing media in a collection with new file(s).
+     */
+    protected function updateMedia(
+        Model $model,
+        mixed $files,
+        string $collection = MediaCollection::DEFAULT,
+        ?string $disk = null,
+        array $meta = []
+    ): Collection {
+        return $this->mediaService()->update($model, $files, $collection, $disk, $meta);
+    }
 
-    protected function deleteMedia(int|array $ids): bool
+    /**
+     * Delete media item(s) by ID, Array of IDs, or Media model.
+     */
+    protected function deleteMedia(mixed $ids): bool
     {
+        return $this->mediaService()->delete($ids);
+    }
 
-        $ids = is_array($ids) ? $ids : [$ids];
+    /**
+     * Upload or replace user/model avatar.
+     */
+    protected function uploadAvatar(Model $model, UploadedFile $file, ?string $disk = null)
+    {
+        return $this->mediaService()->uploadAvatar($model, $file, $disk);
+    }
 
-        $mediaItems = Media::whereIn('id', $ids)->get();
+    /**
+     * Upload or replace user/model cover photo.
+     */
+    protected function uploadCoverPhoto(Model $model, UploadedFile $file, ?string $disk = null)
+    {
+        return $this->mediaService()->uploadCoverPhoto($model, $file, $disk);
+    }
 
-        if ($mediaItems->isEmpty()) {
-            return false;
-        }
+    /**
+     * Upload or replace thumbnail image.
+     */
+    protected function uploadThumbnail(Model $model, UploadedFile $file, ?string $disk = null)
+    {
+        return $this->mediaService()->uploadThumbnail($model, $file, $disk);
+    }
 
-        foreach ($mediaItems as $media) {
-            if ($media->path) {
-                $storagePath = str_replace('storage/', '', $media->path);
-                Storage::disk($media->disk)->delete($storagePath);
-            }
+    /**
+     * Upload multiple gallery images.
+     */
+    protected function uploadGallery(Model $model, array $files, ?string $disk = null): Collection
+    {
+        return $this->mediaService()->uploadGallery($model, $files, $disk);
+    }
 
-            $media->delete();
-        }
-
-        return true;
+    /**
+     * Upload document/file attachment.
+     */
+    protected function uploadDocument(Model $model, UploadedFile $file, ?string $disk = null)
+    {
+        return $this->mediaService()->uploadDocument($model, $file, $disk);
     }
 }
