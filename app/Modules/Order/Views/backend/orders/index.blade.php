@@ -1,7 +1,11 @@
 <x-admin-layout>
     <x-slot name="title">Orders Management</x-slot>
 
-    <div class="d-flex align-items-center justify-content-between mb-4">
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Orders Management</h2>
+    </x-slot>
+
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
         <div>
             <nav aria-label="breadcrumb" class="mb-1">
                 <ol class="breadcrumb mb-0" style="font-size: 0.875rem;">
@@ -11,16 +15,33 @@
             </nav>
             <h4 class="fw-bold text-dark mb-0">Customer Orders</h4>
         </div>
+        <div>
+            <a href="{{ route('admin.analytics.ecommerce') }}" class="btn btn-outline-primary d-inline-flex align-items-center gap-2">
+                <i class="fa fa-chart-line"></i> Sales Analytics
+            </a>
+        </div>
     </div>
 
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+            <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
+        <div class="card-header bg-transparent border-0 pt-3 pb-0 px-3 d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0 fw-bold text-dark">
+                <i class="fa fa-cart-shopping me-2 text-primary"></i> Orders List ({{ \App\Modules\Order\Models\Order::count() }})
+            </h5>
+        </div>
         <div class="card-body p-3">
             <x-datatable id="orders-datatable" :url="route('admin.orders.index')" :order="[[0, 'desc']]" :columns="[
                 ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'SL', 'orderable' => false, 'searchable' => false],
-                ['data' => 'order_number', 'name' => 'order_number', 'title' => 'Order #'],
-                ['data' => 'customer', 'name' => 'user.name', 'title' => 'Customer'],
-                ['data' => 'items_count', 'name' => 'items_count', 'title' => 'Items', 'orderable' => false],
-                ['data' => 'total_amount', 'name' => 'total_amount', 'title' => 'Total Amount'],
+                ['data' => 'order_number_display', 'name' => 'order_number', 'title' => 'Order #'],
+                ['data' => 'customer', 'name' => 'user.name', 'title' => 'Customer Details'],
+                ['data' => 'items_count', 'name' => 'items_count', 'title' => 'Items', 'orderable' => false, 'searchable' => false],
+                ['data' => 'total_amount', 'name' => 'total_amount', 'title' => 'Total Paid'],
                 ['data' => 'status', 'name' => 'status', 'title' => 'Order Status'],
                 ['data' => 'payment_status', 'name' => 'payment_status', 'title' => 'Payment Status'],
                 ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false]

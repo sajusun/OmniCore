@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('orders')->name('orders.')->group(function () {
     Route::get('/', [OrderController::class, 'index'])->name('index');
+    Route::get('/{id}', [OrderController::class, 'show'])->name('show');
+    Route::post('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('update-status');
+    Route::get('/{id}/invoice', [OrderController::class, 'invoice'])->name('invoice');
+    Route::delete('/{id}', [OrderController::class, 'destroy'])->name('destroy');
 });
 
 Route::prefix('analytics')->name('analytics.')->group(function () {
