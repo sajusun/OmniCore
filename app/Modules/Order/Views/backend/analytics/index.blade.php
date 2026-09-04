@@ -22,7 +22,7 @@
                         <span class="text-muted small fw-medium">TOTAL REVENUE</span>
                         <h3 class="fw-bold text-dark mt-1 mb-0">${{ number_format($analytics['overview']['total_revenue'], 2) }}</h3>
                     </div>
-                    <div class="bg-light p-3 rounded-circle text-success fs-4"><i class="fa fa-dollar-sign"></i></div>
+                    <div class="bg-light p-3 text-success fs-4"><i class="fa fa-dollar-sign"></i></div>
                 </div>
             </div>
         </div>
@@ -33,7 +33,7 @@
                         <span class="text-muted small fw-medium">TOTAL ORDERS</span>
                         <h3 class="fw-bold text-dark mt-1 mb-0">{{ $analytics['overview']['total_orders'] }}</h3>
                     </div>
-                    <div class="bg-light p-3 rounded-circle text-primary fs-4"><i class="fa fa-cart-shopping"></i></div>
+                    <div class="bg-light p-3 text-primary fs-4"><i class="fa fa-cart-shopping"></i></div>
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
                         <span class="text-muted small fw-medium">AVERAGE ORDER VALUE</span>
                         <h3 class="fw-bold text-dark mt-1 mb-0">${{ number_format($analytics['overview']['average_order_value'], 2) }}</h3>
                     </div>
-                    <div class="bg-light p-3 rounded-circle text-purple fs-4"><i class="fa fa-chart-line"></i></div>
+                    <div class="bg-light p-3 text-purple fs-4"><i class="fa fa-chart-line"></i></div>
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
                         <span class="text-muted small fw-medium">PENDING ORDERS</span>
                         <h3 class="fw-bold text-dark mt-1 mb-0">{{ $analytics['overview']['pending_orders'] }}</h3>
                     </div>
-                    <div class="bg-light p-3 rounded-circle text-warning fs-4"><i class="fa fa-clock"></i></div>
+                    <div class="bg-light p-3 text-warning fs-4"><i class="fa fa-clock"></i></div>
                 </div>
             </div>
         </div>

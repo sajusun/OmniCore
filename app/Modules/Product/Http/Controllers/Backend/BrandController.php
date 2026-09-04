@@ -21,7 +21,7 @@ class BrandController extends Controller
                     $featuredBadge = $row->is_featured ? ' <span class="badge bg-warning text-dark"><i class="fa fa-star"></i></span>' : '';
                     return '<div class="fw-bold">' . e($row->name) . $featuredBadge . '</div><small class="text-muted">Slug: ' . e($row->slug) . '</small>';
                 })
-                ->addColumn('products_count', fn ($row) => '<span class="badge bg-primary rounded-pill">' . $row->products_count . ' Products</span>')
+                ->addColumn('products_count', fn ($row) => '<span class="badge bg-primary">' . $row->products_count . ' Products</span>')
                 ->addColumn('website_link', fn ($row) => $row->website ? '<a href="' . e($row->website) . '" target="_blank" class="text-primary text-decoration-none"><i class="fa fa-external-link me-1"></i>' . e($row->website) . '</a>' : '<span class="text-muted small">N/A</span>')
                 ->addColumn('status', fn ($row) => $row->is_active ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>')
                 ->addColumn('action', function ($row) {

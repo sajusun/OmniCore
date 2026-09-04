@@ -62,7 +62,7 @@
                                     <tr>
                                         <td class="ps-4">
                                             <div class="d-flex align-items-center gap-3">
-                                                <img src="{{ $item->product ? ($item->product->thumbnail_url ?? asset('default/product.png')) : asset('default/product.png') }}" class="rounded border" style="width: 44px; height: 44px; object-fit: cover;" onError="this.src='https://placehold.co/100x100?text=Product';">
+                                                <img src="{{ $item->product ? ($item->product->thumbnail_url ?? asset('default/product.png')) : asset('default/product.png') }}" class="border" style="width: 44px; height: 44px; object-fit: cover;" onError="this.src='https://placehold.co/100x100?text=Product';">
                                                 <div>
                                                     <div class="fw-bold">{{ $item->product_name }}</div>
                                                     @if($item->variant_name)
@@ -126,7 +126,7 @@
                             <ul class="list-unstyled mb-0 position-relative">
                                 @foreach($order->histories as $history)
                                 <li class="mb-3 d-flex align-items-start gap-3">
-                                    <div class="badge bg-primary rounded-circle p-2 mt-1">
+                                    <div class="badge bg-primary p-2 mt-1">
                                         <i class="fa fa-check text-white" style="font-size: 0.75rem;"></i>
                                     </div>
                                     <div class="flex-grow-1 border-bottom pb-3">
@@ -191,7 +191,7 @@
                     </div>
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="avatar avatar-md bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                            <div class="avatar avatar-md bg-light-primary text-primary d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
                                 <i class="fa fa-user fs-5"></i>
                             </div>
                             <div>

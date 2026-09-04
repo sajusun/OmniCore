@@ -22,7 +22,7 @@ class CategoryController extends Controller
                     return '<div class="fw-bold d-flex align-items-center">' . $icon . e($row->name) . '</div><small class="text-muted">Slug: ' . e($row->slug) . '</small>';
                 })
                 ->addColumn('parent', fn ($row) => $row->parent ? '<span class="badge bg-light text-dark border">' . e($row->parent->name) . '</span>' : '<span class="badge bg-secondary-subtle text-secondary">Root Category</span>')
-                ->addColumn('products_count', fn ($row) => '<span class="badge bg-primary rounded-pill">' . $row->products_count . ' Products</span>')
+                ->addColumn('products_count', fn ($row) => '<span class="badge bg-primary">' . $row->products_count . ' Products</span>')
                 ->addColumn('status', fn ($row) => $row->is_active ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>')
                 ->addColumn('action', function ($row) {
                     $json = htmlspecialchars(json_encode([

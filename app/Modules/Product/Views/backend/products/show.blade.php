@@ -35,12 +35,12 @@
                     <div class="card-body p-4">
                         <div class="row g-4">
                             <div class="col-md-4 text-center">
-                                <img src="{{ $product->thumbnail_url ?? asset('default/product.png') }}" class="img-fluid rounded border shadow-sm" style="max-height: 220px; object-fit: cover;" onError="this.src='https://placehold.co/300x300?text=Product';">
+                                <img src="{{ $product->thumbnail_url ?? asset('default/product.png') }}" class="img-fluid border shadow-sm" style="max-height: 220px; object-fit: cover;" onError="this.src='https://placehold.co/300x300?text=Product';">
                                 
                                 @if($product->media && $product->media->where('collection_name', 'gallery')->isNotEmpty())
                                     <div class="mt-3 d-flex flex-wrap justify-content-center gap-2">
                                         @foreach($product->media->where('collection_name', 'gallery') as $med)
-                                            <img src="{{ $med->url }}" class="rounded border" style="width: 45px; height: 45px; object-fit: cover;">
+                                            <img src="{{ $med->url }}" class="border" style="width: 45px; height: 45px; object-fit: cover;">
                                         @endforeach
                                     </div>
                                 @endif
@@ -200,13 +200,13 @@
                     <div class="card-body p-4">
                         <div class="row text-center g-3">
                             <div class="col-6">
-                                <div class="p-3 bg-light rounded">
+                                <div class="p-3 bg-light">
                                     <div class="fs-4 fw-bold text-primary">{{ $product->sales_count ?? 0 }}</div>
                                     <small class="text-muted">Total Sales</small>
                                 </div>
                             </div>
                             <div class="col-6">
-                                <div class="p-3 bg-light rounded">
+                                <div class="p-3 bg-light">
                                     <div class="fs-4 fw-bold text-info">{{ $product->views_count ?? 0 }}</div>
                                     <small class="text-muted">Page Views</small>
                                 </div>

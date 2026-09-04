@@ -22,7 +22,7 @@ class InventoryController extends Controller
                 ->addColumn('name_info', function ($row) {
                     $thumb = $row->thumbnail_url ?? asset('default/product.png');
                     return '<div class="d-flex align-items-center gap-2">
-                                <img src="' . $thumb . '" class="rounded border" style="width: 40px; height: 40px; object-fit: cover;" onError="this.src=\'https://placehold.co/100x100?text=Product\';">
+                                <img src="' . $thumb . '" class="border" style="width: 40px; height: 40px; object-fit: cover;" onError="this.src=\'https://placehold.co/100x100?text=Product\';">
                                 <div>
                                     <div class="fw-bold">' . e($row->name) . '</div>
                                     <small class="text-muted">SKU: <code>' . e($row->sku ?? 'N/A') . '</code></small>

@@ -47,7 +47,7 @@ class ProductController extends Controller
                 ->addIndexColumn()
                 ->addColumn('thumbnail', function ($row) {
                     $thumb = $row->thumbnail_url ?? asset('default/product.png');
-                    return '<img src="' . $thumb . '" class="rounded shadow-sm" style="width: 46px; height: 46px; object-fit: cover; border: 1px solid #e2e8f0;" onError="this.src=\'https://placehold.co/100x100?text=Product\';">';
+                    return '<img src="' . $thumb . '" class="shadow-sm" style="width: 46px; height: 46px; object-fit: cover; border: 1px solid #e2e8f0;" onError="this.src=\'https://placehold.co/100x100?text=Product\';">';
                 })
                 ->addColumn('name_info', function ($row) {
                     $badge = $row->is_featured ? ' <span class="badge bg-warning text-dark"><i class="fa fa-star"></i> Featured</span>' : '';

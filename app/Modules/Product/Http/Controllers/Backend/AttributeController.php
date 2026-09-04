@@ -24,7 +24,7 @@ class AttributeController extends Controller
                 ->addColumn('type', fn ($row) => '<span class="badge bg-info text-capitalize">' . e($row->type) . '</span>')
                 ->addColumn('values_display', function ($row) {
                     $badges = $row->values->map(function ($val) {
-                        $colorIndicator = $val->code ? '<span class="d-inline-block rounded-circle me-1 border" style="width: 10px; height: 10px; background-color: ' . e($val->code) . ';"></span>' : '';
+                        $colorIndicator = $val->code ? '<span class="d-inline-block me-1 border" style="width: 10px; height: 10px; background-color: ' . e($val->code) . ';"></span>' : '';
                         return '<span class="badge bg-light text-dark border me-1 mb-1 d-inline-flex align-items-center">' . $colorIndicator . e($val->value) . ' <button type="button" class="btn-close ms-1" style="font-size: 0.5rem;" onclick="deleteAttributeValue(' . $val->id . ')" title="Remove"></button></span>';
                     })->implode(' ');
 
