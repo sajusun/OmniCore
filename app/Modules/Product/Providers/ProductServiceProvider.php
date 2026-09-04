@@ -7,17 +7,6 @@ use Illuminate\Support\ServiceProvider;
 
 class ProductServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
-
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         // 1. Auto-load Module Migrations
@@ -32,11 +21,17 @@ class ProductServiceProvider extends ServiceProvider
                 ->group(__DIR__ . '/../Routes/api.php');
         }
 
-        // 3. Auto-load Admin API Routes
+        // 3. Auto-load Admin Web Routes
         if (file_exists(__DIR__ . '/../Routes/admin.php')) {
-            Route::prefix('api')
-                ->middleware('api')
+            Route::prefix('admin')
+                ->name('admin.')
+                ->middleware(['web', 'auth'])
                 ->group(__DIR__ . '/../Routes/admin.php');
+        }
+
+        // 4. Auto-load Views
+        if (is_dir(__DIR__ . '/../Views')) {
+            $this->loadViewsFrom(__DIR__ . '/../Views', 'product');
         }
     }
 }
