@@ -14,4 +14,5 @@ return [
     App\Modules\Post\Providers\PostServiceProvider::class,
     App\Modules\Social\Providers\SocialServiceProvider::class,
     App\Modules\Call\Providers\CallServiceProvider::class,
+    App\Modules\Product\Providers\ProductServiceProvider::class,
 ];

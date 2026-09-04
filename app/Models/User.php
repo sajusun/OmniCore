@@ -6,6 +6,7 @@ use App\Traits\HasPost;
 use App\Traits\HasNotifications;
 use App\Modules\Social\Traits\HasSocialRelations;
 use App\Modules\Media\Traits\HasMedia;
+use App\Modules\Product\Traits\HasEcommerce;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +22,7 @@ class User extends Authenticatable implements JWTSubject
     use HasFactory,
         HasSocialRelations,
         HasMedia,
+        HasEcommerce,
         HasNotifications,
         HasPost,
         HasRoles,
