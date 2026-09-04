@@ -92,7 +92,78 @@
             Activities Logs
         </x-sidebar.link>
 
+        <!-- E-Commerce Group -->
+        <x-sidebar.heading>E-Commerce</x-sidebar.heading>
+
+        <x-sidebar.dropdown title="Products & Catalog"
+            :active="request()->routeIs(['admin.products.*', 'admin.categories.*', 'admin.brands.*', 'admin.attributes.*', 'admin.inventory.*', 'admin.reviews.*', 'admin.variants.*'])">
+            <x-slot name="icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4">
+                    </path>
+                </svg>
+            </x-slot>
+
+            <x-sidebar.sub-link href="{{ Route::has('admin.products.index') ? route('admin.products.index') : url('api/v1/admin/products') }}"
+                :active="request()->routeIs('admin.products.*')">
+                All Products
+            </x-sidebar.sub-link>
+
+            <x-sidebar.sub-link href="{{ Route::has('admin.categories.index') ? route('admin.categories.index') : url('api/v1/admin/categories') }}"
+                :active="request()->routeIs('admin.categories.*')">
+                Categories
+            </x-sidebar.sub-link>
+
+            <x-sidebar.sub-link href="{{ Route::has('admin.brands.index') ? route('admin.brands.index') : url('api/v1/admin/brands') }}"
+                :active="request()->routeIs('admin.brands.*')">
+                Brands
+            </x-sidebar.sub-link>
+
+            <x-sidebar.sub-link href="{{ Route::has('admin.attributes.index') ? route('admin.attributes.index') : url('api/v1/admin/attributes') }}"
+                :active="request()->routeIs('admin.attributes.*')">
+                Attributes & Options
+            </x-sidebar.sub-link>
+
+            <x-sidebar.sub-link href="{{ Route::has('admin.inventory.index') ? route('admin.inventory.index') : url('api/v1/admin/inventory/low-stock') }}"
+                :active="request()->routeIs('admin.inventory.*')">
+                Low Stock Inventory
+            </x-sidebar.sub-link>
+
+            <x-sidebar.sub-link href="{{ Route::has('admin.reviews.index') ? route('admin.reviews.index') : url('api/v1/admin/reviews') }}"
+                :active="request()->routeIs('admin.reviews.*')">
+                Reviews Moderation
+            </x-sidebar.sub-link>
+        </x-sidebar.dropdown>
+
+        <x-sidebar.dropdown title="Orders & Sales"
+            :active="request()->routeIs(['admin.orders.*', 'admin.coupons.*', 'admin.analytics.ecommerce'])">
+            <x-slot name="icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                    </path>
+                </svg>
+            </x-slot>
+
+            <x-sidebar.sub-link href="{{ Route::has('admin.orders.index') ? route('admin.orders.index') : url('api/v1/admin/orders') }}"
+                :active="request()->routeIs('admin.orders.*')">
+                All Orders
+            </x-sidebar.sub-link>
+
+            <x-sidebar.sub-link href="{{ Route::has('admin.coupons.index') ? route('admin.coupons.index') : url('api/v1/admin/coupons') }}"
+                :active="request()->routeIs('admin.coupons.*')">
+                Discount Coupons
+            </x-sidebar.sub-link>
+
+            <x-sidebar.sub-link href="{{ Route::has('admin.analytics.ecommerce') ? route('admin.analytics.ecommerce') : url('api/v1/admin/analytics/ecommerce') }}"
+                :active="request()->routeIs('admin.analytics.ecommerce')">
+                Sales Analytics
+            </x-sidebar.sub-link>
+        </x-sidebar.dropdown>
+
         <!-- Access Control Group -->
+
         <x-sidebar.heading>Access Control</x-sidebar.heading>
 
         <x-sidebar.link href="{{ route('admin.users.index') }}" :active="request()->routeIs('admin.users.*')">

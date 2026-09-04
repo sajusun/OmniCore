@@ -15,6 +15,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             EventTypeSeeder::class,
             VehicleRequirementSeeder::class,
+            \App\Modules\Product\Database\Seeders\ProductModuleSeeder::class,
+            \App\Modules\Order\Database\Seeders\OrderModuleSeeder::class,
         ]);
     }
 }
+

@@ -71,6 +71,47 @@ use Illuminate\Support\Facades\Route;
                     </a>
                 </li>
 
+                <li>
+                    <h3>E-Commerce</h3>
+                </li>
+                <li class="slide {{ request()->routeIs(['admin.products.*', 'admin.categories.*', 'admin.brands.*', 'admin.attributes.*', 'admin.inventory.*', 'admin.reviews.*', 'admin.variants.*']) ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
+                        <i class="fa-solid fa-boxes-stacked side-menu__icon"></i>
+                        <span class="side-menu__label">Products & Catalog</span>
+                        <i class="angle fe fe-chevron-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li><a href="{{ Route::has('admin.products.index') ? route('admin.products.index') : url('api/v1/admin/products') }}"
+                                class="slide-item {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">All Products</a></li>
+                        <li><a href="{{ Route::has('admin.categories.index') ? route('admin.categories.index') : url('api/v1/admin/categories') }}"
+                                class="slide-item {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">Categories</a></li>
+                        <li><a href="{{ Route::has('admin.brands.index') ? route('admin.brands.index') : url('api/v1/admin/brands') }}"
+                                class="slide-item {{ request()->routeIs('admin.brands.*') ? 'active' : '' }}">Brands</a></li>
+                        <li><a href="{{ Route::has('admin.attributes.index') ? route('admin.attributes.index') : url('api/v1/admin/attributes') }}"
+                                class="slide-item {{ request()->routeIs('admin.attributes.*') ? 'active' : '' }}">Attributes & Options</a></li>
+                        <li><a href="{{ Route::has('admin.inventory.index') ? route('admin.inventory.index') : url('api/v1/admin/inventory/low-stock') }}"
+                                class="slide-item {{ request()->routeIs('admin.inventory.*') ? 'active' : '' }}">Low Stock Inventory</a></li>
+                        <li><a href="{{ Route::has('admin.reviews.index') ? route('admin.reviews.index') : url('api/v1/admin/reviews') }}"
+                                class="slide-item {{ request()->routeIs('admin.reviews.*') ? 'active' : '' }}">Reviews Moderation</a></li>
+                    </ul>
+                </li>
+
+                <li class="slide {{ request()->routeIs(['admin.orders.*', 'admin.coupons.*', 'admin.analytics.ecommerce']) ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
+                        <i class="fa-solid fa-cart-shopping side-menu__icon"></i>
+                        <span class="side-menu__label">Orders & Sales</span>
+                        <i class="angle fe fe-chevron-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li><a href="{{ Route::has('admin.orders.index') ? route('admin.orders.index') : url('api/v1/admin/orders') }}"
+                                class="slide-item {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">All Orders</a></li>
+                        <li><a href="{{ Route::has('admin.coupons.index') ? route('admin.coupons.index') : url('api/v1/admin/coupons') }}"
+                                class="slide-item {{ request()->routeIs('admin.coupons.*') ? 'active' : '' }}">Discount Coupons</a></li>
+                        <li><a href="{{ Route::has('admin.analytics.ecommerce') ? route('admin.analytics.ecommerce') : url('api/v1/admin/analytics/ecommerce') }}"
+                                class="slide-item {{ request()->routeIs('admin.analytics.ecommerce') ? 'active' : '' }}">Sales Analytics</a></li>
+                    </ul>
+                </li>
+
                 @if(env('ENABLE_ROLE_MANAGEMENT'))
                 <li
                     class="slide {{ request()->routeIs(['admin.admins.*', 'admin.roles.*', 'admin.permissions.*']) ? 'is-expanded' : '' }}">

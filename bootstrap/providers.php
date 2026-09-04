@@ -15,4 +15,7 @@ return [
     App\Modules\Social\Providers\SocialServiceProvider::class,
     App\Modules\Call\Providers\CallServiceProvider::class,
     App\Modules\Product\Providers\ProductServiceProvider::class,
+    App\Modules\Cart\Providers\CartServiceProvider::class,
+    App\Modules\Coupon\Providers\CouponServiceProvider::class,
+    App\Modules\Order\Providers\OrderServiceProvider::class,
 ];

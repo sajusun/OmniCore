@@ -68,4 +68,82 @@ class CatalogController extends Controller
             'data' => ProductListResource::collection($products),
         ]);
     }
+
+    /**
+     * Fast autocomplete preview for search bar dropdowns
+     */
+    public function autocomplete(Request $request): JsonResponse
+    {
+        $q = trim((string) $request->get('q', ''));
+
+        if (empty($q) || strlen($q) < 2) {
+            return response()->json([
+                'success' => true,
+                'data' => [],
+            ]);
+        }
+
+        $searchTerm = "%{$q}%";
+        $products = Product::with(['category', 'media'])
+            ->published()
+            ->where(function ($query) use ($searchTerm) {
+                $query->where('name', 'like', $searchTerm)
+                    ->orWhere('sku', 'like', $searchTerm);
+            })
+            ->take(6)
+            ->get()
+            ->map(fn ($p) => [
+                'id' => $p->id,
+                'name' => $p->name,
+                'slug' => $p->slug,
+                'price' => (float) $p->price,
+                'compare_at_price' => $p->compare_at_price ? (float) $p->compare_at_price : null,
+                'thumbnail' => $p->thumbnail_url,
+                'category' => $p->category?->name,
+                'average_rating' => (float) $p->average_rating,
+            ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => $products,
+        ]);
+    }
+
+    /**
+     * "Frequently Bought Together" Bundle Recommendations
+     */
+    public function bundleRecommendations(string $slug, Request $request): JsonResponse
+    {
+        $mainProduct = Product::with(['category', 'media'])->where('slug', $slug)->firstOrFail();
+
+        // Get 2 complementary products from same/related categories
+        $bundleItems = Product::with(['category', 'media'])
+            ->published()
+            ->where('id', '!=', $mainProduct->id)
+            ->where(function ($q) use ($mainProduct) {
+                if ($mainProduct->category_id) {
+                    $q->where('category_id', $mainProduct->category_id);
+                }
+            })
+            ->take(2)
+            ->get();
+
+        $allBundle = collect([$mainProduct])->merge($bundleItems);
+        $totalOriginalPrice = $allBundle->sum('price');
+        $bundleDiscountPercent = 10; // 10% bundle discount
+        $bundlePrice = round($totalOriginalPrice * (1 - ($bundleDiscountPercent / 100)), 2);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'main_product' => new ProductListResource($mainProduct),
+                'bundle_items' => ProductListResource::collection($bundleItems),
+                'total_regular_price' => (float) $totalOriginalPrice,
+                'bundle_price' => (float) $bundlePrice,
+                'bundle_discount_percentage' => $bundleDiscountPercent,
+                'savings' => round($totalOriginalPrice - $bundlePrice, 2),
+            ],
+        ]);
+    }
 }
+

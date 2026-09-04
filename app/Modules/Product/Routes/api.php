@@ -18,9 +18,11 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1/store')->group(function () {
     // 1. Products Catalog
     Route::get('/products', [CatalogController::class, 'index']);
+    Route::get('/products/autocomplete', [CatalogController::class, 'autocomplete']);
     Route::get('/products/featured', [CatalogController::class, 'featured']);
     Route::get('/products/{slug}', [ProductDetailController::class, 'show']);
     Route::get('/products/{slug}/related', [ProductDetailController::class, 'related']);
+    Route::get('/products/{slug}/bundle-recommendations', [CatalogController::class, 'bundleRecommendations']);
 
     // 2. Categories
     Route::get('/categories', [CategoryCatalogController::class, 'tree']);

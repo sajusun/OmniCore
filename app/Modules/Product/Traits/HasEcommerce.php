@@ -2,14 +2,32 @@
 
 namespace App\Modules\Product\Traits;
 
+use App\Modules\Order\Models\Order;
+use App\Modules\Order\Models\UserAddress;
 use App\Modules\Product\Models\Product;
 use App\Modules\Product\Models\ProductReview;
 use App\Modules\Product\Models\ProductWishlist;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 trait HasEcommerce
 {
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(UserAddress::class, 'user_id');
+    }
+
+    public function defaultAddress(): HasOne
+    {
+        return $this->hasOne(UserAddress::class, 'user_id')->where('is_default', true);
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'user_id')->latest();
+    }
+
     public function productWishlists(): HasMany
     {
         return $this->hasMany(ProductWishlist::class, 'user_id');
@@ -57,3 +75,4 @@ trait HasEcommerce
         ];
     }
 }
+

@@ -18,7 +18,7 @@
 
 ## 📖 Overview
 
-**One-Dashboard** is a production-ready, enterprise-grade backend platform built on **Laravel 11** utilizing a **Modular Monolith Architecture**. It is engineered for high-scale applications requiring real-time communication, social networking graphs, WebRTC audio/video conferencing, polymorphic media asset pipelines, Shopify-grade e-commerce catalog with dynamic variant matrices, and multi-guard role-based access control (RBAC).
+**One-Dashboard** is a production-ready, enterprise-grade backend platform built on **Laravel 11** utilizing a **Modular Monolith Architecture**. It is engineered for high-scale applications requiring real-time communication, social networking graphs, WebRTC audio/video conferencing, polymorphic media asset pipelines, Shopify/Amazon-grade e-commerce (Product Catalog, Cartesian Variant Matrix, Guest/User Cart, Coupon Engine, Multi-Address Book, Atomic Order Checkout, Live Search & Analytics), and multi-guard role-based access control (RBAC).
 
 ---
 
@@ -28,7 +28,10 @@ The application is structured into decoupled domain modules under `app/Modules/`
 
 ```
 app/Modules/
-├── 🛍️ Product/          ── Shopify-Grade E-Commerce Catalog, Cartesian Variant Matrix, Categories & Inventory
+├── 🛍️ Product/          ── Shopify-Grade E-Commerce Catalog, Cartesian Variant Matrix, Categories & Recommendations
+├── 🛒 Cart/             ── Guest Token Sessions, User Cart Merging, Stock Validation & Coupon Discounts
+├── 🏷️ Coupon/           ── Percentage & Fixed Promo Discounts, Spend Limits & Usage Tracking
+├── 📦 Order/            ── Multi-Address Book, Shipping Rates, Atomic Checkout, Order State Machine & Analytics
 ├── 💬 Chat/             ── Telegram/Messenger-Grade Real-Time Messaging Engine
 ├── 📞 Call/             ── WebRTC Audio/Video Calling & Screen Sharing Engine
 ├── 🌐 Social/           ── Facebook/LinkedIn-Grade Social Graph & Relations
@@ -42,66 +45,42 @@ app/Modules/
 
 ---
 
-## 🌟 Feature Highlights
+## 🌟 E-Commerce Suite Highlights
 
-### 🛍️ 1. E-Commerce Products Engine (`app/Modules/Product`)
+### 🛍️ 1. Catalog & Dynamic Variant Matrix (`app/Modules/Product`)
 * **Flexible Product Architectures**: Support for **Simple Products**, **Variable Products with Variant Matrices**, and **Digital Downloadables**.
-* **Dynamic Cartesian Variant Matrix Generator**: Automatically computes all attribute combinations (e.g. `[Color: Red, Blue] × [Size: S, M, L]` ➔ 6 variants generated with custom SKU algorithms, individual pricing, barcodes, and stock levels).
+* **Dynamic Cartesian Variant Matrix Generator**: Computes all attribute combinations (e.g. `[Color] × [Size] × [Storage]` ➔ variants generated with custom SKU algorithms, individual pricing, barcodes, and stock levels).
 * **Multi-Level Category Tree**: Recursive parent-child category hierarchy with automatic breadcrumb paths (`Electronics > Computers > Laptops`).
-* **Deep Multi-Facet Filtering Catalog Engine**: High-performance querying supporting filters by Category, Brand, Price range (`min_price` to `max_price`), Stock status, Star rating (4+ stars), and Sorting (`newest`, `popular`, `best_selling`, `price_low_high`, `price_high_low`).
-* **Inventory & Stock Management**: Threshold-based low-stock alerts, live stock adjustments (set/increment/decrement), and backorder management.
-* **Customer Social Proof & Wishlist**: Verified buyer review badges, 1-5 star ratings, live average rating recalculation, photo reviews via `MediaService`, and customer wishlist toggle.
-* **Polymorphic Media Handshake**: Automatic S3/Local disk resolution for thumbnails, product galleries, variant images, category icons, and review attachments.
+* **Deep Multi-Facet Filtering Catalog Engine**: Queries active products supporting filters by Category, Brand, Price range (`min_price` to `max_price`), Stock status, Star rating (4+ stars), and Sorting (`newest`, `popular`, `best_selling`, `price_low_high`, `price_high_low`).
+* **Instant Autocomplete & Bundle Recommendations**: Fast search bar autocomplete preview (`/api/v1/store/products/autocomplete?q=...`) and "Frequently Bought Together" bundle packages with savings calculation.
+* **Customer Reviews & Ratings**: Verified buyer review badges, 1-5 star ratings, live average rating recalculation, photo reviews via `MediaService`.
 
 ---
 
-### 💬 2. Real-Time Chat Engine (`app/Modules/Chat`)
-* **Room Architecture**: 1-to-1 Direct Messages, Group Chats, and Broadcast Channels with Owner/Admin/Member role hierarchies.
-* **Seen & Read Receipts (✓✓)**: Dynamic `last_read_message_id` tracking with real-time `MessagesRead` broadcasting and read-receipt timestamps.
-* **Real-time Typing Presence (✍️)**: Zero-lag WebSocket `UserTyping` presence broadcasting.
-* **Message Emoji Reactions**: Interactive reactions (❤️, 👍, 😂, 🔥, 😮, 😢) with real-time reaction summaries (`MessageReactionUpdated`).
-* **Pinned Messages (📌 Telegram Style)**: Pin and unpin critical announcements in 1-on-1 and group chats.
-* **Message Forwarding (↗️)**: Multi-message selection and atomic forwarding to multiple target rooms.
-* **In-Chat Search & Shared Media Gallery (🖼️)**: Full-text search and filterable gallery (Photos, Videos, Audios, Documents).
-* **Smart Mute Presets (🔇)**: 1 Hour, 8 Hours, 1 Day, 7 Days, Forever, or Custom Datetime.
-* **Global Unread Badge Counter (🔴)**: Single-call unread count aggregator for bottom navigation badges.
+### 🛒 2. Smart Cart Engine (`app/Modules/Cart`)
+* **Guest Token & Session Carting**: Unauthenticated users can add items using guest tokens without immediate login.
+* **Seamless Guest-to-User Cart Sync**: When a guest logs in, their session cart automatically merges into their user database cart.
+* **Real-time Stock Protection**: Validates available stock for simple and variable items before adding or incrementing quantity.
+* **Dynamic Cart Pricing Summary**: Computes subtotal, applied coupon discounts, estimated tax, shipping, and grand total.
 
 ---
 
-### 📞 3. Audio/Video Call & Screen Sharing (`app/Modules/Call`)
-* **State Machine Lifecycle**: `initiating` ➔ `ringing` ➔ `connected` ➔ `ended` / `missed` / `rejected` / `busy`.
-* **WebRTC Signaling Engine**: Real-time SDP Offer/Answer relay and ICE Candidate exchange over WebSocket channels.
-* **Screen Sharing & Track Controls**: Instant mic mute/unmute, video camera toggle, and screen share stream broadcast (`TrackStateChanged`).
-* **Chat Integration (Handshake)**: Automatically logs call summaries (duration, missed, cancelled) into linked chat rooms.
-* **Call Logs & History**: Complete audit history with duration tracking and missed call filters.
+### 🏷️ 3. Coupon & Promo Code Engine (`app/Modules/Coupon`)
+* **Flexible Discount Schemes**: Percentage discounts (with optional maximum cap) and fixed amount discounts.
+* **Rule Constraints**: Minimum order amount, total coupon usage limit, per-user usage limits, start/end dates, and active flags.
+* **Automatic Cart Re-evaluation**: If cart items change and fall below the minimum threshold, coupons automatically detach gracefully.
 
 ---
 
-### 🌐 4. Social Graph & Relations (`app/Modules/Social`)
-* **Universal Trait Integration (`HasSocialRelations`)**: Plugs directly into `User` model providing `$user->friends()`, `$user->followers()`, `$user->isFriend()`, etc.
-* **Friendship Lifecycle**: Send request, Accept (with follow-sync), Reject, Cancel, Unfriend.
-* **Mutual Friends Engine**: High-performance SQL join queries for mutual friend listing and count.
-* **Friendship Suggestions**: Smart algorithm ranking potential connections based on mutual connections and network proximity.
-* **Follower Graph**: Follow, Unfollow, Toggle follow, Followers/Followings list.
-* **Block & Privacy System**: Blocking automatically terminates mutual friendships and follows both ways.
-* **Profile Relationship Card (`GET /api/users/{id}/relationship`)**: Instant status card returning friendship state, follow state, block state, and mutual friend counts.
-
----
-
-### 🖼️ 5. Polymorphic Media Pipeline (`app/Modules/Media`)
-* **Central `MediaService`**: Single source of truth for file uploads, updates, deletions, and collection management.
-* **Zero Broken Links (S3 & Local Disk-Aware)**: Relative paths stored in database; URLs resolved dynamically via `Storage::disk($disk)->url($path)`.
-* **Temporary Signed URLs**: Automatic support for private cloud storage buckets (`$media->getTemporaryUrl(30)`).
-* **Collision-Free Storage**: Slugified filenames with unique timestamps and random hashes.
-* **Automatic Storage Cleanup**: Deleting a database record automatically purges the physical file from S3 or local disk.
-* **Model Accessors (`HasMedia`)**: Instant access to `$user->avatar_url`, `$user->cover_photo_url`, `$product->thumbnail_url`, `$product->gallery_urls`.
-
----
-
-### 🛡️ 6. Multi-Guard Authentication & RBAC
-* **JWT Authentication** for high-performance Mobile & Web APIs.
-* **Spatie Permission Engine**: Granular permissions grouped by domain (`POST_LIST`, `POST_SHOW`, `USER_MANAGE`, etc.).
-* **Super Admin Bypass**: Global role bypass for administrative overrides.
+### 📦 4. Multi-Address, Shipping & Atomic Checkout (`app/Modules/Order`)
+* **Customer Multi-Address Book**: Manage multiple shipping & billing addresses with instant default toggle.
+* **Configurable Shipping Methods**: Standard, Express, and Pickup options with configurable free shipping thresholds (e.g. Free delivery on orders over $100).
+* **Atomic Checkout Engine**: Validates stock, calculates totals, creates order items, logs order history, and automatically locks/decrements stock.
+* **Order Lifecycle State Machine**:
+  - `pending` ➔ `confirmed` ➔ `processing` ➔ `shipped` ➔ `out_for_delivery` ➔ `delivered`.
+  - If an order is `cancelled` or `refunded`, inventory stock is **automatically restored** to products and variants.
+* **Real-time Order Tracking**: Public/Customer order tracking timeline (`/api/v1/store/orders/{orderNumber}/track`).
+* **Executive Sales & Revenue Analytics**: Complete dashboard metrics covering Total Revenue, Orders count, Average Order Value (AOV), Monthly Sales Trend graphs, and Top 5 Selling Products.
 
 ---
 
@@ -182,13 +161,6 @@ REVERB_APP_SECRET=one_dashboard_secret
 REVERB_HOST="localhost"
 REVERB_PORT=8080
 REVERB_SCHEME=http
-
-# AWS S3 (Optional - when FILESYSTEM_DISK=s3)
-AWS_ACCESS_KEY_ID=your_access_key
-AWS_SECRET_ACCESS_KEY=your_secret_key
-AWS_DEFAULT_REGION=us-east-1
-AWS_BUCKET=your_bucket_name
-AWS_USE_PATH_STYLE_ENDPOINT=false
 ```
 
 ---
@@ -199,7 +171,7 @@ AWS_USE_PATH_STYLE_ENDPOINT=false
 # Create storage symlink
 php artisan storage:link
 
-# Run fresh migrations with initial seeders
+# Run fresh migrations with initial seeders (includes 37+ products, 144 variants, coupons, shipping methods)
 php artisan migrate:fresh --seed
 ```
 
@@ -239,55 +211,82 @@ After running `--seed`, the following accounts are available for testing:
 
 ---
 
-## 📡 API Endpoint Reference
+## 📡 Complete API Endpoint Reference
 
-All API endpoints are prefixed with `/api` and secured with JWT `auth:api` middleware unless specified as public.
-
----
-
-### 🛍️ E-Commerce Storefront Endpoints (`/api/v1/store`)
-
-| Method | Endpoint | Auth Required | Request Parameters / Payload | Description & Working Mechanism |
-|---|---|---|---|---|
-| `GET` | `/api/v1/store/products` | No | **Query**: `search` (string), `category` (slug/id), `brand` (slug/id), `min_price` (num), `max_price` (num), `in_stock` (bool), `featured` (bool), `rating` (1-5), `sort` (`newest`, `popular`, `best_selling`, `price_low_high`, `price_high_low`), `per_page` (int) | **Catalog Multi-Facet Filter Engine**: Queries active products with calculated discounts, thumbnail, and eager-loaded relations. |
-| `GET` | `/api/v1/store/products/featured` | No | **Query**: `limit` (default: 8) | Fetches showcase high-converting products marked with `is_featured = true`. |
-| `GET` | `/api/v1/store/products/{slug}` | No | **Path**: `slug` (string) | **Product Details View**: Increments `views_count`, returns variant matrix, media gallery URLs, brand, breadcrumbs, rating breakdown, and user wishlist status. |
-| `GET` | `/api/v1/store/products/{slug}/related` | No | **Path**: `slug`, **Query**: `limit` (default: 4) | Suggests related products in the same category or brand. |
-| `GET` | `/api/v1/store/categories` | No | None | **Category Tree**: Returns recursive parent-child category tree with active subcategories and item counts. |
-| `GET` | `/api/v1/store/categories/{slug}` | No | **Path**: `slug`, **Query**: same catalog filters | Returns category details, full breadcrumbs path array, and filterable products under this category (and subcategories). |
-| `GET` | `/api/v1/store/brands` | No | None | Lists active brands with logos and product counts. |
-| `GET` | `/api/v1/store/brands/{slug}` | No | **Path**: `slug`, **Query**: same catalog filters | Returns brand profile and all associated products. |
-| `GET` | `/api/v1/store/products/{productId}/reviews` | No | **Path**: `productId`, **Query**: `per_page` (int) | Returns approved product reviews with user avatar, star rating, verified buyer badge, and photo attachments. |
-| `POST` | `/api/v1/store/products/{productId}/reviews` | Yes | **Body (Form-Data)**: `rating` (1-5, required), `title` (string), `comment` (string, required), `photos[]` (images, max 5) | Submits customer review with photos uploaded to `MediaService`, automatically recalculating product average rating. |
-| `GET` | `/api/v1/store/wishlist` | Yes | **Query**: `per_page` (int) | Paginated list of products saved in the customer's wishlist. |
-| `POST` | `/api/v1/store/wishlist/toggle/{productId}` | Yes | **Path**: `productId` | **Atomic Wishlist Toggle**: Adds or removes product from customer wishlist and returns new status (`in_wishlist: true/false`). |
+All API endpoints are prefixed with `/api` and secured with JWT `auth:api` middleware unless marked as public.
 
 ---
 
-### 🛠️ E-Commerce Admin Management Endpoints (`/api/v1/admin`)
+### 🛍️ Storefront Product & Catalog Endpoints (`/api/v1/store`)
 
 | Method | Endpoint | Auth | Request Parameters / Payload | Description & Working Mechanism |
 |---|---|---|---|---|
-| `GET` | `/api/v1/admin/products` | Yes | **Query**: `status` (`draft`/`published`/`archived`), `type`, `category_id`, `search`, `per_page` | Admin product management table with status filters. |
-| `POST` | `/api/v1/admin/products` | Yes | **Body (Form-Data)**: `name` (required), `category_id`, `brand_id`, `price` (required), `compare_at_price`, `cost_price`, `stock_quantity`, `type` (`simple`/`variable`), `manage_stock`, `thumbnail` (file), `gallery[]` (files) | Creates new product and attaches media via polymorphic `MediaService`. |
-| `GET` | `/api/v1/admin/products/{id}` | Yes | **Path**: `id` | Product details for admin edit modal. |
-| `PUT` | `/api/v1/admin/products/{id}` | Yes | **Body**: Product fields + thumbnail/gallery uploads | Updates product specifications, pricing, and media assets. |
-| `DELETE` | `/api/v1/admin/products/{id}` | Yes | **Path**: `id` | Soft-deletes product. |
-| `POST` | `/api/v1/admin/products/bulk-status` | Yes | **Body (JSON)**: `ids` (array of product IDs), `status` (`draft`/`published`/`archived`) | Bulk updates publishing status across multiple products. |
-| `POST` | `/api/v1/admin/products/bulk-prices` | Yes | **Body (JSON)**: `ids` (array of IDs), `type` (`percentage`/`fixed`), `value` (numeric) | Bulk adjusts prices by percentage or fixed amount and logs old price to `compare_at_price`. |
-| `POST` | `/api/v1/admin/products/{id}/variants/generate` | Yes | **Body (JSON)**: `attribute_value_ids` (e.g. `[[1,2], [5,6]]`), `options` (`{price, stock_quantity}`) | **Cartesian Matrix Generator**: Computes all combinations, generates SKUs (`PROD-RED-XL`), and creates variants. |
-| `PUT` | `/api/v1/admin/products/{id}/variants/{varId}` | Yes | **Body**: `sku`, `price`, `compare_at_price`, `stock_quantity`, `is_active`, `image` (file) | Updates individual variant pricing, stock, and variant image. |
-| `DELETE` | `/api/v1/admin/products/{id}/variants/{varId}` | Yes | **Path**: `id`, `varId` | Removes individual variant. |
-| `GET/POST` | `/api/v1/admin/categories` | Yes | **Body**: `name`, `parent_id`, `image` (file), `icon` (file), `order` | Category tree management and media upload. |
-| `PUT/DELETE`| `/api/v1/admin/categories/{id}` | Yes | **Body**: Category fields | Updates or deletes category. |
-| `GET/POST` | `/api/v1/admin/brands` | Yes | **Body**: `name`, `website`, `logo` (file), `is_active` | Brand catalog and logo management. |
-| `PUT/DELETE`| `/api/v1/admin/brands/{id}` | Yes | **Body**: Brand fields | Updates or deletes brand. |
-| `GET/POST` | `/api/v1/admin/attributes` | Yes | **Body**: `name`, `type` (`select`/`color`), `values` (array with `value`, `code`, `order`) | Manages global options (e.g. Color, Size, Material). |
-| `POST` | `/api/v1/admin/attributes/{id}/values` | Yes | **Body**: `value`, `code`, `order` | Adds single value to attribute. |
-| `GET` | `/api/v1/admin/inventory/low-stock` | Yes | **Query**: `per_page` | Lists products where `stock_quantity <= low_stock_threshold`. |
-| `POST` | `/api/v1/admin/inventory/adjust` | Yes | **Body**: `product_id`, `variant_id` (optional), `quantity`, `action` (`set`/`increment`/`decrement`) | Real-time stock adjustment with updated stock levels. |
-| `GET` | `/api/v1/admin/reviews` | Yes | **Query**: `status` (`pending`/`approved`/`rejected`), `product_id` | Moderation queue for user reviews. |
-| `PUT` | `/api/v1/admin/reviews/{id}/status` | Yes | **Body**: `status` (`approved`/`rejected`/`pending`) | Approves or rejects review, updating product rating stats. |
+| `GET` | `/api/v1/store/products` | No | **Query**: `search`, `category`, `brand`, `min_price`, `max_price`, `in_stock`, `featured`, `rating`, `sort`, `per_page` | **Catalog Multi-Facet Filter Engine**: Queries active products with calculated discounts, thumbnail, and eager-loaded relations. |
+| `GET` | `/api/v1/store/products/autocomplete` | No | **Query**: `q` (string, min 2 chars) | **Live Search Autocomplete**: Returns fast dropdown preview with title, price, thumbnail, category, rating. |
+| `GET` | `/api/v1/store/products/featured` | No | **Query**: `limit` (default: 8) | Fetches showcase high-converting products marked with `is_featured = true`. |
+| `GET` | `/api/v1/store/products/{slug}` | No | **Path**: `slug` (string) | **Product Details View**: Increments `views_count`, returns variant matrix, media gallery URLs, brand, breadcrumbs, rating breakdown, and user wishlist status. |
+| `GET` | `/api/v1/store/products/{slug}/bundle-recommendations` | No | **Path**: `slug` | **"Frequently Bought Together"**: Returns main product + 2 complementary items with calculated bundle discount. |
+| `GET` | `/api/v1/store/products/{slug}/related` | No | **Path**: `slug`, **Query**: `limit` (default: 4) | Suggests related products in the same category or brand. |
+| `GET` | `/api/v1/store/categories` | No | None | **Category Tree**: Returns recursive parent-child category tree with active subcategories and item counts. |
+| `GET` | `/api/v1/store/categories/{slug}` | No | **Path**: `slug`, **Query**: catalog filters | Returns category details, full breadcrumbs path array, and filterable products under this category (and subcategories). |
+| `GET` | `/api/v1/store/brands` | No | None | Lists active brands with logos and product counts. |
+| `GET` | `/api/v1/store/brands/{slug}` | No | **Path**: `slug`, **Query**: catalog filters | Returns brand profile and all associated products. |
+| `GET` | `/api/v1/store/products/{id}/reviews` | No | **Path**: `id`, **Query**: `per_page` | Returns approved product reviews with user avatar, star rating, verified buyer badge, and photo attachments. |
+| `POST` | `/api/v1/store/products/{id}/reviews` | Yes | **Body (Form-Data)**: `rating` (1-5), `title`, `comment`, `photos[]` (images) | Submits customer review with photos uploaded to `MediaService`, recalculating product average rating. |
+| `GET` | `/api/v1/store/wishlist` | Yes | **Query**: `per_page` | Paginated list of products saved in customer wishlist. |
+| `POST` | `/api/v1/store/wishlist/toggle/{id}` | Yes | **Path**: `id` | **Atomic Wishlist Toggle**: Adds or removes product from customer wishlist (`in_wishlist: true/false`). |
+
+---
+
+### 🛒 Storefront Cart & Coupons Endpoints (`/api/v1/store/cart`)
+
+| Method | Endpoint | Auth | Request Parameters / Headers | Description & Working Mechanism |
+|---|---|---|---|---|
+| `GET` | `/api/v1/store/cart` | Optional | **Header/Query**: `X-Guest-Token` or `guest_token` | Retrieves current cart for guest or authenticated user with full pricing breakdown. |
+| `POST` | `/api/v1/store/cart/items` | Optional | **Body (JSON)**: `product_id`, `variant_id` (optional), `quantity`, `guest_token` | Adds item to cart after verifying real-time stock levels. |
+| `PUT` | `/api/v1/store/cart/items/{itemId}` | Optional | **Body (JSON)**: `quantity` | Updates item quantity with live stock verification. Passing 0 removes item. |
+| `DELETE` | `/api/v1/store/cart/items/{itemId}` | Optional | None | Removes specific item from cart. |
+| `DELETE` | `/api/v1/store/cart` | Optional | None | Clears all items in current cart. |
+| `POST` | `/api/v1/store/cart/sync` | Yes | **Body (JSON)**: `guest_token` | **Guest Cart Merge**: Merges unauthenticated guest cart into user account upon login. |
+| `POST` | `/api/v1/store/cart/apply-coupon` | Optional | **Body (JSON)**: `coupon_code` | Validates and attaches promo coupon code to cart, recalculating discount and grand total. |
+| `POST` | `/api/v1/store/cart/remove-coupon` | Optional | None | Detaches applied coupon from cart. |
+
+---
+
+### 📦 Storefront Address, Shipping & Checkout Endpoints (`/api/v1/store`)
+
+| Method | Endpoint | Auth | Request Parameters / Payload | Description & Working Mechanism |
+|---|---|---|---|---|
+| `GET` | `/api/v1/store/shipping-methods` | No | None | Lists active shipping delivery options and rates. |
+| `GET` | `/api/v1/store/addresses` | Yes | None | Lists customer's saved shipping and billing addresses. |
+| `POST` | `/api/v1/store/addresses` | Yes | **Body (JSON)**: `recipient_name`, `phone`, `street_address`, `apartment_suite`, `city`, `state`, `postal_code`, `country`, `is_default` | Adds new address to customer address book. |
+| `PUT` | `/api/v1/store/addresses/{id}` | Yes | **Body (JSON)**: Address fields | Updates existing address. |
+| `POST` | `/api/v1/store/addresses/{id}/default` | Yes | None | Sets selected address as default shipping address. |
+| `DELETE` | `/api/v1/store/addresses/{id}` | Yes | None | Deletes address. |
+| `POST` | `/api/v1/store/checkout` | Yes | **Body (JSON)**: `address_id` (or `shipping_address` object), `shipping_method_id`, `payment_method` (`cod`/`stripe`/`sslcommerz`/`bkash`), `customer_notes` | **Atomic Checkout Engine**: Validates stock, locks totals, creates order & items, decrements inventory, and clears cart. |
+| `GET` | `/api/v1/store/orders` | Yes | **Query**: `per_page` | Paginated customer order history. |
+| `GET` | `/api/v1/store/orders/{orderNumber}` | Yes | **Path**: `orderNumber` | Detailed order summary with items, variant snapshots, and delivery address. |
+| `GET` | `/api/v1/store/orders/{orderNumber}/track` | Yes | **Path**: `orderNumber` | Live order timeline and progress tracker. |
+| `POST` | `/api/v1/store/orders/{orderNumber}/cancel` | Yes | **Body (JSON)**: `reason` | Cancels order (if pending) and **restores inventory stock**. |
+
+---
+
+### 🛠️ Admin E-Commerce Management Endpoints (`/api/v1/admin`)
+
+| Method | Endpoint | Auth | Request Parameters / Payload | Description & Working Mechanism |
+|---|---|---|---|---|
+| `GET` | `/api/v1/admin/analytics/ecommerce` | Yes | None | **Executive Sales Dashboard**: Total revenue, orders count, AOV, monthly sales trend graph, top 5 selling products. |
+| `GET` | `/api/v1/admin/orders` | Yes | **Query**: `status`, `payment_status`, `search`, `per_page` | Admin order management table with status filters. |
+| `GET` | `/api/v1/admin/orders/{id}` | Yes | **Path**: `id` | Full order review modal with customer details, items, timeline. |
+| `PUT` | `/api/v1/admin/orders/{id}/status` | Yes | **Body**: `status` (`pending`, `confirmed`, `processing`, `shipped`, `delivered`, `cancelled`), `comment` | Updates order state machine. Restores stock if cancelled. |
+| `PUT` | `/api/v1/admin/orders/{id}/payment` | Yes | **Body**: `payment_status` (`unpaid`, `paid`, `refunded`, `failed`), `transaction_id` | Updates payment status. |
+| `GET/POST` | `/api/v1/admin/coupons` | Yes | **Body**: `code`, `type` (`percentage`/`fixed`), `value`, `min_order_amount`, `max_discount_amount`, `usage_limit`, `usage_limit_per_user` | Coupon management and creation. |
+| `PUT/DELETE`| `/api/v1/admin/coupons/{id}` | Yes | **Body**: Coupon fields | Updates or deletes coupon. |
+| `GET/POST` | `/api/v1/admin/products` | Yes | **Body (Form-Data)**: Product fields + `thumbnail`, `gallery[]` | Product listing and creation with polymorphic media. |
+| `POST` | `/api/v1/admin/products/{id}/variants/generate` | Yes | **Body (JSON)**: `attribute_value_ids`, `options` | **Cartesian Matrix Generator**: Computes combinations and creates variants. |
+| `GET` | `/api/v1/admin/inventory/low-stock` | Yes | **Query**: `per_page` | Low stock inventory alerts table. |
+| `POST` | `/api/v1/admin/inventory/adjust` | Yes | **Body**: `product_id`, `variant_id`, `quantity`, `action` (`set`/`increment`/`decrement`) | Stock adjustment with audit updates. |
+| `GET/PUT` | `/api/v1/admin/reviews` | Yes | **Body**: `status` (`approved`/`rejected`/`pending`) | Review moderation queue. |
 
 ---
 
