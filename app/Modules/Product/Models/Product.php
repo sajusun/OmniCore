@@ -110,11 +110,6 @@ class Product extends Model
         return $this->hasMany(ProductReview::class, 'product_id')->where('status', 'approved');
     }
 
-    public function wishlists(): HasMany
-    {
-        return $this->hasMany(ProductWishlist::class, 'product_id');
-    }
-
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(ProductTag::class, 'product_tag_pivot', 'product_id', 'tag_id');

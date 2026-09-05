@@ -2,12 +2,11 @@
 
 namespace App\Modules\Product\Traits;
 
+use App\Modules\Interaction\Models\Bookmark;
 use App\Modules\Order\Models\Order;
 use App\Modules\Order\Models\UserAddress;
 use App\Modules\Product\Models\Product;
 use App\Modules\Product\Models\ProductReview;
-use App\Modules\Product\Models\ProductWishlist;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -28,21 +27,6 @@ trait HasEcommerce
         return $this->hasMany(Order::class, 'user_id')->latest();
     }
 
-    public function productWishlists(): HasMany
-    {
-        return $this->hasMany(ProductWishlist::class, 'user_id');
-    }
-
-    public function wishlistProducts(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Product::class,
-            'product_wishlists',
-            'user_id',
-            'product_id'
-        )->withTimestamps();
-    }
-
     public function productReviews(): HasMany
     {
         return $this->hasMany(ProductReview::class, 'user_id');
@@ -50,12 +34,20 @@ trait HasEcommerce
 
     public function hasInWishlist(int $productId): bool
     {
-        return $this->productWishlists()->where('product_id', $productId)->exists();
+        return Bookmark::where('user_id', $this->id)
+            ->where('bookmarkable_type', 'product')
+            ->where('bookmarkable_id', $productId)
+            ->where('collection', 'wishlist')
+            ->exists();
     }
 
     public function toggleWishlist(int $productId): array
     {
-        $existing = $this->productWishlists()->where('product_id', $productId)->first();
+        $existing = Bookmark::where('user_id', $this->id)
+            ->where('bookmarkable_type', 'product')
+            ->where('bookmarkable_id', $productId)
+            ->where('collection', 'wishlist')
+            ->first();
 
         if ($existing) {
             $existing->delete();
@@ -66,7 +58,12 @@ trait HasEcommerce
             ];
         }
 
-        $this->productWishlists()->create(['product_id' => $productId]);
+        Bookmark::create([
+            'user_id' => $this->id,
+            'bookmarkable_type' => 'product',
+            'bookmarkable_id' => $productId,
+            'collection' => 'wishlist',
+        ]);
 
         return [
             'action' => 'added',
@@ -75,4 +72,3 @@ trait HasEcommerce
         ];
     }
 }
-

@@ -2,9 +2,8 @@
 
 namespace App\Modules\Post\Services;
 
+use App\Modules\Interaction\Models\Comment;
 use App\Modules\Post\Models\Post;
-use App\Modules\Post\Models\PostComment;
-use App\Modules\Post\Models\PostCommentLike;
 use Illuminate\Support\Facades\Auth;
 
 class PostCommentService
@@ -21,63 +20,43 @@ class PostCommentService
             ->get();
     }
 
-    public function store(Post $post, array $data): PostComment
+    public function store(Post $post, array $data): Comment
     {
         $userId = Auth::id() ?? auth('api')->id();
 
-        return $post->comments()->create([
-            'user_id' => $userId,
-            'comment' => $data['comment'],
-        ])->load('user');
+        return $post->addComment($data['comment'] ?? $data['body'] ?? '', $userId)->load('user');
     }
 
-    public function update(PostComment $comment, array $data): PostComment
+    public function update(Comment $comment, array $data): Comment
     {
         $comment->update([
-            'comment' => $data['comment'],
-            'edited_at' => now(),
+            'body' => $data['comment'] ?? $data['body'] ?? $comment->body,
         ]);
 
         return $comment->fresh()->load('user');
     }
 
-    public function destroy(PostComment $comment): bool
+    public function destroy(Comment $comment): bool
     {
         return (bool) $comment->delete();
     }
 
-    public function reply(PostComment $comment, array $data): PostComment
+    public function reply(Comment $comment, array $data): Comment
     {
         $userId = Auth::id() ?? auth('api')->id();
 
-        return PostComment::create([
-            'post_id' => $comment->post_id,
-            'user_id' => $userId,
-            'parent_id' => $comment->id,
-            'comment' => $data['comment'],
-        ])->load('user');
+        return $comment->reply($data['comment'] ?? $data['body'] ?? '', $userId)->load('user');
     }
 
-    public function toggleLike(PostComment $comment): bool
+    public function toggleLike(Comment $comment): bool
     {
         $userId = Auth::id() ?? auth('api')->id();
-        $like = PostCommentLike::where('comment_id', $comment->id)->where('user_id', $userId)->first();
+        $res = $comment->toggleLike($userId);
 
-        if ($like) {
-            $like->delete();
-            return false;
-        }
-
-        PostCommentLike::create([
-            'comment_id' => $comment->id,
-            'user_id' => $userId,
-            'reaction' => 'like',
-        ]);
-
-        return true;
+        return (bool) ($res['liked'] ?? false);
     }
 
-    public function replies(PostComment $comment)
+    public function replies(Comment $comment)
     {
         return $comment->replies()
             ->with(['user', 'likes', 'replies.user', 'replies.likes'])

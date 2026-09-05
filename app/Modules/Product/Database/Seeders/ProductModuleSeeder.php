@@ -9,7 +9,6 @@ use App\Modules\Product\Models\ProductBrand;
 use App\Modules\Product\Models\ProductCategory;
 use App\Modules\Product\Models\ProductReview;
 use App\Modules\Product\Models\ProductTag;
-use App\Modules\Product\Models\ProductWishlist;
 use App\Modules\Product\Services\VariantMatrixService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -790,10 +789,7 @@ class ProductModuleSeeder extends Seeder
 
             // Randomly add to wishlist of user 1
             if (rand(0, 1) === 1 && isset($users[0])) {
-                ProductWishlist::firstOrCreate([
-                    'user_id' => $users[0]->id,
-                    'product_id' => $product->id,
-                ]);
+                $product->toggleBookmark($users[0], 'wishlist');
             }
         }
     }

@@ -9,8 +9,6 @@ use App\Helpers\Helper;
 use App\Models\User;
 use App\Modules\Media\Traits\HandlesMedia;
 use App\Modules\Post\Models\Post;
-use App\Modules\Post\Models\PostLike;
-use App\Modules\Post\Models\SavedPost;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
@@ -198,20 +196,9 @@ class PostService
     public function toggleLike(Post $post): bool
     {
         $userId = Auth::id() ?? auth('api')->id();
-        $like = PostLike::where('post_id', $post->id)->where('user_id', $userId)->first();
+        $res = $post->toggleLike($userId);
 
-        if ($like) {
-            $like->delete();
-            return false;
-        }
-
-        PostLike::create([
-            'post_id' => $post->id,
-            'user_id' => $userId,
-            'reaction' => 'like',
-        ]);
-
-        return true;
+        return (bool) ($res['liked'] ?? false);
     }
 
     public function likedUsers(Post|int $post)
@@ -248,19 +235,9 @@ class PostService
     public function toggleSave(Post $post): bool
     {
         $userId = Auth::id() ?? auth('api')->id();
-        $saved = SavedPost::where('user_id', $userId)->where('post_id', $post->id)->first();
+        $res = $post->toggleBookmark($userId, 'saved');
 
-        if ($saved) {
-            $saved->delete();
-            return false;
-        }
-
-        SavedPost::create([
-            'user_id' => $userId,
-            'post_id' => $post->id,
-        ]);
-
-        return true;
+        return (bool) ($res['bookmarked'] ?? false);
     }
 
     public function savedPosts()
@@ -270,6 +247,7 @@ class PostService
             return collect();
         }
 
-        return $user->savedPosts()->with(['user', 'media'])->latest()->paginate(15);
+        return app(\App\Modules\Interaction\Services\BookmarkService::class)
+            ->getUserBookmarks($user, 'saved', 'post');
     }
 }

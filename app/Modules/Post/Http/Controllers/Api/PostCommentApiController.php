@@ -4,13 +4,12 @@ namespace App\Modules\Post\Http\Controllers\Api;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Modules\Interaction\Models\Comment;
 use App\Modules\Post\Http\Requests\StoreCommentRequest;
 use App\Modules\Post\Http\Resources\PostCommentResource;
 use App\Modules\Post\Models\Post;
-use App\Modules\Post\Models\PostComment;
 use App\Modules\Post\Services\PostCommentService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class PostCommentApiController extends Controller
 {
@@ -34,7 +33,7 @@ class PostCommentApiController extends Controller
         return Helper::jsonResponse(true, 'Comment added successfully.', 201, new PostCommentResource($comment));
     }
 
-    public function update(StoreCommentRequest $request, PostComment $comment): JsonResponse
+    public function update(StoreCommentRequest $request, Comment $comment): JsonResponse
     {
         $comment = $this->postCommentService->update(
             $comment,
@@ -44,13 +43,13 @@ class PostCommentApiController extends Controller
         return Helper::jsonResponse(true, 'Comment updated successfully.', 200, new PostCommentResource($comment));
     }
 
-    public function destroy(PostComment $comment): JsonResponse
+    public function destroy(Comment $comment): JsonResponse
     {
         $this->postCommentService->destroy($comment);
         return Helper::jsonResponse(true, 'Comment deleted successfully.', 200);
     }
 
-    public function reply(StoreCommentRequest $request, PostComment $comment): JsonResponse
+    public function reply(StoreCommentRequest $request, Comment $comment): JsonResponse
     {
         $reply = $this->postCommentService->reply(
             $comment,
@@ -60,7 +59,7 @@ class PostCommentApiController extends Controller
         return Helper::jsonResponse(true, 'Reply added successfully.', 201, new PostCommentResource($reply));
     }
 
-    public function toggleLike(PostComment $comment): JsonResponse
+    public function toggleLike(Comment $comment): JsonResponse
     {
         $liked = $this->postCommentService->toggleLike($comment);
 
@@ -71,7 +70,7 @@ class PostCommentApiController extends Controller
         );
     }
 
-    public function replies(PostComment $comment): JsonResponse
+    public function replies(Comment $comment): JsonResponse
     {
         $replies = $this->postCommentService->replies($comment);
         return Helper::jsonResponse(true, 'Replies fetched successfully.', 200, PostCommentResource::collection($replies));

@@ -11,7 +11,7 @@ class PostCommentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'comment' => $this->comment,
+            'comment' => $this->body ?? $this->comment,
             'user' => [
                 'id' => $this->user?->id,
                 'name' => $this->user?->name,
@@ -22,7 +22,7 @@ class PostCommentResource extends JsonResource
                 'likes' => $this->likes_count ?? $this->likes()->count(),
                 'replies' => $this->replies_count ?? $this->replies()->count(),
             ],
-            'is_liked' => auth('api')->check() ? $this->likes->contains('user_id', auth('api')->id()) : false,
+            'is_liked' => auth('api')->check() ? $this->isLikedBy(auth('api')->user()) : false,
             'edited' => ! is_null($this->edited_at),
             'edited_at' => $this->edited_at,
             'created_at' => $this->created_at,
