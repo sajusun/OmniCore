@@ -2,7 +2,6 @@
 
 namespace App\Modules\Interaction\Http\Controllers\Api;
 
-use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Modules\Interaction\Http\Requests\GenerateShareLinkRequest;
 use App\Modules\Interaction\Http\Resources\ShareLinkResource;
@@ -46,14 +45,13 @@ class ShareApiController extends Controller
                 );
             }
 
-            return Helper::jsonResponse(
-                true,
+            return $this->success(
+                new ShareLinkResource($shareLink),
                 'Share link generated successfully.',
-                201,
-                new ShareLinkResource($shareLink)
+                201
             );
         } catch (Exception $e) {
-            return Helper::jsonErrorResponse($e->getMessage(), 400);
+            return $this->error($e->getMessage(), null, 400);
         }
     }
 }

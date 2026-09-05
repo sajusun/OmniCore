@@ -2,7 +2,7 @@
 
 namespace App\Modules\Interaction\Http\Controllers\Api;
 
-use App\Helpers\Helper;
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Modules\Interaction\Http\Requests\ToggleBookmarkRequest;
 use App\Modules\Interaction\Http\Resources\BookmarkResource;
@@ -40,9 +40,9 @@ class BookmarkApiController extends Controller
                 ? ($collection === 'wishlist' ? 'Added to wishlist.' : 'Saved to bookmarks.')
                 : ($collection === 'wishlist' ? 'Removed from wishlist.' : 'Removed from bookmarks.');
 
-            return Helper::jsonResponse(true, $message, 200, $result);
+            return $this->success($result, $message);
         } catch (Exception $e) {
-            return Helper::jsonErrorResponse($e->getMessage(), 400);
+            return $this->error($e->getMessage(), null, 400);
         }
     }
 
@@ -68,16 +68,9 @@ class BookmarkApiController extends Controller
                 $isCursor
             );
 
-            return Helper::jsonResponse(
-                true,
-                'Bookmarks retrieved successfully.',
-                200,
-                BookmarkResource::collection($bookmarks),
-                true,
-                $bookmarks
-            );
+            return $this->paginated($bookmarks, BookmarkResource::class, 'Bookmarks retrieved successfully.');
         } catch (Exception $e) {
-            return Helper::jsonErrorResponse($e->getMessage(), 400);
+            return $this->error($e->getMessage(), null, 400);
         }
     }
 }

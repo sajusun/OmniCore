@@ -2,7 +2,6 @@
 
 namespace App\Modules\Interaction\Http\Controllers\Api;
 
-use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Modules\Interaction\Http\Requests\StoreCommentRequest;
 use App\Modules\Interaction\Http\Resources\CommentResource;
@@ -40,16 +39,9 @@ class CommentApiController extends Controller
                 (int) $request->input('per_page', 15)
             );
 
-            return Helper::jsonResponse(
-                true,
-                'Comments retrieved successfully.',
-                200,
-                CommentResource::collection($comments),
-                true,
-                $comments
-            );
+            return $this->paginated($comments, CommentResource::class, 'Comments retrieved successfully.');
         } catch (Exception $e) {
-            return Helper::jsonErrorResponse($e->getMessage(), 400);
+            return $this->error($e->getMessage(), null, 400);
         }
     }
 
@@ -80,14 +72,13 @@ class CommentApiController extends Controller
                 );
             }
 
-            return Helper::jsonResponse(
-                true,
+            return $this->success(
+                new CommentResource($comment->load('user')),
                 'Comment added successfully.',
-                201,
-                new CommentResource($comment->load('user'))
+                201
             );
         } catch (Exception $e) {
-            return Helper::jsonErrorResponse($e->getMessage(), 400);
+            return $this->error($e->getMessage(), null, 400);
         }
     }
 
@@ -99,9 +90,9 @@ class CommentApiController extends Controller
         try {
             $this->commentService->deleteComment($comment, $request->user());
 
-            return Helper::jsonResponse(true, 'Comment deleted successfully.', 200);
+            return $this->success(null, 'Comment deleted successfully.');
         } catch (Exception $e) {
-            return Helper::jsonErrorResponse($e->getMessage(), 403);
+            return $this->error($e->getMessage(), null, 403);
         }
     }
 }

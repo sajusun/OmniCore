@@ -2,7 +2,6 @@
 
 namespace App\Modules\Interaction\Http\Controllers\Api;
 
-use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Modules\Interaction\Http\Requests\RecordViewRequest;
 use App\Modules\Interaction\Services\ViewService;
@@ -37,9 +36,9 @@ class ViewApiController extends Controller
 
             $message = $result['recorded'] ? 'View recorded successfully.' : 'View already counted recently (cooldown active).';
 
-            return Helper::jsonResponse(true, $message, 200, $result);
+            return $this->success($result, $message);
         } catch (Exception $e) {
-            return Helper::jsonErrorResponse($e->getMessage(), 400);
+            return $this->error($e->getMessage(), null, 400);
         }
     }
 
@@ -61,9 +60,9 @@ class ViewApiController extends Controller
 
             $stats = $this->viewService->getViewStats($model);
 
-            return Helper::jsonResponse(true, 'View stats retrieved successfully.', 200, $stats);
+            return $this->success($stats, 'View stats retrieved successfully.');
         } catch (Exception $e) {
-            return Helper::jsonErrorResponse($e->getMessage(), 400);
+            return $this->error($e->getMessage(), null, 400);
         }
     }
 }
