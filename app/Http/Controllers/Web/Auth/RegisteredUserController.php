@@ -15,7 +15,6 @@ use Illuminate\View\View;
 use App\Mail\OtpMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Http\Middleware\WebCustomRedirectMiddleware;
 use Exception;
 
 class RegisteredUserController extends Controller

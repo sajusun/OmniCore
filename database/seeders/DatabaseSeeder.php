@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Modules\CMS\Database\Seeders\CMSModuleSeeder;
+use App\Modules\Chat\Database\Seeders\ChatModuleSeeder;
 use App\Modules\Order\Database\Seeders\OrderModuleSeeder;
+use App\Modules\Post\Database\Seeders\PostModuleSeeder;
 use App\Modules\Product\Database\Seeders\ProductModuleSeeder;
 use Illuminate\Database\Seeder;
 
@@ -17,6 +20,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ProductModuleSeeder::class,
             OrderModuleSeeder::class,
+            PostModuleSeeder::class,
+            ChatModuleSeeder::class,
+            CMSModuleSeeder::class,
         ]);
     }
 }
