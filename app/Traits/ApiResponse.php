@@ -2,25 +2,18 @@
 
 namespace App\Traits;
 
+use App\Helpers\Helper;
+use Illuminate\Http\JsonResponse;
+
 trait ApiResponse
 {
-    public function success($data = null, $message = null, $status = 200)
+    public function success(mixed $data = null, ?string $message = 'Success', int $status = 200): JsonResponse
     {
-        return response()->json([
-            'status' => true,
-            'message' => $message,
-            'data' => $data,
-            'code' => $status,
-        ], $status);
+        return Helper::jsonResponse(true, $message ?? 'Success', $status, $data);
     }
 
-    public function error($message = 'Something went wrong', $errors = null, $status = 400)
+    public function error(string $message = 'Something went wrong', mixed $errors = null, int $status = 400): JsonResponse
     {
-        return response()->json([
-            'status' => false,
-            'message' => $message,
-            'data' => $errors,
-            'code' => $status,
-        ], $status);
+        return Helper::jsonErrorResponse($message, $status, $errors ?? []);
     }
 }

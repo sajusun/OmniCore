@@ -63,8 +63,20 @@ if (!function_exists('jsonErrorResponse')) {
     /**
      * Helper proxy for standardized JSON error responses.
      */
-    function jsonErrorResponse(string $message, int $code = 400, array $errors = []): JsonResponse
+    function jsonErrorResponse(string $message = 'Something went wrong', int $code = 400, mixed $errors = []): JsonResponse
     {
         return Helper::jsonErrorResponse($message, $code, $errors);
+    }
+}
+
+if (!function_exists('fileService')) {
+    /**
+     * Get the FileService instance.
+     *
+     * @return \App\Services\FileService
+     */
+    function fileService(): \App\Services\FileService
+    {
+        return app(\App\Services\FileService::class);
     }
 }
