@@ -104,8 +104,10 @@ class FirebaseService
             ]) > 0;
     }
 
-    public function getDevices(User $user): Collection
+    public function getDevices(User $user, ?string $currentJwt = null): Collection
     {
+        $currentJwtHash = !empty($currentJwt) ? hash('sha256', $currentJwt) : null;
+
         return FirebaseToken::where('user_id', $user->id)
             ->select([
                 'id',
@@ -113,12 +115,26 @@ class FirebaseService
                 'device_name',
                 'platform',
                 'ip_address',
+                'user_agent',
+                'jwt_hash',
                 'last_activity_at',
                 'status',
                 'created_at',
             ])
             ->latest('last_activity_at')
-            ->get();
+            ->get()
+            ->map(function ($device) use ($currentJwtHash) {
+                $device->is_current_device = ($currentJwtHash !== null && $device->jwt_hash === $currentJwtHash);
+                unset($device->jwt_hash);
+                return $device;
+            });
+    }
+
+    public function deleteById(User $user, int $id): bool
+    {
+        return FirebaseToken::where('user_id', $user->id)
+            ->where('id', $id)
+            ->delete() > 0;
     }
 
     public function getCurrentDevice(string $jwtToken): ?FirebaseToken

@@ -12,18 +12,18 @@ class Verification extends Model
 {
 
 
-    public const string STATUS_PENDING  = 'pending';
-    public const string STATUS_VERIFIED = 'verified';
-    public const string STATUS_EXPIRED  = 'expired';
+    public const STATUS_PENDING  = 'pending';
+    public const STATUS_VERIFIED = 'verified';
+    public const STATUS_EXPIRED  = 'expired';
 
 
 
-    public const string TYPE_OTP   = 'otp';
-    public const string TYPE_TOKEN = 'token';
+    public const TYPE_OTP   = 'otp';
+    public const TYPE_TOKEN = 'token';
 
 
-    public const string PURPOSE_EMAIL_VERIFICATION = 'email_verification';
-    public const string PURPOSE_PASSWORD_RESET     = 'password_reset';
+    public const PURPOSE_EMAIL_VERIFICATION = 'email_verification';
+    public const PURPOSE_PASSWORD_RESET     = 'password_reset';
 
     // -------------------------------------------------------------------------
     // Eloquent configuration

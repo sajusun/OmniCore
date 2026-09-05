@@ -12,9 +12,12 @@ use Illuminate\Support\Facades\Route;
 | Public General Root Endpoints
 |--------------------------------------------------------------------------
 */
-Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe']);
-Route::post('/contact-us', [ContactController::class, 'store']);
-Route::post('app/webhooks/revenuecat', RevenueCatWebhookController::class);
+Route::middleware(['throttle:10,1'])->group(function () {
+    Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+    Route::post('/contact-us', [ContactController::class, 'store'])->name('contact.store');
+});
+
+Route::post('app/webhooks/revenuecat', RevenueCatWebhookController::class)->name('webhooks.revenuecat');
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +25,17 @@ Route::post('app/webhooks/revenuecat', RevenueCatWebhookController::class);
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth:api', 'throttle:api'])->group(function () {
-    // ─── Firebase Tokens ─────────────────────────────────────────────────
+    // ─── Firebase Tokens & Device Sessions ───────────────────────────────
+    Route::prefix('firebase/tokens')->controller(FirebaseTokenController::class)->name('firebase.tokens.')->group(function () {
+        Route::get('/', 'index')->name('index');                         // List all logged-in devices
+        Route::post('/', 'store')->name('store');                        // Save/Update FCM token & session
+        Route::delete('/others', 'revokeOthers')->name('revoke_others'); // Logout/Revoke all other devices
+        Route::delete('/all', 'revokeAll')->name('revoke_all');          // Logout/Revoke all devices
+        Route::delete('/{deviceId?}', 'destroy')->name('destroy');       // Revoke specific device session
+        Route::post('/touch', 'touch')->name('touch');                   // Refresh activity
+    });
+
+    // ─── Legacy Firebase Aliases (for backward compatibility) ────────────
     Route::prefix('firebase')->controller(FirebaseTokenController::class)->group(function () {
         Route::post('firebase-token', 'store');
         Route::post('firebase-token/delete', 'destroy');
@@ -30,14 +43,12 @@ Route::middleware(['auth:api', 'throttle:api'])->group(function () {
     });
 
     // ─── Notifications ───────────────────────────────────────────────────
-    Route::prefix('notifications')->group(function () {
-        Route::get('/', [NotificationController::class, 'index']);
-        Route::get('/unread-count', [NotificationController::class, 'unreadCount']);
-        Route::post('/{notification}/read', [NotificationController::class, 'markAsRead']);
-        Route::post('/read-all', [NotificationController::class, 'markAllAsRead']);
-        Route::delete('/destroy-all', [NotificationController::class, 'destroyAll']);
-        Route::delete('/delete-all', [NotificationController::class, 'destroyAll']);
-        Route::delete('/{notification}', [NotificationController::class, 'destroy']);
+    Route::prefix('notifications')->controller(NotificationController::class)->name('notifications.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/unread-count', 'unreadCount')->name('unread_count');
+        Route::post('/{notification}/read', 'markAsRead')->name('read');
+        Route::post('/read-all', 'markAllAsRead')->name('read_all');
+        Route::delete('/destroy-all', 'destroyAll')->name('destroy_all');
+        Route::delete('/{notification}', 'destroy')->name('destroy');
     });
 });
-

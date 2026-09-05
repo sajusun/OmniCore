@@ -355,6 +355,44 @@ All API endpoints are prefixed with `/api` and secured with JWT `auth:api` middl
 
 ---
 
+### 📱 Device Session & Firebase Push Token Management (`/api/firebase/tokens`)
+
+Multi-device login tracking, remote device session revocation, and Firebase Cloud Messaging (FCM) token synchronization.
+
+| Method | Endpoint | Auth | Request Parameters / Payload | Description & Working Mechanism |
+|---|---|---|---|---|
+| `GET` | `/api/firebase/tokens` | Yes | None | **Active Device Sessions**: Lists all logged-in devices/sessions for the authenticated user, complete with `is_current_device: true/false`, device name, platform (`ios`/`android`/`web`), IP address, and last activity timestamp. |
+| `POST` | `/api/firebase/tokens` | Yes | **Body (JSON)**: `token` (FCM string), `device_id` (UUID), `device_name` (optional), `platform` (optional) | Registers or updates device FCM push token, associating it with the current JWT session hash. |
+| `DELETE` | `/api/firebase/tokens/{deviceId?}` | Yes | **Path/Body**: `deviceId` or `device_id` / `id` | **Revoke Specific Device**: Remotely logs out and deactivates a specific device session. |
+| `DELETE` | `/api/firebase/tokens/others` | Yes | None | **Revoke All Other Devices**: Remotely logs out all devices except the current active session. |
+| `DELETE` | `/api/firebase/tokens/all` | Yes | None | **Revoke All Devices**: Logs out and invalidates all device sessions for the authenticated user. |
+| `POST` | `/api/firebase/tokens/touch` | Yes | **Body (JSON)**: `device_id` | **Activity Heartbeat**: Updates device `last_activity_at` timestamp and client metadata. |
+
+---
+
+### 🔔 In-App Notifications Endpoints (`/api/notifications`)
+
+| Method | Endpoint | Auth | Parameters / Payload | Description & Working Mechanism |
+|---|---|---|---|---|
+| `GET` | `/api/notifications` | Yes | `per_page`, `page` | Paginated list of user notifications with sender info, action links, and read status. |
+| `GET` | `/api/notifications/unread-count` | Yes | None | Returns unread notification count badge for UI navbar. |
+| `POST` | `/api/notifications/{notification}/read` | Yes | **Path**: `notification` ID | Marks specific notification as read (`read_at` timestamp). |
+| `POST` | `/api/notifications/read-all` | Yes | None | Marks all unread notifications as read. |
+| `DELETE` | `/api/notifications/destroy-all` | Yes | None | Deletes all notifications for the authenticated user. |
+| `DELETE` | `/api/notifications/{notification}` | Yes | **Path**: `notification` ID | Deletes a single notification. |
+
+---
+
+### 🌐 Public & Webhook Endpoints
+
+| Method | Endpoint | Auth | Rate Limit | Description |
+|---|---|---|---|---|
+| `POST` | `/api/newsletter/subscribe` | No | 10 req/min | Newsletter subscription endpoint with email validation. |
+| `POST` | `/api/contact-us` | No | 10 req/min | Public contact inquiries with customer message dispatch. |
+| `POST` | `/api/app/webhooks/revenuecat` | No | None | RevenueCat in-app purchase and subscription lifecycle webhook handler. |
+
+---
+
 ## 🧹 Maintenance & Optimization
 
 ```bash

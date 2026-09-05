@@ -12,15 +12,19 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Verification extends Model
 {
-    public const string STATUS_PENDING  = 'pending';
-    public const string STATUS_VERIFIED = 'verified';
-    public const string STATUS_EXPIRED  = 'expired';
+    public const STATUS_PENDING = 'pending';
 
-    public const string TYPE_OTP   = 'otp';
-    public const string TYPE_TOKEN = 'token';
+    public const STATUS_VERIFIED = 'verified';
 
-    public const string PURPOSE_EMAIL_VERIFICATION = 'email_verification';
-    public const string PURPOSE_PASSWORD_RESET     = 'password_reset';
+    public const STATUS_EXPIRED = 'expired';
+
+    public const TYPE_OTP = 'otp';
+
+    public const TYPE_TOKEN = 'token';
+
+    public const PURPOSE_EMAIL_VERIFICATION = 'email_verification';
+
+    public const PURPOSE_PASSWORD_RESET = 'password_reset';
 
     protected $table = 'verifications';
 
@@ -47,12 +51,12 @@ class Verification extends Model
     ];
 
     protected $casts = [
-        'attempts'          => 'integer',
-        'request_count'     => 'integer',
+        'attempts' => 'integer',
+        'request_count' => 'integer',
         'last_requested_at' => 'datetime',
-        'blocked_until'     => 'datetime',
-        'expires_at'        => 'datetime',
-        'verified_at'       => 'datetime',
+        'blocked_until' => 'datetime',
+        'expires_at' => 'datetime',
+        'verified_at' => 'datetime',
     ];
 
     protected $hidden = [
