@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Modules\Auth\Http\Controllers\Web;
+
+use App\Models\Setting;
+use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Auth\LoginRequest;
+
+class AuthenticatedSessionController extends Controller
+{
+    /**
+     * Display the login view.
+     */
+    public function create(): View
+    {
+        $settings = Setting::first();
+        return view('auth.login', compact('settings'));
+    }
+
+    /**
+     * Handle an incoming authentication request.
+     */
+    public function store(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticate();
+
+        $request->session()->regenerate();
+
+        session()->flash('success', 'Welcome back!');
+
+        $user = Auth::user();
+        if ($user->status == 'active' && $user->hasAnyRole(['admin', 'super_admin'])) {
+            return redirect()->intended(route('admin.dashboard', absolute: false));
+        }
+
+        Auth::logout();
+        return redirect()->route('login')->withErrors([
+            'email' => 'You do not have administrative access or your account is inactive.',
+        ]);
+    }
+
+    /**
+     * Destroy an authenticated session.
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        session()->put('success', 'Logout Successfully');
+
+        return redirect('/');
+    }
+}

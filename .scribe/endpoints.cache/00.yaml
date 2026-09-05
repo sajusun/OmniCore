@@ -82,7 +82,7 @@ endpoints:
         name: category
         description: ''
         required: true
-        example: billing
+        example: club
         type: string
         enumValues:
           - bug
@@ -154,7 +154,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       subject: b
-      category: billing
+      category: club
       message: 'n'
       device_os: g
       device_model: z
@@ -1058,14 +1058,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1110,14 +1110,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1189,14 +1189,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1232,14 +1232,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1289,7 +1289,7 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1300,15 +1300,15 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
-      user_id: 16
+      room_id: 1
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1344,14 +1344,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1387,14 +1387,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1430,14 +1430,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1482,14 +1482,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1534,14 +1534,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1586,7 +1586,7 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1597,15 +1597,15 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
-      message_id: 16
+      room_id: 1
+      message_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1641,7 +1641,7 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1652,15 +1652,15 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
-      message_id: 16
+      room_id: 1
+      message_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1696,14 +1696,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1739,14 +1739,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1755,14 +1755,14 @@ endpoints:
         name: is_typing
         description: ''
         required: true
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      is_typing: true
+      is_typing: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -1794,14 +1794,14 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      message_id: 16
+      message_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1846,14 +1846,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1924,7 +1924,7 @@ endpoints:
         name: message_type
         description: ''
         required: false
-        example: audio
+        example: gif
         type: string
         enumValues:
           - text
@@ -1978,7 +1978,7 @@ endpoints:
     cleanBodyParameters:
       chat_room_id: 16
       receiver_id: 16
-      message_type: audio
+      message_type: gif
       message: 'n'
       reply_to: 16
     fileParameters:
@@ -2073,14 +2073,14 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      message_id: 16
+      message_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2128,14 +2128,14 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      message_id: 16
+      message_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2171,14 +2171,14 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      message_id: 16
+      message_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2223,14 +2223,14 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      message_id: 16
+      message_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2278,14 +2278,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2345,14 +2345,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2413,14 +2413,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2429,7 +2429,7 @@ endpoints:
         name: duration
         description: ''
         required: true
-        example: 1_hour
+        example: forever
         type: string
         enumValues:
           - 1_hour
@@ -2453,7 +2453,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      duration: 1_hour
+      duration: forever
       mute_until: '2052-09-28'
     fileParameters: []
     responses: []
@@ -2486,14 +2486,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2529,14 +2529,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2584,14 +2584,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2964,14 +2964,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 16
+      post_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3016,14 +3016,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 16
+      post_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3153,14 +3153,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 16
+      post_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3196,14 +3196,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 16
+      post_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3239,14 +3239,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 16
+      post_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3291,14 +3291,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 16
+      post_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3357,14 +3357,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 16
+      post_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3400,14 +3400,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 16
+      post_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3452,14 +3452,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 16
+      post_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3507,14 +3507,14 @@ endpoints:
         name: comment_id
         description: 'The ID of the comment.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      comment_id: 16
+      comment_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3562,14 +3562,14 @@ endpoints:
         name: comment_id
         description: 'The ID of the comment.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      comment_id: 16
+      comment_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3605,14 +3605,14 @@ endpoints:
         name: comment_id
         description: 'The ID of the comment.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      comment_id: 16
+      comment_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3660,14 +3660,14 @@ endpoints:
         name: comment_id
         description: 'The ID of the comment.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      comment_id: 16
+      comment_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3703,14 +3703,14 @@ endpoints:
         name: comment_id
         description: 'The ID of the comment.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      comment_id: 16
+      comment_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3915,14 +3915,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3967,14 +3967,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4139,14 +4139,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4262,14 +4262,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4314,14 +4314,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4366,14 +4366,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4418,14 +4418,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4461,14 +4461,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4504,14 +4504,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4587,14 +4587,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4630,14 +4630,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4711,7 +4711,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: screen_share
+        example: video
         type: string
         enumValues:
           - audio
@@ -4725,7 +4725,7 @@ endpoints:
       participant_ids:
         - 16
       chat_room_id: 16
-      type: screen_share
+      type: video
     fileParameters: []
     responses: []
     responseFields: []
@@ -4988,7 +4988,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: offer
+        example: ice_candidate
         type: string
         enumValues:
           - offer
@@ -5020,7 +5020,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: offer
+      type: ice_candidate
       payload: []
       target_id: 16
     fileParameters: []
@@ -5081,7 +5081,7 @@ endpoints:
         name: is_video_enabled
         description: ''
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -5100,7 +5100,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       is_muted: false
-      is_video_enabled: false
+      is_video_enabled: true
       is_screen_sharing: false
     fileParameters: []
     responses: []
@@ -5313,7 +5313,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Products fetched successfully.","code":200,"data":[],"pagination":{"type":"offset","current_page":1,"last_page":1,"per_page":20,"total":0,"from":null,"to":null,"has_more":false,"path":"http:\/\/one_dashboard.test\/api\/v1\/store\/products"}}'
+        content: '{"status":true,"message":"Products fetched successfully.","code":200,"data":[{"id":35,"name":"Ergonomic Mesh Office Chair with Lumbar Support","slug":"ergonomic-mesh-office-chair-with-lumbar-support-399","sku":"ERGONOMI-5991","type":"simple","price":289,"compare_at_price":349,"discount_percentage":17,"is_in_stock":true,"stock_quantity":22,"is_featured":true,"average_rating":4.5,"reviews_count":2,"thumbnail":null,"category":{"id":14,"name":"Workspace & Office","slug":"workspace-office"},"brand":{"id":7,"name":"Logitech","slug":"logitech"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":21,"name":"Nike Club Fleece Pullover Hoodie","slug":"nike-club-fleece-pullover-hoodie-888","sku":"NIKE-CLU-1090","type":"variable","price":65,"compare_at_price":75,"discount_percentage":13,"is_in_stock":true,"stock_quantity":90,"is_featured":true,"average_rating":4.5,"reviews_count":2,"thumbnail":null,"category":{"id":7,"name":"Men''s Clothing","slug":"mens-clothing"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":22,"name":"Zara Slim Fit Stretch Oxford Shirt","slug":"zara-slim-fit-stretch-oxford-shirt-172","sku":"ZARA-SLI-9650","type":"variable","price":49.9,"compare_at_price":59.9,"discount_percentage":17,"is_in_stock":true,"stock_quantity":65,"is_featured":false,"average_rating":4,"reviews_count":1,"thumbnail":null,"category":{"id":7,"name":"Men''s Clothing","slug":"mens-clothing"},"brand":{"id":9,"name":"Zara","slug":"zara"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":23,"name":"Puma Modern Basics Cargo Pants","slug":"puma-modern-basics-cargo-pants-294","sku":"PUMA-MOD-5175","type":"variable","price":50,"compare_at_price":65,"discount_percentage":23,"is_in_stock":true,"stock_quantity":55,"is_featured":false,"average_rating":5,"reviews_count":3,"thumbnail":null,"category":{"id":7,"name":"Men''s Clothing","slug":"mens-clothing"},"brand":{"id":10,"name":"Puma","slug":"puma"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":24,"name":"Nike Zenvy Gentle-Support High-Waisted Leggings","slug":"nike-zenvy-gentle-support-high-waisted-leggings-933","sku":"NIKE-ZEN-6438","type":"variable","price":95,"compare_at_price":110,"discount_percentage":14,"is_in_stock":true,"stock_quantity":70,"is_featured":true,"average_rating":4.33,"reviews_count":3,"thumbnail":null,"category":{"id":8,"name":"Women''s Clothing","slug":"womens-clothing"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":25,"name":"Adidas Tiro 24 Training Pants","slug":"adidas-tiro-24-training-pants-789","sku":"ADIDAS-T-2771","type":"variable","price":45,"compare_at_price":55,"discount_percentage":18,"is_in_stock":true,"stock_quantity":85,"is_featured":false,"average_rating":4,"reviews_count":3,"thumbnail":null,"category":{"id":8,"name":"Women''s Clothing","slug":"womens-clothing"},"brand":{"id":5,"name":"Adidas","slug":"adidas"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":26,"name":"Zara Oversized Double-Breasted Blazer","slug":"zara-oversized-double-breasted-blazer-681","sku":"ZARA-OVE-2393","type":"simple","price":119,"compare_at_price":139,"discount_percentage":14,"is_in_stock":true,"stock_quantity":40,"is_featured":true,"average_rating":4,"reviews_count":1,"thumbnail":null,"category":{"id":8,"name":"Women''s Clothing","slug":"womens-clothing"},"brand":{"id":9,"name":"Zara","slug":"zara"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":27,"name":"Nike Air Force 1 07 Classic","slug":"nike-air-force-1-07-classic-995","sku":"NIKE-AIR-5126","type":"variable","price":115,"compare_at_price":130,"discount_percentage":12,"is_in_stock":true,"stock_quantity":110,"is_featured":true,"average_rating":4.67,"reviews_count":3,"thumbnail":null,"category":{"id":9,"name":"Footwear & Sneakers","slug":"footwear-sneakers"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":28,"name":"Adidas Samba OG Shoes","slug":"adidas-samba-og-shoes-626","sku":"ADIDAS-S-6172","type":"variable","price":100,"compare_at_price":120,"discount_percentage":17,"is_in_stock":true,"stock_quantity":95,"is_featured":true,"average_rating":5,"reviews_count":1,"thumbnail":null,"category":{"id":9,"name":"Footwear & Sneakers","slug":"footwear-sneakers"},"brand":{"id":5,"name":"Adidas","slug":"adidas"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":29,"name":"Nike Pegasus 41 Road Running Shoes","slug":"nike-pegasus-41-road-running-shoes-197","sku":"NIKE-PEG-5693","type":"variable","price":140,"compare_at_price":160,"discount_percentage":13,"is_in_stock":true,"stock_quantity":60,"is_featured":false,"average_rating":4,"reviews_count":2,"thumbnail":null,"category":{"id":9,"name":"Footwear & Sneakers","slug":"footwear-sneakers"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":30,"name":"Puma Suede Classic XXI Sneakers","slug":"puma-suede-classic-xxi-sneakers-226","sku":"PUMA-SUE-8678","type":"variable","price":75,"compare_at_price":85,"discount_percentage":12,"is_in_stock":true,"stock_quantity":50,"is_featured":false,"average_rating":4,"reviews_count":1,"thumbnail":null,"category":{"id":9,"name":"Footwear & Sneakers","slug":"footwear-sneakers"},"brand":{"id":10,"name":"Puma","slug":"puma"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":31,"name":"Philips Hue Smart Bridge & Bulb Starter Kit","slug":"philips-hue-smart-bridge-bulb-starter-kit-168","sku":"PHILIPS-6314","type":"simple","price":159.99,"compare_at_price":189.99,"discount_percentage":16,"is_in_stock":true,"stock_quantity":35,"is_featured":true,"average_rating":5,"reviews_count":2,"thumbnail":null,"category":{"id":12,"name":"Smart Home Devices","slug":"smart-home-devices"},"brand":{"id":1,"name":"Apple","slug":"apple"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":32,"name":"Sonos Era 100 Smart Speaker","slug":"sonos-era-100-smart-speaker-266","sku":"SONOS-ER-2844","type":"simple","price":249,"compare_at_price":279,"discount_percentage":11,"is_in_stock":true,"stock_quantity":28,"is_featured":false,"average_rating":4,"reviews_count":1,"thumbnail":null,"category":{"id":12,"name":"Smart Home Devices","slug":"smart-home-devices"},"brand":{"id":8,"name":"Bose","slug":"bose"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":33,"name":"Breville Barista Touch Espresso Machine","slug":"breville-barista-touch-espresso-machine-185","sku":"BREVILLE-5145","type":"simple","price":999.95,"compare_at_price":1099.95,"discount_percentage":9,"is_in_stock":true,"stock_quantity":12,"is_featured":true,"average_rating":4.67,"reviews_count":3,"thumbnail":null,"category":{"id":13,"name":"Kitchen Appliances","slug":"kitchen-appliances"},"brand":{"id":6,"name":"Dell","slug":"dell"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":34,"name":"Ninja Air Fryer Pro 4-in-1","slug":"ninja-air-fryer-pro-4-in-1-869","sku":"NINJA-AI-6372","type":"simple","price":119.99,"compare_at_price":139.99,"discount_percentage":14,"is_in_stock":true,"stock_quantity":45,"is_featured":false,"average_rating":5,"reviews_count":1,"thumbnail":null,"category":{"id":13,"name":"Kitchen Appliances","slug":"kitchen-appliances"},"brand":{"id":2,"name":"Samsung","slug":"samsung"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":16,"name":"Sony PlayStation 5 Slim Digital Edition","slug":"sony-playstation-5-slim-digital-edition-186","sku":"SONY-PLA-8187","type":"simple","price":449.99,"compare_at_price":499.99,"discount_percentage":10,"is_in_stock":true,"stock_quantity":30,"is_featured":true,"average_rating":4.5,"reviews_count":2,"thumbnail":null,"category":{"id":5,"name":"Gaming & Consoles","slug":"gaming-consoles"},"brand":{"id":3,"name":"Sony","slug":"sony"},"created_at":"2026-09-05T10:51:59+00:00"},{"id":17,"name":"PlayStation DualSense Wireless Controller","slug":"playstation-dualsense-wireless-controller-508","sku":"PLAYSTAT-9509","type":"variable","price":69.99,"compare_at_price":74.99,"discount_percentage":7,"is_in_stock":true,"stock_quantity":75,"is_featured":false,"average_rating":5,"reviews_count":1,"thumbnail":null,"category":{"id":5,"name":"Gaming & Consoles","slug":"gaming-consoles"},"brand":{"id":3,"name":"Sony","slug":"sony"},"created_at":"2026-09-05T10:51:59+00:00"},{"id":1,"name":"Apple iPhone 16 Pro Max","slug":"apple-iphone-16-pro-max-476","sku":"APPLE-IP-5440","type":"variable","price":1199,"compare_at_price":1299,"discount_percentage":8,"is_in_stock":true,"stock_quantity":45,"is_featured":true,"average_rating":4,"reviews_count":1,"thumbnail":null,"category":{"id":2,"name":"Smartphones & Accessories","slug":"smartphones-accessories"},"brand":{"id":1,"name":"Apple","slug":"apple"},"created_at":"2026-09-05T10:51:59+00:00"},{"id":19,"name":"Nike Dri-FIT UV Running Shirt","slug":"nike-dri-fit-uv-running-shirt-281","sku":"NIKE-DRI-1259","type":"variable","price":42,"compare_at_price":55,"discount_percentage":24,"is_in_stock":true,"stock_quantity":100,"is_featured":true,"average_rating":4.67,"reviews_count":3,"thumbnail":null,"category":{"id":7,"name":"Men''s Clothing","slug":"mens-clothing"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:51:59+00:00"},{"id":20,"name":"Adidas Essentials 3-Stripes Track Jacket","slug":"adidas-essentials-3-stripes-track-jacket-523","sku":"ADIDAS-E-2961","type":"variable","price":55,"compare_at_price":70,"discount_percentage":21,"is_in_stock":true,"stock_quantity":80,"is_featured":false,"average_rating":5,"reviews_count":3,"thumbnail":null,"category":{"id":7,"name":"Men''s Clothing","slug":"mens-clothing"},"brand":{"id":5,"name":"Adidas","slug":"adidas"},"created_at":"2026-09-05T10:51:59+00:00"}],"pagination":{"type":"offset","current_page":1,"last_page":2,"per_page":20,"total":35,"from":1,"to":20,"has_more":true,"path":"http:\/\/one_dashboard.test\/api\/v1\/store\/products"}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -5393,7 +5393,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Featured products fetched successfully.","code":200,"data":[]}'
+        content: '{"status":true,"message":"Featured products fetched successfully.","code":200,"data":[{"id":35,"name":"Ergonomic Mesh Office Chair with Lumbar Support","slug":"ergonomic-mesh-office-chair-with-lumbar-support-399","sku":"ERGONOMI-5991","type":"simple","price":289,"compare_at_price":349,"discount_percentage":17,"is_in_stock":true,"stock_quantity":22,"is_featured":true,"average_rating":4.5,"reviews_count":2,"thumbnail":null,"category":{"id":14,"name":"Workspace & Office","slug":"workspace-office"},"brand":{"id":7,"name":"Logitech","slug":"logitech"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":33,"name":"Breville Barista Touch Espresso Machine","slug":"breville-barista-touch-espresso-machine-185","sku":"BREVILLE-5145","type":"simple","price":999.95,"compare_at_price":1099.95,"discount_percentage":9,"is_in_stock":true,"stock_quantity":12,"is_featured":true,"average_rating":4.67,"reviews_count":3,"thumbnail":null,"category":{"id":13,"name":"Kitchen Appliances","slug":"kitchen-appliances"},"brand":{"id":6,"name":"Dell","slug":"dell"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":31,"name":"Philips Hue Smart Bridge & Bulb Starter Kit","slug":"philips-hue-smart-bridge-bulb-starter-kit-168","sku":"PHILIPS-6314","type":"simple","price":159.99,"compare_at_price":189.99,"discount_percentage":16,"is_in_stock":true,"stock_quantity":35,"is_featured":true,"average_rating":5,"reviews_count":2,"thumbnail":null,"category":{"id":12,"name":"Smart Home Devices","slug":"smart-home-devices"},"brand":{"id":1,"name":"Apple","slug":"apple"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":28,"name":"Adidas Samba OG Shoes","slug":"adidas-samba-og-shoes-626","sku":"ADIDAS-S-6172","type":"variable","price":100,"compare_at_price":120,"discount_percentage":17,"is_in_stock":true,"stock_quantity":95,"is_featured":true,"average_rating":5,"reviews_count":1,"thumbnail":null,"category":{"id":9,"name":"Footwear & Sneakers","slug":"footwear-sneakers"},"brand":{"id":5,"name":"Adidas","slug":"adidas"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":27,"name":"Nike Air Force 1 07 Classic","slug":"nike-air-force-1-07-classic-995","sku":"NIKE-AIR-5126","type":"variable","price":115,"compare_at_price":130,"discount_percentage":12,"is_in_stock":true,"stock_quantity":110,"is_featured":true,"average_rating":4.67,"reviews_count":3,"thumbnail":null,"category":{"id":9,"name":"Footwear & Sneakers","slug":"footwear-sneakers"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":26,"name":"Zara Oversized Double-Breasted Blazer","slug":"zara-oversized-double-breasted-blazer-681","sku":"ZARA-OVE-2393","type":"simple","price":119,"compare_at_price":139,"discount_percentage":14,"is_in_stock":true,"stock_quantity":40,"is_featured":true,"average_rating":4,"reviews_count":1,"thumbnail":null,"category":{"id":8,"name":"Women''s Clothing","slug":"womens-clothing"},"brand":{"id":9,"name":"Zara","slug":"zara"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":24,"name":"Nike Zenvy Gentle-Support High-Waisted Leggings","slug":"nike-zenvy-gentle-support-high-waisted-leggings-933","sku":"NIKE-ZEN-6438","type":"variable","price":95,"compare_at_price":110,"discount_percentage":14,"is_in_stock":true,"stock_quantity":70,"is_featured":true,"average_rating":4.33,"reviews_count":3,"thumbnail":null,"category":{"id":8,"name":"Women''s Clothing","slug":"womens-clothing"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":21,"name":"Nike Club Fleece Pullover Hoodie","slug":"nike-club-fleece-pullover-hoodie-888","sku":"NIKE-CLU-1090","type":"variable","price":65,"compare_at_price":75,"discount_percentage":13,"is_in_stock":true,"stock_quantity":90,"is_featured":true,"average_rating":4.5,"reviews_count":2,"thumbnail":null,"category":{"id":7,"name":"Men''s Clothing","slug":"mens-clothing"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -5589,7 +5589,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Category tree fetched successfully.","code":200,"data":[]}'
+        content: '{"status":true,"message":"Category tree fetched successfully.","code":200,"data":[{"id":1,"parent_id":null,"name":"Electronics","slug":"electronics","description":"Explore premium collection of Electronics","icon":"fa-tv","image":null,"order":1,"is_active":true,"is_featured":true,"children":[{"id":2,"parent_id":1,"name":"Smartphones & Accessories","slug":"smartphones-accessories","description":"Best selection of Smartphones & Accessories","icon":null,"image":null,"order":1,"is_active":true,"is_featured":true,"children":[]},{"id":3,"parent_id":1,"name":"Laptops & Computers","slug":"laptops-computers","description":"Best selection of Laptops & Computers","icon":null,"image":null,"order":2,"is_active":true,"is_featured":true,"children":[]},{"id":4,"parent_id":1,"name":"Audio & Headphones","slug":"audio-headphones","description":"Best selection of Audio & Headphones","icon":null,"image":null,"order":3,"is_active":true,"is_featured":true,"children":[]},{"id":5,"parent_id":1,"name":"Gaming & Consoles","slug":"gaming-consoles","description":"Best selection of Gaming & Consoles","icon":null,"image":null,"order":4,"is_active":true,"is_featured":true,"children":[]}]},{"id":6,"parent_id":null,"name":"Fashion & Apparel","slug":"fashion-apparel","description":"Explore premium collection of Fashion & Apparel","icon":"fa-tshirt","image":null,"order":2,"is_active":true,"is_featured":true,"children":[{"id":7,"parent_id":6,"name":"Men''s Clothing","slug":"mens-clothing","description":"Best selection of Men''s Clothing","icon":null,"image":null,"order":1,"is_active":true,"is_featured":true,"children":[]},{"id":8,"parent_id":6,"name":"Women''s Clothing","slug":"womens-clothing","description":"Best selection of Women''s Clothing","icon":null,"image":null,"order":2,"is_active":true,"is_featured":true,"children":[]},{"id":9,"parent_id":6,"name":"Footwear & Sneakers","slug":"footwear-sneakers","description":"Best selection of Footwear & Sneakers","icon":null,"image":null,"order":3,"is_active":true,"is_featured":true,"children":[]},{"id":10,"parent_id":6,"name":"Watches & Accessories","slug":"watches-accessories","description":"Best selection of Watches & Accessories","icon":null,"image":null,"order":4,"is_active":true,"is_featured":true,"children":[]}]},{"id":11,"parent_id":null,"name":"Home & Lifestyle","slug":"home-lifestyle","description":"Explore premium collection of Home & Lifestyle","icon":"fa-couch","image":null,"order":3,"is_active":true,"is_featured":true,"children":[{"id":12,"parent_id":11,"name":"Smart Home Devices","slug":"smart-home-devices","description":"Best selection of Smart Home Devices","icon":null,"image":null,"order":1,"is_active":true,"is_featured":true,"children":[]},{"id":13,"parent_id":11,"name":"Kitchen Appliances","slug":"kitchen-appliances","description":"Best selection of Kitchen Appliances","icon":null,"image":null,"order":2,"is_active":true,"is_featured":true,"children":[]},{"id":14,"parent_id":11,"name":"Workspace & Office","slug":"workspace-office","description":"Best selection of Workspace & Office","icon":null,"image":null,"order":3,"is_active":true,"is_featured":true,"children":[]}]}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -5681,7 +5681,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Brands fetched successfully.","code":200,"data":[]}'
+        content: '{"status":true,"message":"Brands fetched successfully.","code":200,"data":[{"id":5,"name":"Adidas","slug":"adidas","logo":null,"website":"https:\/\/adidas.com","description":"Official products from Adidas","is_active":true,"is_featured":true,"products_count":3},{"id":1,"name":"Apple","slug":"apple","logo":null,"website":"https:\/\/apple.com","description":"Official products from Apple","is_active":true,"is_featured":true,"products_count":7},{"id":8,"name":"Bose","slug":"bose","logo":null,"website":"https:\/\/bose.com","description":"Official products from Bose","is_active":true,"is_featured":false,"products_count":2},{"id":6,"name":"Dell","slug":"dell","logo":null,"website":"https:\/\/dell.com","description":"Official products from Dell","is_active":true,"is_featured":false,"products_count":3},{"id":7,"name":"Logitech","slug":"logitech","logo":null,"website":"https:\/\/logitech.com","description":"Official products from Logitech","is_active":true,"is_featured":true,"products_count":4},{"id":4,"name":"Nike","slug":"nike","logo":null,"website":"https:\/\/nike.com","description":"Official products from Nike","is_active":true,"is_featured":true,"products_count":5},{"id":10,"name":"Puma","slug":"puma","logo":null,"website":"https:\/\/puma.com","description":"Official products from Puma","is_active":true,"is_featured":false,"products_count":2},{"id":2,"name":"Samsung","slug":"samsung","logo":null,"website":"https:\/\/samsung.com","description":"Official products from Samsung","is_active":true,"is_featured":true,"products_count":3},{"id":3,"name":"Sony","slug":"sony","logo":null,"website":"https:\/\/sony.com","description":"Official products from Sony","is_active":true,"is_featured":true,"products_count":4},{"id":9,"name":"Zara","slug":"zara","logo":null,"website":"https:\/\/zara.com","description":"Official products from Zara","is_active":true,"is_featured":false,"products_count":2}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -6001,7 +6001,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Cart retrieved successfully.","code":200,"data":{"id":1,"guest_token":"6e5ba262-8590-4bcf-a8f6-45f1affbd4d0","items_count":0,"subtotal":0,"discount_amount":0,"coupon_code":null,"grand_total":0,"items":[]}}'
+        content: '{"status":true,"message":"Cart retrieved successfully.","code":200,"data":{"id":1,"guest_token":"e972469d-58c0-44d5-9bbc-d6a534cd9346","items_count":0,"subtotal":0,"discount_amount":0,"coupon_code":null,"grand_total":0,"items":[]}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -6472,7 +6472,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-05T10:18:35'
+        example: '2026-09-05T10:52:06'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -6494,7 +6494,7 @@ endpoints:
         name: is_active
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -6508,9 +6508,9 @@ endpoints:
       max_discount_amount: 12
       usage_limit: 27
       usage_limit_per_user: 35
-      start_date: '2026-09-05T10:18:35'
+      start_date: '2026-09-05T10:52:06'
       end_date: '2052-09-28'
-      is_active: true
+      is_active: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -6621,7 +6621,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: percentage
+        example: fixed
         type: string
         enumValues:
           - percentage
@@ -6689,7 +6689,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-05T10:18:36'
+        example: '2026-09-05T10:52:06'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -6700,7 +6700,7 @@ endpoints:
         name: end_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-05T10:18:36'
+        example: '2026-09-05T10:52:06'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -6718,14 +6718,14 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: percentage
+      type: fixed
       value: 27
       min_order_amount: 39
       max_discount_amount: 84
       usage_limit: 66
       usage_limit_per_user: 27
-      start_date: '2026-09-05T10:18:36'
-      end_date: '2026-09-05T10:18:36'
+      start_date: '2026-09-05T10:52:06'
+      end_date: '2026-09-05T10:52:06'
       is_active: false
     fileParameters: []
     responses: []
@@ -6806,7 +6806,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Shipping methods fetched successfully.","code":200,"data":[]}'
+        content: '{"status":true,"message":"Shipping methods fetched successfully.","code":200,"data":[{"id":3,"name":"Local Store Pickup","code":"pickup","cost":0,"free_shipping_threshold":null,"estimated_delivery_days":"Ready in 2 hours","description":"Pick up your order directly from our nearest hub.","is_active":true},{"id":1,"name":"Standard Ground Shipping","code":"standard","cost":5,"free_shipping_threshold":100,"estimated_delivery_days":"3-5 business days","description":"Reliable and cost-effective ground delivery across the nation.","is_active":true},{"id":2,"name":"Express Priority Air","code":"express","cost":15,"free_shipping_threshold":250,"estimated_delivery_days":"1-2 business days","description":"Fast expedited delivery with priority handling.","is_active":true}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -7399,7 +7399,7 @@ endpoints:
         name: payment_method
         description: ''
         required: true
-        example: bank_transfer
+        example: bkash
         type: string
         enumValues:
           - cod
@@ -7431,7 +7431,7 @@ endpoints:
         postal_code: iyvdljnikhwaykcm
         country: 'y'
       shipping_method_id: 16
-      payment_method: bank_transfer
+      payment_method: bkash
       customer_notes: 'n'
     fileParameters: []
     responses: []
@@ -7948,14 +7948,14 @@ endpoints:
         name: comment_id
         description: 'The ID of the comment.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      comment_id: 16
+      comment_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -8160,7 +8160,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: single_use
+        example: private
         type: string
         enumValues:
           - public
@@ -8195,7 +8195,7 @@ endpoints:
     cleanBodyParameters:
       subject_type: architecto
       subject_id: architecto
-      type: single_use
+      type: private
       expires_in_minutes: 22
       max_clicks: 67
     fileParameters: []
@@ -8443,7 +8443,7 @@ endpoints:
         name: agree
         description: ''
         required: true
-        example: '1'
+        example: 'true'
         type: string
         enumValues:
           - 'true'
@@ -8455,7 +8455,7 @@ endpoints:
       name: b
       email: zbailey@example.net
       password: '-0pBNvYgxw'
-      agree: '1'
+      agree: 'true'
     fileParameters: []
     responses: []
     responseFields: []
@@ -8873,140 +8873,6 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - POST
-    uri: api/newsletter/subscribe
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      email:
-        custom: []
-        name: email
-        description: 'Must be a valid email address. Must not be greater than 255 characters.'
-        required: true
-        example: gbailey@example.net
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      email: gbailey@example.net
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/contact-us
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      name:
-        custom: []
-        name: name
-        description: 'Must not be greater than 255 characters.'
-        required: true
-        example: b
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      email:
-        custom: []
-        name: email
-        description: 'Must be a valid email address. Must not be greater than 255 characters.'
-        required: true
-        example: zbailey@example.net
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      subject:
-        custom: []
-        name: subject
-        description: 'Must not be greater than 255 characters.'
-        required: true
-        example: i
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      phone:
-        custom: []
-        name: phone
-        description: 'Must not be greater than 20 characters.'
-        required: false
-        example: yvdljnikhwaykcmy
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      message:
-        custom: []
-        name: message
-        description: 'Must not be greater than 2000 characters.'
-        required: true
-        example: u
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      name: b
-      email: zbailey@example.net
-      subject: i
-      phone: yvdljnikhwaykcmy
-      message: u
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
       - GET
     uri: api/verification/verify-token
     metadata:
@@ -9043,7 +8909,7 @@ endpoints:
         name: purpose
         description: ''
         required: true
-        example: password_reset
+        example: email_verification
         type: string
         enumValues:
           - email_verification
@@ -9053,7 +8919,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       token: architecto
-      purpose: password_reset
+      purpose: email_verification
     fileParameters: []
     responses:
       -
@@ -9078,37 +8944,6 @@ endpoints:
           content-type: 'text/html; charset=utf-8'
           access-control-allow-origin: '*'
         description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/app/webhooks/revenuecat
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
     responseFields: []
     auth: []
     controller: null
@@ -9249,14 +9084,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 16
+      user_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -9808,6 +9643,374 @@ endpoints:
     custom: []
     httpMethods:
       - POST
+    uri: api/verification/send
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      purpose:
+        custom: []
+        name: purpose
+        description: ''
+        required: true
+        example: password_reset
+        type: string
+        enumValues:
+          - email_verification
+          - password_reset
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      type:
+        custom: []
+        name: type
+        description: ''
+        required: false
+        example: otp
+        type: string
+        enumValues:
+          - otp
+          - token
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      channel:
+        custom: []
+        name: channel
+        description: ''
+        required: false
+        example: sms
+        type: string
+        enumValues:
+          - email
+          - sms
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      purpose: password_reset
+      type: otp
+      channel: sms
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/verification/verify-otp
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      purpose:
+        custom: []
+        name: purpose
+        description: ''
+        required: true
+        example: password_reset
+        type: string
+        enumValues:
+          - email_verification
+          - password_reset
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      code:
+        custom: []
+        name: code
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      purpose: password_reset
+      code: architecto
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/verification/resend
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      purpose:
+        custom: []
+        name: purpose
+        description: ''
+        required: true
+        example: password_reset
+        type: string
+        enumValues:
+          - email_verification
+          - password_reset
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      type:
+        custom: []
+        name: type
+        description: ''
+        required: false
+        example: otp
+        type: string
+        enumValues:
+          - otp
+          - token
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      channel:
+        custom: []
+        name: channel
+        description: ''
+        required: false
+        example: sms
+        type: string
+        enumValues:
+          - email
+          - sms
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      purpose: password_reset
+      type: otp
+      channel: sms
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/newsletter/subscribe
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: true
+        example: gbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      email: gbailey@example.net
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/contact-us
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: true
+        example: zbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      subject:
+        custom: []
+        name: subject
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: i
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      phone:
+        custom: []
+        name: phone
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: yvdljnikhwaykcmy
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      message:
+        custom: []
+        name: message
+        description: 'Must not be greater than 2000 characters.'
+        required: true
+        example: u
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: b
+      email: zbailey@example.net
+      subject: i
+      phone: yvdljnikhwaykcmy
+      message: u
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/app/webhooks/revenuecat
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
     uri: api/firebase/firebase-token
     metadata:
       custom: []
@@ -10221,181 +10424,6 @@ endpoints:
     cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/verification/send
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      purpose:
-        custom: []
-        name: purpose
-        description: ''
-        required: true
-        example: password_reset
-        type: string
-        enumValues:
-          - email_verification
-          - password_reset
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      type:
-        custom: []
-        name: type
-        description: ''
-        required: false
-        example: otp
-        type: string
-        enumValues:
-          - otp
-          - token
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      purpose: password_reset
-      type: otp
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/verification/verify-otp
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      purpose:
-        custom: []
-        name: purpose
-        description: ''
-        required: true
-        example: password_reset
-        type: string
-        enumValues:
-          - email_verification
-          - password_reset
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      code:
-        custom: []
-        name: code
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      purpose: password_reset
-      code: architecto
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/verification/resend
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      purpose:
-        custom: []
-        name: purpose
-        description: ''
-        required: true
-        example: email_verification
-        type: string
-        enumValues:
-          - email_verification
-          - password_reset
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      type:
-        custom: []
-        name: type
-        description: ''
-        required: false
-        example: token
-        type: string
-        enumValues:
-          - otp
-          - token
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      purpose: email_verification
-      type: token
     fileParameters: []
     responses: []
     responseFields: []

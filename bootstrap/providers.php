@@ -17,4 +17,5 @@ return [
     App\Modules\Coupon\Providers\CouponServiceProvider::class,
     App\Modules\Order\Providers\OrderServiceProvider::class,
     App\Modules\Interaction\Providers\InteractionServiceProvider::class,
+    App\Modules\Auth\Providers\AuthServiceProvider::class,
 ];

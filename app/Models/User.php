@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Modules\Auth\Traits\HasVerification;
 use App\Traits\HasPost;
 use App\Traits\HasNotifications;
 use App\Modules\Social\Traits\HasSocialRelations;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory,
+        HasVerification,
         HasSocialRelations,
         HasMedia,
         HasEcommerce,
@@ -88,17 +90,6 @@ class User extends Authenticatable implements JWTSubject
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class);
-    }
-
-    public function verifications(): HasMany
-    {
-        return $this->hasMany(Verification::class);
-    }
-
-    public function isEmailVerified(): bool
-    {
-        return $this->verifications()->where('purpose', Verification::PURPOSE_EMAIL_VERIFICATION)
-            ->where('status', Verification::STATUS_VERIFIED)->whereNotNull('verified_at')->exists();
     }
 
     public function firebaseTokens(): HasMany

@@ -3,7 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\NotificationController;
-use App\Http\Controllers\Api\Auth\SocialLoginController;
+use App\Modules\Auth\Http\Controllers\Api\SocialLoginApiController;
 
 
 Route::get('/', function () {
@@ -12,8 +12,8 @@ Route::get('/', function () {
 
 
 //Social login test routes
-Route::get('social-login/{provider}', [SocialLoginController::class, 'RedirectToProvider'])->name('social.login');
-Route::get('social-login/{provider}/callback', [SocialLoginController::class, 'HandleProviderCallback']);
+Route::get('social-login/{provider}', [SocialLoginApiController::class, 'redirectToProvider'])->name('social.login');
+Route::get('social-login/{provider}/callback', [SocialLoginApiController::class, 'handleProviderCallback']);
 
 
 Route::controller(NotificationController::class)->prefix('notification')->name('notification.')->group(function () {
@@ -27,6 +27,4 @@ Route::controller(NotificationController::class)->prefix('notification')->name('
 Route::get('/broadcast-test', function () {
     return view('broadcast-test');
 });
-
-require __DIR__ . '/auth.php';
 

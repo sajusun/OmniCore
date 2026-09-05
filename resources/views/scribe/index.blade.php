@@ -542,17 +542,8 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-social-login">
                                 <a href="#endpoints-POSTapi-social-login">POST api/social-login</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-newsletter-subscribe">
-                                <a href="#endpoints-POSTapi-newsletter-subscribe">POST api/newsletter/subscribe</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-contact-us">
-                                <a href="#endpoints-POSTapi-contact-us">POST api/contact-us</a>
-                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-verification-verify-token">
                                 <a href="#endpoints-GETapi-verification-verify-token">GET api/verification/verify-token</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-app-webhooks-revenuecat">
-                                <a href="#endpoints-POSTapi-app-webhooks-revenuecat">POST api/app/webhooks/revenuecat</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-refresh-token">
                                 <a href="#endpoints-GETapi-refresh-token">GET api/refresh-token</a>
@@ -580,6 +571,24 @@
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-profile-delete">
                                 <a href="#endpoints-DELETEapi-profile-delete">DELETE api/profile/delete</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-verification-send">
+                                <a href="#endpoints-POSTapi-verification-send">POST api/verification/send</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-verification-verify-otp">
+                                <a href="#endpoints-POSTapi-verification-verify-otp">POST api/verification/verify-otp</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-verification-resend">
+                                <a href="#endpoints-POSTapi-verification-resend">POST api/verification/resend</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-newsletter-subscribe">
+                                <a href="#endpoints-POSTapi-newsletter-subscribe">POST api/newsletter/subscribe</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-contact-us">
+                                <a href="#endpoints-POSTapi-contact-us">POST api/contact-us</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-app-webhooks-revenuecat">
+                                <a href="#endpoints-POSTapi-app-webhooks-revenuecat">POST api/app/webhooks/revenuecat</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-firebase-firebase-token">
                                 <a href="#endpoints-POSTapi-firebase-firebase-token">Save / Update Firebase Token</a>
@@ -610,15 +619,6 @@
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-notifications--notification_id-">
                                 <a href="#endpoints-DELETEapi-notifications--notification_id-">Delete Notification</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-verification-send">
-                                <a href="#endpoints-POSTapi-verification-send">POST api/verification/send</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-verification-verify-otp">
-                                <a href="#endpoints-POSTapi-verification-verify-otp">POST api/verification/verify-otp</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-verification-resend">
-                                <a href="#endpoints-POSTapi-verification-resend">POST api/verification/resend</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-broadcasting-auth">
                                 <a href="#endpoints-GETapi-broadcasting-auth">Authenticate the request for channel access.</a>
@@ -804,12 +804,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "subject=b"\
-    --form "category=billing"\
+    --form "category=club"\
     --form "message=n"\
     --form "device_os=g"\
     --form "device_model=z"\
     --form "app_version=m"\
-    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\phpC360.tmp" </code></pre></div>
+    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\php722C.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -824,7 +824,7 @@ const headers = {
 
 const body = new FormData();
 body.append('subject', 'b');
-body.append('category', 'billing');
+body.append('category', 'club');
 body.append('message', 'n');
 body.append('device_os', 'g');
 body.append('device_model', 'z');
@@ -932,10 +932,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="category"                data-endpoint="POSTapi-app-support"
-               value="billing"
+               value="club"
                data-component="body">
     <br>
-<p>Example: <code>billing</code></p>
+<p>Example: <code>club</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>bug</code></li> <li><code>account</code></li> <li><code>event</code></li> <li><code>club</code></li> <li><code>vehicle</code></li> <li><code>billing</code></li> <li><code>feedback</code></li> <li><code>other</code></li></ul>
         </div>
@@ -1293,7 +1293,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "message=b"\
-    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\phpC39F.tmp" </code></pre></div>
+    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\php725C.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -3426,14 +3426,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/chat/rooms/16" \
+    --get "http://one_dashboard.test/api/chat/rooms/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16"
+    "http://one_dashboard.test/api/chat/rooms/1"
 );
 
 const headers = {
@@ -3549,10 +3549,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="GETapi-chat-rooms--room_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -3569,7 +3569,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://one_dashboard.test/api/chat/rooms/16" \
+    "http://one_dashboard.test/api/chat/rooms/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -3582,7 +3582,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16"
+    "http://one_dashboard.test/api/chat/rooms/1"
 );
 
 const headers = {
@@ -3685,10 +3685,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="PATCHapi-chat-rooms--room_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -3742,14 +3742,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://one_dashboard.test/api/chat/rooms/16" \
+    "http://one_dashboard.test/api/chat/rooms/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16"
+    "http://one_dashboard.test/api/chat/rooms/1"
 );
 
 const headers = {
@@ -3846,10 +3846,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="DELETEapi-chat-rooms--room_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -3866,7 +3866,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/chat/rooms/16/participants" \
+    "http://one_dashboard.test/api/chat/rooms/1/participants" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -3879,7 +3879,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/participants"
+    "http://one_dashboard.test/api/chat/rooms/1/participants"
 );
 
 const headers = {
@@ -3982,10 +3982,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="POSTapi-chat-rooms--room_id--participants"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -4017,14 +4017,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://one_dashboard.test/api/chat/rooms/16/participants/16" \
+    "http://one_dashboard.test/api/chat/rooms/1/participants/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/participants/16"
+    "http://one_dashboard.test/api/chat/rooms/1/participants/1"
 );
 
 const headers = {
@@ -4121,10 +4121,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="DELETEapi-chat-rooms--room_id--participants--user_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>user_id</code></b>&nbsp;&nbsp;
@@ -4133,10 +4133,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="DELETEapi-chat-rooms--room_id--participants--user_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -4153,14 +4153,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/chat/rooms/16/leave" \
+    "http://one_dashboard.test/api/chat/rooms/1/leave" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/leave"
+    "http://one_dashboard.test/api/chat/rooms/1/leave"
 );
 
 const headers = {
@@ -4257,10 +4257,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="POSTapi-chat-rooms--room_id--leave"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -4277,14 +4277,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/chat/channels/16/join" \
+    "http://one_dashboard.test/api/chat/channels/1/join" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/channels/16/join"
+    "http://one_dashboard.test/api/chat/channels/1/join"
 );
 
 const headers = {
@@ -4381,10 +4381,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="POSTapi-chat-channels--room_id--join"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -4401,14 +4401,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/chat/rooms/16/search" \
+    --get "http://one_dashboard.test/api/chat/rooms/1/search" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/search"
+    "http://one_dashboard.test/api/chat/rooms/1/search"
 );
 
 const headers = {
@@ -4524,10 +4524,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="GETapi-chat-rooms--room_id--search"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -4544,14 +4544,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/chat/rooms/16/media" \
+    --get "http://one_dashboard.test/api/chat/rooms/1/media" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/media"
+    "http://one_dashboard.test/api/chat/rooms/1/media"
 );
 
 const headers = {
@@ -4667,10 +4667,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="GETapi-chat-rooms--room_id--media"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -4687,14 +4687,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/chat/rooms/16/pinned" \
+    --get "http://one_dashboard.test/api/chat/rooms/1/pinned" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/pinned"
+    "http://one_dashboard.test/api/chat/rooms/1/pinned"
 );
 
 const headers = {
@@ -4810,10 +4810,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="GETapi-chat-rooms--room_id--pinned"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -4830,14 +4830,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/chat/rooms/16/pin/16" \
+    "http://one_dashboard.test/api/chat/rooms/1/pin/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/pin/16"
+    "http://one_dashboard.test/api/chat/rooms/1/pin/1"
 );
 
 const headers = {
@@ -4934,10 +4934,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="POSTapi-chat-rooms--room_id--pin--message_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>message_id</code></b>&nbsp;&nbsp;
@@ -4946,10 +4946,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="message_id"                data-endpoint="POSTapi-chat-rooms--room_id--pin--message_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the message. Example: <code>16</code></p>
+<p>The ID of the message. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -4966,14 +4966,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://one_dashboard.test/api/chat/rooms/16/unpin/16" \
+    "http://one_dashboard.test/api/chat/rooms/1/unpin/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/unpin/16"
+    "http://one_dashboard.test/api/chat/rooms/1/unpin/1"
 );
 
 const headers = {
@@ -5070,10 +5070,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="DELETEapi-chat-rooms--room_id--unpin--message_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>message_id</code></b>&nbsp;&nbsp;
@@ -5082,10 +5082,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="message_id"                data-endpoint="DELETEapi-chat-rooms--room_id--unpin--message_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the message. Example: <code>16</code></p>
+<p>The ID of the message. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -5102,14 +5102,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/chat/rooms/16/read" \
+    "http://one_dashboard.test/api/chat/rooms/1/read" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/read"
+    "http://one_dashboard.test/api/chat/rooms/1/read"
 );
 
 const headers = {
@@ -5206,10 +5206,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="POSTapi-chat-rooms--room_id--read"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -5226,18 +5226,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/chat/rooms/16/typing" \
+    "http://one_dashboard.test/api/chat/rooms/1/typing" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"is_typing\": true
+    \"is_typing\": false
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/typing"
+    "http://one_dashboard.test/api/chat/rooms/1/typing"
 );
 
 const headers = {
@@ -5246,7 +5246,7 @@ const headers = {
 };
 
 let body = {
-    "is_typing": true
+    "is_typing": false
 };
 
 fetch(url, {
@@ -5338,10 +5338,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="POSTapi-chat-rooms--room_id--typing"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -5364,7 +5364,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
         </form>
 
@@ -5381,14 +5381,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/chat/messages/16/read-receipts" \
+    --get "http://one_dashboard.test/api/chat/messages/1/read-receipts" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/messages/16/read-receipts"
+    "http://one_dashboard.test/api/chat/messages/1/read-receipts"
 );
 
 const headers = {
@@ -5504,10 +5504,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="message_id"                data-endpoint="GETapi-chat-messages--message_id--read-receipts"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the message. Example: <code>16</code></p>
+<p>The ID of the message. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -5524,14 +5524,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/chat/rooms/16/messages" \
+    --get "http://one_dashboard.test/api/chat/rooms/1/messages" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/messages"
+    "http://one_dashboard.test/api/chat/rooms/1/messages"
 );
 
 const headers = {
@@ -5647,10 +5647,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="GETapi-chat-rooms--room_id--messages"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -5672,10 +5672,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --form "chat_room_id=16"\
     --form "receiver_id=16"\
-    --form "message_type=audio"\
+    --form "message_type=gif"\
     --form "message=n"\
     --form "reply_to=16"\
-    --form "files[]=@C:\Users\sakhawat\AppData\Local\Temp\phpC527.tmp" </code></pre></div>
+    --form "files[]=@C:\Users\sakhawat\AppData\Local\Temp\php72EA.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -5691,7 +5691,7 @@ const headers = {
 const body = new FormData();
 body.append('chat_room_id', '16');
 body.append('receiver_id', '16');
-body.append('message_type', 'audio');
+body.append('message_type', 'gif');
 body.append('message', 'n');
 body.append('reply_to', '16');
 body.append('files[]', document.querySelector('input[name="files[]"]').files[0]);
@@ -5809,10 +5809,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="message_type"                data-endpoint="POSTapi-chat-messages"
-               value="audio"
+               value="gif"
                data-component="body">
     <br>
-<p>Example: <code>audio</code></p>
+<p>Example: <code>gif</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>text</code></li> <li><code>image</code></li> <li><code>video</code></li> <li><code>voice</code></li> <li><code>audio</code></li> <li><code>document</code></li> <li><code>location</code></li> <li><code>contact</code></li> <li><code>sticker</code></li> <li><code>gif</code></li> <li><code>system</code></li></ul>
         </div>
@@ -6027,7 +6027,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://one_dashboard.test/api/chat/messages/16" \
+    "http://one_dashboard.test/api/chat/messages/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -6038,7 +6038,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/messages/16"
+    "http://one_dashboard.test/api/chat/messages/1"
 );
 
 const headers = {
@@ -6139,10 +6139,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="message_id"                data-endpoint="PATCHapi-chat-messages--message_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the message. Example: <code>16</code></p>
+<p>The ID of the message. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -6172,14 +6172,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://one_dashboard.test/api/chat/messages/16" \
+    "http://one_dashboard.test/api/chat/messages/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/messages/16"
+    "http://one_dashboard.test/api/chat/messages/1"
 );
 
 const headers = {
@@ -6276,10 +6276,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="message_id"                data-endpoint="DELETEapi-chat-messages--message_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the message. Example: <code>16</code></p>
+<p>The ID of the message. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -6296,14 +6296,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/chat/messages/16/reactions" \
+    --get "http://one_dashboard.test/api/chat/messages/1/reactions" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/messages/16/reactions"
+    "http://one_dashboard.test/api/chat/messages/1/reactions"
 );
 
 const headers = {
@@ -6419,10 +6419,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="message_id"                data-endpoint="GETapi-chat-messages--message_id--reactions"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the message. Example: <code>16</code></p>
+<p>The ID of the message. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -6439,7 +6439,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/chat/messages/16/reactions" \
+    "http://one_dashboard.test/api/chat/messages/1/reactions" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -6450,7 +6450,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/messages/16/reactions"
+    "http://one_dashboard.test/api/chat/messages/1/reactions"
 );
 
 const headers = {
@@ -6551,10 +6551,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="message_id"                data-endpoint="POSTapi-chat-messages--message_id--reactions"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the message. Example: <code>16</code></p>
+<p>The ID of the message. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -6584,7 +6584,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://one_dashboard.test/api/chat/rooms/16/settings/notification" \
+    "http://one_dashboard.test/api/chat/rooms/1/settings/notification" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -6596,7 +6596,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/settings/notification"
+    "http://one_dashboard.test/api/chat/rooms/1/settings/notification"
 );
 
 const headers = {
@@ -6698,10 +6698,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="PATCHapi-chat-rooms--room_id--settings-notification"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -6753,7 +6753,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://one_dashboard.test/api/chat/rooms/16/settings/sound" \
+    "http://one_dashboard.test/api/chat/rooms/1/settings/sound" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -6765,7 +6765,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/settings/sound"
+    "http://one_dashboard.test/api/chat/rooms/1/settings/sound"
 );
 
 const headers = {
@@ -6867,10 +6867,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="PATCHapi-chat-rooms--room_id--settings-sound"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -6922,11 +6922,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/chat/rooms/16/settings/mute" \
+    "http://one_dashboard.test/api/chat/rooms/1/settings/mute" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"duration\": \"1_hour\",
+    \"duration\": \"forever\",
     \"mute_until\": \"2052-09-28\"
 }"
 </code></pre></div>
@@ -6934,7 +6934,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/settings/mute"
+    "http://one_dashboard.test/api/chat/rooms/1/settings/mute"
 );
 
 const headers = {
@@ -6943,7 +6943,7 @@ const headers = {
 };
 
 let body = {
-    "duration": "1_hour",
+    "duration": "forever",
     "mute_until": "2052-09-28"
 };
 
@@ -7040,10 +7040,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="POSTapi-chat-rooms--room_id--settings-mute"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -7053,10 +7053,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="duration"                data-endpoint="POSTapi-chat-rooms--room_id--settings-mute"
-               value="1_hour"
+               value="forever"
                data-component="body">
     <br>
-<p>Example: <code>1_hour</code></p>
+<p>Example: <code>forever</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>1_hour</code></li> <li><code>8_hours</code></li> <li><code>1_day</code></li> <li><code>7_days</code></li> <li><code>forever</code></li> <li><code>custom</code></li></ul>
         </div>
@@ -7087,14 +7087,14 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://one_dashboard.test/api/chat/rooms/16/settings/mute" \
+    "http://one_dashboard.test/api/chat/rooms/1/settings/mute" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/rooms/16/settings/mute"
+    "http://one_dashboard.test/api/chat/rooms/1/settings/mute"
 );
 
 const headers = {
@@ -7191,10 +7191,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="room_id"                data-endpoint="DELETEapi-chat-rooms--room_id--settings-mute"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the room. Example: <code>16</code></p>
+<p>The ID of the room. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -7211,7 +7211,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/chat/block/16" \
+    "http://one_dashboard.test/api/chat/block/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -7222,7 +7222,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/block/16"
+    "http://one_dashboard.test/api/chat/block/1"
 );
 
 const headers = {
@@ -7323,10 +7323,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="POSTapi-chat-block--user_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -7356,14 +7356,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://one_dashboard.test/api/chat/unblock/16" \
+    "http://one_dashboard.test/api/chat/unblock/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/chat/unblock/16"
+    "http://one_dashboard.test/api/chat/unblock/1"
 );
 
 const headers = {
@@ -7460,10 +7460,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="DELETEapi-chat-unblock--user_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -8148,8 +8148,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --form "title=b"\
     --form "content=architecto"\
-    --form "thumbnail=@C:\Users\sakhawat\AppData\Local\Temp\phpC567.tmp" \
-    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\phpC568.tmp" </code></pre></div>
+    --form "thumbnail=@C:\Users\sakhawat\AppData\Local\Temp\php7329.tmp" \
+    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\php732A.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -8284,7 +8284,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpC567.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php7329.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>media</code></b>&nbsp;&nbsp;
@@ -8365,14 +8365,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/posts/16/show" \
+    --get "http://one_dashboard.test/api/posts/1/show" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/posts/16/show"
+    "http://one_dashboard.test/api/posts/1/show"
 );
 
 const headers = {
@@ -8488,10 +8488,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="post_id"                data-endpoint="GETapi-posts--post_id--show"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the post. Example: <code>16</code></p>
+<p>The ID of the post. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -8508,18 +8508,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/posts/16/update" \
+    "http://one_dashboard.test/api/posts/1/update" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "title=b"\
     --form "content=architecto"\
-    --form "thumbnail=@C:\Users\sakhawat\AppData\Local\Temp\phpC578.tmp" \
-    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\phpC579.tmp" </code></pre></div>
+    --form "thumbnail=@C:\Users\sakhawat\AppData\Local\Temp\php732B.tmp" \
+    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\php732C.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/posts/16/update"
+    "http://one_dashboard.test/api/posts/1/update"
 );
 
 const headers = {
@@ -8622,10 +8622,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="post_id"                data-endpoint="POSTapi-posts--post_id--update"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the post. Example: <code>16</code></p>
+<p>The ID of the post. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -8662,7 +8662,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpC578.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php732B.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>media</code></b>&nbsp;&nbsp;
@@ -8743,14 +8743,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://one_dashboard.test/api/posts/16/delete" \
+    "http://one_dashboard.test/api/posts/1/delete" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/posts/16/delete"
+    "http://one_dashboard.test/api/posts/1/delete"
 );
 
 const headers = {
@@ -8847,10 +8847,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="post_id"                data-endpoint="DELETEapi-posts--post_id--delete"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the post. Example: <code>16</code></p>
+<p>The ID of the post. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -8867,14 +8867,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/posts/16/like" \
+    "http://one_dashboard.test/api/posts/1/like" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/posts/16/like"
+    "http://one_dashboard.test/api/posts/1/like"
 );
 
 const headers = {
@@ -8971,10 +8971,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="post_id"                data-endpoint="POSTapi-posts--post_id--like"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the post. Example: <code>16</code></p>
+<p>The ID of the post. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -8991,14 +8991,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/posts/16/liked" \
+    --get "http://one_dashboard.test/api/posts/1/liked" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/posts/16/liked"
+    "http://one_dashboard.test/api/posts/1/liked"
 );
 
 const headers = {
@@ -9114,10 +9114,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="post_id"                data-endpoint="GETapi-posts--post_id--liked"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the post. Example: <code>16</code></p>
+<p>The ID of the post. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -9134,7 +9134,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/posts/16/repost" \
+    "http://one_dashboard.test/api/posts/1/repost" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -9145,7 +9145,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/posts/16/repost"
+    "http://one_dashboard.test/api/posts/1/repost"
 );
 
 const headers = {
@@ -9246,10 +9246,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="post_id"                data-endpoint="POSTapi-posts--post_id--repost"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the post. Example: <code>16</code></p>
+<p>The ID of the post. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -9291,14 +9291,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/posts/16/save" \
+    "http://one_dashboard.test/api/posts/1/save" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/posts/16/save"
+    "http://one_dashboard.test/api/posts/1/save"
 );
 
 const headers = {
@@ -9395,10 +9395,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="post_id"                data-endpoint="POSTapi-posts--post_id--save"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the post. Example: <code>16</code></p>
+<p>The ID of the post. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -9415,14 +9415,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/posts/16/comments" \
+    --get "http://one_dashboard.test/api/posts/1/comments" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/posts/16/comments"
+    "http://one_dashboard.test/api/posts/1/comments"
 );
 
 const headers = {
@@ -9538,10 +9538,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="post_id"                data-endpoint="GETapi-posts--post_id--comments"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the post. Example: <code>16</code></p>
+<p>The ID of the post. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -9558,7 +9558,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/posts/16/comments" \
+    "http://one_dashboard.test/api/posts/1/comments" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -9569,7 +9569,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/posts/16/comments"
+    "http://one_dashboard.test/api/posts/1/comments"
 );
 
 const headers = {
@@ -9670,10 +9670,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="post_id"                data-endpoint="POSTapi-posts--post_id--comments"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the post. Example: <code>16</code></p>
+<p>The ID of the post. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -9703,7 +9703,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/comments/16/update" \
+    "http://one_dashboard.test/api/comments/1/update" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -9714,7 +9714,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/comments/16/update"
+    "http://one_dashboard.test/api/comments/1/update"
 );
 
 const headers = {
@@ -9815,10 +9815,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="comment_id"                data-endpoint="POSTapi-comments--comment_id--update"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the comment. Example: <code>16</code></p>
+<p>The ID of the comment. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -9848,14 +9848,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://one_dashboard.test/api/comments/16/delete" \
+    "http://one_dashboard.test/api/comments/1/delete" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/comments/16/delete"
+    "http://one_dashboard.test/api/comments/1/delete"
 );
 
 const headers = {
@@ -9952,10 +9952,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="comment_id"                data-endpoint="DELETEapi-comments--comment_id--delete"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the comment. Example: <code>16</code></p>
+<p>The ID of the comment. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -9972,7 +9972,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/comments/16/reply" \
+    "http://one_dashboard.test/api/comments/1/reply" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -9983,7 +9983,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/comments/16/reply"
+    "http://one_dashboard.test/api/comments/1/reply"
 );
 
 const headers = {
@@ -10084,10 +10084,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="comment_id"                data-endpoint="POSTapi-comments--comment_id--reply"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the comment. Example: <code>16</code></p>
+<p>The ID of the comment. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -10117,14 +10117,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/comments/16/like" \
+    "http://one_dashboard.test/api/comments/1/like" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/comments/16/like"
+    "http://one_dashboard.test/api/comments/1/like"
 );
 
 const headers = {
@@ -10221,10 +10221,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="comment_id"                data-endpoint="POSTapi-comments--comment_id--like"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the comment. Example: <code>16</code></p>
+<p>The ID of the comment. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -10241,14 +10241,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/comments/16/replies" \
+    --get "http://one_dashboard.test/api/comments/1/replies" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/comments/16/replies"
+    "http://one_dashboard.test/api/comments/1/replies"
 );
 
 const headers = {
@@ -10364,10 +10364,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="comment_id"                data-endpoint="GETapi-comments--comment_id--replies"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the comment. Example: <code>16</code></p>
+<p>The ID of the comment. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -10904,14 +10904,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/friends/16/mutual" \
+    --get "http://one_dashboard.test/api/friends/1/mutual" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/friends/16/mutual"
+    "http://one_dashboard.test/api/friends/1/mutual"
 );
 
 const headers = {
@@ -11027,10 +11027,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="GETapi-friends--user_id--mutual"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -11047,14 +11047,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/friends/request/16" \
+    "http://one_dashboard.test/api/friends/request/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/friends/request/16"
+    "http://one_dashboard.test/api/friends/request/1"
 );
 
 const headers = {
@@ -11151,10 +11151,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="POSTapi-friends-request--user_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -11543,14 +11543,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://one_dashboard.test/api/friends/unfriend/16" \
+    "http://one_dashboard.test/api/friends/unfriend/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/friends/unfriend/16"
+    "http://one_dashboard.test/api/friends/unfriend/1"
 );
 
 const headers = {
@@ -11647,10 +11647,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="DELETEapi-friends-unfriend--user_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -11927,14 +11927,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/users/16/followers" \
+    --get "http://one_dashboard.test/api/users/1/followers" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/users/16/followers"
+    "http://one_dashboard.test/api/users/1/followers"
 );
 
 const headers = {
@@ -12050,10 +12050,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="GETapi-users--user_id--followers"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -12070,14 +12070,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/users/16/followings" \
+    --get "http://one_dashboard.test/api/users/1/followings" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/users/16/followings"
+    "http://one_dashboard.test/api/users/1/followings"
 );
 
 const headers = {
@@ -12193,10 +12193,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="GETapi-users--user_id--followings"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -12213,14 +12213,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/users/16/relationship" \
+    --get "http://one_dashboard.test/api/users/1/relationship" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/users/16/relationship"
+    "http://one_dashboard.test/api/users/1/relationship"
 );
 
 const headers = {
@@ -12336,10 +12336,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="GETapi-users--user_id--relationship"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -12356,14 +12356,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/users/16/follow" \
+    "http://one_dashboard.test/api/users/1/follow" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/users/16/follow"
+    "http://one_dashboard.test/api/users/1/follow"
 );
 
 const headers = {
@@ -12460,10 +12460,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="POSTapi-users--user_id--follow"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -12480,14 +12480,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://one_dashboard.test/api/users/16/unfollow" \
+    "http://one_dashboard.test/api/users/1/unfollow" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/users/16/unfollow"
+    "http://one_dashboard.test/api/users/1/unfollow"
 );
 
 const headers = {
@@ -12584,10 +12584,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="DELETEapi-users--user_id--unfollow"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -12604,14 +12604,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/users/16/toggle-follow" \
+    "http://one_dashboard.test/api/users/1/toggle-follow" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/users/16/toggle-follow"
+    "http://one_dashboard.test/api/users/1/toggle-follow"
 );
 
 const headers = {
@@ -12708,10 +12708,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="POSTapi-users--user_id--toggle-follow"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -12858,14 +12858,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/blocks/16" \
+    "http://one_dashboard.test/api/blocks/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/blocks/16"
+    "http://one_dashboard.test/api/blocks/1"
 );
 
 const headers = {
@@ -12962,10 +12962,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="POSTapi-blocks--user_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -12982,14 +12982,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://one_dashboard.test/api/blocks/16" \
+    "http://one_dashboard.test/api/blocks/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/blocks/16"
+    "http://one_dashboard.test/api/blocks/1"
 );
 
 const headers = {
@@ -13086,10 +13086,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="DELETEapi-blocks--user_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -13115,7 +13115,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         16
     ],
     \"chat_room_id\": 16,
-    \"type\": \"screen_share\"
+    \"type\": \"video\"
 }"
 </code></pre></div>
 
@@ -13136,7 +13136,7 @@ let body = {
         16
     ],
     "chat_room_id": 16,
-    "type": "screen_share"
+    "type": "video"
 };
 
 fetch(url, {
@@ -13266,10 +13266,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="POSTapi-calls-initiate"
-               value="screen_share"
+               value="video"
                data-component="body">
     <br>
-<p>Example: <code>screen_share</code></p>
+<p>Example: <code>video</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>audio</code></li> <li><code>video</code></li> <li><code>screen_share</code></li></ul>
         </div>
@@ -13912,7 +13912,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"type\": \"offer\",
+    \"type\": \"ice_candidate\",
     \"payload\": [],
     \"target_id\": 16
 }"
@@ -13930,7 +13930,7 @@ const headers = {
 };
 
 let body = {
-    "type": "offer",
+    "type": "ice_candidate",
     "payload": [],
     "target_id": 16
 };
@@ -14037,10 +14037,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="POSTapi-calls--callSession_id--signal"
-               value="offer"
+               value="ice_candidate"
                data-component="body">
     <br>
-<p>Example: <code>offer</code></p>
+<p>Example: <code>ice_candidate</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>offer</code></li> <li><code>answer</code></li> <li><code>ice_candidate</code></li></ul>
         </div>
@@ -14088,7 +14088,7 @@ Must be one of:
     --header "Accept: application/json" \
     --data "{
     \"is_muted\": false,
-    \"is_video_enabled\": false,
+    \"is_video_enabled\": true,
     \"is_screen_sharing\": false
 }"
 </code></pre></div>
@@ -14106,7 +14106,7 @@ const headers = {
 
 let body = {
     "is_muted": false,
-    "is_video_enabled": false,
+    "is_video_enabled": true,
     "is_screen_sharing": false
 };
 
@@ -14247,7 +14247,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>is_screen_sharing</code></b>&nbsp;&nbsp;
@@ -14853,16 +14853,557 @@ access-control-allow-origin: *
     &quot;status&quot;: true,
     &quot;message&quot;: &quot;Products fetched successfully.&quot;,
     &quot;code&quot;: 200,
-    &quot;data&quot;: [],
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 35,
+            &quot;name&quot;: &quot;Ergonomic Mesh Office Chair with Lumbar Support&quot;,
+            &quot;slug&quot;: &quot;ergonomic-mesh-office-chair-with-lumbar-support-399&quot;,
+            &quot;sku&quot;: &quot;ERGONOMI-5991&quot;,
+            &quot;type&quot;: &quot;simple&quot;,
+            &quot;price&quot;: 289,
+            &quot;compare_at_price&quot;: 349,
+            &quot;discount_percentage&quot;: 17,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 22,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4.5,
+            &quot;reviews_count&quot;: 2,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 14,
+                &quot;name&quot;: &quot;Workspace &amp; Office&quot;,
+                &quot;slug&quot;: &quot;workspace-office&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 7,
+                &quot;name&quot;: &quot;Logitech&quot;,
+                &quot;slug&quot;: &quot;logitech&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 21,
+            &quot;name&quot;: &quot;Nike Club Fleece Pullover Hoodie&quot;,
+            &quot;slug&quot;: &quot;nike-club-fleece-pullover-hoodie-888&quot;,
+            &quot;sku&quot;: &quot;NIKE-CLU-1090&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 65,
+            &quot;compare_at_price&quot;: 75,
+            &quot;discount_percentage&quot;: 13,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 90,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4.5,
+            &quot;reviews_count&quot;: 2,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 7,
+                &quot;name&quot;: &quot;Men&#039;s Clothing&quot;,
+                &quot;slug&quot;: &quot;mens-clothing&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 4,
+                &quot;name&quot;: &quot;Nike&quot;,
+                &quot;slug&quot;: &quot;nike&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 22,
+            &quot;name&quot;: &quot;Zara Slim Fit Stretch Oxford Shirt&quot;,
+            &quot;slug&quot;: &quot;zara-slim-fit-stretch-oxford-shirt-172&quot;,
+            &quot;sku&quot;: &quot;ZARA-SLI-9650&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 49.9,
+            &quot;compare_at_price&quot;: 59.9,
+            &quot;discount_percentage&quot;: 17,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 65,
+            &quot;is_featured&quot;: false,
+            &quot;average_rating&quot;: 4,
+            &quot;reviews_count&quot;: 1,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 7,
+                &quot;name&quot;: &quot;Men&#039;s Clothing&quot;,
+                &quot;slug&quot;: &quot;mens-clothing&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 9,
+                &quot;name&quot;: &quot;Zara&quot;,
+                &quot;slug&quot;: &quot;zara&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 23,
+            &quot;name&quot;: &quot;Puma Modern Basics Cargo Pants&quot;,
+            &quot;slug&quot;: &quot;puma-modern-basics-cargo-pants-294&quot;,
+            &quot;sku&quot;: &quot;PUMA-MOD-5175&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 50,
+            &quot;compare_at_price&quot;: 65,
+            &quot;discount_percentage&quot;: 23,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 55,
+            &quot;is_featured&quot;: false,
+            &quot;average_rating&quot;: 5,
+            &quot;reviews_count&quot;: 3,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 7,
+                &quot;name&quot;: &quot;Men&#039;s Clothing&quot;,
+                &quot;slug&quot;: &quot;mens-clothing&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 10,
+                &quot;name&quot;: &quot;Puma&quot;,
+                &quot;slug&quot;: &quot;puma&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 24,
+            &quot;name&quot;: &quot;Nike Zenvy Gentle-Support High-Waisted Leggings&quot;,
+            &quot;slug&quot;: &quot;nike-zenvy-gentle-support-high-waisted-leggings-933&quot;,
+            &quot;sku&quot;: &quot;NIKE-ZEN-6438&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 95,
+            &quot;compare_at_price&quot;: 110,
+            &quot;discount_percentage&quot;: 14,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 70,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4.33,
+            &quot;reviews_count&quot;: 3,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 8,
+                &quot;name&quot;: &quot;Women&#039;s Clothing&quot;,
+                &quot;slug&quot;: &quot;womens-clothing&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 4,
+                &quot;name&quot;: &quot;Nike&quot;,
+                &quot;slug&quot;: &quot;nike&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 25,
+            &quot;name&quot;: &quot;Adidas Tiro 24 Training Pants&quot;,
+            &quot;slug&quot;: &quot;adidas-tiro-24-training-pants-789&quot;,
+            &quot;sku&quot;: &quot;ADIDAS-T-2771&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 45,
+            &quot;compare_at_price&quot;: 55,
+            &quot;discount_percentage&quot;: 18,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 85,
+            &quot;is_featured&quot;: false,
+            &quot;average_rating&quot;: 4,
+            &quot;reviews_count&quot;: 3,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 8,
+                &quot;name&quot;: &quot;Women&#039;s Clothing&quot;,
+                &quot;slug&quot;: &quot;womens-clothing&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 5,
+                &quot;name&quot;: &quot;Adidas&quot;,
+                &quot;slug&quot;: &quot;adidas&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 26,
+            &quot;name&quot;: &quot;Zara Oversized Double-Breasted Blazer&quot;,
+            &quot;slug&quot;: &quot;zara-oversized-double-breasted-blazer-681&quot;,
+            &quot;sku&quot;: &quot;ZARA-OVE-2393&quot;,
+            &quot;type&quot;: &quot;simple&quot;,
+            &quot;price&quot;: 119,
+            &quot;compare_at_price&quot;: 139,
+            &quot;discount_percentage&quot;: 14,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 40,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4,
+            &quot;reviews_count&quot;: 1,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 8,
+                &quot;name&quot;: &quot;Women&#039;s Clothing&quot;,
+                &quot;slug&quot;: &quot;womens-clothing&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 9,
+                &quot;name&quot;: &quot;Zara&quot;,
+                &quot;slug&quot;: &quot;zara&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 27,
+            &quot;name&quot;: &quot;Nike Air Force 1 07 Classic&quot;,
+            &quot;slug&quot;: &quot;nike-air-force-1-07-classic-995&quot;,
+            &quot;sku&quot;: &quot;NIKE-AIR-5126&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 115,
+            &quot;compare_at_price&quot;: 130,
+            &quot;discount_percentage&quot;: 12,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 110,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4.67,
+            &quot;reviews_count&quot;: 3,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 9,
+                &quot;name&quot;: &quot;Footwear &amp; Sneakers&quot;,
+                &quot;slug&quot;: &quot;footwear-sneakers&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 4,
+                &quot;name&quot;: &quot;Nike&quot;,
+                &quot;slug&quot;: &quot;nike&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 28,
+            &quot;name&quot;: &quot;Adidas Samba OG Shoes&quot;,
+            &quot;slug&quot;: &quot;adidas-samba-og-shoes-626&quot;,
+            &quot;sku&quot;: &quot;ADIDAS-S-6172&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 100,
+            &quot;compare_at_price&quot;: 120,
+            &quot;discount_percentage&quot;: 17,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 95,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 5,
+            &quot;reviews_count&quot;: 1,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 9,
+                &quot;name&quot;: &quot;Footwear &amp; Sneakers&quot;,
+                &quot;slug&quot;: &quot;footwear-sneakers&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 5,
+                &quot;name&quot;: &quot;Adidas&quot;,
+                &quot;slug&quot;: &quot;adidas&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 29,
+            &quot;name&quot;: &quot;Nike Pegasus 41 Road Running Shoes&quot;,
+            &quot;slug&quot;: &quot;nike-pegasus-41-road-running-shoes-197&quot;,
+            &quot;sku&quot;: &quot;NIKE-PEG-5693&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 140,
+            &quot;compare_at_price&quot;: 160,
+            &quot;discount_percentage&quot;: 13,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 60,
+            &quot;is_featured&quot;: false,
+            &quot;average_rating&quot;: 4,
+            &quot;reviews_count&quot;: 2,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 9,
+                &quot;name&quot;: &quot;Footwear &amp; Sneakers&quot;,
+                &quot;slug&quot;: &quot;footwear-sneakers&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 4,
+                &quot;name&quot;: &quot;Nike&quot;,
+                &quot;slug&quot;: &quot;nike&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 30,
+            &quot;name&quot;: &quot;Puma Suede Classic XXI Sneakers&quot;,
+            &quot;slug&quot;: &quot;puma-suede-classic-xxi-sneakers-226&quot;,
+            &quot;sku&quot;: &quot;PUMA-SUE-8678&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 75,
+            &quot;compare_at_price&quot;: 85,
+            &quot;discount_percentage&quot;: 12,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 50,
+            &quot;is_featured&quot;: false,
+            &quot;average_rating&quot;: 4,
+            &quot;reviews_count&quot;: 1,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 9,
+                &quot;name&quot;: &quot;Footwear &amp; Sneakers&quot;,
+                &quot;slug&quot;: &quot;footwear-sneakers&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 10,
+                &quot;name&quot;: &quot;Puma&quot;,
+                &quot;slug&quot;: &quot;puma&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 31,
+            &quot;name&quot;: &quot;Philips Hue Smart Bridge &amp; Bulb Starter Kit&quot;,
+            &quot;slug&quot;: &quot;philips-hue-smart-bridge-bulb-starter-kit-168&quot;,
+            &quot;sku&quot;: &quot;PHILIPS-6314&quot;,
+            &quot;type&quot;: &quot;simple&quot;,
+            &quot;price&quot;: 159.99,
+            &quot;compare_at_price&quot;: 189.99,
+            &quot;discount_percentage&quot;: 16,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 35,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 5,
+            &quot;reviews_count&quot;: 2,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 12,
+                &quot;name&quot;: &quot;Smart Home Devices&quot;,
+                &quot;slug&quot;: &quot;smart-home-devices&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;Apple&quot;,
+                &quot;slug&quot;: &quot;apple&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 32,
+            &quot;name&quot;: &quot;Sonos Era 100 Smart Speaker&quot;,
+            &quot;slug&quot;: &quot;sonos-era-100-smart-speaker-266&quot;,
+            &quot;sku&quot;: &quot;SONOS-ER-2844&quot;,
+            &quot;type&quot;: &quot;simple&quot;,
+            &quot;price&quot;: 249,
+            &quot;compare_at_price&quot;: 279,
+            &quot;discount_percentage&quot;: 11,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 28,
+            &quot;is_featured&quot;: false,
+            &quot;average_rating&quot;: 4,
+            &quot;reviews_count&quot;: 1,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 12,
+                &quot;name&quot;: &quot;Smart Home Devices&quot;,
+                &quot;slug&quot;: &quot;smart-home-devices&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 8,
+                &quot;name&quot;: &quot;Bose&quot;,
+                &quot;slug&quot;: &quot;bose&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 33,
+            &quot;name&quot;: &quot;Breville Barista Touch Espresso Machine&quot;,
+            &quot;slug&quot;: &quot;breville-barista-touch-espresso-machine-185&quot;,
+            &quot;sku&quot;: &quot;BREVILLE-5145&quot;,
+            &quot;type&quot;: &quot;simple&quot;,
+            &quot;price&quot;: 999.95,
+            &quot;compare_at_price&quot;: 1099.95,
+            &quot;discount_percentage&quot;: 9,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 12,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4.67,
+            &quot;reviews_count&quot;: 3,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 13,
+                &quot;name&quot;: &quot;Kitchen Appliances&quot;,
+                &quot;slug&quot;: &quot;kitchen-appliances&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 6,
+                &quot;name&quot;: &quot;Dell&quot;,
+                &quot;slug&quot;: &quot;dell&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 34,
+            &quot;name&quot;: &quot;Ninja Air Fryer Pro 4-in-1&quot;,
+            &quot;slug&quot;: &quot;ninja-air-fryer-pro-4-in-1-869&quot;,
+            &quot;sku&quot;: &quot;NINJA-AI-6372&quot;,
+            &quot;type&quot;: &quot;simple&quot;,
+            &quot;price&quot;: 119.99,
+            &quot;compare_at_price&quot;: 139.99,
+            &quot;discount_percentage&quot;: 14,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 45,
+            &quot;is_featured&quot;: false,
+            &quot;average_rating&quot;: 5,
+            &quot;reviews_count&quot;: 1,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 13,
+                &quot;name&quot;: &quot;Kitchen Appliances&quot;,
+                &quot;slug&quot;: &quot;kitchen-appliances&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 2,
+                &quot;name&quot;: &quot;Samsung&quot;,
+                &quot;slug&quot;: &quot;samsung&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 16,
+            &quot;name&quot;: &quot;Sony PlayStation 5 Slim Digital Edition&quot;,
+            &quot;slug&quot;: &quot;sony-playstation-5-slim-digital-edition-186&quot;,
+            &quot;sku&quot;: &quot;SONY-PLA-8187&quot;,
+            &quot;type&quot;: &quot;simple&quot;,
+            &quot;price&quot;: 449.99,
+            &quot;compare_at_price&quot;: 499.99,
+            &quot;discount_percentage&quot;: 10,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 30,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4.5,
+            &quot;reviews_count&quot;: 2,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 5,
+                &quot;name&quot;: &quot;Gaming &amp; Consoles&quot;,
+                &quot;slug&quot;: &quot;gaming-consoles&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 3,
+                &quot;name&quot;: &quot;Sony&quot;,
+                &quot;slug&quot;: &quot;sony&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:51:59+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 17,
+            &quot;name&quot;: &quot;PlayStation DualSense Wireless Controller&quot;,
+            &quot;slug&quot;: &quot;playstation-dualsense-wireless-controller-508&quot;,
+            &quot;sku&quot;: &quot;PLAYSTAT-9509&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 69.99,
+            &quot;compare_at_price&quot;: 74.99,
+            &quot;discount_percentage&quot;: 7,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 75,
+            &quot;is_featured&quot;: false,
+            &quot;average_rating&quot;: 5,
+            &quot;reviews_count&quot;: 1,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 5,
+                &quot;name&quot;: &quot;Gaming &amp; Consoles&quot;,
+                &quot;slug&quot;: &quot;gaming-consoles&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 3,
+                &quot;name&quot;: &quot;Sony&quot;,
+                &quot;slug&quot;: &quot;sony&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:51:59+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;Apple iPhone 16 Pro Max&quot;,
+            &quot;slug&quot;: &quot;apple-iphone-16-pro-max-476&quot;,
+            &quot;sku&quot;: &quot;APPLE-IP-5440&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 1199,
+            &quot;compare_at_price&quot;: 1299,
+            &quot;discount_percentage&quot;: 8,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 45,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4,
+            &quot;reviews_count&quot;: 1,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 2,
+                &quot;name&quot;: &quot;Smartphones &amp; Accessories&quot;,
+                &quot;slug&quot;: &quot;smartphones-accessories&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;Apple&quot;,
+                &quot;slug&quot;: &quot;apple&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:51:59+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 19,
+            &quot;name&quot;: &quot;Nike Dri-FIT UV Running Shirt&quot;,
+            &quot;slug&quot;: &quot;nike-dri-fit-uv-running-shirt-281&quot;,
+            &quot;sku&quot;: &quot;NIKE-DRI-1259&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 42,
+            &quot;compare_at_price&quot;: 55,
+            &quot;discount_percentage&quot;: 24,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 100,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4.67,
+            &quot;reviews_count&quot;: 3,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 7,
+                &quot;name&quot;: &quot;Men&#039;s Clothing&quot;,
+                &quot;slug&quot;: &quot;mens-clothing&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 4,
+                &quot;name&quot;: &quot;Nike&quot;,
+                &quot;slug&quot;: &quot;nike&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:51:59+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 20,
+            &quot;name&quot;: &quot;Adidas Essentials 3-Stripes Track Jacket&quot;,
+            &quot;slug&quot;: &quot;adidas-essentials-3-stripes-track-jacket-523&quot;,
+            &quot;sku&quot;: &quot;ADIDAS-E-2961&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 55,
+            &quot;compare_at_price&quot;: 70,
+            &quot;discount_percentage&quot;: 21,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 80,
+            &quot;is_featured&quot;: false,
+            &quot;average_rating&quot;: 5,
+            &quot;reviews_count&quot;: 3,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 7,
+                &quot;name&quot;: &quot;Men&#039;s Clothing&quot;,
+                &quot;slug&quot;: &quot;mens-clothing&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 5,
+                &quot;name&quot;: &quot;Adidas&quot;,
+                &quot;slug&quot;: &quot;adidas&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:51:59+00:00&quot;
+        }
+    ],
     &quot;pagination&quot;: {
         &quot;type&quot;: &quot;offset&quot;,
         &quot;current_page&quot;: 1,
-        &quot;last_page&quot;: 1,
+        &quot;last_page&quot;: 2,
         &quot;per_page&quot;: 20,
-        &quot;total&quot;: 0,
-        &quot;from&quot;: null,
-        &quot;to&quot;: null,
-        &quot;has_more&quot;: false,
+        &quot;total&quot;: 35,
+        &quot;from&quot;: 1,
+        &quot;to&quot;: 20,
+        &quot;has_more&quot;: true,
         &quot;path&quot;: &quot;http://one_dashboard.test/api/v1/store/products&quot;
     }
 }</code>
@@ -15124,7 +15665,224 @@ access-control-allow-origin: *
     &quot;status&quot;: true,
     &quot;message&quot;: &quot;Featured products fetched successfully.&quot;,
     &quot;code&quot;: 200,
-    &quot;data&quot;: []
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 35,
+            &quot;name&quot;: &quot;Ergonomic Mesh Office Chair with Lumbar Support&quot;,
+            &quot;slug&quot;: &quot;ergonomic-mesh-office-chair-with-lumbar-support-399&quot;,
+            &quot;sku&quot;: &quot;ERGONOMI-5991&quot;,
+            &quot;type&quot;: &quot;simple&quot;,
+            &quot;price&quot;: 289,
+            &quot;compare_at_price&quot;: 349,
+            &quot;discount_percentage&quot;: 17,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 22,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4.5,
+            &quot;reviews_count&quot;: 2,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 14,
+                &quot;name&quot;: &quot;Workspace &amp; Office&quot;,
+                &quot;slug&quot;: &quot;workspace-office&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 7,
+                &quot;name&quot;: &quot;Logitech&quot;,
+                &quot;slug&quot;: &quot;logitech&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 33,
+            &quot;name&quot;: &quot;Breville Barista Touch Espresso Machine&quot;,
+            &quot;slug&quot;: &quot;breville-barista-touch-espresso-machine-185&quot;,
+            &quot;sku&quot;: &quot;BREVILLE-5145&quot;,
+            &quot;type&quot;: &quot;simple&quot;,
+            &quot;price&quot;: 999.95,
+            &quot;compare_at_price&quot;: 1099.95,
+            &quot;discount_percentage&quot;: 9,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 12,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4.67,
+            &quot;reviews_count&quot;: 3,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 13,
+                &quot;name&quot;: &quot;Kitchen Appliances&quot;,
+                &quot;slug&quot;: &quot;kitchen-appliances&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 6,
+                &quot;name&quot;: &quot;Dell&quot;,
+                &quot;slug&quot;: &quot;dell&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 31,
+            &quot;name&quot;: &quot;Philips Hue Smart Bridge &amp; Bulb Starter Kit&quot;,
+            &quot;slug&quot;: &quot;philips-hue-smart-bridge-bulb-starter-kit-168&quot;,
+            &quot;sku&quot;: &quot;PHILIPS-6314&quot;,
+            &quot;type&quot;: &quot;simple&quot;,
+            &quot;price&quot;: 159.99,
+            &quot;compare_at_price&quot;: 189.99,
+            &quot;discount_percentage&quot;: 16,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 35,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 5,
+            &quot;reviews_count&quot;: 2,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 12,
+                &quot;name&quot;: &quot;Smart Home Devices&quot;,
+                &quot;slug&quot;: &quot;smart-home-devices&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;Apple&quot;,
+                &quot;slug&quot;: &quot;apple&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 28,
+            &quot;name&quot;: &quot;Adidas Samba OG Shoes&quot;,
+            &quot;slug&quot;: &quot;adidas-samba-og-shoes-626&quot;,
+            &quot;sku&quot;: &quot;ADIDAS-S-6172&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 100,
+            &quot;compare_at_price&quot;: 120,
+            &quot;discount_percentage&quot;: 17,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 95,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 5,
+            &quot;reviews_count&quot;: 1,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 9,
+                &quot;name&quot;: &quot;Footwear &amp; Sneakers&quot;,
+                &quot;slug&quot;: &quot;footwear-sneakers&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 5,
+                &quot;name&quot;: &quot;Adidas&quot;,
+                &quot;slug&quot;: &quot;adidas&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 27,
+            &quot;name&quot;: &quot;Nike Air Force 1 07 Classic&quot;,
+            &quot;slug&quot;: &quot;nike-air-force-1-07-classic-995&quot;,
+            &quot;sku&quot;: &quot;NIKE-AIR-5126&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 115,
+            &quot;compare_at_price&quot;: 130,
+            &quot;discount_percentage&quot;: 12,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 110,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4.67,
+            &quot;reviews_count&quot;: 3,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 9,
+                &quot;name&quot;: &quot;Footwear &amp; Sneakers&quot;,
+                &quot;slug&quot;: &quot;footwear-sneakers&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 4,
+                &quot;name&quot;: &quot;Nike&quot;,
+                &quot;slug&quot;: &quot;nike&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 26,
+            &quot;name&quot;: &quot;Zara Oversized Double-Breasted Blazer&quot;,
+            &quot;slug&quot;: &quot;zara-oversized-double-breasted-blazer-681&quot;,
+            &quot;sku&quot;: &quot;ZARA-OVE-2393&quot;,
+            &quot;type&quot;: &quot;simple&quot;,
+            &quot;price&quot;: 119,
+            &quot;compare_at_price&quot;: 139,
+            &quot;discount_percentage&quot;: 14,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 40,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4,
+            &quot;reviews_count&quot;: 1,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 8,
+                &quot;name&quot;: &quot;Women&#039;s Clothing&quot;,
+                &quot;slug&quot;: &quot;womens-clothing&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 9,
+                &quot;name&quot;: &quot;Zara&quot;,
+                &quot;slug&quot;: &quot;zara&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 24,
+            &quot;name&quot;: &quot;Nike Zenvy Gentle-Support High-Waisted Leggings&quot;,
+            &quot;slug&quot;: &quot;nike-zenvy-gentle-support-high-waisted-leggings-933&quot;,
+            &quot;sku&quot;: &quot;NIKE-ZEN-6438&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 95,
+            &quot;compare_at_price&quot;: 110,
+            &quot;discount_percentage&quot;: 14,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 70,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4.33,
+            &quot;reviews_count&quot;: 3,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 8,
+                &quot;name&quot;: &quot;Women&#039;s Clothing&quot;,
+                &quot;slug&quot;: &quot;womens-clothing&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 4,
+                &quot;name&quot;: &quot;Nike&quot;,
+                &quot;slug&quot;: &quot;nike&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        },
+        {
+            &quot;id&quot;: 21,
+            &quot;name&quot;: &quot;Nike Club Fleece Pullover Hoodie&quot;,
+            &quot;slug&quot;: &quot;nike-club-fleece-pullover-hoodie-888&quot;,
+            &quot;sku&quot;: &quot;NIKE-CLU-1090&quot;,
+            &quot;type&quot;: &quot;variable&quot;,
+            &quot;price&quot;: 65,
+            &quot;compare_at_price&quot;: 75,
+            &quot;discount_percentage&quot;: 13,
+            &quot;is_in_stock&quot;: true,
+            &quot;stock_quantity&quot;: 90,
+            &quot;is_featured&quot;: true,
+            &quot;average_rating&quot;: 4.5,
+            &quot;reviews_count&quot;: 2,
+            &quot;thumbnail&quot;: null,
+            &quot;category&quot;: {
+                &quot;id&quot;: 7,
+                &quot;name&quot;: &quot;Men&#039;s Clothing&quot;,
+                &quot;slug&quot;: &quot;mens-clothing&quot;
+            },
+            &quot;brand&quot;: {
+                &quot;id&quot;: 4,
+                &quot;name&quot;: &quot;Nike&quot;,
+                &quot;slug&quot;: &quot;nike&quot;
+            },
+            &quot;created_at&quot;: &quot;2026-09-05T10:52:00+00:00&quot;
+        }
+    ]
 }</code>
  </pre>
     </span>
@@ -15683,7 +16441,193 @@ access-control-allow-origin: *
     &quot;status&quot;: true,
     &quot;message&quot;: &quot;Category tree fetched successfully.&quot;,
     &quot;code&quot;: 200,
-    &quot;data&quot;: []
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 1,
+            &quot;parent_id&quot;: null,
+            &quot;name&quot;: &quot;Electronics&quot;,
+            &quot;slug&quot;: &quot;electronics&quot;,
+            &quot;description&quot;: &quot;Explore premium collection of Electronics&quot;,
+            &quot;icon&quot;: &quot;fa-tv&quot;,
+            &quot;image&quot;: null,
+            &quot;order&quot;: 1,
+            &quot;is_active&quot;: true,
+            &quot;is_featured&quot;: true,
+            &quot;children&quot;: [
+                {
+                    &quot;id&quot;: 2,
+                    &quot;parent_id&quot;: 1,
+                    &quot;name&quot;: &quot;Smartphones &amp; Accessories&quot;,
+                    &quot;slug&quot;: &quot;smartphones-accessories&quot;,
+                    &quot;description&quot;: &quot;Best selection of Smartphones &amp; Accessories&quot;,
+                    &quot;icon&quot;: null,
+                    &quot;image&quot;: null,
+                    &quot;order&quot;: 1,
+                    &quot;is_active&quot;: true,
+                    &quot;is_featured&quot;: true,
+                    &quot;children&quot;: []
+                },
+                {
+                    &quot;id&quot;: 3,
+                    &quot;parent_id&quot;: 1,
+                    &quot;name&quot;: &quot;Laptops &amp; Computers&quot;,
+                    &quot;slug&quot;: &quot;laptops-computers&quot;,
+                    &quot;description&quot;: &quot;Best selection of Laptops &amp; Computers&quot;,
+                    &quot;icon&quot;: null,
+                    &quot;image&quot;: null,
+                    &quot;order&quot;: 2,
+                    &quot;is_active&quot;: true,
+                    &quot;is_featured&quot;: true,
+                    &quot;children&quot;: []
+                },
+                {
+                    &quot;id&quot;: 4,
+                    &quot;parent_id&quot;: 1,
+                    &quot;name&quot;: &quot;Audio &amp; Headphones&quot;,
+                    &quot;slug&quot;: &quot;audio-headphones&quot;,
+                    &quot;description&quot;: &quot;Best selection of Audio &amp; Headphones&quot;,
+                    &quot;icon&quot;: null,
+                    &quot;image&quot;: null,
+                    &quot;order&quot;: 3,
+                    &quot;is_active&quot;: true,
+                    &quot;is_featured&quot;: true,
+                    &quot;children&quot;: []
+                },
+                {
+                    &quot;id&quot;: 5,
+                    &quot;parent_id&quot;: 1,
+                    &quot;name&quot;: &quot;Gaming &amp; Consoles&quot;,
+                    &quot;slug&quot;: &quot;gaming-consoles&quot;,
+                    &quot;description&quot;: &quot;Best selection of Gaming &amp; Consoles&quot;,
+                    &quot;icon&quot;: null,
+                    &quot;image&quot;: null,
+                    &quot;order&quot;: 4,
+                    &quot;is_active&quot;: true,
+                    &quot;is_featured&quot;: true,
+                    &quot;children&quot;: []
+                }
+            ]
+        },
+        {
+            &quot;id&quot;: 6,
+            &quot;parent_id&quot;: null,
+            &quot;name&quot;: &quot;Fashion &amp; Apparel&quot;,
+            &quot;slug&quot;: &quot;fashion-apparel&quot;,
+            &quot;description&quot;: &quot;Explore premium collection of Fashion &amp; Apparel&quot;,
+            &quot;icon&quot;: &quot;fa-tshirt&quot;,
+            &quot;image&quot;: null,
+            &quot;order&quot;: 2,
+            &quot;is_active&quot;: true,
+            &quot;is_featured&quot;: true,
+            &quot;children&quot;: [
+                {
+                    &quot;id&quot;: 7,
+                    &quot;parent_id&quot;: 6,
+                    &quot;name&quot;: &quot;Men&#039;s Clothing&quot;,
+                    &quot;slug&quot;: &quot;mens-clothing&quot;,
+                    &quot;description&quot;: &quot;Best selection of Men&#039;s Clothing&quot;,
+                    &quot;icon&quot;: null,
+                    &quot;image&quot;: null,
+                    &quot;order&quot;: 1,
+                    &quot;is_active&quot;: true,
+                    &quot;is_featured&quot;: true,
+                    &quot;children&quot;: []
+                },
+                {
+                    &quot;id&quot;: 8,
+                    &quot;parent_id&quot;: 6,
+                    &quot;name&quot;: &quot;Women&#039;s Clothing&quot;,
+                    &quot;slug&quot;: &quot;womens-clothing&quot;,
+                    &quot;description&quot;: &quot;Best selection of Women&#039;s Clothing&quot;,
+                    &quot;icon&quot;: null,
+                    &quot;image&quot;: null,
+                    &quot;order&quot;: 2,
+                    &quot;is_active&quot;: true,
+                    &quot;is_featured&quot;: true,
+                    &quot;children&quot;: []
+                },
+                {
+                    &quot;id&quot;: 9,
+                    &quot;parent_id&quot;: 6,
+                    &quot;name&quot;: &quot;Footwear &amp; Sneakers&quot;,
+                    &quot;slug&quot;: &quot;footwear-sneakers&quot;,
+                    &quot;description&quot;: &quot;Best selection of Footwear &amp; Sneakers&quot;,
+                    &quot;icon&quot;: null,
+                    &quot;image&quot;: null,
+                    &quot;order&quot;: 3,
+                    &quot;is_active&quot;: true,
+                    &quot;is_featured&quot;: true,
+                    &quot;children&quot;: []
+                },
+                {
+                    &quot;id&quot;: 10,
+                    &quot;parent_id&quot;: 6,
+                    &quot;name&quot;: &quot;Watches &amp; Accessories&quot;,
+                    &quot;slug&quot;: &quot;watches-accessories&quot;,
+                    &quot;description&quot;: &quot;Best selection of Watches &amp; Accessories&quot;,
+                    &quot;icon&quot;: null,
+                    &quot;image&quot;: null,
+                    &quot;order&quot;: 4,
+                    &quot;is_active&quot;: true,
+                    &quot;is_featured&quot;: true,
+                    &quot;children&quot;: []
+                }
+            ]
+        },
+        {
+            &quot;id&quot;: 11,
+            &quot;parent_id&quot;: null,
+            &quot;name&quot;: &quot;Home &amp; Lifestyle&quot;,
+            &quot;slug&quot;: &quot;home-lifestyle&quot;,
+            &quot;description&quot;: &quot;Explore premium collection of Home &amp; Lifestyle&quot;,
+            &quot;icon&quot;: &quot;fa-couch&quot;,
+            &quot;image&quot;: null,
+            &quot;order&quot;: 3,
+            &quot;is_active&quot;: true,
+            &quot;is_featured&quot;: true,
+            &quot;children&quot;: [
+                {
+                    &quot;id&quot;: 12,
+                    &quot;parent_id&quot;: 11,
+                    &quot;name&quot;: &quot;Smart Home Devices&quot;,
+                    &quot;slug&quot;: &quot;smart-home-devices&quot;,
+                    &quot;description&quot;: &quot;Best selection of Smart Home Devices&quot;,
+                    &quot;icon&quot;: null,
+                    &quot;image&quot;: null,
+                    &quot;order&quot;: 1,
+                    &quot;is_active&quot;: true,
+                    &quot;is_featured&quot;: true,
+                    &quot;children&quot;: []
+                },
+                {
+                    &quot;id&quot;: 13,
+                    &quot;parent_id&quot;: 11,
+                    &quot;name&quot;: &quot;Kitchen Appliances&quot;,
+                    &quot;slug&quot;: &quot;kitchen-appliances&quot;,
+                    &quot;description&quot;: &quot;Best selection of Kitchen Appliances&quot;,
+                    &quot;icon&quot;: null,
+                    &quot;image&quot;: null,
+                    &quot;order&quot;: 2,
+                    &quot;is_active&quot;: true,
+                    &quot;is_featured&quot;: true,
+                    &quot;children&quot;: []
+                },
+                {
+                    &quot;id&quot;: 14,
+                    &quot;parent_id&quot;: 11,
+                    &quot;name&quot;: &quot;Workspace &amp; Office&quot;,
+                    &quot;slug&quot;: &quot;workspace-office&quot;,
+                    &quot;description&quot;: &quot;Best selection of Workspace &amp; Office&quot;,
+                    &quot;icon&quot;: null,
+                    &quot;image&quot;: null,
+                    &quot;order&quot;: 3,
+                    &quot;is_active&quot;: true,
+                    &quot;is_featured&quot;: true,
+                    &quot;children&quot;: []
+                }
+            ]
+        }
+    ]
 }</code>
  </pre>
     </span>
@@ -15956,7 +16900,118 @@ access-control-allow-origin: *
     &quot;status&quot;: true,
     &quot;message&quot;: &quot;Brands fetched successfully.&quot;,
     &quot;code&quot;: 200,
-    &quot;data&quot;: []
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 5,
+            &quot;name&quot;: &quot;Adidas&quot;,
+            &quot;slug&quot;: &quot;adidas&quot;,
+            &quot;logo&quot;: null,
+            &quot;website&quot;: &quot;https://adidas.com&quot;,
+            &quot;description&quot;: &quot;Official products from Adidas&quot;,
+            &quot;is_active&quot;: true,
+            &quot;is_featured&quot;: true,
+            &quot;products_count&quot;: 3
+        },
+        {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;Apple&quot;,
+            &quot;slug&quot;: &quot;apple&quot;,
+            &quot;logo&quot;: null,
+            &quot;website&quot;: &quot;https://apple.com&quot;,
+            &quot;description&quot;: &quot;Official products from Apple&quot;,
+            &quot;is_active&quot;: true,
+            &quot;is_featured&quot;: true,
+            &quot;products_count&quot;: 7
+        },
+        {
+            &quot;id&quot;: 8,
+            &quot;name&quot;: &quot;Bose&quot;,
+            &quot;slug&quot;: &quot;bose&quot;,
+            &quot;logo&quot;: null,
+            &quot;website&quot;: &quot;https://bose.com&quot;,
+            &quot;description&quot;: &quot;Official products from Bose&quot;,
+            &quot;is_active&quot;: true,
+            &quot;is_featured&quot;: false,
+            &quot;products_count&quot;: 2
+        },
+        {
+            &quot;id&quot;: 6,
+            &quot;name&quot;: &quot;Dell&quot;,
+            &quot;slug&quot;: &quot;dell&quot;,
+            &quot;logo&quot;: null,
+            &quot;website&quot;: &quot;https://dell.com&quot;,
+            &quot;description&quot;: &quot;Official products from Dell&quot;,
+            &quot;is_active&quot;: true,
+            &quot;is_featured&quot;: false,
+            &quot;products_count&quot;: 3
+        },
+        {
+            &quot;id&quot;: 7,
+            &quot;name&quot;: &quot;Logitech&quot;,
+            &quot;slug&quot;: &quot;logitech&quot;,
+            &quot;logo&quot;: null,
+            &quot;website&quot;: &quot;https://logitech.com&quot;,
+            &quot;description&quot;: &quot;Official products from Logitech&quot;,
+            &quot;is_active&quot;: true,
+            &quot;is_featured&quot;: true,
+            &quot;products_count&quot;: 4
+        },
+        {
+            &quot;id&quot;: 4,
+            &quot;name&quot;: &quot;Nike&quot;,
+            &quot;slug&quot;: &quot;nike&quot;,
+            &quot;logo&quot;: null,
+            &quot;website&quot;: &quot;https://nike.com&quot;,
+            &quot;description&quot;: &quot;Official products from Nike&quot;,
+            &quot;is_active&quot;: true,
+            &quot;is_featured&quot;: true,
+            &quot;products_count&quot;: 5
+        },
+        {
+            &quot;id&quot;: 10,
+            &quot;name&quot;: &quot;Puma&quot;,
+            &quot;slug&quot;: &quot;puma&quot;,
+            &quot;logo&quot;: null,
+            &quot;website&quot;: &quot;https://puma.com&quot;,
+            &quot;description&quot;: &quot;Official products from Puma&quot;,
+            &quot;is_active&quot;: true,
+            &quot;is_featured&quot;: false,
+            &quot;products_count&quot;: 2
+        },
+        {
+            &quot;id&quot;: 2,
+            &quot;name&quot;: &quot;Samsung&quot;,
+            &quot;slug&quot;: &quot;samsung&quot;,
+            &quot;logo&quot;: null,
+            &quot;website&quot;: &quot;https://samsung.com&quot;,
+            &quot;description&quot;: &quot;Official products from Samsung&quot;,
+            &quot;is_active&quot;: true,
+            &quot;is_featured&quot;: true,
+            &quot;products_count&quot;: 3
+        },
+        {
+            &quot;id&quot;: 3,
+            &quot;name&quot;: &quot;Sony&quot;,
+            &quot;slug&quot;: &quot;sony&quot;,
+            &quot;logo&quot;: null,
+            &quot;website&quot;: &quot;https://sony.com&quot;,
+            &quot;description&quot;: &quot;Official products from Sony&quot;,
+            &quot;is_active&quot;: true,
+            &quot;is_featured&quot;: true,
+            &quot;products_count&quot;: 4
+        },
+        {
+            &quot;id&quot;: 9,
+            &quot;name&quot;: &quot;Zara&quot;,
+            &quot;slug&quot;: &quot;zara&quot;,
+            &quot;logo&quot;: null,
+            &quot;website&quot;: &quot;https://zara.com&quot;,
+            &quot;description&quot;: &quot;Official products from Zara&quot;,
+            &quot;is_active&quot;: true,
+            &quot;is_featured&quot;: false,
+            &quot;products_count&quot;: 2
+        }
+    ]
 }</code>
  </pre>
     </span>
@@ -16338,7 +17393,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "rating=1"\
     --form "title=n"\
     --form "comment=g"\
-    --form "photos[]=@C:\Users\sakhawat\AppData\Local\Temp\phpC6B3.tmp" </code></pre></div>
+    --form "photos[]=@C:\Users\sakhawat\AppData\Local\Temp\php7417.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -16813,7 +17868,7 @@ access-control-allow-origin: *
     &quot;code&quot;: 200,
     &quot;data&quot;: {
         &quot;id&quot;: 1,
-        &quot;guest_token&quot;: &quot;6e5ba262-8590-4bcf-a8f6-45f1affbd4d0&quot;,
+        &quot;guest_token&quot;: &quot;e972469d-58c0-44d5-9bbc-d6a534cd9346&quot;,
         &quot;items_count&quot;: 0,
         &quot;subtotal&quot;: 0,
         &quot;discount_amount&quot;: 0,
@@ -17966,9 +19021,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"max_discount_amount\": 12,
     \"usage_limit\": 27,
     \"usage_limit_per_user\": 35,
-    \"start_date\": \"2026-09-05T10:18:35\",
+    \"start_date\": \"2026-09-05T10:52:06\",
     \"end_date\": \"2052-09-28\",
-    \"is_active\": true
+    \"is_active\": false
 }"
 </code></pre></div>
 
@@ -17991,9 +19046,9 @@ let body = {
     "max_discount_amount": 12,
     "usage_limit": 27,
     "usage_limit_per_user": 35,
-    "start_date": "2026-09-05T10:18:35",
+    "start_date": "2026-09-05T10:52:06",
     "end_date": "2052-09-28",
-    "is_active": true
+    "is_active": false
 };
 
 fetch(url, {
@@ -18171,10 +19226,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="start_date"                data-endpoint="POSTapi-v1-admin-coupons"
-               value="2026-09-05T10:18:35"
+               value="2026-09-05T10:52:06"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-09-05T10:18:35</code></p>
+<p>Must be a valid date. Example: <code>2026-09-05T10:52:06</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>end_date</code></b>&nbsp;&nbsp;
@@ -18208,7 +19263,7 @@ Must be one of:
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
         </form>
 
@@ -18372,14 +19427,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"type\": \"percentage\",
+    \"type\": \"fixed\",
     \"value\": 27,
     \"min_order_amount\": 39,
     \"max_discount_amount\": 84,
     \"usage_limit\": 66,
     \"usage_limit_per_user\": 27,
-    \"start_date\": \"2026-09-05T10:18:36\",
-    \"end_date\": \"2026-09-05T10:18:36\",
+    \"start_date\": \"2026-09-05T10:52:06\",
+    \"end_date\": \"2026-09-05T10:52:06\",
     \"is_active\": false
 }"
 </code></pre></div>
@@ -18396,14 +19451,14 @@ const headers = {
 };
 
 let body = {
-    "type": "percentage",
+    "type": "fixed",
     "value": 27,
     "min_order_amount": 39,
     "max_discount_amount": 84,
     "usage_limit": 66,
     "usage_limit_per_user": 27,
-    "start_date": "2026-09-05T10:18:36",
-    "end_date": "2026-09-05T10:18:36",
+    "start_date": "2026-09-05T10:52:06",
+    "end_date": "2026-09-05T10:52:06",
     "is_active": false
 };
 
@@ -18521,10 +19576,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="PUTapi-v1-admin-coupons--id-"
-               value="percentage"
+               value="fixed"
                data-component="body">
     <br>
-<p>Example: <code>percentage</code></p>
+<p>Example: <code>fixed</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>percentage</code></li> <li><code>fixed</code></li></ul>
         </div>
@@ -18595,10 +19650,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="start_date"                data-endpoint="PUTapi-v1-admin-coupons--id-"
-               value="2026-09-05T10:18:36"
+               value="2026-09-05T10:52:06"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-09-05T10:18:36</code></p>
+<p>Must be a valid date. Example: <code>2026-09-05T10:52:06</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>end_date</code></b>&nbsp;&nbsp;
@@ -18607,10 +19662,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="end_date"                data-endpoint="PUTapi-v1-admin-coupons--id-"
-               value="2026-09-05T10:18:36"
+               value="2026-09-05T10:52:06"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-09-05T10:18:36</code></p>
+<p>Must be a valid date. Example: <code>2026-09-05T10:52:06</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>is_active</code></b>&nbsp;&nbsp;
@@ -18813,7 +19868,38 @@ access-control-allow-origin: *
     &quot;status&quot;: true,
     &quot;message&quot;: &quot;Shipping methods fetched successfully.&quot;,
     &quot;code&quot;: 200,
-    &quot;data&quot;: []
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 3,
+            &quot;name&quot;: &quot;Local Store Pickup&quot;,
+            &quot;code&quot;: &quot;pickup&quot;,
+            &quot;cost&quot;: 0,
+            &quot;free_shipping_threshold&quot;: null,
+            &quot;estimated_delivery_days&quot;: &quot;Ready in 2 hours&quot;,
+            &quot;description&quot;: &quot;Pick up your order directly from our nearest hub.&quot;,
+            &quot;is_active&quot;: true
+        },
+        {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;Standard Ground Shipping&quot;,
+            &quot;code&quot;: &quot;standard&quot;,
+            &quot;cost&quot;: 5,
+            &quot;free_shipping_threshold&quot;: 100,
+            &quot;estimated_delivery_days&quot;: &quot;3-5 business days&quot;,
+            &quot;description&quot;: &quot;Reliable and cost-effective ground delivery across the nation.&quot;,
+            &quot;is_active&quot;: true
+        },
+        {
+            &quot;id&quot;: 2,
+            &quot;name&quot;: &quot;Express Priority Air&quot;,
+            &quot;code&quot;: &quot;express&quot;,
+            &quot;cost&quot;: 15,
+            &quot;free_shipping_threshold&quot;: 250,
+            &quot;estimated_delivery_days&quot;: &quot;1-2 business days&quot;,
+            &quot;description&quot;: &quot;Fast expedited delivery with priority handling.&quot;,
+            &quot;is_active&quot;: true
+        }
+    ]
 }</code>
  </pre>
     </span>
@@ -19848,7 +20934,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         \"country\": \"y\"
     },
     \"shipping_method_id\": 16,
-    \"payment_method\": \"bank_transfer\",
+    \"payment_method\": \"bkash\",
     \"customer_notes\": \"n\"
 }"
 </code></pre></div>
@@ -19875,7 +20961,7 @@ let body = {
         "country": "y"
     },
     "shipping_method_id": 16,
-    "payment_method": "bank_transfer",
+    "payment_method": "bkash",
     "customer_notes": "n"
 };
 
@@ -20088,10 +21174,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="payment_method"                data-endpoint="POSTapi-v1-store-checkout"
-               value="bank_transfer"
+               value="bkash"
                data-component="body">
     <br>
-<p>Example: <code>bank_transfer</code></p>
+<p>Example: <code>bkash</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>cod</code></li> <li><code>stripe</code></li> <li><code>sslcommerz</code></li> <li><code>bkash</code></li> <li><code>bank_transfer</code></li></ul>
         </div>
@@ -21359,14 +22445,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://one_dashboard.test/api/interactions/comments/16" \
+    "http://one_dashboard.test/api/interactions/comments/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/interactions/comments/16"
+    "http://one_dashboard.test/api/interactions/comments/1"
 );
 
 const headers = {
@@ -21463,10 +22549,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="comment_id"                data-endpoint="DELETEapi-interactions-comments--comment_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the comment. Example: <code>16</code></p>
+<p>The ID of the comment. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -21828,7 +22914,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --data "{
     \"subject_type\": \"architecto\",
     \"subject_id\": \"architecto\",
-    \"type\": \"single_use\",
+    \"type\": \"private\",
     \"expires_in_minutes\": 22,
     \"max_clicks\": 67
 }"
@@ -21848,7 +22934,7 @@ const headers = {
 let body = {
     "subject_type": "architecto",
     "subject_id": "architecto",
-    "type": "single_use",
+    "type": "private",
     "expires_in_minutes": 22,
     "max_clicks": 67
 };
@@ -21966,10 +23052,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="POSTapi-interactions-shares"
-               value="single_use"
+               value="private"
                data-component="body">
     <br>
-<p>Example: <code>single_use</code></p>
+<p>Example: <code>private</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>public</code></li> <li><code>private</code></li> <li><code>single_use</code></li> <li><code>expiring</code></li></ul>
         </div>
@@ -22396,7 +23482,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"name\": \"b\",
     \"email\": \"zbailey@example.net\",
     \"password\": \"-0pBNvYgxw\",
-    \"agree\": \"1\"
+    \"agree\": \"true\"
 }"
 </code></pre></div>
 
@@ -22415,7 +23501,7 @@ let body = {
     "name": "b",
     "email": "zbailey@example.net",
     "password": "-0pBNvYgxw",
-    "agree": "1"
+    "agree": "true"
 };
 
 fetch(url, {
@@ -22543,10 +23629,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="agree"                data-endpoint="POSTapi-register"
-               value="1"
+               value="true"
                data-component="body">
     <br>
-<p>Example: <code>1</code></p>
+<p>Example: <code>true</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>true</code></li> <li><code>1</code></li></ul>
         </div>
@@ -23673,326 +24759,6 @@ Must be one of:
         </div>
         </form>
 
-                    <h2 id="endpoints-POSTapi-newsletter-subscribe">POST api/newsletter/subscribe</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-POSTapi-newsletter-subscribe">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/newsletter/subscribe" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"email\": \"gbailey@example.net\"
-}"
-</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/newsletter/subscribe"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "email": "gbailey@example.net"
-};
-
-fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-POSTapi-newsletter-subscribe">
-</span>
-<span id="execution-results-POSTapi-newsletter-subscribe" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-POSTapi-newsletter-subscribe"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-newsletter-subscribe"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-POSTapi-newsletter-subscribe" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-newsletter-subscribe">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-POSTapi-newsletter-subscribe" data-method="POST"
-      data-path="api/newsletter/subscribe"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-newsletter-subscribe', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-newsletter-subscribe"
-                    onclick="tryItOut('POSTapi-newsletter-subscribe');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-newsletter-subscribe"
-                    onclick="cancelTryOut('POSTapi-newsletter-subscribe');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-newsletter-subscribe"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-black">POST</small>
-            <b><code>api/newsletter/subscribe</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-newsletter-subscribe"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-newsletter-subscribe"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="email"                data-endpoint="POSTapi-newsletter-subscribe"
-               value="gbailey@example.net"
-               data-component="body">
-    <br>
-<p>Must be a valid email address. Must not be greater than 255 characters. Example: <code>gbailey@example.net</code></p>
-        </div>
-        </form>
-
-                    <h2 id="endpoints-POSTapi-contact-us">POST api/contact-us</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-POSTapi-contact-us">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/contact-us" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"name\": \"b\",
-    \"email\": \"zbailey@example.net\",
-    \"subject\": \"i\",
-    \"phone\": \"yvdljnikhwaykcmy\",
-    \"message\": \"u\"
-}"
-</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/contact-us"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "name": "b",
-    "email": "zbailey@example.net",
-    "subject": "i",
-    "phone": "yvdljnikhwaykcmy",
-    "message": "u"
-};
-
-fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-POSTapi-contact-us">
-</span>
-<span id="execution-results-POSTapi-contact-us" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-POSTapi-contact-us"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-contact-us"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-POSTapi-contact-us" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-contact-us">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-POSTapi-contact-us" data-method="POST"
-      data-path="api/contact-us"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-contact-us', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-contact-us"
-                    onclick="tryItOut('POSTapi-contact-us');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-contact-us"
-                    onclick="cancelTryOut('POSTapi-contact-us');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-contact-us"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-black">POST</small>
-            <b><code>api/contact-us</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-contact-us"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-contact-us"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="name"                data-endpoint="POSTapi-contact-us"
-               value="b"
-               data-component="body">
-    <br>
-<p>Must not be greater than 255 characters. Example: <code>b</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="email"                data-endpoint="POSTapi-contact-us"
-               value="zbailey@example.net"
-               data-component="body">
-    <br>
-<p>Must be a valid email address. Must not be greater than 255 characters. Example: <code>zbailey@example.net</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>subject</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="subject"                data-endpoint="POSTapi-contact-us"
-               value="i"
-               data-component="body">
-    <br>
-<p>Must not be greater than 255 characters. Example: <code>i</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="phone"                data-endpoint="POSTapi-contact-us"
-               value="yvdljnikhwaykcmy"
-               data-component="body">
-    <br>
-<p>Must not be greater than 20 characters. Example: <code>yvdljnikhwaykcmy</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>message</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="message"                data-endpoint="POSTapi-contact-us"
-               value="u"
-               data-component="body">
-    <br>
-<p>Must not be greater than 2000 characters. Example: <code>u</code></p>
-        </div>
-        </form>
-
                     <h2 id="endpoints-GETapi-verification-verify-token">GET api/verification/verify-token</h2>
 
 <p>
@@ -24011,7 +24777,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"token\": \"architecto\",
-    \"purpose\": \"password_reset\"
+    \"purpose\": \"email_verification\"
 }"
 </code></pre></div>
 
@@ -24028,7 +24794,7 @@ const headers = {
 
 let body = {
     "token": "architecto",
-    "purpose": "password_reset"
+    "purpose": "email_verification"
 };
 
 fetch(url, {
@@ -24158,125 +24924,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="purpose"                data-endpoint="GETapi-verification-verify-token"
-               value="password_reset"
+               value="email_verification"
                data-component="body">
     <br>
-<p>Example: <code>password_reset</code></p>
+<p>Example: <code>email_verification</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>email_verification</code></li> <li><code>password_reset</code></li></ul>
         </div>
         </form>
-
-                    <h2 id="endpoints-POSTapi-app-webhooks-revenuecat">POST api/app/webhooks/revenuecat</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-POSTapi-app-webhooks-revenuecat">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/app/webhooks/revenuecat" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/app/webhooks/revenuecat"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-
-fetch(url, {
-    method: "POST",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-POSTapi-app-webhooks-revenuecat">
-</span>
-<span id="execution-results-POSTapi-app-webhooks-revenuecat" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-POSTapi-app-webhooks-revenuecat"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-app-webhooks-revenuecat"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-POSTapi-app-webhooks-revenuecat" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-app-webhooks-revenuecat">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-POSTapi-app-webhooks-revenuecat" data-method="POST"
-      data-path="api/app/webhooks/revenuecat"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-app-webhooks-revenuecat', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-app-webhooks-revenuecat"
-                    onclick="tryItOut('POSTapi-app-webhooks-revenuecat');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-app-webhooks-revenuecat"
-                    onclick="cancelTryOut('POSTapi-app-webhooks-revenuecat');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-app-webhooks-revenuecat"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-black">POST</small>
-            <b><code>api/app/webhooks/revenuecat</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-app-webhooks-revenuecat"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-app-webhooks-revenuecat"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
 
                     <h2 id="endpoints-GETapi-refresh-token">GET api/refresh-token</h2>
 
@@ -24662,14 +25317,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://one_dashboard.test/api/profile/16" \
+    --get "http://one_dashboard.test/api/profile/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/profile/16"
+    "http://one_dashboard.test/api/profile/1"
 );
 
 const headers = {
@@ -24785,10 +25440,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="user_id"                data-endpoint="GETapi-profile--user_id-"
-               value="16"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the user. Example: <code>16</code></p>
+<p>The ID of the user. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -24822,9 +25477,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "latitude=y"\
     --form "longitude=u"\
     --form "bio=architecto"\
-    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\phpC83A.tmp" \
-    --form "cover_photo=@C:\Users\sakhawat\AppData\Local\Temp\phpC83B.tmp" \
-    --form "cover_image=@C:\Users\sakhawat\AppData\Local\Temp\phpC83C.tmp" </code></pre></div>
+    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\php74F3.tmp" \
+    --form "cover_photo=@C:\Users\sakhawat\AppData\Local\Temp\php74F4.tmp" \
+    --form "cover_image=@C:\Users\sakhawat\AppData\Local\Temp\php74F5.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -24984,7 +25639,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpC83A.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php74F3.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>cover_photo</code></b>&nbsp;&nbsp;
@@ -24996,7 +25651,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpC83B.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php74F4.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>cover_image</code></b>&nbsp;&nbsp;
@@ -25008,7 +25663,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpC83C.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php74F5.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
@@ -25169,7 +25824,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "state=v"\
     --form "city=d"\
     --form "zip_code=l"\
-    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\phpC83D.tmp" </code></pre></div>
+    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\php74F6.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -25310,7 +25965,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpC83D.tmp</code></p>
+<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php74F6.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
@@ -25414,7 +26069,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://one_dashboard.test/api/update-avatar" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\phpC84E.tmp" </code></pre></div>
+    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\php74F8.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -25522,7 +26177,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpC84E.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php74F8.tmp</code></p>
         </div>
         </form>
 
@@ -25790,6 +26445,917 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="Accept"                data-endpoint="DELETEapi-profile-delete"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="endpoints-POSTapi-verification-send">POST api/verification/send</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-verification-send">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://one_dashboard.test/api/verification/send" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"purpose\": \"password_reset\",
+    \"type\": \"otp\",
+    \"channel\": \"sms\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://one_dashboard.test/api/verification/send"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "purpose": "password_reset",
+    "type": "otp",
+    "channel": "sms"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-verification-send">
+</span>
+<span id="execution-results-POSTapi-verification-send" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-verification-send"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-verification-send"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-verification-send" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-verification-send">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-verification-send" data-method="POST"
+      data-path="api/verification/send"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-verification-send', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-verification-send"
+                    onclick="tryItOut('POSTapi-verification-send');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-verification-send"
+                    onclick="cancelTryOut('POSTapi-verification-send');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-verification-send"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/verification/send</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-verification-send"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-verification-send"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>purpose</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="purpose"                data-endpoint="POSTapi-verification-send"
+               value="password_reset"
+               data-component="body">
+    <br>
+<p>Example: <code>password_reset</code></p>
+Must be one of:
+<ul style="list-style-type: square;"><li><code>email_verification</code></li> <li><code>password_reset</code></li></ul>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>type</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="type"                data-endpoint="POSTapi-verification-send"
+               value="otp"
+               data-component="body">
+    <br>
+<p>Example: <code>otp</code></p>
+Must be one of:
+<ul style="list-style-type: square;"><li><code>otp</code></li> <li><code>token</code></li></ul>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>channel</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="channel"                data-endpoint="POSTapi-verification-send"
+               value="sms"
+               data-component="body">
+    <br>
+<p>Example: <code>sms</code></p>
+Must be one of:
+<ul style="list-style-type: square;"><li><code>email</code></li> <li><code>sms</code></li></ul>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-POSTapi-verification-verify-otp">POST api/verification/verify-otp</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-verification-verify-otp">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://one_dashboard.test/api/verification/verify-otp" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"purpose\": \"password_reset\",
+    \"code\": \"architecto\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://one_dashboard.test/api/verification/verify-otp"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "purpose": "password_reset",
+    "code": "architecto"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-verification-verify-otp">
+</span>
+<span id="execution-results-POSTapi-verification-verify-otp" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-verification-verify-otp"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-verification-verify-otp"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-verification-verify-otp" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-verification-verify-otp">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-verification-verify-otp" data-method="POST"
+      data-path="api/verification/verify-otp"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-verification-verify-otp', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-verification-verify-otp"
+                    onclick="tryItOut('POSTapi-verification-verify-otp');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-verification-verify-otp"
+                    onclick="cancelTryOut('POSTapi-verification-verify-otp');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-verification-verify-otp"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/verification/verify-otp</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-verification-verify-otp"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-verification-verify-otp"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>purpose</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="purpose"                data-endpoint="POSTapi-verification-verify-otp"
+               value="password_reset"
+               data-component="body">
+    <br>
+<p>Example: <code>password_reset</code></p>
+Must be one of:
+<ul style="list-style-type: square;"><li><code>email_verification</code></li> <li><code>password_reset</code></li></ul>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>code</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="code"                data-endpoint="POSTapi-verification-verify-otp"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-POSTapi-verification-resend">POST api/verification/resend</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-verification-resend">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://one_dashboard.test/api/verification/resend" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"purpose\": \"password_reset\",
+    \"type\": \"otp\",
+    \"channel\": \"sms\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://one_dashboard.test/api/verification/resend"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "purpose": "password_reset",
+    "type": "otp",
+    "channel": "sms"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-verification-resend">
+</span>
+<span id="execution-results-POSTapi-verification-resend" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-verification-resend"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-verification-resend"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-verification-resend" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-verification-resend">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-verification-resend" data-method="POST"
+      data-path="api/verification/resend"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-verification-resend', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-verification-resend"
+                    onclick="tryItOut('POSTapi-verification-resend');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-verification-resend"
+                    onclick="cancelTryOut('POSTapi-verification-resend');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-verification-resend"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/verification/resend</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-verification-resend"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-verification-resend"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>purpose</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="purpose"                data-endpoint="POSTapi-verification-resend"
+               value="password_reset"
+               data-component="body">
+    <br>
+<p>Example: <code>password_reset</code></p>
+Must be one of:
+<ul style="list-style-type: square;"><li><code>email_verification</code></li> <li><code>password_reset</code></li></ul>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>type</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="type"                data-endpoint="POSTapi-verification-resend"
+               value="otp"
+               data-component="body">
+    <br>
+<p>Example: <code>otp</code></p>
+Must be one of:
+<ul style="list-style-type: square;"><li><code>otp</code></li> <li><code>token</code></li></ul>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>channel</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="channel"                data-endpoint="POSTapi-verification-resend"
+               value="sms"
+               data-component="body">
+    <br>
+<p>Example: <code>sms</code></p>
+Must be one of:
+<ul style="list-style-type: square;"><li><code>email</code></li> <li><code>sms</code></li></ul>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-POSTapi-newsletter-subscribe">POST api/newsletter/subscribe</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-newsletter-subscribe">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://one_dashboard.test/api/newsletter/subscribe" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"email\": \"gbailey@example.net\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://one_dashboard.test/api/newsletter/subscribe"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "email": "gbailey@example.net"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-newsletter-subscribe">
+</span>
+<span id="execution-results-POSTapi-newsletter-subscribe" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-newsletter-subscribe"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-newsletter-subscribe"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-newsletter-subscribe" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-newsletter-subscribe">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-newsletter-subscribe" data-method="POST"
+      data-path="api/newsletter/subscribe"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-newsletter-subscribe', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-newsletter-subscribe"
+                    onclick="tryItOut('POSTapi-newsletter-subscribe');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-newsletter-subscribe"
+                    onclick="cancelTryOut('POSTapi-newsletter-subscribe');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-newsletter-subscribe"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/newsletter/subscribe</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-newsletter-subscribe"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-newsletter-subscribe"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="email"                data-endpoint="POSTapi-newsletter-subscribe"
+               value="gbailey@example.net"
+               data-component="body">
+    <br>
+<p>Must be a valid email address. Must not be greater than 255 characters. Example: <code>gbailey@example.net</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-POSTapi-contact-us">POST api/contact-us</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-contact-us">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://one_dashboard.test/api/contact-us" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"name\": \"b\",
+    \"email\": \"zbailey@example.net\",
+    \"subject\": \"i\",
+    \"phone\": \"yvdljnikhwaykcmy\",
+    \"message\": \"u\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://one_dashboard.test/api/contact-us"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "b",
+    "email": "zbailey@example.net",
+    "subject": "i",
+    "phone": "yvdljnikhwaykcmy",
+    "message": "u"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-contact-us">
+</span>
+<span id="execution-results-POSTapi-contact-us" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-contact-us"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-contact-us"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-contact-us" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-contact-us">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-contact-us" data-method="POST"
+      data-path="api/contact-us"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-contact-us', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-contact-us"
+                    onclick="tryItOut('POSTapi-contact-us');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-contact-us"
+                    onclick="cancelTryOut('POSTapi-contact-us');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-contact-us"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/contact-us</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-contact-us"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-contact-us"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="name"                data-endpoint="POSTapi-contact-us"
+               value="b"
+               data-component="body">
+    <br>
+<p>Must not be greater than 255 characters. Example: <code>b</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="email"                data-endpoint="POSTapi-contact-us"
+               value="zbailey@example.net"
+               data-component="body">
+    <br>
+<p>Must be a valid email address. Must not be greater than 255 characters. Example: <code>zbailey@example.net</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>subject</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="subject"                data-endpoint="POSTapi-contact-us"
+               value="i"
+               data-component="body">
+    <br>
+<p>Must not be greater than 255 characters. Example: <code>i</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="phone"                data-endpoint="POSTapi-contact-us"
+               value="yvdljnikhwaykcmy"
+               data-component="body">
+    <br>
+<p>Must not be greater than 20 characters. Example: <code>yvdljnikhwaykcmy</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>message</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="message"                data-endpoint="POSTapi-contact-us"
+               value="u"
+               data-component="body">
+    <br>
+<p>Must not be greater than 2000 characters. Example: <code>u</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-POSTapi-app-webhooks-revenuecat">POST api/app/webhooks/revenuecat</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-app-webhooks-revenuecat">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://one_dashboard.test/api/app/webhooks/revenuecat" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://one_dashboard.test/api/app/webhooks/revenuecat"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-app-webhooks-revenuecat">
+</span>
+<span id="execution-results-POSTapi-app-webhooks-revenuecat" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-app-webhooks-revenuecat"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-app-webhooks-revenuecat"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-app-webhooks-revenuecat" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-app-webhooks-revenuecat">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-app-webhooks-revenuecat" data-method="POST"
+      data-path="api/app/webhooks/revenuecat"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-app-webhooks-revenuecat', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-app-webhooks-revenuecat"
+                    onclick="tryItOut('POSTapi-app-webhooks-revenuecat');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-app-webhooks-revenuecat"
+                    onclick="cancelTryOut('POSTapi-app-webhooks-revenuecat');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-app-webhooks-revenuecat"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/app/webhooks/revenuecat</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-app-webhooks-revenuecat"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-app-webhooks-revenuecat"
                value="application/json"
                data-component="header">
     <br>
@@ -27075,454 +28641,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>The ID of the notification. Example: <code>architecto</code></p>
             </div>
                     </form>
-
-                    <h2 id="endpoints-POSTapi-verification-send">POST api/verification/send</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-POSTapi-verification-send">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/verification/send" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"purpose\": \"password_reset\",
-    \"type\": \"otp\"
-}"
-</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/verification/send"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "purpose": "password_reset",
-    "type": "otp"
-};
-
-fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-POSTapi-verification-send">
-</span>
-<span id="execution-results-POSTapi-verification-send" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-POSTapi-verification-send"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-verification-send"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-POSTapi-verification-send" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-verification-send">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-POSTapi-verification-send" data-method="POST"
-      data-path="api/verification/send"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-verification-send', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-verification-send"
-                    onclick="tryItOut('POSTapi-verification-send');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-verification-send"
-                    onclick="cancelTryOut('POSTapi-verification-send');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-verification-send"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-black">POST</small>
-            <b><code>api/verification/send</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-verification-send"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-verification-send"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>purpose</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="purpose"                data-endpoint="POSTapi-verification-send"
-               value="password_reset"
-               data-component="body">
-    <br>
-<p>Example: <code>password_reset</code></p>
-Must be one of:
-<ul style="list-style-type: square;"><li><code>email_verification</code></li> <li><code>password_reset</code></li></ul>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>type</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="type"                data-endpoint="POSTapi-verification-send"
-               value="otp"
-               data-component="body">
-    <br>
-<p>Example: <code>otp</code></p>
-Must be one of:
-<ul style="list-style-type: square;"><li><code>otp</code></li> <li><code>token</code></li></ul>
-        </div>
-        </form>
-
-                    <h2 id="endpoints-POSTapi-verification-verify-otp">POST api/verification/verify-otp</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-POSTapi-verification-verify-otp">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/verification/verify-otp" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"purpose\": \"password_reset\",
-    \"code\": \"architecto\"
-}"
-</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/verification/verify-otp"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "purpose": "password_reset",
-    "code": "architecto"
-};
-
-fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-POSTapi-verification-verify-otp">
-</span>
-<span id="execution-results-POSTapi-verification-verify-otp" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-POSTapi-verification-verify-otp"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-verification-verify-otp"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-POSTapi-verification-verify-otp" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-verification-verify-otp">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-POSTapi-verification-verify-otp" data-method="POST"
-      data-path="api/verification/verify-otp"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-verification-verify-otp', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-verification-verify-otp"
-                    onclick="tryItOut('POSTapi-verification-verify-otp');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-verification-verify-otp"
-                    onclick="cancelTryOut('POSTapi-verification-verify-otp');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-verification-verify-otp"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-black">POST</small>
-            <b><code>api/verification/verify-otp</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-verification-verify-otp"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-verification-verify-otp"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>purpose</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="purpose"                data-endpoint="POSTapi-verification-verify-otp"
-               value="password_reset"
-               data-component="body">
-    <br>
-<p>Example: <code>password_reset</code></p>
-Must be one of:
-<ul style="list-style-type: square;"><li><code>email_verification</code></li> <li><code>password_reset</code></li></ul>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>code</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="code"                data-endpoint="POSTapi-verification-verify-otp"
-               value="architecto"
-               data-component="body">
-    <br>
-<p>Example: <code>architecto</code></p>
-        </div>
-        </form>
-
-                    <h2 id="endpoints-POSTapi-verification-resend">POST api/verification/resend</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-POSTapi-verification-resend">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request POST \
-    "http://one_dashboard.test/api/verification/resend" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"purpose\": \"email_verification\",
-    \"type\": \"token\"
-}"
-</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/verification/resend"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "purpose": "email_verification",
-    "type": "token"
-};
-
-fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-POSTapi-verification-resend">
-</span>
-<span id="execution-results-POSTapi-verification-resend" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-POSTapi-verification-resend"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-verification-resend"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-POSTapi-verification-resend" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-verification-resend">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-POSTapi-verification-resend" data-method="POST"
-      data-path="api/verification/resend"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-verification-resend', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-verification-resend"
-                    onclick="tryItOut('POSTapi-verification-resend');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-verification-resend"
-                    onclick="cancelTryOut('POSTapi-verification-resend');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-verification-resend"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-black">POST</small>
-            <b><code>api/verification/resend</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-verification-resend"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-verification-resend"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>purpose</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="purpose"                data-endpoint="POSTapi-verification-resend"
-               value="email_verification"
-               data-component="body">
-    <br>
-<p>Example: <code>email_verification</code></p>
-Must be one of:
-<ul style="list-style-type: square;"><li><code>email_verification</code></li> <li><code>password_reset</code></li></ul>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>type</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="type"                data-endpoint="POSTapi-verification-resend"
-               value="token"
-               data-component="body">
-    <br>
-<p>Example: <code>token</code></p>
-Must be one of:
-<ul style="list-style-type: square;"><li><code>otp</code></li> <li><code>token</code></li></ul>
-        </div>
-        </form>
 
                     <h2 id="endpoints-GETapi-broadcasting-auth">Authenticate the request for channel access.</h2>
 
