@@ -18,4 +18,5 @@ return [
     App\Modules\Cart\Providers\CartServiceProvider::class,
     App\Modules\Coupon\Providers\CouponServiceProvider::class,
     App\Modules\Order\Providers\OrderServiceProvider::class,
+    App\Modules\Interaction\Providers\InteractionServiceProvider::class,
 ];

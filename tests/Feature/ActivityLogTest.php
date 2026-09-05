@@ -51,7 +51,7 @@ class ActivityLogTest extends TestCase
         $logCreated = activity()->created($dummyUser, 'User created test');
         $this->assertInstanceOf(ActivityLog::class, $logCreated);
         $this->assertEquals('created', $logCreated->event);
-        $this->assertEquals(User::class, $logCreated->subject_type);
+        $this->assertEquals($dummyUser->getMorphClass(), $logCreated->subject_type);
         $this->assertEquals($dummyUser->id, $logCreated->subject_id);
 
         // Test updated logging
