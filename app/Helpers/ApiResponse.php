@@ -69,23 +69,41 @@ class ApiResponse
     }
 
     /**
-     * Send a standardized error API response.
+     * Send a standardized error API response with flexible parameter order.
+     * Supports:
+     * - error(message, code, errors)
+     * - error(message, errors, code)
      *
      * @param string $message Error description
-     * @param int $code HTTP status code
-     * @param mixed $errors Detailed field validation errors or exception stack
+     * @param mixed $codeOrErrors HTTP status code OR errors payload
+     * @param mixed $errorsOrCode Detailed field errors OR HTTP status code
      * @return JsonResponse
      */
     public static function error(
         string $message = 'Something went wrong',
-        int $code = 400,
-        mixed $errors = []
+        mixed $codeOrErrors = 400,
+        mixed $errorsOrCode = []
     ): JsonResponse {
+        if (is_int($codeOrErrors)) {
+            $code = $codeOrErrors;
+            $errors = $errorsOrCode;
+        } elseif (is_int($errorsOrCode)) {
+            $code = $errorsOrCode;
+            $errors = $codeOrErrors;
+        } else {
+            $code = 400;
+            $errors = $codeOrErrors ?: $errorsOrCode;
+        }
+
+        $formattedErrors = is_array($errors) || is_object($errors)
+            ? $errors
+            : (empty($errors) ? [] : ['error' => $errors]);
+
         $response = [
-            'status' => false,
+            'status'  => false,
             'message' => $message,
-            'code' => $code,
-            'errors' => is_array($errors) || is_object($errors) ? $errors : (empty($errors) ? [] : ['error' => $errors]),
+            'code'    => $code,
+            'errors'  => $formattedErrors,
         ];
 
         return response()->json($response, $code);

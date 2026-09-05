@@ -2,7 +2,6 @@
 
 namespace App\Modules\Media\Controllers;
 
-use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Modules\Media\Models\Media;
 use App\Modules\Media\Services\MediaService;
@@ -34,16 +33,10 @@ class MediaController extends Controller
             ->latest()
             ->paginate($perPage);
 
-        return Helper::jsonResponse(
-            true,
-            'Media retrieved successfully',
-            200,
+        return $this->paginated(
             $media,
-            [
-                'current_page' => $media->currentPage(),
-                'last_page'    => $media->lastPage(),
-                'total'        => $media->total(),
-            ]
+            null,
+            'Media retrieved successfully'
         );
     }
 
@@ -55,15 +48,10 @@ class MediaController extends Controller
         $media = Media::find($id);
 
         if (!$media) {
-            return Helper::jsonResponse(false, 'Media not found', 404);
+            return $this->notFound('Media not found');
         }
 
-        return Helper::jsonResponse(
-            true,
-            'Media details retrieved successfully',
-            200,
-            $media
-        );
+        return $this->success($media, 'Media details retrieved successfully');
     }
 
     /**
@@ -74,16 +62,16 @@ class MediaController extends Controller
         $ids = $request->input('ids') ?? $request->input('id');
 
         if (!$ids) {
-            return Helper::jsonResponse(false, 'Media ID or IDs array is required', 422);
+            return $this->error('Media ID or IDs array is required', null, 422);
         }
 
         $deleted = $this->deleteMedia($ids);
 
-        return Helper::jsonResponse(
-            $deleted,
-            $deleted ? 'Media deleted successfully' : 'Media not found or failed to delete',
-            $deleted ? 200 : 404
-        );
+        if (!$deleted) {
+            return $this->notFound('Media not found or failed to delete');
+        }
+
+        return $this->success(null, 'Media deleted successfully');
     }
 
     /**
@@ -93,7 +81,7 @@ class MediaController extends Controller
     {
         $media->delete();
 
-        return Helper::jsonResponse(true, 'Media deleted successfully', 200);
+        return $this->success(null, 'Media deleted successfully');
     }
 
     /**
@@ -109,7 +97,7 @@ class MediaController extends Controller
 
         $media->update(['is_primary' => true]);
 
-        return Helper::jsonResponse(true, 'Media set as primary successfully', 200, $media);
+        return $this->success($media, 'Media set as primary successfully');
     }
 
     /**
@@ -118,8 +106,8 @@ class MediaController extends Controller
     public function sortOrder(Request $request): JsonResponse
     {
         $request->validate([
-            'orders'   => ['required', 'array'],
-            'orders.*.id' => ['required', 'integer', 'exists:media,id'],
+            'orders'              => ['required', 'array'],
+            'orders.*.id'         => ['required', 'integer', 'exists:media,id'],
             'orders.*.sort_order' => ['required', 'integer'],
         ]);
 
@@ -127,6 +115,6 @@ class MediaController extends Controller
             Media::where('id', $item['id'])->update(['sort_order' => $item['sort_order']]);
         }
 
-        return Helper::jsonResponse(true, 'Media order updated successfully', 200);
+        return $this->success(null, 'Media order updated successfully');
     }
 }

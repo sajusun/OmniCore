@@ -2,7 +2,6 @@
 
 namespace App\Modules\Social\Http\Controllers\Api;
 
-use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Modules\Social\Http\Resources\FollowerResource;
@@ -11,14 +10,17 @@ use Illuminate\Http\JsonResponse;
 
 class FollowApiController extends Controller
 {
-    public function __construct(private readonly FollowService $followService) {}
+    public function __construct(private readonly FollowService $followService)
+    {
+        parent::__construct();
+    }
 
     public function follow(User $user): JsonResponse
     {
         $authUser = auth('api')->user() ?? auth()->user();
         $this->followService->follow($authUser, $user);
 
-        return Helper::jsonResponse(true, 'User followed successfully.', 200);
+        return $this->success(null, 'User followed successfully.');
     }
 
     public function unfollow(User $user): JsonResponse
@@ -26,7 +28,7 @@ class FollowApiController extends Controller
         $authUser = auth('api')->user() ?? auth()->user();
         $this->followService->unfollow($authUser, $user);
 
-        return Helper::jsonResponse(true, 'User unfollowed successfully.', 200);
+        return $this->success(null, 'User unfollowed successfully.');
     }
 
     public function toggle(User $user): JsonResponse
@@ -34,11 +36,9 @@ class FollowApiController extends Controller
         $authUser = auth('api')->user() ?? auth()->user();
         $following = $this->followService->toggle($authUser, $user);
 
-        return Helper::jsonResponse(
-            true,
-            $following ? 'User followed successfully.' : 'User unfollowed successfully.',
-            200,
-            ['is_following' => $following]
+        return $this->success(
+            ['is_following' => $following],
+            $following ? 'User followed successfully.' : 'User unfollowed successfully.'
         );
     }
 
@@ -47,16 +47,10 @@ class FollowApiController extends Controller
         $authUser = auth('api')->user() ?? auth()->user();
         $followers = $this->followService->followers($authUser);
 
-        return Helper::jsonResponse(
-            true,
-            'Followers fetched successfully.',
-            200,
-            FollowerResource::collection($followers),
-            [
-                'current_page' => $followers->currentPage(),
-                'last_page'    => $followers->lastPage(),
-                'total'        => $followers->total(),
-            ]
+        return $this->paginated(
+            $followers,
+            FollowerResource::class,
+            'Followers fetched successfully.'
         );
     }
 
@@ -65,16 +59,10 @@ class FollowApiController extends Controller
         $authUser = auth('api')->user() ?? auth()->user();
         $followings = $this->followService->followings($authUser);
 
-        return Helper::jsonResponse(
-            true,
-            'Followings fetched successfully.',
-            200,
-            FollowerResource::collection($followings),
-            [
-                'current_page' => $followings->currentPage(),
-                'last_page'    => $followings->lastPage(),
-                'total'        => $followings->total(),
-            ]
+        return $this->paginated(
+            $followings,
+            FollowerResource::class,
+            'Followings fetched successfully.'
         );
     }
 
@@ -82,16 +70,10 @@ class FollowApiController extends Controller
     {
         $followers = $this->followService->followers($user);
 
-        return Helper::jsonResponse(
-            true,
-            'User followers fetched successfully.',
-            200,
-            FollowerResource::collection($followers),
-            [
-                'current_page' => $followers->currentPage(),
-                'last_page'    => $followers->lastPage(),
-                'total'        => $followers->total(),
-            ]
+        return $this->paginated(
+            $followers,
+            FollowerResource::class,
+            'User followers fetched successfully.'
         );
     }
 
@@ -99,16 +81,10 @@ class FollowApiController extends Controller
     {
         $followings = $this->followService->followings($user);
 
-        return Helper::jsonResponse(
-            true,
-            'User followings fetched successfully.',
-            200,
-            FollowerResource::collection($followings),
-            [
-                'current_page' => $followings->currentPage(),
-                'last_page'    => $followings->lastPage(),
-                'total'        => $followings->total(),
-            ]
+        return $this->paginated(
+            $followings,
+            FollowerResource::class,
+            'User followings fetched successfully.'
         );
     }
 }

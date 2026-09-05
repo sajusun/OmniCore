@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use Exception;
-use App\Models\User;
-use App\Helpers\Helper;
-use App\Mail\NewSignUpMail;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
 use App\Services\AppleIdentityTokenService;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
 
 class SocialLoginController extends Controller
 {
@@ -31,15 +29,13 @@ class SocialLoginController extends Controller
 
     public function HandleProviderCallback($provider)
     {
-        $data = Socialite::driver($provider)->stateless()->user();
-
-        return $data;
+        return Socialite::driver($provider)->stateless()->user();
     }
 
-    public function SocialLogin(Request $request)
+    public function SocialLogin(Request $request): JsonResponse
     {
         $request->validate([
-            'token' => 'required',
+            'token'    => 'required',
             'provider' => 'required|in:google,facebook,apple',
         ]);
 
@@ -47,29 +43,26 @@ class SocialLoginController extends Controller
             $provider = $request->provider;
 
             if ($provider === 'apple') {
-                // dd($request->email);
                 return $this->handleAppleLogin($request->token);
             }
+
             $socialUser = Socialite::driver($provider)->stateless()->userFromToken($request->token);
 
             if ($socialUser) {
                 $user = User::withTrashed()->where('email', $socialUser->email)->first();
-                if (! empty($user->deleted_at)) {
-                    return Helper::jsonErrorResponse('Your account has been deleted.', 410);
+                if (!empty($user->deleted_at)) {
+                    return $this->error('Your account has been deleted.', null, 410);
                 }
-                $isNewUser = false;
 
-                if (! $user) {
+                if (!$user) {
                     $password = Str::random(16);
                     $user = User::create([
-                        'name' => $socialUser->getName() ?? $socialUser->getNickname() ?? explode('@', $socialUser->getEmail())[0],
-                        'email' => $socialUser->getEmail(),
+                        'name'     => $socialUser->getName() ?? $socialUser->getNickname() ?? explode('@', $socialUser->getEmail())[0],
+                        'email'    => $socialUser->getEmail(),
                         'password' => bcrypt($password),
-                        'avatar' => $socialUser->getAvatar(),
-                        'status' => 'active',
+                        'avatar'   => $socialUser->getAvatar(),
+                        'status'   => 'active',
                     ]);
-
-                    // Mail::to(config('app.support_mail'))->send(new NewSignUpMail($user, $provider));
                 }
 
                 Auth::login($user);
@@ -77,31 +70,25 @@ class SocialLoginController extends Controller
 
                 $data = User::select($this->select)->find($user->id);
 
-                return response()->json([
-                    'status' => true,
-                    'message' => 'User logged in successfully.',
-                    'code' => 200,
+                return $this->success([
                     'token_type' => 'bearer',
-                    'token' => $token,
-                    'data' => $data,
-                ], 200);
-            } else {
-                return Helper::jsonResponse(false, 'Unauthorized', 401);
+                    'token'      => $token,
+                    'user'       => $data,
+                    'data'       => $data,
+                ], 'User logged in successfully.');
             }
+
+            return $this->error('Unauthorized', null, 401);
         } catch (Exception $e) {
-            return Helper::jsonResponse(false, 'Something went wrong', 500, ['error' => $e->getMessage()]);
+            return $this->error('Something went wrong', ['error' => $e->getMessage()], 500);
         }
     }
 
-
-    private function handleAppleLogin(string $identityToken)
+    private function handleAppleLogin(string $identityToken): JsonResponse
     {
         $payload = $this->appleService->verify($identityToken);
-
         $email = $payload['email'];
 
-        // Apple hides the email after first sign-in; fall back to apple_id-based
-        // synthetic address so updateOrCreate can always match on a stable key.
         $lookupEmail = $email ?? ($payload['apple_id'] . '@privaterelay.appleid.com');
 
         do {
@@ -111,10 +98,10 @@ class SocialLoginController extends Controller
         $user = User::updateOrCreate(
             ['email' => $lookupEmail],
             [
-                'name'             => $this->deriveAppleName($lookupEmail),
-                'avatar'           => null,
-                'password'         => bcrypt($payload['apple_id']),
-                'status' => 'active',
+                'name'     => $this->deriveAppleName($lookupEmail),
+                'avatar'   => null,
+                'password' => bcrypt($payload['apple_id']),
+                'status'   => 'active',
             ]
         );
 
@@ -125,22 +112,18 @@ class SocialLoginController extends Controller
 
         $data = User::select($this->select)->find($user->id);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'User logged in successfully.',
-            'code' => 200,
+        return $this->success([
             'token_type' => 'bearer',
-            'token' => $jwtToken,
-            'data' => $data,
-        ], 200);
+            'token'      => $jwtToken,
+            'user'       => $data,
+            'data'       => $data,
+        ], 'User logged in successfully.');
     }
 
     private function deriveAppleName(string $email): string
     {
         $local = explode('@', $email)[0] ?? 'User';
 
-        // Apple private-relay addresses look like random hex strings; use a
-        // generic label instead of surfacing the opaque identifier to the UI.
         if (str_ends_with($email, '@privaterelay.appleid.com')) {
             return 'Apple User';
         }

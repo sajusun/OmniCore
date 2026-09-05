@@ -3,21 +3,21 @@
 namespace Tests\Feature\Chat;
 
 use App\Models\User;
-use App\Models\ChatRoom;
-use App\Models\Message;
-use App\Models\ChatParticipant;
-use App\Models\UserBlock;
-use App\Enums\Chat\ChatRoomTypeEnum;
-use App\Enums\Chat\MessageTypeEnum;
-use App\Enums\Chat\ParticipantRoleEnum;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Modules\Chat\Models\ChatRoom;
+use App\Modules\Chat\Models\Message;
+use App\Modules\Chat\Models\ChatParticipant;
+use App\Modules\Social\Models\UserBlock;
+use App\Modules\Chat\Enums\ChatRoomTypeEnum;
+use App\Modules\Chat\Enums\MessageTypeEnum;
+use App\Modules\Chat\Enums\ParticipantRoleEnum;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ChatModuleTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     protected User $user1;
     protected User $user2;
@@ -27,26 +27,25 @@ class ChatModuleTest extends TestCase
     {
         parent::setUp();
 
-        // Create test users manually to avoid factory dependency issues
         $this->user1 = User::create([
-            'name' => 'User One',
-            'email' => 'user1@example.com',
+            'name'     => 'User One',
+            'email'    => 'user1_' . uniqid() . '@example.com',
             'password' => bcrypt('password'),
-            'status' => 'active',
+            'status'   => 'active',
         ]);
 
         $this->user2 = User::create([
-            'name' => 'User Two',
-            'email' => 'user2@example.com',
+            'name'     => 'User Two',
+            'email'    => 'user2_' . uniqid() . '@example.com',
             'password' => bcrypt('password'),
-            'status' => 'active',
+            'status'   => 'active',
         ]);
 
         $this->user3 = User::create([
-            'name' => 'User Three',
-            'email' => 'user3@example.com',
+            'name'     => 'User Three',
+            'email'    => 'user3_' . uniqid() . '@example.com',
             'password' => bcrypt('password'),
-            'status' => 'active',
+            'status'   => 'active',
         ]);
     }
 
@@ -119,7 +118,7 @@ class ChatModuleTest extends TestCase
         $messageResponse = $this->actingAs($this->user1, 'api')
             ->postJson('/api/chat/messages', [
                 'chat_room_id' => $roomId,
-                'message' => 'Hello',
+                'message'      => 'Hello',
             ]);
 
         $messageResponse->assertStatus(403);
@@ -132,8 +131,8 @@ class ChatModuleTest extends TestCase
     {
         $response = $this->actingAs($this->user1, 'api')
             ->postJson('/api/chat/rooms/group', [
-                'name' => 'Team Chat',
-                'description' => 'A team group chat room',
+                'name'            => 'Team Chat',
+                'description'     => 'A team group chat room',
                 'participant_ids' => [$this->user2->id],
             ]);
 
@@ -152,7 +151,7 @@ class ChatModuleTest extends TestCase
 
         $this->assertDatabaseHas('chat_participants', [
             'chat_room_id' => $roomId,
-            'user_id' => $this->user3->id,
+            'user_id'      => $this->user3->id,
         ]);
 
         // User 3 can leave
@@ -162,7 +161,7 @@ class ChatModuleTest extends TestCase
 
         $this->assertDatabaseMissing('chat_participants', [
             'chat_room_id' => $roomId,
-            'user_id' => $this->user3->id,
+            'user_id'      => $this->user3->id,
         ]);
 
         // Creator can remove User 2
@@ -172,7 +171,7 @@ class ChatModuleTest extends TestCase
 
         $this->assertDatabaseMissing('chat_participants', [
             'chat_room_id' => $roomId,
-            'user_id' => $this->user2->id,
+            'user_id'      => $this->user2->id,
         ]);
     }
 
@@ -183,7 +182,7 @@ class ChatModuleTest extends TestCase
     {
         $response = $this->actingAs($this->user1, 'api')
             ->postJson('/api/chat/rooms/channel', [
-                'name' => 'News Channel',
+                'name'        => 'News Channel',
                 'description' => 'Announcements channel',
             ]);
 
@@ -199,15 +198,15 @@ class ChatModuleTest extends TestCase
 
         $this->assertDatabaseHas('chat_participants', [
             'chat_room_id' => $roomId,
-            'user_id' => $this->user2->id,
-            'role' => ParticipantRoleEnum::MEMBER->value,
+            'user_id'      => $this->user2->id,
+            'role'         => ParticipantRoleEnum::MEMBER->value,
         ]);
 
         // User 2 cannot send a message in a channel (since they are a regular member)
         $msgResponse = $this->actingAs($this->user2, 'api')
             ->postJson('/api/chat/messages', [
                 'chat_room_id' => $roomId,
-                'message' => 'Hey',
+                'message'      => 'Hey',
             ]);
 
         $msgResponse->assertStatus(403);
@@ -216,7 +215,7 @@ class ChatModuleTest extends TestCase
         $msgResponse2 = $this->actingAs($this->user1, 'api')
             ->postJson('/api/chat/messages', [
                 'chat_room_id' => $roomId,
-                'message' => 'Important announcement!',
+                'message'      => 'Important announcement!',
             ]);
 
         $msgResponse2->assertStatus(201);
@@ -238,7 +237,7 @@ class ChatModuleTest extends TestCase
         $response = $this->actingAs($this->user1, 'api')
             ->postJson('/api/chat/messages', [
                 'chat_room_id' => $room->id,
-                'message' => 'Hello User 2',
+                'message'      => 'Hello User 2',
             ]);
 
         $response->assertStatus(201)
@@ -263,7 +262,7 @@ class ChatModuleTest extends TestCase
         $mediaResponse = $this->actingAs($this->user1, 'api')
             ->postJson('/api/chat/messages', [
                 'chat_room_id' => $room->id,
-                'files' => [$file],
+                'files'        => [$file],
             ]);
 
         $mediaResponse->assertStatus(201)
@@ -271,7 +270,6 @@ class ChatModuleTest extends TestCase
             ->assertJsonCount(1, 'data.media');
 
         $mediaMessageId = $mediaResponse->json('data.id');
-        $mediaPath = $mediaResponse->json('data.media.0.url');
 
         // 4. Delete message (and attached media)
         $this->actingAs($this->user1, 'api')
@@ -296,8 +294,8 @@ class ChatModuleTest extends TestCase
             ->assertOk();
 
         $this->assertDatabaseHas('chat_participants', [
-            'chat_room_id' => $room->id,
-            'user_id' => $this->user1->id,
+            'chat_room_id'         => $room->id,
+            'user_id'              => $this->user1->id,
             'notification_enabled' => false,
         ]);
 
@@ -307,15 +305,18 @@ class ChatModuleTest extends TestCase
             ->assertOk();
 
         $this->assertDatabaseHas('chat_participants', [
-            'chat_room_id' => $room->id,
-            'user_id' => $this->user1->id,
+            'chat_room_id'  => $room->id,
+            'user_id'       => $this->user1->id,
             'sound_enabled' => false,
         ]);
 
         // Mute room
         $muteTime = now()->addHour()->toIso8601String();
         $this->actingAs($this->user1, 'api')
-            ->patchJson("/api/chat/rooms/{$room->id}/settings/mute", ['mute_until' => $muteTime])
+            ->patchJson("/api/chat/rooms/{$room->id}/settings/mute", [
+                'duration'   => 'custom',
+                'mute_until' => $muteTime,
+            ])
             ->assertOk();
 
         // Unmute room
@@ -325,8 +326,8 @@ class ChatModuleTest extends TestCase
 
         $this->assertDatabaseHas('chat_participants', [
             'chat_room_id' => $room->id,
-            'user_id' => $this->user1->id,
-            'mute_until' => null,
+            'user_id'      => $this->user1->id,
+            'mute_until'   => null,
         ]);
     }
 
@@ -339,7 +340,7 @@ class ChatModuleTest extends TestCase
         $response = $this->actingAs($this->user1, 'api')
             ->postJson('/api/chat/messages', [
                 'receiver_id' => $this->user2->id,
-                'message' => 'First message creates room auto',
+                'message'     => 'First message creates room auto',
             ]);
 
         $response->assertStatus(201)
@@ -350,25 +351,25 @@ class ChatModuleTest extends TestCase
 
         // Verify database has room and both participants
         $this->assertDatabaseHas('chat_rooms', [
-            'id' => $roomId,
+            'id'   => $roomId,
             'type' => ChatRoomTypeEnum::SINGLE->value,
         ]);
 
         $this->assertDatabaseHas('chat_participants', [
             'chat_room_id' => $roomId,
-            'user_id' => $this->user1->id,
+            'user_id'      => $this->user1->id,
         ]);
 
         $this->assertDatabaseHas('chat_participants', [
             'chat_room_id' => $roomId,
-            'user_id' => $this->user2->id,
+            'user_id'      => $this->user2->id,
         ]);
 
         // 2. Send another message to user2, it should reuse the same room
         $response2 = $this->actingAs($this->user1, 'api')
             ->postJson('/api/chat/messages', [
                 'receiver_id' => $this->user2->id,
-                'message' => 'Second message in same room',
+                'message'     => 'Second message in same room',
             ]);
 
         $response2->assertStatus(201)
@@ -393,7 +394,7 @@ class ChatModuleTest extends TestCase
         $response4 = $this->actingAs($this->user1, 'api')
             ->postJson('/api/chat/messages', [
                 'receiver_id' => $this->user2->id,
-                'message' => 'Hello blocker',
+                'message'     => 'Hello blocker',
             ]);
 
         $response4->assertStatus(403);

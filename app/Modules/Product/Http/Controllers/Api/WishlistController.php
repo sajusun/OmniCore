@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class WishlistController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * Get customer wishlist items
      */
@@ -23,15 +28,11 @@ class WishlistController extends Controller
             ->latest('product_wishlists.created_at')
             ->paginate((int) $request->get('per_page', 20));
 
-        return response()->json([
-            'success' => true,
-            'data' => ProductListResource::collection($products),
-            'meta' => [
-                'current_page' => $products->currentPage(),
-                'last_page' => $products->lastPage(),
-                'total' => $products->total(),
-            ],
-        ]);
+        return $this->paginated(
+            $products,
+            ProductListResource::class,
+            'Wishlist items fetched successfully.'
+        );
     }
 
     /**
@@ -44,11 +45,9 @@ class WishlistController extends Controller
 
         $result = $user->toggleWishlist($product->id);
 
-        return response()->json([
-            'success' => true,
-            'action' => $result['action'],
+        return $this->success([
+            'action'      => $result['action'],
             'in_wishlist' => $result['in_wishlist'],
-            'message' => $result['message'],
-        ]);
+        ], $result['message']);
     }
 }

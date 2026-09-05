@@ -61,7 +61,7 @@ Route::middleware('auth:api')->prefix('chat')->group(function () {
     // ─── Chat Settings & Telegram-Style Mute Presets ──────────────────
     Route::patch('/rooms/{room}/settings/notification', [ChatSettingController::class, 'updateNotification']);
     Route::patch('/rooms/{room}/settings/sound', [ChatSettingController::class, 'updateSound']);
-    Route::post('/rooms/{room}/settings/mute', [ChatSettingController::class, 'mute']);
+    Route::match(['post', 'patch'], '/rooms/{room}/settings/mute', [ChatSettingController::class, 'mute']);
     Route::delete('/rooms/{room}/settings/mute', [ChatSettingController::class, 'unmute']);
 
     // ─── Block & Privacy ──────────────────────────────────────────────

@@ -2,7 +2,6 @@
 
 namespace App\Modules\Call\Http\Controllers\Api;
 
-use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Modules\Call\Http\Resources\CallLogResource;
 use App\Modules\Call\Http\Resources\CallSessionResource;
@@ -26,16 +25,10 @@ class CallLogApiController extends Controller
         $user = auth('api')->user();
         $logs = $this->logService->history($user, $request->query('type'), $request->query('status'));
 
-        return Helper::jsonResponse(
-            true,
-            'Call history retrieved successfully',
-            200,
-            CallLogResource::collection($logs),
-            [
-                'current_page' => $logs->currentPage(),
-                'last_page'    => $logs->lastPage(),
-                'total'        => $logs->total(),
-            ]
+        return $this->paginated(
+            $logs,
+            CallLogResource::class,
+            'Call history retrieved successfully'
         );
     }
 
@@ -47,16 +40,10 @@ class CallLogApiController extends Controller
         $user = auth('api')->user();
         $logs = $this->logService->missed($user);
 
-        return Helper::jsonResponse(
-            true,
-            'Missed calls retrieved successfully',
-            200,
-            CallLogResource::collection($logs),
-            [
-                'current_page' => $logs->currentPage(),
-                'last_page'    => $logs->lastPage(),
-                'total'        => $logs->total(),
-            ]
+        return $this->paginated(
+            $logs,
+            CallLogResource::class,
+            'Missed calls retrieved successfully'
         );
     }
 
@@ -67,11 +54,9 @@ class CallLogApiController extends Controller
     {
         $session = $this->logService->show($callSession);
 
-        return Helper::jsonResponse(
-            true,
-            'Call session retrieved successfully',
-            200,
-            new CallSessionResource($session)
+        return $this->success(
+            new CallSessionResource($session),
+            'Call session retrieved successfully'
         );
     }
 
@@ -83,6 +68,6 @@ class CallLogApiController extends Controller
         $user = auth('api')->user();
         $this->logService->delete($callSession, $user);
 
-        return Helper::jsonResponse(true, 'Call log deleted successfully', 200);
+        return $this->success(null, 'Call log deleted successfully');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Helpers\Helper;
+use App\Helpers\ApiResponse;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +17,6 @@ class WebOtpVerifiedMiddleware
             return $next($request);
         }
 
-        return Helper::jsonResponse(false, 'Validation failed', 422, 'Email is not verified.');
+        return ApiResponse::error('Email is not verified.', null, 403);
     }
 }

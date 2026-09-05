@@ -15,6 +15,7 @@ class CartController extends Controller
 {
     public function __construct(protected CartService $cartService)
     {
+        parent::__construct();
     }
 
     /**
@@ -27,10 +28,10 @@ class CartController extends Controller
 
         $cart = $this->cartService->getOrCreateCart($user, $guestToken);
 
-        return response()->json([
-            'success' => true,
-            'data' => new CartResource($cart),
-        ]);
+        return $this->success(
+            new CartResource($cart),
+            'Cart retrieved successfully.'
+        );
     }
 
     /**
@@ -41,7 +42,7 @@ class CartController extends Controller
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
             'variant_id' => 'nullable|integer|exists:product_variants,id',
-            'quantity' => 'nullable|integer|min:1',
+            'quantity'   => 'nullable|integer|min:1',
         ]);
 
         $user = $request->user();
@@ -56,18 +57,13 @@ class CartController extends Controller
                 (int) $request->get('quantity', 1)
             );
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Item added to cart.',
+            return $this->success([
                 'guest_token' => $cart->guest_token,
-                'data' => new CartItemResource($item),
-                'cart' => new CartResource($cart->fresh('items.product.media')),
-            ]);
+                'item'        => new CartItemResource($item),
+                'cart'        => new CartResource($cart->fresh('items.product.media')),
+            ], 'Item added to cart.', 201);
         } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 422);
+            return $this->error($e->getMessage(), null, 422);
         }
     }
 
@@ -85,16 +81,12 @@ class CartController extends Controller
         try {
             $this->cartService->updateItemQuantity($item, (int) $request->quantity);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Cart updated.',
-                'cart' => new CartResource($item->cart->fresh('items.product.media')),
-            ]);
+            return $this->success(
+                new CartResource($item->cart->fresh('items.product.media')),
+                'Cart updated.'
+            );
         } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 422);
+            return $this->error($e->getMessage(), null, 422);
         }
     }
 
@@ -107,11 +99,10 @@ class CartController extends Controller
         $cart = $item->cart;
         $this->cartService->removeItem($item);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Item removed from cart.',
-            'cart' => new CartResource($cart->fresh('items.product.media')),
-        ]);
+        return $this->success(
+            new CartResource($cart->fresh('items.product.media')),
+            'Item removed from cart.'
+        );
     }
 
     /**
@@ -125,11 +116,10 @@ class CartController extends Controller
 
         $this->cartService->clearCart($cart);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Cart cleared.',
-            'cart' => new CartResource($cart->fresh('items')),
-        ]);
+        return $this->success(
+            new CartResource($cart->fresh('items')),
+            'Cart cleared.'
+        );
     }
 
     /**
@@ -144,11 +134,10 @@ class CartController extends Controller
         $user = $request->user();
         $cart = $this->cartService->syncGuestCart($user, $request->guest_token);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Guest cart synced successfully.',
-            'data' => new CartResource($cart),
-        ]);
+        return $this->success(
+            new CartResource($cart),
+            'Guest cart synced successfully.'
+        );
     }
 
     /**
@@ -166,13 +155,16 @@ class CartController extends Controller
 
         $result = $this->cartService->applyCoupon($cart, $request->coupon_code, $user);
 
-        if (! $result['success']) {
-            return response()->json($result, 422);
+        if (!$result['success']) {
+            return $this->error($result['message'] ?? 'Coupon could not be applied.', null, 422);
         }
 
-        return response()->json(array_merge($result, [
-            'cart' => new CartResource($cart->fresh('items.product')),
-        ]));
+        return $this->success(
+            array_merge($result, [
+                'cart' => new CartResource($cart->fresh('items.product')),
+            ]),
+            $result['message'] ?? 'Coupon applied successfully.'
+        );
     }
 
     /**
@@ -186,10 +178,9 @@ class CartController extends Controller
 
         $this->cartService->removeCoupon($cart);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Coupon removed.',
-            'cart' => new CartResource($cart->fresh('items.product')),
-        ]);
+        return $this->success(
+            new CartResource($cart->fresh('items.product')),
+            'Coupon removed.'
+        );
     }
 }

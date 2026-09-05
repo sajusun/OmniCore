@@ -13,6 +13,7 @@ class CatalogController extends Controller
 {
     public function __construct(protected ProductService $productService)
     {
+        parent::__construct();
     }
 
     /**
@@ -35,17 +36,11 @@ class CatalogController extends Controller
         $perPage = (int) $request->get('per_page', 20);
         $products = $this->productService->getFilteredCatalog($filters, $perPage);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Products fetched successfully.',
-            'data' => ProductListResource::collection($products),
-            'meta' => [
-                'current_page' => $products->currentPage(),
-                'last_page' => $products->lastPage(),
-                'per_page' => $products->perPage(),
-                'total' => $products->total(),
-            ],
-        ]);
+        return $this->paginated(
+            $products,
+            ProductListResource::class,
+            'Products fetched successfully.'
+        );
     }
 
     /**
@@ -62,11 +57,10 @@ class CatalogController extends Controller
             ->take($limit)
             ->get();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Featured products fetched successfully.',
-            'data' => ProductListResource::collection($products),
-        ]);
+        return $this->success(
+            ProductListResource::collection($products),
+            'Featured products fetched successfully.'
+        );
     }
 
     /**
@@ -77,10 +71,7 @@ class CatalogController extends Controller
         $q = trim((string) $request->get('q', ''));
 
         if (empty($q) || strlen($q) < 2) {
-            return response()->json([
-                'success' => true,
-                'data' => [],
-            ]);
+            return $this->success([], 'Autocomplete preview fetched.');
         }
 
         $searchTerm = "%{$q}%";
@@ -93,20 +84,17 @@ class CatalogController extends Controller
             ->take(6)
             ->get()
             ->map(fn ($p) => [
-                'id' => $p->id,
-                'name' => $p->name,
-                'slug' => $p->slug,
-                'price' => (float) $p->price,
+                'id'               => $p->id,
+                'name'             => $p->name,
+                'slug'             => $p->slug,
+                'price'            => (float) $p->price,
                 'compare_at_price' => $p->compare_at_price ? (float) $p->compare_at_price : null,
-                'thumbnail' => $p->thumbnail_url,
-                'category' => $p->category?->name,
-                'average_rating' => (float) $p->average_rating,
+                'thumbnail'        => $p->thumbnail_url,
+                'category'         => $p->category?->name,
+                'average_rating'   => (float) $p->average_rating,
             ]);
 
-        return response()->json([
-            'success' => true,
-            'data' => $products,
-        ]);
+        return $this->success($products, 'Autocomplete preview fetched.');
     }
 
     /**
@@ -114,7 +102,11 @@ class CatalogController extends Controller
      */
     public function bundleRecommendations(string $slug, Request $request): JsonResponse
     {
-        $mainProduct = Product::with(['category', 'media'])->where('slug', $slug)->firstOrFail();
+        $mainProduct = Product::with(['category', 'media'])->where('slug', $slug)->first();
+
+        if (!$mainProduct) {
+            return $this->notFound('Product not found.');
+        }
 
         // Get 2 complementary products from same/related categories
         $bundleItems = Product::with(['category', 'media'])
@@ -133,17 +125,13 @@ class CatalogController extends Controller
         $bundleDiscountPercent = 10; // 10% bundle discount
         $bundlePrice = round($totalOriginalPrice * (1 - ($bundleDiscountPercent / 100)), 2);
 
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'main_product' => new ProductListResource($mainProduct),
-                'bundle_items' => ProductListResource::collection($bundleItems),
-                'total_regular_price' => (float) $totalOriginalPrice,
-                'bundle_price' => (float) $bundlePrice,
-                'bundle_discount_percentage' => $bundleDiscountPercent,
-                'savings' => round($totalOriginalPrice - $bundlePrice, 2),
-            ],
-        ]);
+        return $this->success([
+            'main_product'               => new ProductListResource($mainProduct),
+            'bundle_items'               => ProductListResource::collection($bundleItems),
+            'total_regular_price'        => (float) $totalOriginalPrice,
+            'bundle_price'               => (float) $bundlePrice,
+            'bundle_discount_percentage' => $bundleDiscountPercent,
+            'savings'                    => round($totalOriginalPrice - $bundlePrice, 2),
+        ], 'Bundle recommendations fetched.');
     }
 }
-

@@ -14,6 +14,7 @@ class ProductDetailController extends Controller
 {
     public function __construct(protected ProductService $productService)
     {
+        parent::__construct();
     }
 
     /**
@@ -23,17 +24,14 @@ class ProductDetailController extends Controller
     {
         $product = $this->productService->getProductBySlug($slug);
 
-        if (! $product || $product->status !== 'published') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Product not found or unavailable.',
-            ], 404);
+        if (!$product || $product->status !== 'published') {
+            return $this->notFound('Product not found or unavailable.');
         }
 
-        return response()->json([
-            'success' => true,
-            'data' => new ProductDetailResource($product),
-        ]);
+        return $this->success(
+            new ProductDetailResource($product),
+            'Product details fetched successfully.'
+        );
     }
 
     /**
@@ -43,11 +41,8 @@ class ProductDetailController extends Controller
     {
         $product = Product::where('slug', $slug)->first();
 
-        if (! $product) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Product not found.',
-            ], 404);
+        if (!$product) {
+            return $this->notFound('Product not found.');
         }
 
         $limit = (int) $request->get('limit', 4);
@@ -66,10 +61,9 @@ class ProductDetailController extends Controller
             ->take($limit)
             ->get();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Related products fetched.',
-            'data' => ProductListResource::collection($related),
-        ]);
+        return $this->success(
+            ProductListResource::collection($related),
+            'Related products fetched successfully.'
+        );
     }
 }

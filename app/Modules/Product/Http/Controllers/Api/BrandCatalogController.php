@@ -14,6 +14,7 @@ class BrandCatalogController extends Controller
 {
     public function __construct(protected ProductService $productService)
     {
+        parent::__construct();
     }
 
     /**
@@ -27,10 +28,10 @@ class BrandCatalogController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        return response()->json([
-            'success' => true,
-            'data' => BrandResource::collection($brands),
-        ]);
+        return $this->success(
+            BrandResource::collection($brands),
+            'Brands fetched successfully.'
+        );
     }
 
     /**
@@ -43,26 +44,21 @@ class BrandCatalogController extends Controller
             ->where('is_active', true)
             ->first();
 
-        if (! $brand) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Brand not found.',
-            ], 404);
+        if (!$brand) {
+            return $this->notFound('Brand not found.');
         }
 
         $filters = array_merge($request->all(), ['brand' => $brand->id]);
         $products = $this->productService->getFilteredCatalog($filters, (int) $request->get('per_page', 20));
 
-        return response()->json([
-            'success' => true,
-            'brand' => new BrandResource($brand),
+        return $this->success([
+            'brand'    => new BrandResource($brand),
             'products' => ProductListResource::collection($products),
-            'meta' => [
-                'current_page' => $products->currentPage(),
-                'last_page' => $products->lastPage(),
-                'per_page' => $products->perPage(),
-                'total' => $products->total(),
-            ],
+        ], 'Brand details fetched successfully.', 200, [
+            'current_page' => $products->currentPage(),
+            'last_page'    => $products->lastPage(),
+            'per_page'     => $products->perPage(),
+            'total'        => $products->total(),
         ]);
     }
 }

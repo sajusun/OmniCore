@@ -17,6 +17,7 @@ class CategoryCatalogController extends Controller
         protected CategoryService $categoryService,
         protected ProductService $productService
     ) {
+        parent::__construct();
     }
 
     /**
@@ -26,10 +27,10 @@ class CategoryCatalogController extends Controller
     {
         $categories = $this->categoryService->getTree(true);
 
-        return response()->json([
-            'success' => true,
-            'data' => CategoryResource::collection($categories),
-        ]);
+        return $this->success(
+            CategoryResource::collection($categories),
+            'Category tree fetched successfully.'
+        );
     }
 
     /**
@@ -42,27 +43,22 @@ class CategoryCatalogController extends Controller
             ->where('is_active', true)
             ->first();
 
-        if (! $category) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Category not found.',
-            ], 404);
+        if (!$category) {
+            return $this->notFound('Category not found.');
         }
 
         $filters = array_merge($request->all(), ['category' => $category->id]);
         $products = $this->productService->getFilteredCatalog($filters, (int) $request->get('per_page', 20));
 
-        return response()->json([
-            'success' => true,
-            'category' => new CategoryResource($category),
+        return $this->success([
+            'category'    => new CategoryResource($category),
             'breadcrumbs' => $category->getBreadcrumbs(),
-            'products' => ProductListResource::collection($products),
-            'meta' => [
-                'current_page' => $products->currentPage(),
-                'last_page' => $products->lastPage(),
-                'per_page' => $products->perPage(),
-                'total' => $products->total(),
-            ],
+            'products'    => ProductListResource::collection($products),
+        ], 'Category products fetched successfully.', 200, [
+            'current_page' => $products->currentPage(),
+            'last_page'    => $products->lastPage(),
+            'per_page'     => $products->perPage(),
+            'total'        => $products->total(),
         ]);
     }
 }

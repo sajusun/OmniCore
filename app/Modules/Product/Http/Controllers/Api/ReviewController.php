@@ -14,6 +14,7 @@ class ReviewController extends Controller
 {
     public function __construct(protected ReviewService $reviewService)
     {
+        parent::__construct();
     }
 
     /**
@@ -24,17 +25,11 @@ class ReviewController extends Controller
         $product = Product::findOrFail($productId);
         $reviews = $this->reviewService->getProductReviews($product, (int) $request->get('per_page', 10));
 
-        return response()->json([
-            'success' => true,
-            'data' => ReviewResource::collection($reviews),
-            'meta' => [
-                'average_rating' => (float) $product->average_rating,
-                'reviews_count' => (int) $product->reviews_count,
-                'current_page' => $reviews->currentPage(),
-                'last_page' => $reviews->lastPage(),
-                'total' => $reviews->total(),
-            ],
-        ]);
+        return $this->paginated(
+            $reviews,
+            ReviewResource::class,
+            'Product reviews fetched successfully.'
+        );
     }
 
     /**
@@ -48,10 +43,9 @@ class ReviewController extends Controller
         $photos = $request->file('photos', []);
         $review = $this->reviewService->createReview($user, $product, $request->validated(), $photos);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Your review has been submitted successfully.',
-            'data' => new ReviewResource($review),
-        ], 201);
+        return $this->created(
+            new ReviewResource($review),
+            'Your review has been submitted successfully.'
+        );
     }
 }

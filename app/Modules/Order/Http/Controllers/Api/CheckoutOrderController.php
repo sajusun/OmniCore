@@ -14,6 +14,7 @@ class CheckoutOrderController extends Controller
 {
     public function __construct(protected OrderService $orderService)
     {
+        parent::__construct();
     }
 
     /**
@@ -22,18 +23,18 @@ class CheckoutOrderController extends Controller
     public function checkout(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'address_id' => 'nullable|integer|exists:user_addresses,id',
-            'shipping_address' => 'required_without:address_id|array',
+            'address_id'                      => 'nullable|integer|exists:user_addresses,id',
+            'shipping_address'                => 'required_without:address_id|array',
             'shipping_address.recipient_name' => 'required_with:shipping_address|string|max:255',
-            'shipping_address.phone' => 'required_with:shipping_address|string|max:30',
+            'shipping_address.phone'          => 'required_with:shipping_address|string|max:30',
             'shipping_address.street_address' => 'required_with:shipping_address|string|max:255',
-            'shipping_address.city' => 'required_with:shipping_address|string|max:100',
-            'shipping_address.postal_code' => 'required_with:shipping_address|string|max:20',
-            'shipping_address.country' => 'nullable|string|max:100',
-            'billing_address' => 'nullable|array',
-            'shipping_method_id' => 'nullable|integer|exists:shipping_methods,id',
-            'payment_method' => 'required|in:cod,stripe,sslcommerz,bkash,bank_transfer',
-            'customer_notes' => 'nullable|string|max:1000',
+            'shipping_address.city'           => 'required_with:shipping_address|string|max:100',
+            'shipping_address.postal_code'    => 'required_with:shipping_address|string|max:20',
+            'shipping_address.country'        => 'nullable|string|max:100',
+            'billing_address'                 => 'nullable|array',
+            'shipping_method_id'              => 'nullable|integer|exists:shipping_methods,id',
+            'payment_method'                  => 'required|in:cod,stripe,sslcommerz,bkash,bank_transfer',
+            'customer_notes'                  => 'nullable|string|max:1000',
         ]);
 
         $user = $request->user();
@@ -41,16 +42,12 @@ class CheckoutOrderController extends Controller
         try {
             $order = $this->orderService->checkout($user, $validated);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Order placed successfully!',
-                'data' => new OrderResource($order),
-            ], 201);
+            return $this->created(
+                new OrderResource($order),
+                'Order placed successfully!'
+            );
         } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 422);
+            return $this->error($e->getMessage(), null, 422);
         }
     }
 
@@ -64,15 +61,11 @@ class CheckoutOrderController extends Controller
             ->latest()
             ->paginate((int) $request->get('per_page', 10));
 
-        return response()->json([
-            'success' => true,
-            'data' => OrderResource::collection($orders),
-            'meta' => [
-                'current_page' => $orders->currentPage(),
-                'last_page' => $orders->lastPage(),
-                'total' => $orders->total(),
-            ],
-        ]);
+        return $this->paginated(
+            $orders,
+            OrderResource::class,
+            'Orders fetched successfully.'
+        );
     }
 
     /**
@@ -85,10 +78,10 @@ class CheckoutOrderController extends Controller
             ->where('user_id', $request->user()->id)
             ->firstOrFail();
 
-        return response()->json([
-            'success' => true,
-            'data' => new OrderResource($order),
-        ]);
+        return $this->success(
+            new OrderResource($order),
+            'Order details fetched successfully.'
+        );
     }
 
     /**
@@ -101,18 +94,17 @@ class CheckoutOrderController extends Controller
             ->where('user_id', $request->user()->id)
             ->firstOrFail();
 
-        return response()->json([
-            'success' => true,
-            'order_number' => $order->order_number,
+        return $this->success([
+            'order_number'   => $order->order_number,
             'current_status' => $order->status,
             'payment_status' => $order->payment_status,
-            'created_at' => $order->created_at->toIso8601String(),
-            'timeline' => $order->histories->map(fn ($h) => [
-                'status' => $h->status,
+            'created_at'     => $order->created_at->toIso8601String(),
+            'timeline'       => $order->histories->map(fn ($h) => [
+                'status'  => $h->status,
                 'comment' => $h->comment,
-                'time' => $h->created_at->toIso8601String(),
+                'time'    => $h->created_at->toIso8601String(),
             ]),
-        ]);
+        ], 'Order tracking status fetched.');
     }
 
     /**
@@ -131,16 +123,12 @@ class CheckoutOrderController extends Controller
         try {
             $updatedOrder = $this->orderService->cancelOrder($order, $request->user(), $request->reason);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Order cancelled successfully.',
-                'data' => new OrderResource($updatedOrder),
-            ]);
+            return $this->success(
+                new OrderResource($updatedOrder),
+                'Order cancelled successfully.'
+            );
         } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 422);
+            return $this->error($e->getMessage(), null, 422);
         }
     }
 }

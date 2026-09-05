@@ -2,7 +2,6 @@
 
 namespace App\Modules\Chat\Http\Controllers;
 
-use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Modules\Chat\Http\Requests\ReactionRequest;
 use App\Modules\Chat\Http\Resources\MessageReactionResource;
@@ -28,16 +27,14 @@ class MessageReactionController extends Controller
         $user = auth('api')->user();
 
         if (!$this->permissionService->canView($user, $message->room)) {
-            return Helper::jsonResponse(false, 'You do not have access to this chat room.', 403);
+            return $this->forbidden('You do not have access to this chat room.');
         }
 
         $result = $this->reactionService->toggleReaction($message, $user, $request->validated('reaction'));
 
-        return Helper::jsonResponse(
-            true,
-            'Reaction updated successfully',
-            200,
-            $result
+        return $this->success(
+            $result,
+            'Reaction updated successfully'
         );
     }
 
@@ -49,16 +46,14 @@ class MessageReactionController extends Controller
         $user = auth('api')->user();
 
         if (!$this->permissionService->canView($user, $message->room)) {
-            return Helper::jsonResponse(false, 'You do not have access to this chat room.', 403);
+            return $this->forbidden('You do not have access to this chat room.');
         }
 
         $reactions = $this->reactionService->getReactions($message);
 
-        return Helper::jsonResponse(
-            true,
-            'Message reactions retrieved successfully',
-            200,
-            MessageReactionResource::collection($reactions)
+        return $this->success(
+            MessageReactionResource::collection($reactions),
+            'Message reactions retrieved successfully'
         );
     }
 }

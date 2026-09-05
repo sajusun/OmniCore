@@ -4,26 +4,27 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\Auth;
 
-use Exception;
-use App\Models\User;
-use RuntimeException;
-use App\Helpers\Helper;
-use App\Models\Verification;
-use Illuminate\Http\Request;
-use App\Services\UserService;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Models\Verification;
+use App\Services\UserService;
 use App\Services\VerificationService;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use RuntimeException;
 
 class RegisterController extends Controller
 {
     private array $select = ['id', 'name', 'email', 'avatar', 'last_activity_at'];
 
-    public function __construct(private readonly VerificationService $verificationService, private UserService $userService)
-    {
+    public function __construct(
+        private readonly VerificationService $verificationService,
+        private UserService $userService
+    ) {
         parent::__construct();
     }
 
@@ -52,28 +53,28 @@ class RegisterController extends Controller
             $user->assignRole('user');
 
             // Send OTP via the Verification Module (stores in verifications table)
-            $verifcation = $this->verificationService->send(user: $user, purpose: Verification::PURPOSE_EMAIL_VERIFICATION);
+            $verification = $this->verificationService->send(user: $user, purpose: Verification::PURPOSE_EMAIL_VERIFICATION);
 
             DB::commit();
 
-            return response()->json([
-                'status'  => true,
-                'message' => 'Registration successful. Please check your email for the OTP.',
-                'code'    => 200,
-                'otp'      => $verifcation->code,
-                'data'    => User::select($this->select)->find($user->id),
-            ], 200);
+            return $this->success(
+                data: [
+                    'user' => User::select($this->select)->find($user->id),
+                    'otp'  => $verification->code,
+                ],
+                message: 'Registration successful. Please check your email for the OTP.',
+                status: 201
+            );
         } catch (RuntimeException $e) {
             Log::error('User registration failed: ' . $e->getMessage(), ['exception' => $e]);
             DB::rollBack();
-            return $this->error(message: $e->getMessage(), status: 422);
+            return $this->error($e->getMessage(), null, 422);
         } catch (Exception $e) {
             Log::error('User registration failed: ' . $e->getMessage(), ['exception' => $e]);
             DB::rollBack();
-            return $this->error(message: $e->getMessage(), status: 500);
+            return $this->error($e->getMessage(), null, 500);
         }
     }
-
 
     public function VerifyEmail(Request $request): JsonResponse
     {
@@ -85,39 +86,41 @@ class RegisterController extends Controller
         try {
             $user = $this->userService->findByEmail($request->input('email'));
             if (!$user) {
-                return $this->error(message: 'Invalid Email Address', status: 404);
+                return $this->error('Invalid Email Address', null, 404);
             }
 
             if ($user->isEmailVerified()) {
-                return $this->error(message: 'Email is already verified.', status: 409);
+                return $this->error('Email is already verified.', null, 409);
             }
 
-            $verified = $this->verificationService->verifyOtp(user: $user, purpose: Verification::PURPOSE_EMAIL_VERIFICATION, code: (string) $request->input('otp'));
+            $verified = $this->verificationService->verifyOtp(
+                user: $user,
+                purpose: Verification::PURPOSE_EMAIL_VERIFICATION,
+                code: (string) $request->input('otp')
+            );
 
             if (!$verified) {
-                return $this->error(message: 'Invalid OTP code. Please try again.', status: 422);
+                return $this->error('Invalid OTP code. Please try again.', null, 422);
             }
 
             return $this->success(
-                message: 'Email verified successfully.',
-                status: 200,
                 data: [
-                    'token_type' => 'bearer',
-                    'token'      => auth('api')->login($user),
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'avatar' => $user->avatar ? url($user->avatar) : null,
+                    'token_type'       => 'bearer',
+                    'token'            => auth('api')->login($user),
+                    'id'               => $user->id,
+                    'name'             => $user->name,
+                    'email'            => $user->email,
+                    'avatar'           => $user->avatar ? url($user->avatar) : null,
                     'last_activity_at' => $user->last_activity_at,
-
-                ]
+                ],
+                message: 'Email verified successfully.'
             );
         } catch (RuntimeException $e) {
             Log::error('Email verification failed: ' . $e->getMessage(), ['exception' => $e]);
-            return $this->error(message: $e->getMessage(), status: 422);
+            return $this->error($e->getMessage(), null, 422);
         } catch (Exception $e) {
-            log::error('Email verification failed: ' . $e->getMessage(), ['exception' => $e]);
-            return $this->error(message: $e->getMessage(), status: 500);
+            Log::error('Email verification failed: ' . $e->getMessage(), ['exception' => $e]);
+            return $this->error($e->getMessage(), null, 500);
         }
     }
 
@@ -130,30 +133,33 @@ class RegisterController extends Controller
         try {
             $user = $this->userService->findByEmail($request->input('email'));
             if (!$user) {
-                return $this->error(message: 'Invalid Email Address', status: 404);
+                return $this->error('Invalid Email Address', null, 404);
             }
 
             if ($user->isEmailVerified()) {
-                return $this->error(message: 'Email is already verified.', status: 409);
+                return $this->error('Email is already verified.', null, 409);
             }
 
-            $verification = $this->verificationService->resend(user: $user, purpose: Verification::PURPOSE_EMAIL_VERIFICATION, type: 'otp');
+            $verification = $this->verificationService->resend(
+                user: $user,
+                purpose: Verification::PURPOSE_EMAIL_VERIFICATION,
+                type: 'otp'
+            );
 
             return $this->success(
-                message: 'A new OTP has been sent to your email.',
-                status: 200,
                 data: [
-                    'expires_at' => $verification->expires_at?->toDateTimeString(),
+                    'expires_at'    => $verification->expires_at?->toDateTimeString(),
                     'request_count' => $verification->request_count,
-                    'otp' => $verification->code,
-                ]
+                    'otp'           => $verification->code,
+                ],
+                message: 'A new OTP has been sent to your email.'
             );
         } catch (RuntimeException $e) {
-            log::error('Resend OTP failed: ' . $e->getMessage(), ['exception' => $e]);
-            return $this->error(message: $e->getMessage(), status: 422);
+            Log::error('Resend OTP failed: ' . $e->getMessage(), ['exception' => $e]);
+            return $this->error($e->getMessage(), null, 422);
         } catch (Exception $e) {
-            log::error('Resend OTP failed: ' . $e->getMessage(), ['exception' => $e]);
-            return $this->error(message: $e->getMessage(), status: 500);
+            Log::error('Resend OTP failed: ' . $e->getMessage(), ['exception' => $e]);
+            return $this->error($e->getMessage(), null, 500);
         }
     }
 }

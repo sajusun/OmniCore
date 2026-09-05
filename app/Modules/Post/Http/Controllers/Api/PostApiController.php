@@ -2,7 +2,6 @@
 
 namespace App\Modules\Post\Http\Controllers\Api;
 
-use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Modules\Post\Http\Requests\StorePostRequest;
@@ -18,36 +17,36 @@ class PostApiController extends Controller
 {
     public function __construct(
         protected PostService $postService
-    ) {}
+    ) {
+        parent::__construct();
+    }
 
     public function feed(): JsonResponse
     {
         $posts = $this->postService->feed();
-        return Helper::jsonResponse(true, 'Feed fetched successfully.', 200, PostResource::collection($posts));
+        return $this->paginated($posts, PostResource::class, 'Feed fetched successfully.');
     }
 
     public function index(): JsonResponse
     {
         $posts = $this->postService->index();
-        return Helper::jsonResponse(true, 'Posts fetched successfully.', 200, PostResource::collection($posts));
+        return $this->paginated($posts, PostResource::class, 'Posts fetched successfully.');
     }
 
     public function store(StorePostRequest $request): JsonResponse
     {
         $post = $this->postService->store($request->validated());
 
-        return Helper::jsonResponse(
-            true,
-            'Post created successfully.',
-            201,
-            new PostResource($post)
+        return $this->created(
+            new PostResource($post),
+            'Post created successfully.'
         );
     }
 
     public function show(Post $post): JsonResponse
     {
         $post = $this->postService->show($post);
-        return Helper::jsonResponse(true, 'Post fetched successfully.', 200, new PostResource($post));
+        return $this->success(new PostResource($post), 'Post fetched successfully.');
     }
 
     public function update(UpdatePostRequest $request, Post $post): JsonResponse
@@ -56,42 +55,42 @@ class PostApiController extends Controller
             $post,
             $request->validated()
         );
-        return Helper::jsonResponse(true, 'Post updated successfully.', 200, new PostResource($post));
+        return $this->success(new PostResource($post), 'Post updated successfully.');
     }
 
     public function destroy(Post $post): JsonResponse
     {
         $this->postService->destroy($post);
-        return Helper::jsonResponse(true, 'Post deleted successfully.', 200);
+        return $this->success(null, 'Post deleted successfully.');
     }
 
     public function like(Post $post): JsonResponse
     {
         $liked = $this->postService->toggleLike($post);
-        return Helper::jsonResponse(true, $liked ? 'Post liked successfully.' : 'Post unliked successfully.', 200);
+        return $this->success(['liked' => $liked], $liked ? 'Post liked successfully.' : 'Post unliked successfully.');
     }
 
     public function likedUser(Post $post): JsonResponse
     {
         $likedUsers = $this->postService->likedUsers($post);
 
-        return Helper::jsonResponse(true, 'Liked users fetched successfully.', 200, UserResource::collection($likedUsers));
+        return $this->paginated($likedUsers, UserResource::class, 'Liked users fetched successfully.');
     }
 
     public function repost(Request $request, Post $post): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'content' => ['nullable', 'string'],
+            'content'    => ['nullable', 'string'],
             'visibility' => ['nullable'],
         ]);
 
         if ($validator->fails()) {
-            return Helper::jsonResponse(false, 'Validation failed.', 422, $validator->errors());
+            return $this->validationError($validator->errors());
         }
 
         $sharedPost = $this->postService->share($post, $validator->validated());
 
-        return Helper::jsonResponse(true, 'Post shared successfully.', 201, new PostResource($sharedPost));
+        return $this->created(new PostResource($sharedPost), 'Post shared successfully.');
     }
 
     public function share(string $share_link): JsonResponse
@@ -99,7 +98,7 @@ class PostApiController extends Controller
         $post = Post::where('share_link', $share_link)->first();
 
         if (!$post) {
-            return Helper::jsonResponse(false, 'Failed to get post.', 404);
+            return $this->notFound('Failed to get post.');
         }
 
         return $this->show($post);
@@ -108,12 +107,12 @@ class PostApiController extends Controller
     public function toggleSave(Post $post): JsonResponse
     {
         $saved = $this->postService->toggleSave($post);
-        return Helper::jsonResponse(true, $saved ? 'Post saved successfully.' : 'Post removed from saved posts.', 200);
+        return $this->success(['saved' => $saved], $saved ? 'Post saved successfully.' : 'Post removed from saved posts.');
     }
 
     public function savedPosts(): JsonResponse
     {
         $posts = $this->postService->savedPosts();
-        return Helper::jsonResponse(true, 'Saved posts fetched successfully.', 200, PostResource::collection($posts));
+        return $this->paginated($posts, PostResource::class, 'Saved posts fetched successfully.');
     }
 }

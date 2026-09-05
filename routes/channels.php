@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\User;
-use App\Models\ChatRoom;
-use Illuminate\Support\Facades\Log;
+use App\Modules\Chat\Models\ChatRoom;
+use App\Modules\Chat\Services\ChatPermissionService;
 use Illuminate\Support\Facades\Broadcast;
-use App\Services\Chat\ChatPermissionService;
+use Illuminate\Support\Facades\Log;
 
 Broadcast::channel('user.{userId}', function ($user, $userId) {
     return (int) $user->id === (int) $userId;
@@ -16,9 +16,6 @@ Broadcast::channel('chat.room.{roomId}', function (User $user, int $roomId) {
     if (!$room) {
         return false;
     }
-    Log::info($user);
-
-    // return true;
 
     return app(ChatPermissionService::class)->canView($user, $room);
 });

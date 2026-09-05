@@ -2,7 +2,6 @@
 
 namespace App\Modules\Chat\Http\Controllers;
 
-use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Modules\Chat\Enums\MuteDurationEnum;
 use App\Modules\Chat\Http\Requests\ChatSettingRequest;
@@ -46,7 +45,7 @@ class ChatSettingController extends Controller
             $this->settingService->disableNotification($room, $userId);
         }
 
-        return Helper::jsonResponse(true, 'Notification settings updated successfully', 200);
+        return $this->success(null, 'Notification settings updated successfully');
     }
 
     /**
@@ -64,7 +63,7 @@ class ChatSettingController extends Controller
             $this->settingService->disableSound($room, $userId);
         }
 
-        return Helper::jsonResponse(true, 'Sound settings updated successfully', 200);
+        return $this->success(null, 'Sound settings updated successfully');
     }
 
     /**
@@ -79,11 +78,9 @@ class ChatSettingController extends Controller
 
         $until = $this->settingService->mute($room, $userId, $duration, $customTime);
 
-        return Helper::jsonResponse(
-            true,
-            'Chat room muted successfully',
-            200,
-            ['mute_until' => $until->toIso8601String()]
+        return $this->success(
+            ['mute_until' => $until->toIso8601String()],
+            'Chat room muted successfully'
         );
     }
 
@@ -96,6 +93,6 @@ class ChatSettingController extends Controller
         $userId = auth('api')->id();
         $this->settingService->unmute($room, $userId);
 
-        return Helper::jsonResponse(true, 'Chat room unmuted successfully', 200);
+        return $this->success(null, 'Chat room unmuted successfully');
     }
 }

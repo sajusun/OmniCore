@@ -2,7 +2,6 @@
 
 namespace App\Modules\Call\Http\Controllers\Api;
 
-use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Modules\Call\Http\Requests\InitiateCallRequest;
 use App\Modules\Call\Http\Requests\SignalingRequest;
@@ -28,11 +27,9 @@ class CallSignalingApiController extends Controller
         $caller = auth('api')->user();
         $session = $this->signalingService->initiateCall($caller, $request->validated());
 
-        return Helper::jsonResponse(
-            true,
-            'Call initiated successfully',
-            201,
-            new CallSessionResource($session)
+        return $this->created(
+            new CallSessionResource($session),
+            'Call initiated successfully'
         );
     }
 
@@ -44,7 +41,7 @@ class CallSignalingApiController extends Controller
         $user = auth('api')->user();
         $this->signalingService->ring($callSession, $user);
 
-        return Helper::jsonResponse(true, 'Ringing status reported successfully', 200);
+        return $this->success(null, 'Ringing status reported successfully');
     }
 
     /**
@@ -55,11 +52,9 @@ class CallSignalingApiController extends Controller
         $user = auth('api')->user();
         $session = $this->signalingService->accept($callSession, $user);
 
-        return Helper::jsonResponse(
-            true,
-            'Call accepted successfully',
-            200,
-            new CallSessionResource($session)
+        return $this->success(
+            new CallSessionResource($session),
+            'Call accepted successfully'
         );
     }
 
@@ -72,7 +67,7 @@ class CallSignalingApiController extends Controller
         $reason = $request->input('reason');
         $this->signalingService->reject($callSession, $user, $reason);
 
-        return Helper::jsonResponse(true, 'Call declined successfully', 200);
+        return $this->success(null, 'Call declined successfully');
     }
 
     /**
@@ -83,11 +78,9 @@ class CallSignalingApiController extends Controller
         $user = auth('api')->user();
         $session = $this->signalingService->end($callSession, $user);
 
-        return Helper::jsonResponse(
-            true,
-            'Call ended successfully',
-            200,
-            new CallSessionResource($session)
+        return $this->success(
+            new CallSessionResource($session),
+            'Call ended successfully'
         );
     }
 
@@ -99,7 +92,7 @@ class CallSignalingApiController extends Controller
         $user = auth('api')->user();
         $this->signalingService->busy($callSession, $user);
 
-        return Helper::jsonResponse(true, 'Busy state reported successfully', 200);
+        return $this->success(null, 'Busy state reported successfully');
     }
 
     /**
@@ -116,7 +109,7 @@ class CallSignalingApiController extends Controller
             $request->validated('target_id')
         );
 
-        return Helper::jsonResponse(true, 'Signal relayed successfully', 200);
+        return $this->success(null, 'Signal relayed successfully');
     }
 
     /**
@@ -133,6 +126,6 @@ class CallSignalingApiController extends Controller
             (bool) $request->validated('is_screen_sharing')
         );
 
-        return Helper::jsonResponse(true, 'Track state updated successfully', 200);
+        return $this->success(null, 'Track state updated successfully');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiResponse;
 use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
@@ -37,7 +38,7 @@ abstract class Controller
      */
     protected function success(mixed $data = null, string $message = 'Success', int $status = 200, mixed $pagination = null): JsonResponse
     {
-        return \App\Helpers\ApiResponse::success($data, $message, $status, $pagination);
+        return ApiResponse::success($data, $message, $status, $pagination);
     }
 
     /**
@@ -45,7 +46,7 @@ abstract class Controller
      */
     protected function error(string $message = 'Something went wrong', mixed $errors = null, int $status = 400): JsonResponse
     {
-        return \App\Helpers\ApiResponse::error($message, $status, $errors ?? []);
+        return ApiResponse::error($message, $status, $errors ?? []);
     }
 
     /**
@@ -53,7 +54,47 @@ abstract class Controller
      */
     protected function paginated(mixed $paginator, ?string $resourceClass = null, string $message = 'Data retrieved successfully.', int $code = 200): JsonResponse
     {
-        return \App\Helpers\ApiResponse::paginated($paginator, $resourceClass, $message, $code);
+        return ApiResponse::paginated($paginator, $resourceClass, $message, $code);
+    }
+
+    /**
+     * Standard 201 Created JSON response.
+     */
+    protected function created(mixed $data = null, string $message = 'Resource created successfully.'): JsonResponse
+    {
+        return ApiResponse::created($data, $message);
+    }
+
+    /**
+     * Standard 404 Not Found JSON response.
+     */
+    protected function notFound(string $message = 'Resource not found.'): JsonResponse
+    {
+        return ApiResponse::notFound($message);
+    }
+
+    /**
+     * Standard 403 Forbidden JSON response.
+     */
+    protected function forbidden(string $message = 'Access forbidden.'): JsonResponse
+    {
+        return ApiResponse::forbidden($message);
+    }
+
+    /**
+     * Standard 401 Unauthorized JSON response.
+     */
+    protected function unauthorized(string $message = 'Unauthorized access.'): JsonResponse
+    {
+        return ApiResponse::unauthorized($message);
+    }
+
+    /**
+     * Standard 422 Validation Error JSON response.
+     */
+    protected function validationError(mixed $errors = [], string $message = 'Validation failed.'): JsonResponse
+    {
+        return ApiResponse::validationError($errors, $message);
     }
 
     /**
@@ -68,8 +109,8 @@ abstract class Controller
         mixed $paginateData = null
     ): JsonResponse {
         return $status
-            ? \App\Helpers\ApiResponse::success($data, $message, $code, $paginateData)
-            : \App\Helpers\ApiResponse::error($message, $code, $data);
+            ? ApiResponse::success($data, $message, $code, $paginateData)
+            : ApiResponse::error($message, $code, $data);
     }
 
     /**

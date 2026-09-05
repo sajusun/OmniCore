@@ -9,13 +9,18 @@ use Illuminate\Http\JsonResponse;
 
 class ShippingMethodController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index(): JsonResponse
     {
         $methods = ShippingMethod::where('is_active', true)->orderBy('cost', 'asc')->get();
 
-        return response()->json([
-            'success' => true,
-            'data' => ShippingMethodResource::collection($methods),
-        ]);
+        return $this->success(
+            ShippingMethodResource::collection($methods),
+            'Shipping methods fetched successfully.'
+        );
     }
 }

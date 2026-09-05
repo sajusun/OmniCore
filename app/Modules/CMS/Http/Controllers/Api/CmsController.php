@@ -11,15 +11,17 @@ use Illuminate\Http\JsonResponse;
 
 class CmsController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function page(string $page): JsonResponse
     {
         $pageEnum = PageName::tryFrom($page);
 
-        if (! $pageEnum) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Page not found.',
-            ], 404);
+        if (!$pageEnum) {
+            return $this->notFound('Page not found.');
         }
 
         $sections = $pageEnum->sections();
@@ -39,11 +41,10 @@ class CmsController extends Controller
             ];
         });
 
-        return response()->json([
-            'status' => true,
-            'page'   => $page,
-            'data'   => $data,
-        ]);
+        return $this->success([
+            'page' => $page,
+            'data' => $data,
+        ], 'Page data fetched successfully.');
     }
 
     public function section(string $page, string $section): JsonResponse
@@ -51,18 +52,12 @@ class CmsController extends Controller
         $pageEnum    = PageName::tryFrom($page);
         $sectionEnum = SectionName::tryFrom($section);
 
-        if (! $pageEnum || ! $sectionEnum) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Page or section not found.',
-            ], 404);
+        if (!$pageEnum || !$sectionEnum) {
+            return $this->notFound('Page or section not found.');
         }
 
-        if (! in_array($sectionEnum, $pageEnum->sections())) {
-            return response()->json([
-                'success' => false,
-                'message' => "Section '{$section}' does not belong to page '{$page}'.",
-            ], 404);
+        if (!in_array($sectionEnum, $pageEnum->sections())) {
+            return $this->notFound("Section '{$section}' does not belong to page '{$page}'.");
         }
 
         $record = CMS::with('media')
@@ -71,21 +66,11 @@ class CmsController extends Controller
             ->where('status', 'active')
             ->first();
 
-        if (! $record) {
-            return response()->json([
-                'success' => true,
-                'page'    => $page,
-                'section' => $section,
-                'data'    => null,
-            ]);
-        }
-
-        return response()->json([
-            'success' => true,
+        return $this->success([
             'page'    => $page,
             'section' => $section,
-            'data'    => new CMSResource($record),
-        ]);
+            'data'    => $record ? new CMSResource($record) : null,
+        ], 'Section data fetched successfully.');
     }
 
     public function index(): JsonResponse
@@ -98,9 +83,6 @@ class CmsController extends Controller
             ];
         });
 
-        return response()->json([
-            'status' => true,
-            'data'   => $pages,
-        ]);
+        return $this->success($pages, 'CMS pages list fetched successfully.');
     }
 }
