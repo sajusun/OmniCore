@@ -4,13 +4,14 @@ namespace App\Modules\Post\Models;
 
 use App\Enums\PostType;
 use App\Models\User;
+use App\Modules\Interaction\Traits\HasInteractions;
 use App\Modules\Media\Traits\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Post extends Model
 {
-    use HasMedia;
+    use HasMedia, HasInteractions;
 
     protected $guarded = [];
 
@@ -51,51 +52,6 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function likes()
-    {
-        return $this->hasMany(PostLike::class);
-    }
-
-    public function likedUsers()
-    {
-        return $this->belongsToMany(
-            User::class,
-            'post_likes',
-            'post_id',
-            'user_id'
-        )->withTimestamps();
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(PostComment::class)->whereNull('parent_id');
-    }
-
-    public function allComments()
-    {
-        return $this->hasMany(PostComment::class);
-    }
-
-    public function saves()
-    {
-        return $this->hasMany(SavedPost::class);
-    }
-
-    public function savedPosts()
-    {
-        return $this->belongsToMany(
-            Post::class,
-            'saved_posts',
-            'user_id',
-            'post_id'
-        )->withTimestamps();
-    }
-
-    public function views()
-    {
-        return $this->hasMany(PostView::class);
     }
 
     // Share Post (referenced original)

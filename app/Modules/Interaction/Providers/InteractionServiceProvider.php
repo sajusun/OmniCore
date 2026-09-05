@@ -4,10 +4,12 @@ namespace App\Modules\Interaction\Providers;
 
 use App\Models\Event;
 use App\Models\User;
+use App\Modules\Interaction\Models\Bookmark;
 use App\Modules\Interaction\Models\Comment;
 use App\Modules\Interaction\Models\Like;
 use App\Modules\Interaction\Models\ShareLink;
 use App\Modules\Interaction\Models\View;
+use App\Modules\Interaction\Services\BookmarkService;
 use App\Modules\Interaction\Services\CommentService;
 use App\Modules\Interaction\Services\LikeService;
 use App\Modules\Interaction\Services\ShareService;
@@ -29,6 +31,7 @@ class InteractionServiceProvider extends ServiceProvider
         $this->app->singleton(LikeService::class, fn() => new LikeService());
         $this->app->singleton(ShareService::class, fn() => new ShareService());
         $this->app->singleton(ViewService::class, fn() => new ViewService());
+        $this->app->singleton(BookmarkService::class, fn() => new BookmarkService());
     }
 
     /**
@@ -66,6 +69,7 @@ class InteractionServiceProvider extends ServiceProvider
             'like' => Like::class,
             'share_link' => ShareLink::class,
             'view' => View::class,
+            'bookmark' => Bookmark::class,
             'post' => Post::class,
             'product' => Product::class,
             'event' => Event::class,

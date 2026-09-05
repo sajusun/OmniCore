@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Interaction\Http\Controllers\Api\BookmarkApiController;
 use App\Modules\Interaction\Http\Controllers\Api\CommentApiController;
 use App\Modules\Interaction\Http\Controllers\Api\LikeApiController;
 use App\Modules\Interaction\Http\Controllers\Api\ShareApiController;
@@ -37,6 +38,12 @@ Route::prefix('interactions')->group(function () {
         // Share Links
         Route::prefix('shares')->group(function () {
             Route::post('/', [ShareApiController::class, 'store']);
+        });
+
+        // Bookmarks / Saved / Wishlists
+        Route::prefix('bookmarks')->group(function () {
+            Route::get('/', [BookmarkApiController::class, 'index']);
+            Route::post('/toggle', [BookmarkApiController::class, 'toggle']);
         });
     });
 });

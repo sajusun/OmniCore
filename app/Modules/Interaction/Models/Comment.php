@@ -71,4 +71,25 @@ class Comment extends Model
     {
         return !is_null($this->parent_id);
     }
+
+    /**
+     * Add a reply to this comment.
+     */
+    public function reply(string $body, User|int $user): self
+    {
+        $userId = $user instanceof User ? $user->id : $user;
+
+        $reply = self::create([
+            'user_id' => $userId,
+            'commentable_type' => $this->commentable_type,
+            'commentable_id' => $this->commentable_id,
+            'parent_id' => $this->id,
+            'body' => $body,
+            'status' => 'approved',
+        ]);
+
+        $this->increment('replies_count');
+
+        return $reply;
+    }
 }

@@ -32,4 +32,12 @@ trait CanInteract
     {
         return $this->hasMany(ShareLink::class, 'user_id');
     }
+
+    /**
+     * Get all polymorphic bookmarks saved by this user.
+     */
+    public function bookmarks(): HasMany
+    {
+        return $this->hasMany(\App\Modules\Interaction\Models\Bookmark::class, 'user_id');
+    }
 }
