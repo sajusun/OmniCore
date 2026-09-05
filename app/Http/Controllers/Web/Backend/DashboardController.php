@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web\Backend;
 
-use App\Models\ActivityLog;
+use App\Modules\ActivityLog\Models\ActivityLog;
 use App\Services\DashboardService;
 use App\Http\Controllers\Controller;
 

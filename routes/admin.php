@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Web\Backend\TicketController;
 use App\Http\Controllers\Web\Backend\DashboardController;
 use App\Http\Controllers\Web\Backend\Access\RoleController;

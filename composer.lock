@@ -126,16 +126,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.394.7",
+            "version": "3.394.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "40a8717706fd789cd3e8c72a2e8e93ee4455b391"
+                "reference": "c5e7a247fa6aeac7355d5be88f38873480789c71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/40a8717706fd789cd3e8c72a2e8e93ee4455b391",
-                "reference": "40a8717706fd789cd3e8c72a2e8e93ee4455b391",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c5e7a247fa6aeac7355d5be88f38873480789c71",
+                "reference": "c5e7a247fa6aeac7355d5be88f38873480789c71",
                 "shasum": ""
             },
             "require": {
@@ -217,9 +217,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.394.7"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.394.9"
             },
-            "time": "2026-09-02T18:07:40+00:00"
+            "time": "2026-09-04T18:07:00+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -2856,16 +2856,16 @@
         },
         {
             "name": "kreait/firebase-php",
-            "version": "8.4.0",
+            "version": "8.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/beste/firebase-php.git",
-                "reference": "459d86c5404153564f99ff532b24378c01b5a7ff"
+                "reference": "b4dd7487112c60f077bec781253c54b37f96beea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beste/firebase-php/zipball/459d86c5404153564f99ff532b24378c01b5a7ff",
-                "reference": "459d86c5404153564f99ff532b24378c01b5a7ff",
+                "url": "https://api.github.com/repos/beste/firebase-php/zipball/b4dd7487112c60f077bec781253c54b37f96beea",
+                "reference": "b4dd7487112c60f077bec781253c54b37f96beea",
                 "shasum": ""
             },
             "require": {
@@ -2887,7 +2887,7 @@
                 "kreait/firebase-tokens": "^5.2",
                 "lcobucci/jwt": "^5.3",
                 "mtdowling/jmespath.php": "^2.9.2",
-                "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
+                "php": "~8.3.0 || ~8.4.0 || ~8.5.0 || ~8.6.0",
                 "psr/cache": "^2.0 || ^3.0",
                 "psr/clock": "^1.0",
                 "psr/http-client": "^1.0.3",
@@ -2945,7 +2945,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-05T11:32:44+00:00"
+            "time": "2026-09-04T22:24:20+00:00"
         },
         {
             "name": "kreait/firebase-tokens",

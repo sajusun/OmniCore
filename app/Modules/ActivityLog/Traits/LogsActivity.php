@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Traits;
+namespace App\Modules\ActivityLog\Traits;
 
-use App\Observers\ActivityObserver;
+use App\Modules\ActivityLog\Observers\ActivityObserver;
 
 trait LogsActivity
 {
