@@ -1,21 +1,18 @@
 <?php
 
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\Web\Backend\TicketController;
-use App\Http\Controllers\Web\Backend\DashboardController;
+use App\Http\Controllers\Web\Backend\Access\AdminController;
+use App\Http\Controllers\Web\Backend\Access\PermissionController;
 use App\Http\Controllers\Web\Backend\Access\RoleController;
 use App\Http\Controllers\Web\Backend\Access\UserController;
-use App\Http\Controllers\Web\Backend\Event\EventController;
-use App\Http\Controllers\Web\Backend\Club\ClubController;
-use App\Http\Controllers\Web\Backend\Vehicle\VehicleController;
-use App\Http\Controllers\Web\Backend\Access\AdminController;
+use App\Http\Controllers\Web\Backend\DashboardController;
 use App\Http\Controllers\Web\Backend\NotificationController;
+use App\Http\Controllers\Web\Backend\Pages\PageContentController;
 use App\Http\Controllers\Web\Backend\Settings\ProfileController;
 use App\Http\Controllers\Web\Backend\Settings\SettingController;
-use App\Http\Controllers\Web\Backend\Access\PermissionController;
-use App\Http\Controllers\Web\Backend\Pages\PageContentController;
+use App\Http\Controllers\Web\Backend\TicketController;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,29 +83,6 @@ Route::prefix('setting/profile')->name('setting.profile.')->group(function () {
     Route::put('/update', [ProfileController::class, 'UpdateProfile'])->name('update');
     Route::put('/update/password', [ProfileController::class, 'UpdatePassword'])->name('update.password');
     Route::post('/update/avatar', [ProfileController::class, 'UpdateProfilePicture'])->name('avatar.update');
-});
-
-Route::prefix('events')->name('events.')->group(function () {
-    Route::get('/', [EventController::class, 'index'])->name('index');
-    Route::get('/create', [EventController::class, 'create'])->name('create');
-    Route::post('/store', [EventController::class, 'store'])->name('store');
-    Route::get('/{event}/edit', [EventController::class, 'edit'])->name('edit');
-    Route::put('/{event}/update', [EventController::class, 'update'])->name('update');
-    Route::delete('/{event}/destroy', [EventController::class, 'destroy'])->name('destroy');
-    Route::get('/status/{event_id}', [EventController::class, 'status'])->name('status');
-});
-
-Route::prefix('clubs')->name('clubs.')->group(function () {
-    Route::get('/', [ClubController::class, 'index'])->name('index');
-    Route::get('/{club}', [ClubController::class, 'show'])->name('show');
-    Route::put('/{club}/status', [ClubController::class, 'updateStatus'])->name('status.update');
-    Route::delete('/{club}/destroy', [ClubController::class, 'destroy'])->name('destroy');
-});
-
-Route::prefix('vehicles')->name('vehicles.')->group(function () {
-    Route::get('/', [VehicleController::class, 'index'])->name('index');
-    Route::get('/{vehicle}', [VehicleController::class, 'show'])->name('show');
-    Route::delete('/{vehicle}/destroy', [VehicleController::class, 'destroy'])->name('destroy');
 });
 
 // ─── General Settings ─────────────────────────────────────────────────────────

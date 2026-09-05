@@ -2,7 +2,6 @@
 
 namespace App\Modules\Interaction\Providers;
 
-use App\Models\Event;
 use App\Models\User;
 use App\Modules\Interaction\Models\Bookmark;
 use App\Modules\Interaction\Models\Comment;
@@ -72,7 +71,6 @@ class InteractionServiceProvider extends ServiceProvider
             'bookmark' => Bookmark::class,
             'post' => Post::class,
             'product' => Product::class,
-            'event' => Event::class,
         ]);
     }
 }

@@ -28,7 +28,9 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function () {
             Route::middleware(['web', 'admin'])->prefix('admin')->name('admin.')->group(base_path('routes/admin.php'));
             Route::middleware(['web', 'admin'])->group(base_path('routes/backend.php'));
-            require base_path('routes/cmd.php');
+            if (app()->isLocal() && file_exists(base_path('routes/cmd.php'))) {
+                require base_path('routes/cmd.php');
+            }
         }
     )
     ->withBroadcasting(
@@ -48,33 +50,31 @@ return Application::configure(basePath: dirname(__DIR__))
             'payment/stripe/webhook',
             'graphql',
         ]);
-        $middleware->api([
-            StartSession::class,
-        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (Throwable $e, Request $request) {
             if ($request->is('api/*')) {
                 if ($e instanceof ValidationException) {
-                    return Helper::jsonErrorResponse($e->getMessage(), 422, $e->errors());
+                    return \App\Helpers\ApiResponse::validationError($e->errors(), $e->getMessage());
                 }
 
                 if ($e instanceof ModelNotFoundException) {
-                    return Helper::jsonErrorResponse($e->getMessage(), 404);
+                    return \App\Helpers\ApiResponse::notFound($e->getMessage() ?: 'Resource not found.');
                 }
 
                 if ($e instanceof AuthenticationException) {
-                    return Helper::jsonErrorResponse($e->getMessage(), 401);
+                    return \App\Helpers\ApiResponse::unauthorized($e->getMessage() ?: 'Unauthenticated.');
                 }
+
                 if ($e instanceof AuthorizationException) {
-                    return Helper::jsonErrorResponse($e->getMessage(), 403);
+                    return \App\Helpers\ApiResponse::forbidden($e->getMessage() ?: 'This action is unauthorized.');
                 }
-                // Dynamically determine the status code if available
+
                 $statusCode = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
 
-                return Helper::jsonErrorResponse($e->getMessage(), $statusCode);
-            } else {
-                return null;
+                return \App\Helpers\ApiResponse::error($e->getMessage() ?: 'Server Error', $statusCode);
             }
+
+            return null;
         });
     })->create();

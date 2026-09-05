@@ -35,9 +35,9 @@ abstract class Controller
     /**
      * Standard success JSON response.
      */
-    protected function success(mixed $data = null, string $message = 'Success', int $status = 200): JsonResponse
+    protected function success(mixed $data = null, string $message = 'Success', int $status = 200, mixed $pagination = null): JsonResponse
     {
-        return Helper::jsonResponse(true, $message, $status, $data);
+        return \App\Helpers\ApiResponse::success($data, $message, $status, $pagination);
     }
 
     /**
@@ -45,11 +45,19 @@ abstract class Controller
      */
     protected function error(string $message = 'Something went wrong', mixed $errors = null, int $status = 400): JsonResponse
     {
-        return Helper::jsonErrorResponse($message, $status, $errors ?? []);
+        return \App\Helpers\ApiResponse::error($message, $status, $errors ?? []);
     }
 
     /**
-     * Unified JSON response with auto-pagination support.
+     * Standard paginated JSON response.
+     */
+    protected function paginated(mixed $paginator, ?string $resourceClass = null, string $message = 'Data retrieved successfully.', int $code = 200): JsonResponse
+    {
+        return \App\Helpers\ApiResponse::paginated($paginator, $resourceClass, $message, $code);
+    }
+
+    /**
+     * Unified JSON response.
      */
     protected function response(
         bool $status = true,
@@ -59,7 +67,9 @@ abstract class Controller
         bool $paginate = false,
         mixed $paginateData = null
     ): JsonResponse {
-        return Helper::jsonResponse($status, $message, $code, $data, $paginate, $paginateData);
+        return $status
+            ? \App\Helpers\ApiResponse::success($data, $message, $code, $paginateData)
+            : \App\Helpers\ApiResponse::error($message, $code, $data);
     }
 
     /**

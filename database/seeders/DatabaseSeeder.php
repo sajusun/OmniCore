@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Modules\Order\Database\Seeders\OrderModuleSeeder;
+use App\Modules\Product\Database\Seeders\ProductModuleSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            EventTypeSeeder::class,
-            VehicleRequirementSeeder::class,
-            \App\Modules\Product\Database\Seeders\ProductModuleSeeder::class,
-            \App\Modules\Order\Database\Seeders\OrderModuleSeeder::class,
+            ProductModuleSeeder::class,
+            OrderModuleSeeder::class,
         ]);
     }
 }
-
