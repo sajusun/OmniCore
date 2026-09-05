@@ -7,9 +7,11 @@ use App\Models\User;
 use App\Modules\Interaction\Models\Comment;
 use App\Modules\Interaction\Models\Like;
 use App\Modules\Interaction\Models\ShareLink;
+use App\Modules\Interaction\Models\View;
 use App\Modules\Interaction\Services\CommentService;
 use App\Modules\Interaction\Services\LikeService;
 use App\Modules\Interaction\Services\ShareService;
+use App\Modules\Interaction\Services\ViewService;
 use App\Modules\Post\Models\Post;
 use App\Modules\Product\Models\Product;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -26,6 +28,7 @@ class InteractionServiceProvider extends ServiceProvider
         $this->app->singleton(CommentService::class, fn() => new CommentService());
         $this->app->singleton(LikeService::class, fn() => new LikeService());
         $this->app->singleton(ShareService::class, fn() => new ShareService());
+        $this->app->singleton(ViewService::class, fn() => new ViewService());
     }
 
     /**
@@ -62,6 +65,7 @@ class InteractionServiceProvider extends ServiceProvider
             'comment' => Comment::class,
             'like' => Like::class,
             'share_link' => ShareLink::class,
+            'view' => View::class,
             'post' => Post::class,
             'product' => Product::class,
             'event' => Event::class,

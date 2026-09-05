@@ -28,8 +28,8 @@ class InteractionModuleTest extends TestCase
             'password' => bcrypt('password'),
         ]);
 
-        $this->product = Product::first() ?? Product::create([
-            'name' => 'MacBook Pro M3 Max',
+        $this->product = Product::create([
+            'name' => 'MacBook Pro M3 Max ' . uniqid(),
             'slug' => 'macbook-pro-m3-max-' . uniqid(),
             'sku' => 'SKU-' . uniqid(),
             'price' => 2499.00,
@@ -152,5 +152,28 @@ class InteractionModuleTest extends TestCase
 
         $expiredResolved = $shareService->resolvePrivateToken($expiredLink->token);
         $this->assertNull($expiredResolved);
+    }
+
+    /**
+     * Test recording views and anti-spam cooldown logic.
+     */
+    public function test_view_recording_with_anti_spam_cooldown(): void
+    {
+        // 1. Record first view for user
+        $firstView = $this->product->recordView($this->user, '127.0.0.1', 60);
+        $this->assertTrue($firstView);
+        $this->assertEquals(1, $this->product->viewsCount());
+        $this->assertTrue($this->product->isViewedBy($this->user));
+
+        // 2. Immediate second view from same user -> Ignored (Cooldown active)
+        $secondView = $this->product->recordView($this->user, '127.0.0.1', 60);
+        $this->assertFalse($secondView);
+        $this->assertEquals(1, $this->product->viewsCount());
+
+        // 3. Guest view from different IP -> Allowed
+        $guestView = $this->product->recordView(null, '192.168.1.100', 60);
+        $this->assertTrue($guestView);
+        $this->assertEquals(2, $this->product->viewsCount());
+        $this->assertEquals(2, $this->product->uniqueViewsCount());
     }
 }
