@@ -2,7 +2,7 @@
 
 namespace App\Modules\Post\Models;
 
-use App\Enums\PostType;
+use App\Modules\Post\Enums\PostType;
 use App\Models\User;
 use App\Modules\Interaction\Traits\HasInteractions;
 use App\Modules\Media\Traits\HasMedia;

@@ -2,9 +2,9 @@
 
 namespace App\Modules\Post\Services;
 
-use App\Enums\PostStatusEnum;
-use App\Enums\PostType;
-use App\Enums\PostVisibilityEnum;
+use App\Modules\Post\Enums\PostStatusEnum;
+use App\Modules\Post\Enums\PostType;
+use App\Modules\Post\Enums\PostVisibilityEnum;
 use App\Helpers\Helper;
 use App\Models\User;
 use App\Modules\Media\Traits\HandlesMedia;
