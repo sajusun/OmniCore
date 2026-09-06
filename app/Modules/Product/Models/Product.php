@@ -4,6 +4,7 @@ namespace App\Modules\Product\Models;
 
 use App\Modules\Interaction\Traits\HasInteractions;
 use App\Modules\Media\Traits\HasMedia;
+use App\Modules\Review\Traits\HasReviews;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, HasMedia, HasInteractions, SoftDeletes;
+    use HasFactory, HasMedia, HasInteractions, HasReviews, SoftDeletes;
 
     protected $table = 'products';
 

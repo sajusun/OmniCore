@@ -27,6 +27,9 @@ class DatabaseSeeder extends Seeder
             \App\Modules\Subscription\Database\Seeders\SubscriptionSeeder::class,
             \App\Modules\Reward\Database\Seeders\RewardSeeder::class,
             \App\Modules\Ticket\Database\Seeders\TicketSeeder::class,
+            \App\Modules\Review\Database\Seeders\ReviewSeeder::class,
+            \App\Modules\Affiliate\Database\Seeders\AffiliateSeeder::class,
+            \App\Modules\Vendor\Database\Seeders\VendorSeeder::class,
         ]);
     }
 }

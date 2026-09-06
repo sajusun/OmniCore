@@ -14,6 +14,9 @@ use App\Modules\Payment\Traits\HasWallet;
 use App\Modules\Subscription\Traits\HasSubscriptions;
 use App\Modules\Reward\Traits\HasRewards;
 use App\Modules\Ticket\Traits\HasTickets;
+use App\Modules\Review\Traits\CanReview;
+use App\Modules\Affiliate\Traits\HasAffiliate;
+use App\Modules\Vendor\Traits\HasVendorStore;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -36,6 +39,9 @@ class User extends Authenticatable implements JWTSubject
         HasSubscriptions,
         HasRewards,
         HasTickets,
+        CanReview,
+        HasAffiliate,
+        HasVendorStore,
         HasPost,
         HasRoles,
         CanInteract,

@@ -21,5 +21,8 @@ return [
     App\Modules\Subscription\Providers\SubscriptionServiceProvider::class,
     App\Modules\Reward\Providers\RewardServiceProvider::class,
     App\Modules\Ticket\Providers\TicketServiceProvider::class,
+    App\Modules\Review\Providers\ReviewServiceProvider::class,
+    App\Modules\Affiliate\Providers\AffiliateServiceProvider::class,
+    App\Modules\Vendor\Providers\VendorServiceProvider::class,
     App\Modules\Auth\Providers\AuthServiceProvider::class,
 ];
