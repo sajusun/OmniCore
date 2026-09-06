@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\BulkNotification\Http\Controllers;
+namespace App\Modules\Notification\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Modules\BulkNotification\Mail\AdminCustomMail;
-use App\Services\NotificationService;
+use App\Modules\Notification\Mail\AdminCustomMail;
+use App\Modules\Notification\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -15,7 +15,9 @@ class BulkNotificationController extends Controller
 {
     public function __construct(
         protected NotificationService $notificationService
-    ) {}
+    ) {
+        parent::__construct();
+    }
 
     /**
      * Display the Mail & Notification management page.
@@ -27,9 +29,9 @@ class BulkNotificationController extends Controller
             ->latest()
             ->get();
 
-        $viewName = view()->exists('bulk_notification::backend.index')
-            ? 'bulk_notification::backend.index'
-            : 'backend.notifications.index';
+        $viewName = view()->exists('notification::backend.index')
+            ? 'notification::backend.index'
+            : (view()->exists('bulk_notification::backend.index') ? 'bulk_notification::backend.index' : 'backend.notifications.index');
 
         return view($viewName, compact('users'));
     }

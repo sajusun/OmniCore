@@ -2,17 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Notification;
-use App\Events\NotificationCreated;
+use App\Modules\Notification\Services\BroadcastService as ModularBroadcastService;
 
-class BroadcastService
+class BroadcastService extends ModularBroadcastService
 {
-    public function send(Notification $notification): void
-    {
-        try {
-            broadcast(new NotificationCreated($notification))->toOthers();
-        } catch (\Throwable $th) {
-            \Illuminate\Support\Facades\Log::warning('Broadcast notification skipped or failed: ' . $th->getMessage());
-        }
-    }
 }

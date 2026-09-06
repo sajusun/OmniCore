@@ -1,6 +1,6 @@
 <?php
 
-use App\Modules\BulkNotification\Http\Controllers\BulkNotificationController;
+use App\Modules\Notification\Http\Controllers\Backend\BulkNotificationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Route;
 | Bulk Notification & Custom Mail Admin Routes
 |--------------------------------------------------------------------------
 */
-
 Route::middleware('permission:notification.send')->prefix('notifications')->name('notifications.')->group(function () {
     Route::get('/', [BulkNotificationController::class, 'index'])->name('index');
     Route::get('/create', [BulkNotificationController::class, 'index'])->name('create');

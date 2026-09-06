@@ -2,33 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Modules\Notification\Models\FirebaseToken as ModularFirebaseToken;
 
-class FirebaseToken extends Model
+class FirebaseToken extends ModularFirebaseToken
 {
-    protected $fillable = [
-        'user_id',
-        'token',
-        'device_id',
-        'device_name',
-        'platform',
-        'jwt_hash',
-        'ip_address',
-        'user_agent',
-        'last_activity_at',
-        'status',
-    ];
-
-    protected $casts = [
-        'last_activity_at' => 'datetime',
-    ];
-
-    /**
-     * User Relation
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 }
