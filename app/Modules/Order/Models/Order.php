@@ -3,6 +3,8 @@
 namespace App\Modules\Order\Models;
 
 use App\Models\User;
+use App\Modules\Payment\Models\Payment;
+use App\Modules\Payment\Traits\Payable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Payable;
 
     protected $table = 'orders';
 
@@ -91,5 +93,24 @@ class Order extends Model
             'user_id' => $userId,
             'customer_notified' => $notified,
         ]);
+    }
+
+    public function onPaymentSuccess(Payment $payment): void
+    {
+        $this->update([
+            'payment_status' => 'paid',
+            'transaction_id' => $payment->gateway_transaction_id ?: $payment->payment_id,
+            'paid_at' => now(),
+        ]);
+        $methodName = $payment->method instanceof \App\Modules\Payment\Enums\PaymentMethod ? $payment->method->value : ($payment->gateway ?: (string) $payment->method);
+        $this->addHistory('payment_received', "Payment #{$payment->payment_id} received successfully via {$methodName}");
+    }
+
+    public function onPaymentFailed(Payment $payment): void
+    {
+        $this->update([
+            'payment_status' => 'failed',
+        ]);
+        $this->addHistory('payment_failed', "Payment #{$payment->payment_id} failed: {$payment->failure_reason}");
     }
 }

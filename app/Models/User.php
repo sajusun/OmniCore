@@ -4,11 +4,13 @@ namespace App\Models;
 
 use App\Modules\Auth\Traits\HasVerification;
 use App\Traits\HasPost;
-use App\Traits\HasNotifications;
+use App\Modules\Notification\Traits\HasNotifications;
+use App\Modules\Notification\Models\FirebaseToken;
 use App\Modules\Social\Traits\HasSocialRelations;
 use App\Modules\Media\Traits\HasMedia;
 use App\Modules\Product\Traits\HasEcommerce;
 use App\Modules\Interaction\Traits\CanInteract;
+use App\Modules\Payment\Traits\HasWallet;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -27,6 +29,7 @@ class User extends Authenticatable implements JWTSubject
         HasMedia,
         HasEcommerce,
         HasNotifications,
+        HasWallet,
         HasPost,
         HasRoles,
         CanInteract,

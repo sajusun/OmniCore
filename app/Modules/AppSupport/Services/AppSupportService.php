@@ -9,7 +9,7 @@ use App\Modules\AppSupport\Mail\AppSupportReplyMail;
 use App\Modules\AppSupport\Models\AppSupport;
 use App\Modules\AppSupport\Models\AppSupportReply;
 use App\Modules\Media\Traits\HandlesMedia;
-use App\Services\NotificationService;
+use App\Modules\Notification\Services\NotificationService;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
