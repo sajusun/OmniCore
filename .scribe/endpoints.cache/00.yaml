@@ -82,7 +82,7 @@ endpoints:
         name: category
         description: ''
         required: true
-        example: club
+        example: event
         type: string
         enumValues:
           - bug
@@ -154,7 +154,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       subject: b
-      category: club
+      category: event
       message: 'n'
       device_os: g
       device_model: z
@@ -1755,14 +1755,14 @@ endpoints:
         name: is_typing
         description: ''
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      is_typing: false
+      is_typing: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -1924,7 +1924,7 @@ endpoints:
         name: message_type
         description: ''
         required: false
-        example: gif
+        example: sticker
         type: string
         enumValues:
           - text
@@ -1978,7 +1978,7 @@ endpoints:
     cleanBodyParameters:
       chat_room_id: 16
       receiver_id: 16
-      message_type: gif
+      message_type: sticker
       message: 'n'
       reply_to: 16
     fileParameters:
@@ -2294,7 +2294,7 @@ endpoints:
         name: enabled
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -2305,15 +2305,15 @@ endpoints:
         name: mute_until
         description: 'Must be a valid date. Must be a date after <code>now</code>.'
         required: false
-        example: '2052-09-28'
+        example: '2052-09-29'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      enabled: false
-      mute_until: '2052-09-28'
+      enabled: true
+      mute_until: '2052-09-29'
     fileParameters: []
     responses: []
     responseFields: []
@@ -2361,7 +2361,7 @@ endpoints:
         name: enabled
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -2372,15 +2372,15 @@ endpoints:
         name: mute_until
         description: 'Must be a valid date. Must be a date after <code>now</code>.'
         required: false
-        example: '2052-09-28'
+        example: '2052-09-29'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      enabled: false
-      mute_until: '2052-09-28'
+      enabled: true
+      mute_until: '2052-09-29'
     fileParameters: []
     responses: []
     responseFields: []
@@ -2429,7 +2429,7 @@ endpoints:
         name: duration
         description: ''
         required: true
-        example: forever
+        example: custom
         type: string
         enumValues:
           - 1_hour
@@ -2446,15 +2446,15 @@ endpoints:
         name: mute_until
         description: 'This field is required when <code>duration</code> is <code>custom</code>. Must be a valid date. Must be a date after <code>now</code>.'
         required: false
-        example: '2052-09-28'
+        example: '2052-09-29'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      duration: forever
-      mute_until: '2052-09-28'
+      duration: custom
+      mute_until: '2052-09-29'
     fileParameters: []
     responses: []
     responseFields: []
@@ -4711,7 +4711,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: video
+        example: audio
         type: string
         enumValues:
           - audio
@@ -4725,7 +4725,7 @@ endpoints:
       participant_ids:
         - 16
       chat_room_id: 16
-      type: video
+      type: audio
     fileParameters: []
     responses: []
     responseFields: []
@@ -4988,7 +4988,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: ice_candidate
+        example: answer
         type: string
         enumValues:
           - offer
@@ -5020,7 +5020,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: ice_candidate
+      type: answer
       payload: []
       target_id: 16
     fileParameters: []
@@ -5070,7 +5070,7 @@ endpoints:
         name: is_muted
         description: ''
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -5081,7 +5081,7 @@ endpoints:
         name: is_video_enabled
         description: ''
         required: true
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -5099,8 +5099,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      is_muted: false
-      is_video_enabled: true
+      is_muted: true
+      is_video_enabled: false
       is_screen_sharing: false
     fileParameters: []
     responses: []
@@ -6001,7 +6001,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Cart retrieved successfully.","code":200,"data":{"id":1,"guest_token":"e972469d-58c0-44d5-9bbc-d6a534cd9346","items_count":0,"subtotal":0,"discount_amount":0,"coupon_code":null,"grand_total":0,"items":[]}}'
+        content: '{"status":true,"message":"Cart retrieved successfully.","code":200,"data":{"id":2,"guest_token":"a0683cc7-a932-4210-9be8-e1b212363095","items_count":0,"subtotal":0,"discount_amount":0,"coupon_code":null,"grand_total":0,"items":[]}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -6404,7 +6404,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: fixed
+        example: percentage
         type: string
         enumValues:
           - percentage
@@ -6472,7 +6472,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-05T10:52:06'
+        example: '2026-09-06T06:09:29'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -6483,7 +6483,7 @@ endpoints:
         name: end_date
         description: 'Must be a valid date. Must be a date after or equal to <code>start_date</code>.'
         required: false
-        example: '2052-09-28'
+        example: '2052-09-29'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -6494,7 +6494,7 @@ endpoints:
         name: is_active
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -6502,15 +6502,15 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       code: b
-      type: fixed
+      type: percentage
       value: 39
       min_order_amount: 84
       max_discount_amount: 12
       usage_limit: 27
       usage_limit_per_user: 35
-      start_date: '2026-09-05T10:52:06'
-      end_date: '2052-09-28'
-      is_active: false
+      start_date: '2026-09-06T06:09:29'
+      end_date: '2052-09-29'
+      is_active: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -6621,7 +6621,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: fixed
+        example: percentage
         type: string
         enumValues:
           - percentage
@@ -6689,7 +6689,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-05T10:52:06'
+        example: '2026-09-06T06:09:29'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -6700,7 +6700,7 @@ endpoints:
         name: end_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-05T10:52:06'
+        example: '2026-09-06T06:09:29'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -6718,14 +6718,14 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: fixed
+      type: percentage
       value: 27
       min_order_amount: 39
       max_discount_amount: 84
       usage_limit: 66
       usage_limit_per_user: 27
-      start_date: '2026-09-05T10:52:06'
-      end_date: '2026-09-05T10:52:06'
+      start_date: '2026-09-06T06:09:29'
+      end_date: '2026-09-06T06:09:29'
       is_active: false
     fileParameters: []
     responses: []
@@ -6885,7 +6885,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: billing
+        example: shipping
         type: string
         enumValues:
           - shipping
@@ -6993,7 +6993,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: billing
+      type: shipping
       recipient_name: b
       phone: 'n'
       street_address: g
@@ -7151,7 +7151,7 @@ endpoints:
         name: is_default
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -7167,7 +7167,7 @@ endpoints:
       state: i
       postal_code: yvdljnikhwaykcmy
       country: u
-      is_default: false
+      is_default: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -8160,7 +8160,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: private
+        example: single_use
         type: string
         enumValues:
           - public
@@ -8195,7 +8195,7 @@ endpoints:
     cleanBodyParameters:
       subject_type: architecto
       subject_id: architecto
-      type: private
+      type: single_use
       expires_in_minutes: 22
       max_clicks: 67
     fileParameters: []
@@ -8443,7 +8443,7 @@ endpoints:
         name: agree
         description: ''
         required: true
-        example: 'true'
+        example: '1'
         type: string
         enumValues:
           - 'true'
@@ -8455,7 +8455,7 @@ endpoints:
       name: b
       email: zbailey@example.net
       password: '-0pBNvYgxw'
-      agree: 'true'
+      agree: '1'
     fileParameters: []
     responses: []
     responseFields: []
@@ -8851,7 +8851,7 @@ endpoints:
         name: provider
         description: ''
         required: true
-        example: facebook
+        example: google
         type: string
         enumValues:
           - google
@@ -8862,7 +8862,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       token: architecto
-      provider: facebook
+      provider: google
     fileParameters: []
     responses: []
     responseFields: []
@@ -8909,7 +8909,7 @@ endpoints:
         name: purpose
         description: ''
         required: true
-        example: email_verification
+        example: password_reset
         type: string
         enumValues:
           - email_verification
@@ -8919,7 +8919,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       token: architecto
-      purpose: email_verification
+      purpose: password_reset
     fileParameters: []
     responses:
       -
@@ -9667,7 +9667,7 @@ endpoints:
         name: purpose
         description: ''
         required: true
-        example: password_reset
+        example: email_verification
         type: string
         enumValues:
           - email_verification
@@ -9693,7 +9693,7 @@ endpoints:
         name: channel
         description: ''
         required: false
-        example: sms
+        example: email
         type: string
         enumValues:
           - email
@@ -9702,9 +9702,9 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      purpose: password_reset
+      purpose: email_verification
       type: otp
-      channel: sms
+      channel: email
     fileParameters: []
     responses: []
     responseFields: []
@@ -9740,7 +9740,7 @@ endpoints:
         name: purpose
         description: ''
         required: true
-        example: password_reset
+        example: email_verification
         type: string
         enumValues:
           - email_verification
@@ -9760,7 +9760,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      purpose: password_reset
+      purpose: email_verification
       code: architecto
     fileParameters: []
     responses: []
@@ -9797,7 +9797,7 @@ endpoints:
         name: purpose
         description: ''
         required: true
-        example: password_reset
+        example: email_verification
         type: string
         enumValues:
           - email_verification
@@ -9810,7 +9810,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: otp
+        example: token
         type: string
         enumValues:
           - otp
@@ -9832,8 +9832,8 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      purpose: password_reset
-      type: otp
+      purpose: email_verification
+      type: token
       channel: sms
     fileParameters: []
     responses: []
@@ -10010,6 +10010,273 @@ endpoints:
   -
     custom: []
     httpMethods:
+      - GET
+    uri: api/firebase/tokens
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get all active device sessions for authenticated user'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/firebase/tokens
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Save / Update Firebase Token & Register Device Session'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      token:
+        custom: []
+        name: token
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      device_id:
+        custom: []
+        name: device_id
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      device_name:
+        custom: []
+        name: device_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      platform:
+        custom: []
+        name: platform
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      token: architecto
+      device_id: architecto
+      device_name: 'n'
+      platform: g
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: api/firebase/tokens/others
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Revoke All Other Devices (except the current one)'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: api/firebase/tokens/all
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Revoke All Devices for current user'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/firebase/tokens/{deviceId?}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Revoke / Remove a Specific Device Session'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      deviceId:
+        custom: []
+        name: deviceId
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      deviceId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/firebase/tokens/touch
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Refresh Last Activity & Device Info'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      device_id:
+        custom: []
+        name: device_id
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      device_id: architecto
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
       - POST
     uri: api/firebase/firebase-token
     metadata:
@@ -10018,7 +10285,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Save / Update Firebase Token'
+      title: 'Save / Update Firebase Token & Register Device Session'
       description: ''
       authenticated: false
       deprecated: false
@@ -10097,7 +10364,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove Token'
+      title: 'Revoke / Remove a Specific Device Session'
       description: ''
       authenticated: false
       deprecated: false
@@ -10108,20 +10375,8 @@ endpoints:
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters:
-      device_id:
-        custom: []
-        name: device_id
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      device_id: architecto
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses: []
     responseFields: []
@@ -10140,7 +10395,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Refresh Last Activity'
+      title: 'Refresh Last Activity & Device Info'
       description: ''
       authenticated: false
       deprecated: false
@@ -10361,38 +10616,7 @@ endpoints:
     custom: []
     httpMethods:
       - DELETE
-    uri: api/notifications/delete-all
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Delete All Notifications'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - DELETE
-    uri: 'api/notifications/{notification_id}'
+    uri: 'api/notifications/{id}'
     metadata:
       custom: []
       groupName: Endpoints
@@ -10407,9 +10631,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      notification_id:
+      id:
         custom: []
-        name: notification_id
+        name: id
         description: 'The ID of the notification.'
         required: true
         example: architecto
@@ -10419,7 +10643,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      notification_id: architecto
+      id: architecto
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

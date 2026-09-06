@@ -19,13 +19,47 @@ class FirebaseService
 
     public function __construct()
     {
-        if (config('notifications.channels.firebase')) {
-            $this->messaging = (new Factory)->withServiceAccount(storage_path(config('firebase.credentials_path')))->createMessaging();
+        // Messaging is initialized lazily via getMessaging() to prevent constructor failures
+    }
+
+    public function getMessaging()
+    {
+        if ($this->messaging !== null) {
+            return $this->messaging;
         }
+
+        if (! config('notifications.channels.firebase')) {
+            return null;
+        }
+
+        $credentialsPath = config('firebase.credentials_path');
+        if (empty($credentialsPath)) {
+            return null;
+        }
+
+        $fullPath = storage_path($credentialsPath);
+        if (! file_exists($fullPath) || is_dir($fullPath)) {
+            Log::warning("Firebase credentials file not found or is a directory at: {$fullPath}");
+            return null;
+        }
+
+        try {
+            $this->messaging = (new Factory)->withServiceAccount($fullPath)->createMessaging();
+        } catch (Exception $e) {
+            Log::error('Firebase initialization error: ' . $e->getMessage());
+            $this->messaging = null;
+        }
+
+        return $this->messaging;
     }
 
     public function send(Notification $notification): void
     {
+        $messaging = $this->getMessaging();
+        if (! $messaging) {
+            return;
+        }
+
         $tokens = FirebaseToken::where('user_id', $notification->user_id)->pluck('token');
 
         if ($tokens->isEmpty()) {

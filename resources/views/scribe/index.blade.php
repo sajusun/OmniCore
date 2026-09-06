@@ -590,14 +590,32 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-app-webhooks-revenuecat">
                                 <a href="#endpoints-POSTapi-app-webhooks-revenuecat">POST api/app/webhooks/revenuecat</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-firebase-tokens">
+                                <a href="#endpoints-GETapi-firebase-tokens">Get all active device sessions for authenticated user</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-firebase-tokens">
+                                <a href="#endpoints-POSTapi-firebase-tokens">Save / Update Firebase Token & Register Device Session</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-firebase-tokens-others">
+                                <a href="#endpoints-DELETEapi-firebase-tokens-others">Revoke All Other Devices (except the current one)</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-firebase-tokens-all">
+                                <a href="#endpoints-DELETEapi-firebase-tokens-all">Revoke All Devices for current user</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-firebase-tokens--deviceId--">
+                                <a href="#endpoints-DELETEapi-firebase-tokens--deviceId--">Revoke / Remove a Specific Device Session</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-firebase-tokens-touch">
+                                <a href="#endpoints-POSTapi-firebase-tokens-touch">Refresh Last Activity & Device Info</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-firebase-firebase-token">
-                                <a href="#endpoints-POSTapi-firebase-firebase-token">Save / Update Firebase Token</a>
+                                <a href="#endpoints-POSTapi-firebase-firebase-token">Save / Update Firebase Token & Register Device Session</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-firebase-firebase-token-delete">
-                                <a href="#endpoints-POSTapi-firebase-firebase-token-delete">Remove Token</a>
+                                <a href="#endpoints-POSTapi-firebase-firebase-token-delete">Revoke / Remove a Specific Device Session</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-firebase-firebase-token-touch">
-                                <a href="#endpoints-POSTapi-firebase-firebase-token-touch">Refresh Last Activity</a>
+                                <a href="#endpoints-POSTapi-firebase-firebase-token-touch">Refresh Last Activity & Device Info</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-notifications">
                                 <a href="#endpoints-GETapi-notifications">Notification List</a>
@@ -614,11 +632,8 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-notifications-destroy-all">
                                 <a href="#endpoints-DELETEapi-notifications-destroy-all">Delete All Notifications</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-notifications-delete-all">
-                                <a href="#endpoints-DELETEapi-notifications-delete-all">Delete All Notifications</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-notifications--notification_id-">
-                                <a href="#endpoints-DELETEapi-notifications--notification_id-">Delete Notification</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-notifications--id-">
+                                <a href="#endpoints-DELETEapi-notifications--id-">Delete Notification</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-broadcasting-auth">
                                 <a href="#endpoints-GETapi-broadcasting-auth">Authenticate the request for channel access.</a>
@@ -634,7 +649,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: September 5, 2026</li>
+        <li>Last updated: September 6, 2026</li>
     </ul>
 </div>
 
@@ -804,12 +819,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "subject=b"\
-    --form "category=club"\
+    --form "category=event"\
     --form "message=n"\
     --form "device_os=g"\
     --form "device_model=z"\
     --form "app_version=m"\
-    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\php722C.tmp" </code></pre></div>
+    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\phpFE50.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -824,7 +839,7 @@ const headers = {
 
 const body = new FormData();
 body.append('subject', 'b');
-body.append('category', 'club');
+body.append('category', 'event');
 body.append('message', 'n');
 body.append('device_os', 'g');
 body.append('device_model', 'z');
@@ -932,10 +947,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="category"                data-endpoint="POSTapi-app-support"
-               value="club"
+               value="event"
                data-component="body">
     <br>
-<p>Example: <code>club</code></p>
+<p>Example: <code>event</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>bug</code></li> <li><code>account</code></li> <li><code>event</code></li> <li><code>club</code></li> <li><code>vehicle</code></li> <li><code>billing</code></li> <li><code>feedback</code></li> <li><code>other</code></li></ul>
         </div>
@@ -1293,7 +1308,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "message=b"\
-    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\php725C.tmp" </code></pre></div>
+    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\php120.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -5230,7 +5245,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"is_typing\": false
+    \"is_typing\": true
 }"
 </code></pre></div>
 
@@ -5246,7 +5261,7 @@ const headers = {
 };
 
 let body = {
-    "is_typing": false
+    "is_typing": true
 };
 
 fetch(url, {
@@ -5364,7 +5379,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
         </form>
 
@@ -5672,10 +5687,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --form "chat_room_id=16"\
     --form "receiver_id=16"\
-    --form "message_type=gif"\
+    --form "message_type=sticker"\
     --form "message=n"\
     --form "reply_to=16"\
-    --form "files[]=@C:\Users\sakhawat\AppData\Local\Temp\php72EA.tmp" </code></pre></div>
+    --form "files[]=@C:\Users\sakhawat\AppData\Local\Temp\php538.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -5691,7 +5706,7 @@ const headers = {
 const body = new FormData();
 body.append('chat_room_id', '16');
 body.append('receiver_id', '16');
-body.append('message_type', 'gif');
+body.append('message_type', 'sticker');
 body.append('message', 'n');
 body.append('reply_to', '16');
 body.append('files[]', document.querySelector('input[name="files[]"]').files[0]);
@@ -5809,10 +5824,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="message_type"                data-endpoint="POSTapi-chat-messages"
-               value="gif"
+               value="sticker"
                data-component="body">
     <br>
-<p>Example: <code>gif</code></p>
+<p>Example: <code>sticker</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>text</code></li> <li><code>image</code></li> <li><code>video</code></li> <li><code>voice</code></li> <li><code>audio</code></li> <li><code>document</code></li> <li><code>location</code></li> <li><code>contact</code></li> <li><code>sticker</code></li> <li><code>gif</code></li> <li><code>system</code></li></ul>
         </div>
@@ -6588,8 +6603,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"enabled\": false,
-    \"mute_until\": \"2052-09-28\"
+    \"enabled\": true,
+    \"mute_until\": \"2052-09-29\"
 }"
 </code></pre></div>
 
@@ -6605,8 +6620,8 @@ const headers = {
 };
 
 let body = {
-    "enabled": false,
-    "mute_until": "2052-09-28"
+    "enabled": true,
+    "mute_until": "2052-09-29"
 };
 
 fetch(url, {
@@ -6724,7 +6739,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>mute_until</code></b>&nbsp;&nbsp;
@@ -6733,10 +6748,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="mute_until"                data-endpoint="PATCHapi-chat-rooms--room_id--settings-notification"
-               value="2052-09-28"
+               value="2052-09-29"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2052-09-28</code></p>
+<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2052-09-29</code></p>
         </div>
         </form>
 
@@ -6757,8 +6772,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"enabled\": false,
-    \"mute_until\": \"2052-09-28\"
+    \"enabled\": true,
+    \"mute_until\": \"2052-09-29\"
 }"
 </code></pre></div>
 
@@ -6774,8 +6789,8 @@ const headers = {
 };
 
 let body = {
-    "enabled": false,
-    "mute_until": "2052-09-28"
+    "enabled": true,
+    "mute_until": "2052-09-29"
 };
 
 fetch(url, {
@@ -6893,7 +6908,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>mute_until</code></b>&nbsp;&nbsp;
@@ -6902,10 +6917,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="mute_until"                data-endpoint="PATCHapi-chat-rooms--room_id--settings-sound"
-               value="2052-09-28"
+               value="2052-09-29"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2052-09-28</code></p>
+<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2052-09-29</code></p>
         </div>
         </form>
 
@@ -6926,8 +6941,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"duration\": \"forever\",
-    \"mute_until\": \"2052-09-28\"
+    \"duration\": \"custom\",
+    \"mute_until\": \"2052-09-29\"
 }"
 </code></pre></div>
 
@@ -6943,8 +6958,8 @@ const headers = {
 };
 
 let body = {
-    "duration": "forever",
-    "mute_until": "2052-09-28"
+    "duration": "custom",
+    "mute_until": "2052-09-29"
 };
 
 fetch(url, {
@@ -7053,10 +7068,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="duration"                data-endpoint="POSTapi-chat-rooms--room_id--settings-mute"
-               value="forever"
+               value="custom"
                data-component="body">
     <br>
-<p>Example: <code>forever</code></p>
+<p>Example: <code>custom</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>1_hour</code></li> <li><code>8_hours</code></li> <li><code>1_day</code></li> <li><code>7_days</code></li> <li><code>forever</code></li> <li><code>custom</code></li></ul>
         </div>
@@ -7067,10 +7082,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="mute_until"                data-endpoint="POSTapi-chat-rooms--room_id--settings-mute"
-               value="2052-09-28"
+               value="2052-09-29"
                data-component="body">
     <br>
-<p>This field is required when <code>duration</code> is <code>custom</code>. Must be a valid date. Must be a date after <code>now</code>. Example: <code>2052-09-28</code></p>
+<p>This field is required when <code>duration</code> is <code>custom</code>. Must be a valid date. Must be a date after <code>now</code>. Example: <code>2052-09-29</code></p>
         </div>
         </form>
 
@@ -8148,8 +8163,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --form "title=b"\
     --form "content=architecto"\
-    --form "thumbnail=@C:\Users\sakhawat\AppData\Local\Temp\php7329.tmp" \
-    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\php732A.tmp" </code></pre></div>
+    --form "thumbnail=@C:\Users\sakhawat\AppData\Local\Temp\php633.tmp" \
+    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\php643.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -8284,7 +8299,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php7329.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php633.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>media</code></b>&nbsp;&nbsp;
@@ -8513,8 +8528,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --form "title=b"\
     --form "content=architecto"\
-    --form "thumbnail=@C:\Users\sakhawat\AppData\Local\Temp\php732B.tmp" \
-    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\php732C.tmp" </code></pre></div>
+    --form "thumbnail=@C:\Users\sakhawat\AppData\Local\Temp\php6A2.tmp" \
+    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\php6B3.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -8662,7 +8677,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php732B.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php6A2.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>media</code></b>&nbsp;&nbsp;
@@ -13115,7 +13130,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         16
     ],
     \"chat_room_id\": 16,
-    \"type\": \"video\"
+    \"type\": \"audio\"
 }"
 </code></pre></div>
 
@@ -13136,7 +13151,7 @@ let body = {
         16
     ],
     "chat_room_id": 16,
-    "type": "video"
+    "type": "audio"
 };
 
 fetch(url, {
@@ -13266,10 +13281,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="POSTapi-calls-initiate"
-               value="video"
+               value="audio"
                data-component="body">
     <br>
-<p>Example: <code>video</code></p>
+<p>Example: <code>audio</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>audio</code></li> <li><code>video</code></li> <li><code>screen_share</code></li></ul>
         </div>
@@ -13912,7 +13927,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"type\": \"ice_candidate\",
+    \"type\": \"answer\",
     \"payload\": [],
     \"target_id\": 16
 }"
@@ -13930,7 +13945,7 @@ const headers = {
 };
 
 let body = {
-    "type": "ice_candidate",
+    "type": "answer",
     "payload": [],
     "target_id": 16
 };
@@ -14037,10 +14052,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="POSTapi-calls--callSession_id--signal"
-               value="ice_candidate"
+               value="answer"
                data-component="body">
     <br>
-<p>Example: <code>ice_candidate</code></p>
+<p>Example: <code>answer</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>offer</code></li> <li><code>answer</code></li> <li><code>ice_candidate</code></li></ul>
         </div>
@@ -14087,8 +14102,8 @@ Must be one of:
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"is_muted\": false,
-    \"is_video_enabled\": true,
+    \"is_muted\": true,
+    \"is_video_enabled\": false,
     \"is_screen_sharing\": false
 }"
 </code></pre></div>
@@ -14105,8 +14120,8 @@ const headers = {
 };
 
 let body = {
-    "is_muted": false,
-    "is_video_enabled": true,
+    "is_muted": true,
+    "is_video_enabled": false,
     "is_screen_sharing": false
 };
 
@@ -14225,7 +14240,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>is_video_enabled</code></b>&nbsp;&nbsp;
@@ -14247,7 +14262,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>is_screen_sharing</code></b>&nbsp;&nbsp;
@@ -17393,7 +17408,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "rating=1"\
     --form "title=n"\
     --form "comment=g"\
-    --form "photos[]=@C:\Users\sakhawat\AppData\Local\Temp\php7417.tmp" </code></pre></div>
+    --form "photos[]=@C:\Users\sakhawat\AppData\Local\Temp\phpB48.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -17867,8 +17882,8 @@ access-control-allow-origin: *
     &quot;message&quot;: &quot;Cart retrieved successfully.&quot;,
     &quot;code&quot;: 200,
     &quot;data&quot;: {
-        &quot;id&quot;: 1,
-        &quot;guest_token&quot;: &quot;e972469d-58c0-44d5-9bbc-d6a534cd9346&quot;,
+        &quot;id&quot;: 2,
+        &quot;guest_token&quot;: &quot;a0683cc7-a932-4210-9be8-e1b212363095&quot;,
         &quot;items_count&quot;: 0,
         &quot;subtotal&quot;: 0,
         &quot;discount_amount&quot;: 0,
@@ -19015,15 +19030,15 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"code\": \"b\",
-    \"type\": \"fixed\",
+    \"type\": \"percentage\",
     \"value\": 39,
     \"min_order_amount\": 84,
     \"max_discount_amount\": 12,
     \"usage_limit\": 27,
     \"usage_limit_per_user\": 35,
-    \"start_date\": \"2026-09-05T10:52:06\",
-    \"end_date\": \"2052-09-28\",
-    \"is_active\": false
+    \"start_date\": \"2026-09-06T06:09:29\",
+    \"end_date\": \"2052-09-29\",
+    \"is_active\": true
 }"
 </code></pre></div>
 
@@ -19040,15 +19055,15 @@ const headers = {
 
 let body = {
     "code": "b",
-    "type": "fixed",
+    "type": "percentage",
     "value": 39,
     "min_order_amount": 84,
     "max_discount_amount": 12,
     "usage_limit": 27,
     "usage_limit_per_user": 35,
-    "start_date": "2026-09-05T10:52:06",
-    "end_date": "2052-09-28",
-    "is_active": false
+    "start_date": "2026-09-06T06:09:29",
+    "end_date": "2052-09-29",
+    "is_active": true
 };
 
 fetch(url, {
@@ -19152,10 +19167,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="POSTapi-v1-admin-coupons"
-               value="fixed"
+               value="percentage"
                data-component="body">
     <br>
-<p>Example: <code>fixed</code></p>
+<p>Example: <code>percentage</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>percentage</code></li> <li><code>fixed</code></li></ul>
         </div>
@@ -19226,10 +19241,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="start_date"                data-endpoint="POSTapi-v1-admin-coupons"
-               value="2026-09-05T10:52:06"
+               value="2026-09-06T06:09:29"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-09-05T10:52:06</code></p>
+<p>Must be a valid date. Example: <code>2026-09-06T06:09:29</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>end_date</code></b>&nbsp;&nbsp;
@@ -19238,10 +19253,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="end_date"                data-endpoint="POSTapi-v1-admin-coupons"
-               value="2052-09-28"
+               value="2052-09-29"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after or equal to <code>start_date</code>. Example: <code>2052-09-28</code></p>
+<p>Must be a valid date. Must be a date after or equal to <code>start_date</code>. Example: <code>2052-09-29</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>is_active</code></b>&nbsp;&nbsp;
@@ -19263,7 +19278,7 @@ Must be one of:
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
         </form>
 
@@ -19427,14 +19442,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"type\": \"fixed\",
+    \"type\": \"percentage\",
     \"value\": 27,
     \"min_order_amount\": 39,
     \"max_discount_amount\": 84,
     \"usage_limit\": 66,
     \"usage_limit_per_user\": 27,
-    \"start_date\": \"2026-09-05T10:52:06\",
-    \"end_date\": \"2026-09-05T10:52:06\",
+    \"start_date\": \"2026-09-06T06:09:29\",
+    \"end_date\": \"2026-09-06T06:09:29\",
     \"is_active\": false
 }"
 </code></pre></div>
@@ -19451,14 +19466,14 @@ const headers = {
 };
 
 let body = {
-    "type": "fixed",
+    "type": "percentage",
     "value": 27,
     "min_order_amount": 39,
     "max_discount_amount": 84,
     "usage_limit": 66,
     "usage_limit_per_user": 27,
-    "start_date": "2026-09-05T10:52:06",
-    "end_date": "2026-09-05T10:52:06",
+    "start_date": "2026-09-06T06:09:29",
+    "end_date": "2026-09-06T06:09:29",
     "is_active": false
 };
 
@@ -19576,10 +19591,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="PUTapi-v1-admin-coupons--id-"
-               value="fixed"
+               value="percentage"
                data-component="body">
     <br>
-<p>Example: <code>fixed</code></p>
+<p>Example: <code>percentage</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>percentage</code></li> <li><code>fixed</code></li></ul>
         </div>
@@ -19650,10 +19665,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="start_date"                data-endpoint="PUTapi-v1-admin-coupons--id-"
-               value="2026-09-05T10:52:06"
+               value="2026-09-06T06:09:29"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-09-05T10:52:06</code></p>
+<p>Must be a valid date. Example: <code>2026-09-06T06:09:29</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>end_date</code></b>&nbsp;&nbsp;
@@ -19662,10 +19677,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="end_date"                data-endpoint="PUTapi-v1-admin-coupons--id-"
-               value="2026-09-05T10:52:06"
+               value="2026-09-06T06:09:29"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-09-05T10:52:06</code></p>
+<p>Must be a valid date. Example: <code>2026-09-06T06:09:29</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>is_active</code></b>&nbsp;&nbsp;
@@ -20123,7 +20138,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"type\": \"billing\",
+    \"type\": \"shipping\",
     \"recipient_name\": \"b\",
     \"phone\": \"n\",
     \"street_address\": \"g\",
@@ -20148,7 +20163,7 @@ const headers = {
 };
 
 let body = {
-    "type": "billing",
+    "type": "shipping",
     "recipient_name": "b",
     "phone": "n",
     "street_address": "g",
@@ -20249,10 +20264,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="POSTapi-v1-store-addresses"
-               value="billing"
+               value="shipping"
                data-component="body">
     <br>
-<p>Example: <code>billing</code></p>
+<p>Example: <code>shipping</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>shipping</code></li> <li><code>billing</code></li></ul>
         </div>
@@ -20402,7 +20417,7 @@ Must be one of:
     \"state\": \"i\",
     \"postal_code\": \"yvdljnikhwaykcmy\",
     \"country\": \"u\",
-    \"is_default\": false
+    \"is_default\": true
 }"
 </code></pre></div>
 
@@ -20427,7 +20442,7 @@ let body = {
     "state": "i",
     "postal_code": "yvdljnikhwaykcmy",
     "country": "u",
-    "is_default": false
+    "is_default": true
 };
 
 fetch(url, {
@@ -20655,7 +20670,7 @@ Must be one of:
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
         </form>
 
@@ -22914,7 +22929,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --data "{
     \"subject_type\": \"architecto\",
     \"subject_id\": \"architecto\",
-    \"type\": \"private\",
+    \"type\": \"single_use\",
     \"expires_in_minutes\": 22,
     \"max_clicks\": 67
 }"
@@ -22934,7 +22949,7 @@ const headers = {
 let body = {
     "subject_type": "architecto",
     "subject_id": "architecto",
-    "type": "private",
+    "type": "single_use",
     "expires_in_minutes": 22,
     "max_clicks": 67
 };
@@ -23052,10 +23067,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="POSTapi-interactions-shares"
-               value="private"
+               value="single_use"
                data-component="body">
     <br>
-<p>Example: <code>private</code></p>
+<p>Example: <code>single_use</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>public</code></li> <li><code>private</code></li> <li><code>single_use</code></li> <li><code>expiring</code></li></ul>
         </div>
@@ -23482,7 +23497,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"name\": \"b\",
     \"email\": \"zbailey@example.net\",
     \"password\": \"-0pBNvYgxw\",
-    \"agree\": \"true\"
+    \"agree\": \"1\"
 }"
 </code></pre></div>
 
@@ -23501,7 +23516,7 @@ let body = {
     "name": "b",
     "email": "zbailey@example.net",
     "password": "-0pBNvYgxw",
-    "agree": "true"
+    "agree": "1"
 };
 
 fetch(url, {
@@ -23629,10 +23644,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="agree"                data-endpoint="POSTapi-register"
-               value="true"
+               value="1"
                data-component="body">
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>1</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>true</code></li> <li><code>1</code></li></ul>
         </div>
@@ -24629,7 +24644,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"token\": \"architecto\",
-    \"provider\": \"facebook\"
+    \"provider\": \"google\"
 }"
 </code></pre></div>
 
@@ -24646,7 +24661,7 @@ const headers = {
 
 let body = {
     "token": "architecto",
-    "provider": "facebook"
+    "provider": "google"
 };
 
 fetch(url, {
@@ -24750,10 +24765,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="provider"                data-endpoint="POSTapi-social-login"
-               value="facebook"
+               value="google"
                data-component="body">
     <br>
-<p>Example: <code>facebook</code></p>
+<p>Example: <code>google</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>google</code></li> <li><code>facebook</code></li> <li><code>apple</code></li></ul>
         </div>
@@ -24777,7 +24792,7 @@ Must be one of:
     --header "Accept: application/json" \
     --data "{
     \"token\": \"architecto\",
-    \"purpose\": \"email_verification\"
+    \"purpose\": \"password_reset\"
 }"
 </code></pre></div>
 
@@ -24794,7 +24809,7 @@ const headers = {
 
 let body = {
     "token": "architecto",
-    "purpose": "email_verification"
+    "purpose": "password_reset"
 };
 
 fetch(url, {
@@ -24924,10 +24939,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="purpose"                data-endpoint="GETapi-verification-verify-token"
-               value="email_verification"
+               value="password_reset"
                data-component="body">
     <br>
-<p>Example: <code>email_verification</code></p>
+<p>Example: <code>password_reset</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>email_verification</code></li> <li><code>password_reset</code></li></ul>
         </div>
@@ -25477,9 +25492,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "latitude=y"\
     --form "longitude=u"\
     --form "bio=architecto"\
-    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\php74F3.tmp" \
-    --form "cover_photo=@C:\Users\sakhawat\AppData\Local\Temp\php74F4.tmp" \
-    --form "cover_image=@C:\Users\sakhawat\AppData\Local\Temp\php74F5.tmp" </code></pre></div>
+    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\php10B7.tmp" \
+    --form "cover_photo=@C:\Users\sakhawat\AppData\Local\Temp\php10B8.tmp" \
+    --form "cover_image=@C:\Users\sakhawat\AppData\Local\Temp\php10B9.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -25639,7 +25654,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php74F3.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php10B7.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>cover_photo</code></b>&nbsp;&nbsp;
@@ -25651,7 +25666,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php74F4.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php10B8.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>cover_image</code></b>&nbsp;&nbsp;
@@ -25663,7 +25678,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php74F5.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php10B9.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
@@ -25824,7 +25839,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "state=v"\
     --form "city=d"\
     --form "zip_code=l"\
-    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\php74F6.tmp" </code></pre></div>
+    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\php10BA.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -25965,7 +25980,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php74F6.tmp</code></p>
+<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php10BA.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
@@ -26069,7 +26084,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://one_dashboard.test/api/update-avatar" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\php74F8.tmp" </code></pre></div>
+    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\php10BC.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -26177,7 +26192,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php74F8.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php10BC.tmp</code></p>
         </div>
         </form>
 
@@ -26469,9 +26484,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"purpose\": \"password_reset\",
+    \"purpose\": \"email_verification\",
     \"type\": \"otp\",
-    \"channel\": \"sms\"
+    \"channel\": \"email\"
 }"
 </code></pre></div>
 
@@ -26487,9 +26502,9 @@ const headers = {
 };
 
 let body = {
-    "purpose": "password_reset",
+    "purpose": "email_verification",
     "type": "otp",
-    "channel": "sms"
+    "channel": "email"
 };
 
 fetch(url, {
@@ -26581,10 +26596,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="purpose"                data-endpoint="POSTapi-verification-send"
-               value="password_reset"
+               value="email_verification"
                data-component="body">
     <br>
-<p>Example: <code>password_reset</code></p>
+<p>Example: <code>email_verification</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>email_verification</code></li> <li><code>password_reset</code></li></ul>
         </div>
@@ -26609,10 +26624,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="channel"                data-endpoint="POSTapi-verification-send"
-               value="sms"
+               value="email"
                data-component="body">
     <br>
-<p>Example: <code>sms</code></p>
+<p>Example: <code>email</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>email</code></li> <li><code>sms</code></li></ul>
         </div>
@@ -26635,7 +26650,7 @@ Must be one of:
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"purpose\": \"password_reset\",
+    \"purpose\": \"email_verification\",
     \"code\": \"architecto\"
 }"
 </code></pre></div>
@@ -26652,7 +26667,7 @@ const headers = {
 };
 
 let body = {
-    "purpose": "password_reset",
+    "purpose": "email_verification",
     "code": "architecto"
 };
 
@@ -26745,10 +26760,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="purpose"                data-endpoint="POSTapi-verification-verify-otp"
-               value="password_reset"
+               value="email_verification"
                data-component="body">
     <br>
-<p>Example: <code>password_reset</code></p>
+<p>Example: <code>email_verification</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>email_verification</code></li> <li><code>password_reset</code></li></ul>
         </div>
@@ -26783,8 +26798,8 @@ Must be one of:
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"purpose\": \"password_reset\",
-    \"type\": \"otp\",
+    \"purpose\": \"email_verification\",
+    \"type\": \"token\",
     \"channel\": \"sms\"
 }"
 </code></pre></div>
@@ -26801,8 +26816,8 @@ const headers = {
 };
 
 let body = {
-    "purpose": "password_reset",
-    "type": "otp",
+    "purpose": "email_verification",
+    "type": "token",
     "channel": "sms"
 };
 
@@ -26895,10 +26910,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="purpose"                data-endpoint="POSTapi-verification-resend"
-               value="password_reset"
+               value="email_verification"
                data-component="body">
     <br>
-<p>Example: <code>password_reset</code></p>
+<p>Example: <code>email_verification</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>email_verification</code></li> <li><code>password_reset</code></li></ul>
         </div>
@@ -26909,10 +26924,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="POSTapi-verification-resend"
-               value="otp"
+               value="token"
                data-component="body">
     <br>
-<p>Example: <code>otp</code></p>
+<p>Example: <code>token</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>otp</code></li> <li><code>token</code></li></ul>
         </div>
@@ -27363,7 +27378,789 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-POSTapi-firebase-firebase-token">Save / Update Firebase Token</h2>
+                    <h2 id="endpoints-GETapi-firebase-tokens">Get all active device sessions for authenticated user</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-firebase-tokens">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://one_dashboard.test/api/firebase/tokens" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://one_dashboard.test/api/firebase/tokens"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-firebase-tokens">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;status&quot;: false,
+    &quot;message&quot;: &quot;Unauthenticated.&quot;,
+    &quot;code&quot;: 401,
+    &quot;errors&quot;: []
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-firebase-tokens" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-firebase-tokens"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-firebase-tokens"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-firebase-tokens" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-firebase-tokens">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-firebase-tokens" data-method="GET"
+      data-path="api/firebase/tokens"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-firebase-tokens', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-firebase-tokens"
+                    onclick="tryItOut('GETapi-firebase-tokens');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-firebase-tokens"
+                    onclick="cancelTryOut('GETapi-firebase-tokens');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-firebase-tokens"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/firebase/tokens</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-firebase-tokens"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-firebase-tokens"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="endpoints-POSTapi-firebase-tokens">Save / Update Firebase Token &amp; Register Device Session</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-firebase-tokens">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://one_dashboard.test/api/firebase/tokens" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"token\": \"architecto\",
+    \"device_id\": \"architecto\",
+    \"device_name\": \"n\",
+    \"platform\": \"g\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://one_dashboard.test/api/firebase/tokens"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "token": "architecto",
+    "device_id": "architecto",
+    "device_name": "n",
+    "platform": "g"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-firebase-tokens">
+</span>
+<span id="execution-results-POSTapi-firebase-tokens" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-firebase-tokens"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-firebase-tokens"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-firebase-tokens" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-firebase-tokens">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-firebase-tokens" data-method="POST"
+      data-path="api/firebase/tokens"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-firebase-tokens', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-firebase-tokens"
+                    onclick="tryItOut('POSTapi-firebase-tokens');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-firebase-tokens"
+                    onclick="cancelTryOut('POSTapi-firebase-tokens');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-firebase-tokens"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/firebase/tokens</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-firebase-tokens"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-firebase-tokens"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>token</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="token"                data-endpoint="POSTapi-firebase-tokens"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>device_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="device_id"                data-endpoint="POSTapi-firebase-tokens"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>device_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="device_name"                data-endpoint="POSTapi-firebase-tokens"
+               value="n"
+               data-component="body">
+    <br>
+<p>Must not be greater than 255 characters. Example: <code>n</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>platform</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="platform"                data-endpoint="POSTapi-firebase-tokens"
+               value="g"
+               data-component="body">
+    <br>
+<p>Must not be greater than 50 characters. Example: <code>g</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-DELETEapi-firebase-tokens-others">Revoke All Other Devices (except the current one)</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-DELETEapi-firebase-tokens-others">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://one_dashboard.test/api/firebase/tokens/others" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://one_dashboard.test/api/firebase/tokens/others"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-firebase-tokens-others">
+</span>
+<span id="execution-results-DELETEapi-firebase-tokens-others" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-firebase-tokens-others"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-firebase-tokens-others"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-firebase-tokens-others" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-firebase-tokens-others">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-DELETEapi-firebase-tokens-others" data-method="DELETE"
+      data-path="api/firebase/tokens/others"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-firebase-tokens-others', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-DELETEapi-firebase-tokens-others"
+                    onclick="tryItOut('DELETEapi-firebase-tokens-others');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-DELETEapi-firebase-tokens-others"
+                    onclick="cancelTryOut('DELETEapi-firebase-tokens-others');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-DELETEapi-firebase-tokens-others"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/firebase/tokens/others</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="DELETEapi-firebase-tokens-others"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="DELETEapi-firebase-tokens-others"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="endpoints-DELETEapi-firebase-tokens-all">Revoke All Devices for current user</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-DELETEapi-firebase-tokens-all">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://one_dashboard.test/api/firebase/tokens/all" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://one_dashboard.test/api/firebase/tokens/all"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-firebase-tokens-all">
+</span>
+<span id="execution-results-DELETEapi-firebase-tokens-all" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-firebase-tokens-all"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-firebase-tokens-all"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-firebase-tokens-all" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-firebase-tokens-all">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-DELETEapi-firebase-tokens-all" data-method="DELETE"
+      data-path="api/firebase/tokens/all"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-firebase-tokens-all', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-DELETEapi-firebase-tokens-all"
+                    onclick="tryItOut('DELETEapi-firebase-tokens-all');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-DELETEapi-firebase-tokens-all"
+                    onclick="cancelTryOut('DELETEapi-firebase-tokens-all');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-DELETEapi-firebase-tokens-all"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/firebase/tokens/all</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="DELETEapi-firebase-tokens-all"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="DELETEapi-firebase-tokens-all"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="endpoints-DELETEapi-firebase-tokens--deviceId--">Revoke / Remove a Specific Device Session</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-DELETEapi-firebase-tokens--deviceId--">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://one_dashboard.test/api/firebase/tokens/architecto" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://one_dashboard.test/api/firebase/tokens/architecto"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-firebase-tokens--deviceId--">
+</span>
+<span id="execution-results-DELETEapi-firebase-tokens--deviceId--" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-firebase-tokens--deviceId--"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-firebase-tokens--deviceId--"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-firebase-tokens--deviceId--" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-firebase-tokens--deviceId--">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-DELETEapi-firebase-tokens--deviceId--" data-method="DELETE"
+      data-path="api/firebase/tokens/{deviceId?}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-firebase-tokens--deviceId--', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-DELETEapi-firebase-tokens--deviceId--"
+                    onclick="tryItOut('DELETEapi-firebase-tokens--deviceId--');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-DELETEapi-firebase-tokens--deviceId--"
+                    onclick="cancelTryOut('DELETEapi-firebase-tokens--deviceId--');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-DELETEapi-firebase-tokens--deviceId--"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/firebase/tokens/{deviceId?}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="DELETEapi-firebase-tokens--deviceId--"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="DELETEapi-firebase-tokens--deviceId--"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>deviceId</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="deviceId"                data-endpoint="DELETEapi-firebase-tokens--deviceId--"
+               value="architecto"
+               data-component="url">
+    <br>
+<p>Example: <code>architecto</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="endpoints-POSTapi-firebase-tokens-touch">Refresh Last Activity &amp; Device Info</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-firebase-tokens-touch">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://one_dashboard.test/api/firebase/tokens/touch" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"device_id\": \"architecto\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://one_dashboard.test/api/firebase/tokens/touch"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "device_id": "architecto"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-firebase-tokens-touch">
+</span>
+<span id="execution-results-POSTapi-firebase-tokens-touch" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-firebase-tokens-touch"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-firebase-tokens-touch"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-firebase-tokens-touch" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-firebase-tokens-touch">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-firebase-tokens-touch" data-method="POST"
+      data-path="api/firebase/tokens/touch"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-firebase-tokens-touch', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-firebase-tokens-touch"
+                    onclick="tryItOut('POSTapi-firebase-tokens-touch');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-firebase-tokens-touch"
+                    onclick="cancelTryOut('POSTapi-firebase-tokens-touch');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-firebase-tokens-touch"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/firebase/tokens/touch</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-firebase-tokens-touch"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-firebase-tokens-touch"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>device_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="device_id"                data-endpoint="POSTapi-firebase-tokens-touch"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-POSTapi-firebase-firebase-token">Save / Update Firebase Token &amp; Register Device Session</h2>
 
 <p>
 </p>
@@ -27537,7 +28334,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-POSTapi-firebase-firebase-token-delete">Remove Token</h2>
+                    <h2 id="endpoints-POSTapi-firebase-firebase-token-delete">Revoke / Remove a Specific Device Session</h2>
 
 <p>
 </p>
@@ -27552,11 +28349,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <pre><code class="language-bash">curl --request POST \
     "http://one_dashboard.test/api/firebase/firebase-token/delete" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"device_id\": \"architecto\"
-}"
-</code></pre></div>
+    --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
@@ -27569,14 +28362,10 @@ const headers = {
     "Accept": "application/json",
 };
 
-let body = {
-    "device_id": "architecto"
-};
 
 fetch(url, {
     method: "POST",
     headers,
-    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 </span>
@@ -27654,22 +28443,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Example: <code>application/json</code></p>
             </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>device_id</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="device_id"                data-endpoint="POSTapi-firebase-firebase-token-delete"
-               value="architecto"
-               data-component="body">
-    <br>
-<p>Example: <code>architecto</code></p>
-        </div>
-        </form>
+                        </form>
 
-                    <h2 id="endpoints-POSTapi-firebase-firebase-token-touch">Refresh Last Activity</h2>
+                    <h2 id="endpoints-POSTapi-firebase-firebase-token-touch">Refresh Last Activity &amp; Device Info</h2>
 
 <p>
 </p>
@@ -28407,125 +29183,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-DELETEapi-notifications-delete-all">Delete All Notifications</h2>
+                    <h2 id="endpoints-DELETEapi-notifications--id-">Delete Notification</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-DELETEapi-notifications-delete-all">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request DELETE \
-    "http://one_dashboard.test/api/notifications/delete-all" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://one_dashboard.test/api/notifications/delete-all"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-
-fetch(url, {
-    method: "DELETE",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-DELETEapi-notifications-delete-all">
-</span>
-<span id="execution-results-DELETEapi-notifications-delete-all" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-DELETEapi-notifications-delete-all"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-DELETEapi-notifications-delete-all"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-DELETEapi-notifications-delete-all" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-DELETEapi-notifications-delete-all">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-DELETEapi-notifications-delete-all" data-method="DELETE"
-      data-path="api/notifications/delete-all"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-notifications-delete-all', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-DELETEapi-notifications-delete-all"
-                    onclick="tryItOut('DELETEapi-notifications-delete-all');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-DELETEapi-notifications-delete-all"
-                    onclick="cancelTryOut('DELETEapi-notifications-delete-all');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-DELETEapi-notifications-delete-all"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-red">DELETE</small>
-            <b><code>api/notifications/delete-all</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="DELETEapi-notifications-delete-all"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="DELETEapi-notifications-delete-all"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
-
-                    <h2 id="endpoints-DELETEapi-notifications--notification_id-">Delete Notification</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-DELETEapi-notifications--notification_id-">
+<span id="example-requests-DELETEapi-notifications--id-">
 <blockquote>Example request:</blockquote>
 
 
@@ -28554,45 +29219,45 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-DELETEapi-notifications--notification_id-">
+<span id="example-responses-DELETEapi-notifications--id-">
 </span>
-<span id="execution-results-DELETEapi-notifications--notification_id-" hidden>
+<span id="execution-results-DELETEapi-notifications--id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-DELETEapi-notifications--notification_id-"></span>:
+                id="execution-response-status-DELETEapi-notifications--id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-DELETEapi-notifications--notification_id-"
+    <pre class="json"><code id="execution-response-content-DELETEapi-notifications--id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-DELETEapi-notifications--notification_id-" hidden>
+<span id="execution-error-DELETEapi-notifications--id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-DELETEapi-notifications--notification_id-">
+    <pre><code id="execution-error-message-DELETEapi-notifications--id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-DELETEapi-notifications--notification_id-" data-method="DELETE"
-      data-path="api/notifications/{notification_id}"
+<form id="form-DELETEapi-notifications--id-" data-method="DELETE"
+      data-path="api/notifications/{id}"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-notifications--notification_id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-notifications--id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-DELETEapi-notifications--notification_id-"
-                    onclick="tryItOut('DELETEapi-notifications--notification_id-');">Try it out ⚡
+                    id="btn-tryout-DELETEapi-notifications--id-"
+                    onclick="tryItOut('DELETEapi-notifications--id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-DELETEapi-notifications--notification_id-"
-                    onclick="cancelTryOut('DELETEapi-notifications--notification_id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-DELETEapi-notifications--id-"
+                    onclick="cancelTryOut('DELETEapi-notifications--id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-DELETEapi-notifications--notification_id-"
+                    id="btn-executetryout-DELETEapi-notifications--id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -28600,7 +29265,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-red">DELETE</small>
-            <b><code>api/notifications/{notification_id}</code></b>
+            <b><code>api/notifications/{id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -28609,7 +29274,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="DELETEapi-notifications--notification_id-"
+                              name="Content-Type"                data-endpoint="DELETEapi-notifications--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -28621,7 +29286,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="DELETEapi-notifications--notification_id-"
+                              name="Accept"                data-endpoint="DELETEapi-notifications--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -28629,12 +29294,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>notification_id</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="notification_id"                data-endpoint="DELETEapi-notifications--notification_id-"
+                              name="id"                data-endpoint="DELETEapi-notifications--id-"
                value="architecto"
                data-component="url">
     <br>
