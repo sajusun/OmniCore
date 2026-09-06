@@ -20,6 +20,10 @@ class BlockController extends Controller
      */
     public function block(User $user, BlockUserRequest $request)
     {
+        if ($user->id === auth('api')->id()) {
+            return $this->error('You cannot block yourself.', null, 422);
+        }
+
         $this->blockService->block(auth('api')->id(), $user->id);
 
         return $this->success(

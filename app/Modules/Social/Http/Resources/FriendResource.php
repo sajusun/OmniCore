@@ -17,8 +17,9 @@ class FriendResource extends JsonResource
             $targetUser = ($this->sender_id === $authId) ? $this->receiver : $this->sender;
         }
 
-        $mutualCount = ($authId && $targetUser && method_exists(auth('api')->user() ?? auth()->user(), 'getMutualFriendsCount'))
-            ? (auth('api')->user() ?? auth()->user())->getMutualFriendsCount($targetUser)
+        $targetUserId = $targetUser->id ?? $this->id ?? null;
+        $mutualCount = ($authId && $targetUserId && method_exists(auth('api')->user() ?? auth()->user(), 'getMutualFriendsCount'))
+            ? (auth('api')->user() ?? auth()->user())->getMutualFriendsCount($targetUserId)
             : 0;
 
         return [

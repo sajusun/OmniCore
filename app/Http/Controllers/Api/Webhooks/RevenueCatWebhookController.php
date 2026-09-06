@@ -10,92 +10,78 @@ use App\Http\Controllers\Controller;
 
 class RevenueCatWebhookController extends Controller
 {
-    protected User $user;
-    protected Subscription $subscription;
-    protected mixed $event;
-    public function __construct(Request $request)
-    {
-        $this->event = $request->input('event');
-        $this->user = User::findOrFail($this->event['app_user_id']);
-    }
-
     public function __invoke(Request $request)
     {
         $authorizationHeader = $request->header('Authorization');
         $expectedToken = config('services.revenuecat.webhook_secret');
 
-        if (!$authorizationHeader || !hash_equals($expectedToken, $authorizationHeader)) {
-
+        if (!$expectedToken || !$authorizationHeader || !hash_equals($expectedToken, $authorizationHeader)) {
             return response()->json(['status' => false, 'message' => 'Unauthorized'], 401);
         }
 
-        // $event = $this->event;
+        $event = $request->input('event');
+        if (!is_array($event) || empty($event['app_user_id'])) {
+            return response()->json(['status' => false, 'message' => 'Invalid event payload'], 400);
+        }
 
-        switch ($this->event['type']) {
+        $user = User::find($event['app_user_id']);
+        if (!$user) {
+            return response()->json(['status' => false, 'message' => 'User not found'], 404);
+        }
 
+        switch ($event['type'] ?? null) {
             case 'INITIAL_PURCHASE':
             case 'RENEWAL':
-                $this->handleSubscription();
+                $this->handleSubscription($user, $event);
                 break;
 
             case 'EXPIRATION':
             case 'CANCELLATION':
-                $this->handleCancellation();
+                $this->handleCancellation($user, $event);
                 break;
         }
 
         return response()->json([
             'status' => true,
-            'message' => "Webhook processed successfully"
+            'message' => 'Webhook processed successfully',
         ]);
     }
-    private function handleSubscription(): void
+    private function handleSubscription(User $user, array $event): void
     {
-        $appUserId = $this->event['app_user_id'];
-
-        if (!$this->user) {
-            return;
-        }
+        $appUserId = $event['app_user_id'];
+        $expirationAtMs = $event['expiration_at_ms'] ?? null;
+        $expiresAt = $expirationAtMs ? Carbon::createFromTimestampMs($expirationAtMs) : null;
 
         Subscription::updateOrCreate(
             [
-                'user_id' => $this->user->id,
-                'product_id' => $this->event['product_id'],
+                'user_id' => $user->id,
+                'product_id' => $event['product_id'] ?? null,
             ],
             [
                 'revenuecat_id' => $appUserId,
-                'package' => $this->event['period_type'] ?? null,
+                'package' => $event['period_type'] ?? null,
                 'is_active' => true,
                 'started_at' => now(),
-                'expires_at' => Carbon::createFromTimestampMs(
-                    $this->event['expiration_at_ms']
-                ),
-                'meta' => $this->event,
+                'expires_at' => $expiresAt,
+                'meta' => $event,
             ]
         );
 
-        $this->user->update([
+        $user->update([
             'is_subscribed' => 1,
-            'subscription_ends_at' => Carbon::createFromTimestampMs(
-                $this->event['expiration_at_ms']
-            ),
+            'subscription_ends_at' => $expiresAt,
         ]);
     }
 
-    private function handleCancellation(): void
+    private function handleCancellation(User $user, array $event): void
     {
-
-
-        if (!$this->user) {
-            return;
-        }
-
-        Subscription::where('user_id', $this->user->id)->where('product_id', $this->event['product_id'])
+        Subscription::where('user_id', $user->id)
+            ->where('product_id', $event['product_id'] ?? null)
             ->update([
                 'is_active' => false,
             ]);
 
-        $this->user->update([
+        $user->update([
             'is_subscribed' => 0,
         ]);
     }

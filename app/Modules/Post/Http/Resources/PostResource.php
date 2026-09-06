@@ -42,8 +42,8 @@ class PostResource extends JsonResource
             ],
             'share_link' => $this->share_link ? route('post.share', $this->share_link) : null,
 
-            'is_liked' => auth('api')->check() ? $this->likes->contains('user_id', auth('api')->id()) : false,
-            'is_saved' => auth('api')->check() ? $this->saves->contains('user_id', auth('api')->id()) : false,
+            'is_liked' => auth('api')->check() ? ($this->likes?->contains('user_id', auth('api')->id()) ?? false) : false,
+            'is_saved' => auth('api')->check() ? ($this->saves?->contains('user_id', auth('api')->id()) ?? false) : false,
             'is_following' => $authUser && $this->user ? $authUser->isFollowing($this->user) : false,
 
             'created_at' => $this->created_at,

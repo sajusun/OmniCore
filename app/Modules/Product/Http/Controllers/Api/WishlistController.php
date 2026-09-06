@@ -25,7 +25,7 @@ class WishlistController extends Controller
         $products = $user->wishlistProducts()
             ->with(['category', 'brand', 'media'])
             ->published()
-            ->latest('product_wishlists.created_at')
+            ->latest('products.created_at')
             ->paginate((int) $request->get('per_page', 20));
 
         return $this->paginated(

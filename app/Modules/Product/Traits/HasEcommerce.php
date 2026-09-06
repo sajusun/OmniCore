@@ -32,6 +32,17 @@ trait HasEcommerce
         return $this->hasMany(ProductReview::class, 'user_id');
     }
 
+    public function wishlistProducts()
+    {
+        return Product::whereIn('id', function ($query) {
+            $query->select('bookmarkable_id')
+                ->from('bookmarks')
+                ->where('user_id', $this->id)
+                ->where('bookmarkable_type', 'product')
+                ->where('collection', 'wishlist');
+        });
+    }
+
     public function hasInWishlist(int $productId): bool
     {
         return Bookmark::where('user_id', $this->id)
