@@ -9,7 +9,6 @@ use App\Http\Controllers\Web\Backend\NotificationController;
 use App\Http\Controllers\Web\Backend\Pages\PageContentController;
 use App\Http\Controllers\Web\Backend\Settings\ProfileController;
 use App\Http\Controllers\Web\Backend\Settings\SettingController;
-use App\Http\Controllers\Web\Backend\TicketController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
@@ -27,13 +26,6 @@ Route::middleware('permission:dashboard.access')->get('dashboard', [DashboardCon
 
 
 
-// ─── Support Tickets ──────────────────────────────────────────────────────────
-Route::middleware('permission:ticket.list|ticket.reply|ticket.close')->prefix('tickets')->name('tickets.')->group(function () {
-    Route::get('/', [TicketController::class, 'index'])->name('index');
-    Route::get('/{ticket}', [TicketController::class, 'show'])->middleware('permission:ticket.list')->name('show');
-    Route::post('/{ticket}/reply', [TicketController::class, 'reply'])->middleware('permission:ticket.reply')->name('reply');
-    Route::patch('/{ticket}/close', [TicketController::class, 'close'])->middleware('permission:ticket.close')->name('close');
-});
 
 // ─── User Management (Regular Users) ─────────────────────────────────────────
 Route::prefix('users')->name('users.')->group(function () {

@@ -23,6 +23,10 @@ class DatabaseSeeder extends Seeder
             PostModuleSeeder::class,
             ChatModuleSeeder::class,
             CMSModuleSeeder::class,
+            \App\Modules\Payment\Database\Seeders\PaymentSeeder::class,
+            \App\Modules\Subscription\Database\Seeders\SubscriptionSeeder::class,
+            \App\Modules\Reward\Database\Seeders\RewardSeeder::class,
+            \App\Modules\Ticket\Database\Seeders\TicketSeeder::class,
         ]);
     }
 }

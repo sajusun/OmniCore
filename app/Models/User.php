@@ -11,6 +11,9 @@ use App\Modules\Media\Traits\HasMedia;
 use App\Modules\Product\Traits\HasEcommerce;
 use App\Modules\Interaction\Traits\CanInteract;
 use App\Modules\Payment\Traits\HasWallet;
+use App\Modules\Subscription\Traits\HasSubscriptions;
+use App\Modules\Reward\Traits\HasRewards;
+use App\Modules\Ticket\Traits\HasTickets;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -30,6 +33,9 @@ class User extends Authenticatable implements JWTSubject
         HasEcommerce,
         HasNotifications,
         HasWallet,
+        HasSubscriptions,
+        HasRewards,
+        HasTickets,
         HasPost,
         HasRoles,
         CanInteract,

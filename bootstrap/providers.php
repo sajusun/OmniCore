@@ -18,5 +18,8 @@ return [
     App\Modules\Order\Providers\OrderServiceProvider::class,
     App\Modules\Interaction\Providers\InteractionServiceProvider::class,
     App\Modules\Payment\Providers\PaymentServiceProvider::class,
+    App\Modules\Subscription\Providers\SubscriptionServiceProvider::class,
+    App\Modules\Reward\Providers\RewardServiceProvider::class,
+    App\Modules\Ticket\Providers\TicketServiceProvider::class,
     App\Modules\Auth\Providers\AuthServiceProvider::class,
 ];
