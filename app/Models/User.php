@@ -17,6 +17,7 @@ use App\Modules\Ticket\Traits\HasTickets;
 use App\Modules\Review\Traits\CanReview;
 use App\Modules\Affiliate\Traits\HasAffiliate;
 use App\Modules\Vendor\Traits\HasVendorStore;
+use App\Modules\AI\Traits\HasAiConversations;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -42,6 +43,7 @@ class User extends Authenticatable implements JWTSubject
         CanReview,
         HasAffiliate,
         HasVendorStore,
+        HasAiConversations,
         HasPost,
         HasRoles,
         CanInteract,

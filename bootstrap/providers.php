@@ -24,5 +24,6 @@ return [
     App\Modules\Review\Providers\ReviewServiceProvider::class,
     App\Modules\Affiliate\Providers\AffiliateServiceProvider::class,
     App\Modules\Vendor\Providers\VendorServiceProvider::class,
+    App\Modules\AI\Providers\AiServiceProvider::class,
     App\Modules\Auth\Providers\AuthServiceProvider::class,
 ];

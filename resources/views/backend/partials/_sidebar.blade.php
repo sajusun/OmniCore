@@ -112,6 +112,51 @@ use Illuminate\Support\Facades\Route;
                     </ul>
                 </li>
 
+                <li>
+                    <h3>Support & AI Automation</h3>
+                </li>
+                <li class="slide {{ request()->routeIs(['admin.tickets.*', 'admin.ai.*']) ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
+                        <i class="fa-solid fa-robot side-menu__icon"></i>
+                        <span class="side-menu__label">AI & Helpdesk</span>
+                        <i class="angle fe fe-chevron-right"></i>
+                    </a>
+                    <ul class="slide-menu">
+                        <li><a href="{{ route('admin.tickets.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.tickets.*') ? 'active' : '' }}">Support Tickets</a></li>
+                        <li><a href="{{ route('admin.ai.knowledge-base.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.ai.*') ? 'active' : '' }}">AI Knowledge Base</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <h3>Growth & Monetization</h3>
+                </li>
+                <li class="slide">
+                    <a class="side-menu__item" href="{{ url('api/v1/vendor/profile') }}">
+                        <i class="fa-solid fa-store side-menu__icon"></i>
+                        <span class="side-menu__label">Vendor Stores</span>
+                    </a>
+                </li>
+                <li class="slide">
+                    <a class="side-menu__item" href="{{ url('api/v1/subscription/plans') }}">
+                        <i class="fa-solid fa-gem side-menu__icon"></i>
+                        <span class="side-menu__label">Subscription Plans</span>
+                    </a>
+                </li>
+                <li class="slide">
+                    <a class="side-menu__item" href="{{ url('api/v1/reward/profile') }}">
+                        <i class="fa-solid fa-award side-menu__icon"></i>
+                        <span class="side-menu__label">Rewards & Points</span>
+                    </a>
+                </li>
+                <li class="slide">
+                    <a class="side-menu__item" href="{{ url('api/v1/affiliate/account') }}">
+                        <i class="fa-solid fa-bullhorn side-menu__icon"></i>
+                        <span class="side-menu__label">Affiliate Network</span>
+                    </a>
+                </li>
+
                 @if(env('ENABLE_ROLE_MANAGEMENT'))
                 <li
                     class="slide {{ request()->routeIs(['admin.admins.*', 'admin.roles.*', 'admin.permissions.*']) ? 'is-expanded' : '' }}">

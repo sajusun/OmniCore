@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             \App\Modules\Review\Database\Seeders\ReviewSeeder::class,
             \App\Modules\Affiliate\Database\Seeders\AffiliateSeeder::class,
             \App\Modules\Vendor\Database\Seeders\VendorSeeder::class,
+            \App\Modules\AI\Database\Seeders\AiSeeder::class,
         ]);
     }
 }
