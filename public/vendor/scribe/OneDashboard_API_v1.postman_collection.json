@@ -1,0 +1,869 @@
+{
+  "info": {
+    "_postman_id": "onedashboard-api-collection-v1",
+    "name": "One-Dashboard API (v1.0.0)",
+    "description": "Production-grade, fully structured Postman Collection for Mobile App Developers (Flutter / React Native / iOS / Android) and Frontend Engineers. Includes automated Bearer Token extraction, clean modular grouping, and dynamic pre/post-request scripts.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.request.headers.add({key: 'Accept', value: 'application/json'});"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication & Security",
+      "item": [
+        {
+          "name": "Register New Account",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    var json = pm.response.json();",
+                  "    var token = (json.data && json.data.access_token) || (json.data && json.data.token) || json.access_token || json.token;",
+                  "    if (token) {",
+                  "        pm.environment.set('auth_token', token);",
+                  "        console.log('Saved auth_token to environment');",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\",\n  \"phone\": \"+1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User (Auto Saves Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var json = pm.response.json();",
+                  "    var token = (json.data && json.data.access_token) || (json.data && json.data.token) || json.access_token || json.token;",
+                  "    if (token) {",
+                  "        pm.environment.set('auth_token', token);",
+                  "        console.log('Successfully set auth_token:', token);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{test_email}}\",\n  \"password\": \"{{test_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "login"]
+            }
+          }
+        },
+        {
+          "name": "Verify Email / Phone OTP",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{test_email}}\",\n  \"otp\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/verify-otp",
+              "host": ["{{base_url}}"],
+              "path": ["api", "verify-otp"]
+            }
+          }
+        },
+        {
+          "name": "Get Authenticated User Profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/user",
+              "host": ["{{base_url}}"],
+              "path": ["api", "user"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe Updated\",\n  \"phone\": \"+1987654321\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/profile/update",
+              "host": ["{{base_url}}"],
+              "path": ["api", "profile", "update"]
+            }
+          }
+        },
+        {
+          "name": "Logout (Revoke Token)",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Chat & Realtime Messaging",
+      "item": [
+        {
+          "name": "List All Chat Rooms",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/chat/rooms?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chat", "rooms"],
+              "query": [{ "key": "page", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Create or Get 1-on-1 Direct Room",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"receiver_id\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/chat/rooms/direct",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chat", "rooms", "direct"]
+            }
+          }
+        },
+        {
+          "name": "Get Room Messages",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/chat/rooms/1/messages?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chat", "rooms", "1", "messages"],
+              "query": [{ "key": "page", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Send Text Message",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Hello, how are you?\",\n  \"type\": \"text\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/chat/rooms/1/messages",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chat", "rooms", "1", "messages"]
+            }
+          }
+        },
+        {
+          "name": "Block or Unblock User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"blocked_id\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/chat/block",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chat", "block"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Products & E-Commerce",
+      "item": [
+        {
+          "name": "Get Products Catalog (Paginated with Filters)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/products?search=phone&category_id=1&min_price=10&max_price=1000&sort=price_asc",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products"],
+              "query": [
+                { "key": "search", "value": "phone" },
+                { "key": "category_id", "value": "1" },
+                { "key": "min_price", "value": "10" },
+                { "key": "max_price", "value": "1000" },
+                { "key": "sort", "value": "price_asc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product Details by Slug",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/products/sample-product-slug",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "sample-product-slug"]
+            }
+          }
+        },
+        {
+          "name": "Get All Categories",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/categories",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Get All Brands",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/brands",
+              "host": ["{{base_url}}"],
+              "path": ["api", "brands"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Cart & Checkout",
+      "item": [
+        {
+          "name": "Get User Cart",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/cart",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart"]
+            }
+          }
+        },
+        {
+          "name": "Add Item to Cart",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": 1,\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/cart/items",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart", "items"]
+            }
+          }
+        },
+        {
+          "name": "Clear Cart",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/cart/clear",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart", "clear"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Orders & Invoices",
+      "item": [
+        {
+          "name": "List User Orders",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/orders?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders"],
+              "query": [{ "key": "page", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Place New Order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipping_address\": {\n    \"name\": \"John Doe\",\n    \"phone\": \"+123456789\",\n    \"address\": \"123 Tech Boulevard\",\n    \"city\": \"Silicon Valley\",\n    \"postal_code\": \"94025\"\n  },\n  \"payment_method\": \"wallet\",\n  \"coupon_code\": \"FLASH20\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders"]
+            }
+          }
+        },
+        {
+          "name": "Get Order Details",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/orders/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Discount Coupons",
+      "item": [
+        {
+          "name": "Validate & Apply Coupon",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"FLASH20\",\n  \"order_amount\": 150.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/coupons/validate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "coupons", "validate"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Vendor Marketplace",
+      "item": [
+        {
+          "name": "List Active Stores",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/vendors/stores",
+              "host": ["{{base_url}}"],
+              "path": ["api", "vendors", "stores"]
+            }
+          }
+        },
+        {
+          "name": "Register Merchant Store",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Tech Gadgets Store\",\n  \"description\": \"Official dealer for high quality electronics.\",\n  \"phone\": \"+123456789\",\n  \"address\": \"45 Market Street\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vendors/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "vendors", "register"]
+            }
+          }
+        },
+        {
+          "name": "Get My Store Overview",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/vendors/my-store",
+              "host": ["{{base_url}}"],
+              "path": ["api", "vendors", "my-store"]
+            }
+          }
+        },
+        {
+          "name": "Request Vendor Payout to Wallet",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 50.00,\n  \"payout_method\": \"wallet\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vendors/payout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "vendors", "payout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Payment & Wallet",
+      "item": [
+        {
+          "name": "Get Active Payment Gateways",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/payments/gateways",
+              "host": ["{{base_url}}"],
+              "path": ["api", "payments", "gateways"]
+            }
+          }
+        },
+        {
+          "name": "Initiate Checkout Payment (Stripe/PayPal)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 99.99,\n  \"gateway\": \"stripe\",\n  \"currency\": \"USD\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payments/initiate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "payments", "initiate"]
+            }
+          }
+        },
+        {
+          "name": "Get User Wallet Balance & Trx History",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/wallet",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet"]
+            }
+          }
+        },
+        {
+          "name": "P2P Wallet Balance Transfer to Another User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"recipient_email\": \"receiver@example.com\",\n  \"amount\": 25.00,\n  \"description\": \"Shared dinner payment\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/wallet/transfer",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet", "transfer"]
+            }
+          }
+        },
+        {
+          "name": "Request Cashout / Withdrawal",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 100.00,\n  \"method\": \"bank_transfer\",\n  \"account_details\": {\n    \"bank_name\": \"Chase\",\n    \"account_number\": \"1234567890\",\n    \"routing_number\": \"987654321\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/wallet/withdraw",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet", "withdraw"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Subscriptions & Quotas",
+      "item": [
+        {
+          "name": "List Subscription Plans",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/subscriptions/plans",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subscriptions", "plans"]
+            }
+          }
+        },
+        {
+          "name": "Subscribe to Plan (Using Wallet)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan_id\": 2,\n  \"payment_method\": \"wallet\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/subscriptions/subscribe",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subscriptions", "subscribe"]
+            }
+          }
+        },
+        {
+          "name": "Check Feature Quota Access",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/subscriptions/quota-check?feature=ai_generation",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subscriptions", "quota-check"],
+              "query": [{ "key": "feature", "value": "ai_generation" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Loyalty & Gamification",
+      "item": [
+        {
+          "name": "Get Rewards Overview & Current Tier",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/rewards/overview",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rewards", "overview"]
+            }
+          }
+        },
+        {
+          "name": "Claim Daily Check-in Streak",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/rewards/checkin",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rewards", "checkin"]
+            }
+          }
+        },
+        {
+          "name": "Redeem Points to Wallet Cash",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"points\": 500\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rewards/redeem",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rewards", "redeem"]
+            }
+          }
+        },
+        {
+          "name": "View Badges & Points Leaderboard",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/rewards/leaderboard",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rewards", "leaderboard"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Affiliate Network",
+      "item": [
+        {
+          "name": "Get Affiliate Account Details & Referral Link",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/affiliate/account",
+              "host": ["{{base_url}}"],
+              "path": ["api", "affiliate", "account"]
+            }
+          }
+        },
+        {
+          "name": "Track Referral Link Visit",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"referral_code\": \"REF-ABC123\",\n  \"landing_page\": \"/products/macbook-pro\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/affiliate/track",
+              "host": ["{{base_url}}"],
+              "path": ["api", "affiliate", "track"]
+            }
+          }
+        },
+        {
+          "name": "Payout Affiliate Balance to Wallet",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 35.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/affiliate/payout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "affiliate", "payout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "12. Customer Support & Tickets",
+      "item": [
+        {
+          "name": "List User Support Tickets",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/tickets",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tickets"]
+            }
+          }
+        },
+        {
+          "name": "Create Support Ticket",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject\": \"Issue with Order #ORD-2026-001\",\n  \"category_id\": 1,\n  \"priority\": \"high\",\n  \"message\": \"I have not received my tracking confirmation email yet.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tickets",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tickets"]
+            }
+          }
+        },
+        {
+          "name": "Reply to Ticket Thread",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Here is additional information regarding my inquiry.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tickets/1/reply",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tickets", "1", "reply"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "13. AI Assistant & Automated Helpdesk",
+      "item": [
+        {
+          "name": "Conversational AI Chat",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What is your return and refund policy?\",\n  \"persona\": \"support_agent\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/ai/chat",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ai", "chat"]
+            }
+          }
+        },
+        {
+          "name": "Generate Marketing Copy / Description",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"product_description\",\n  \"prompt\": \"Noise Cancelling Wireless Earbuds\",\n  \"context\": {\n    \"product_name\": \"AuraPods Pro\",\n    \"category\": \"Audio\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/ai/content",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ai", "content"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "14. Social Feed & Interactions",
+      "item": [
+        {
+          "name": "List Community Feed Posts",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/posts?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "posts"],
+              "query": [{ "key": "page", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Toggle Like on Product or Post",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"likeable_type\": \"post\",\n  \"likeable_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/interactions/like",
+              "host": ["{{base_url}}"],
+              "path": ["api", "interactions", "like"]
+            }
+          }
+        },
+        {
+          "name": "Add Comment / Reply",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"commentable_type\": \"post\",\n  \"commentable_id\": 1,\n  \"comment\": \"Amazing insight! Thanks for sharing.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/interactions/comment",
+              "host": ["{{base_url}}"],
+              "path": ["api", "interactions", "comment"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "15. Push & In-App Notifications",
+      "item": [
+        {
+          "name": "List User Notifications",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/notifications",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications"]
+            }
+          }
+        },
+        {
+          "name": "Register FCM Device Push Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"fcm_device_registration_token_sample_12345\",\n  \"device_type\": \"android\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/notifications/register-token",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications", "register-token"]
+            }
+          }
+        },
+        {
+          "name": "Mark All Notifications as Read",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/notifications/mark-all-read",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications", "mark-all-read"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

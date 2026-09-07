@@ -29,8 +29,8 @@ endpoints:
     responses:
       -
         custom: []
-        status: 500
-        content: '{"status":false,"message":"Cannot use SplFileObject with directories","code":500,"errors":[]}'
+        status: 200
+        content: '{"status":true,"message":"Support categories list.","code":200,"data":[{"value":"bug","label":"Technical Bug \/ Crash"},{"value":"account","label":"Account & Login"},{"value":"event","label":"Events & RSVP"},{"value":"club","label":"Clubs & Membership"},{"value":"vehicle","label":"Vehicles & Garage"},{"value":"billing","label":"Billing & Subscription"},{"value":"feedback","label":"Feedback & Suggestion"},{"value":"other","label":"Other \/ General Issue"}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -80,7 +80,7 @@ endpoints:
         name: category
         description: ''
         required: true
-        example: event
+        example: club
         type: string
         enumValues:
           - bug
@@ -152,7 +152,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       subject: b
-      category: event
+      category: club
       message: 'n'
       device_os: g
       device_model: z
@@ -598,6 +598,654 @@ endpoints:
         -
           id: 16
           sort_order: 16
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/firebase/tokens
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get all active device sessions for authenticated user'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/firebase/tokens
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Save / Update Firebase Token & Register Device Session'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      token:
+        custom: []
+        name: token
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      device_id:
+        custom: []
+        name: device_id
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      device_name:
+        custom: []
+        name: device_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      platform:
+        custom: []
+        name: platform
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      token: architecto
+      device_id: architecto
+      device_name: 'n'
+      platform: g
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: api/firebase/tokens/others
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Revoke All Other Devices (except the current one)'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: api/firebase/tokens/all
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Revoke All Devices for current user'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/firebase/tokens/{deviceId?}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Revoke / Remove a Specific Device Session'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      deviceId:
+        custom: []
+        name: deviceId
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      deviceId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/firebase/tokens/touch
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Refresh Last Activity & Device Info'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      device_id:
+        custom: []
+        name: device_id
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      device_id: architecto
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/firebase/firebase-token
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Save / Update Firebase Token & Register Device Session'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      token:
+        custom: []
+        name: token
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      device_id:
+        custom: []
+        name: device_id
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      device_name:
+        custom: []
+        name: device_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      platform:
+        custom: []
+        name: platform
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      token: architecto
+      device_id: architecto
+      device_name: 'n'
+      platform: g
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/firebase/firebase-token/delete
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Revoke / Remove a Specific Device Session'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/firebase/firebase-token/touch
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Refresh Last Activity & Device Info'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      device_id:
+        custom: []
+        name: device_id
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      device_id: architecto
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/notifications
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Notification List'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/notifications/unread-count
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Unread Count'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/notifications/{notification}/read'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Mark as Read'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      notification:
+        custom: []
+        name: notification
+        description: 'The notification.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      notification: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/notifications/read-all
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Mark All Read'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: api/notifications/destroy-all
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Delete All Notifications'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/notifications/{id}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Delete Notification'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the notification.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses: []
     responseFields: []
@@ -1056,14 +1704,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1108,14 +1756,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1187,14 +1835,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1230,14 +1878,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1287,7 +1935,7 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1298,15 +1946,15 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
-      user_id: 1
+      room_id: 16
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1342,14 +1990,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1385,14 +2033,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1428,14 +2076,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1480,14 +2128,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1532,14 +2180,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1584,7 +2232,7 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1595,15 +2243,15 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
-      message_id: 1
+      room_id: 16
+      message_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1639,7 +2287,7 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1650,15 +2298,15 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
-      message_id: 1
+      room_id: 16
+      message_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1694,14 +2342,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1737,14 +2385,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1753,14 +2401,14 @@ endpoints:
         name: is_typing
         description: ''
         required: true
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      is_typing: true
+      is_typing: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -1792,14 +2440,14 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      message_id: 1
+      message_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1844,14 +2492,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1922,7 +2570,7 @@ endpoints:
         name: message_type
         description: ''
         required: false
-        example: sticker
+        example: video
         type: string
         enumValues:
           - text
@@ -1976,7 +2624,7 @@ endpoints:
     cleanBodyParameters:
       chat_room_id: 16
       receiver_id: 16
-      message_type: sticker
+      message_type: video
       message: 'n'
       reply_to: 16
     fileParameters:
@@ -2071,14 +2719,14 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      message_id: 1
+      message_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2126,14 +2774,14 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      message_id: 1
+      message_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2169,14 +2817,14 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      message_id: 1
+      message_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2221,14 +2869,14 @@ endpoints:
         name: message_id
         description: 'The ID of the message.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      message_id: 1
+      message_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2276,14 +2924,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2303,7 +2951,7 @@ endpoints:
         name: mute_until
         description: 'Must be a valid date. Must be a date after <code>now</code>.'
         required: false
-        example: '2052-09-29'
+        example: '2052-09-30'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2311,7 +2959,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       enabled: true
-      mute_until: '2052-09-29'
+      mute_until: '2052-09-30'
     fileParameters: []
     responses: []
     responseFields: []
@@ -2343,14 +2991,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2370,7 +3018,7 @@ endpoints:
         name: mute_until
         description: 'Must be a valid date. Must be a date after <code>now</code>.'
         required: false
-        example: '2052-09-29'
+        example: '2052-09-30'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2378,7 +3026,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       enabled: true
-      mute_until: '2052-09-29'
+      mute_until: '2052-09-30'
     fileParameters: []
     responses: []
     responseFields: []
@@ -2411,14 +3059,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2444,7 +3092,7 @@ endpoints:
         name: mute_until
         description: 'This field is required when <code>duration</code> is <code>custom</code>. Must be a valid date. Must be a date after <code>now</code>.'
         required: false
-        example: '2052-09-29'
+        example: '2052-09-30'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2452,7 +3100,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       duration: custom
-      mute_until: '2052-09-29'
+      mute_until: '2052-09-30'
     fileParameters: []
     responses: []
     responseFields: []
@@ -2484,14 +3132,14 @@ endpoints:
         name: room_id
         description: 'The ID of the room.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 1
+      room_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2527,14 +3175,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2582,14 +3230,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2962,14 +3610,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 1
+      post_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3014,14 +3662,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 1
+      post_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3151,14 +3799,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 1
+      post_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3194,14 +3842,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 1
+      post_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3237,14 +3885,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 1
+      post_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3289,14 +3937,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 1
+      post_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3355,14 +4003,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 1
+      post_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3398,14 +4046,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 1
+      post_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3450,14 +4098,14 @@ endpoints:
         name: post_id
         description: 'The ID of the post.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      post_id: 1
+      post_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3505,14 +4153,14 @@ endpoints:
         name: comment_id
         description: 'The ID of the comment.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      comment_id: 1
+      comment_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3560,14 +4208,14 @@ endpoints:
         name: comment_id
         description: 'The ID of the comment.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      comment_id: 1
+      comment_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3603,14 +4251,14 @@ endpoints:
         name: comment_id
         description: 'The ID of the comment.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      comment_id: 1
+      comment_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -3658,14 +4306,14 @@ endpoints:
         name: comment_id
         description: 'The ID of the comment.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      comment_id: 1
+      comment_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3701,14 +4349,14 @@ endpoints:
         name: comment_id
         description: 'The ID of the comment.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      comment_id: 1
+      comment_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3913,14 +4561,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3965,14 +4613,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4137,14 +4785,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4260,14 +4908,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4312,14 +4960,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4364,14 +5012,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4416,14 +5064,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4459,14 +5107,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4502,14 +5150,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4585,14 +5233,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4628,14 +5276,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -4986,7 +5634,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: answer
+        example: offer
         type: string
         enumValues:
           - offer
@@ -5018,7 +5666,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: answer
+      type: offer
       payload: []
       target_id: 16
     fileParameters: []
@@ -5068,7 +5716,7 @@ endpoints:
         name: is_muted
         description: ''
         required: true
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -5097,7 +5745,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      is_muted: true
+      is_muted: false
       is_video_enabled: false
       is_screen_sharing: false
     fileParameters: []
@@ -5311,7 +5959,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Products fetched successfully.","code":200,"data":[{"id":35,"name":"Ergonomic Mesh Office Chair with Lumbar Support","slug":"ergonomic-mesh-office-chair-with-lumbar-support-399","sku":"ERGONOMI-5991","type":"simple","price":289,"compare_at_price":349,"discount_percentage":17,"is_in_stock":true,"stock_quantity":22,"is_featured":true,"average_rating":4.5,"reviews_count":2,"thumbnail":null,"category":{"id":14,"name":"Workspace & Office","slug":"workspace-office"},"brand":{"id":7,"name":"Logitech","slug":"logitech"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":21,"name":"Nike Club Fleece Pullover Hoodie","slug":"nike-club-fleece-pullover-hoodie-888","sku":"NIKE-CLU-1090","type":"variable","price":65,"compare_at_price":75,"discount_percentage":13,"is_in_stock":true,"stock_quantity":90,"is_featured":true,"average_rating":4.5,"reviews_count":2,"thumbnail":null,"category":{"id":7,"name":"Men''s Clothing","slug":"mens-clothing"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":22,"name":"Zara Slim Fit Stretch Oxford Shirt","slug":"zara-slim-fit-stretch-oxford-shirt-172","sku":"ZARA-SLI-9650","type":"variable","price":49.9,"compare_at_price":59.9,"discount_percentage":17,"is_in_stock":true,"stock_quantity":65,"is_featured":false,"average_rating":4,"reviews_count":1,"thumbnail":null,"category":{"id":7,"name":"Men''s Clothing","slug":"mens-clothing"},"brand":{"id":9,"name":"Zara","slug":"zara"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":23,"name":"Puma Modern Basics Cargo Pants","slug":"puma-modern-basics-cargo-pants-294","sku":"PUMA-MOD-5175","type":"variable","price":50,"compare_at_price":65,"discount_percentage":23,"is_in_stock":true,"stock_quantity":55,"is_featured":false,"average_rating":5,"reviews_count":3,"thumbnail":null,"category":{"id":7,"name":"Men''s Clothing","slug":"mens-clothing"},"brand":{"id":10,"name":"Puma","slug":"puma"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":24,"name":"Nike Zenvy Gentle-Support High-Waisted Leggings","slug":"nike-zenvy-gentle-support-high-waisted-leggings-933","sku":"NIKE-ZEN-6438","type":"variable","price":95,"compare_at_price":110,"discount_percentage":14,"is_in_stock":true,"stock_quantity":70,"is_featured":true,"average_rating":4.33,"reviews_count":3,"thumbnail":null,"category":{"id":8,"name":"Women''s Clothing","slug":"womens-clothing"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":25,"name":"Adidas Tiro 24 Training Pants","slug":"adidas-tiro-24-training-pants-789","sku":"ADIDAS-T-2771","type":"variable","price":45,"compare_at_price":55,"discount_percentage":18,"is_in_stock":true,"stock_quantity":85,"is_featured":false,"average_rating":4,"reviews_count":3,"thumbnail":null,"category":{"id":8,"name":"Women''s Clothing","slug":"womens-clothing"},"brand":{"id":5,"name":"Adidas","slug":"adidas"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":26,"name":"Zara Oversized Double-Breasted Blazer","slug":"zara-oversized-double-breasted-blazer-681","sku":"ZARA-OVE-2393","type":"simple","price":119,"compare_at_price":139,"discount_percentage":14,"is_in_stock":true,"stock_quantity":40,"is_featured":true,"average_rating":4,"reviews_count":1,"thumbnail":null,"category":{"id":8,"name":"Women''s Clothing","slug":"womens-clothing"},"brand":{"id":9,"name":"Zara","slug":"zara"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":27,"name":"Nike Air Force 1 07 Classic","slug":"nike-air-force-1-07-classic-995","sku":"NIKE-AIR-5126","type":"variable","price":115,"compare_at_price":130,"discount_percentage":12,"is_in_stock":true,"stock_quantity":110,"is_featured":true,"average_rating":4.67,"reviews_count":3,"thumbnail":null,"category":{"id":9,"name":"Footwear & Sneakers","slug":"footwear-sneakers"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":28,"name":"Adidas Samba OG Shoes","slug":"adidas-samba-og-shoes-626","sku":"ADIDAS-S-6172","type":"variable","price":100,"compare_at_price":120,"discount_percentage":17,"is_in_stock":true,"stock_quantity":95,"is_featured":true,"average_rating":5,"reviews_count":1,"thumbnail":null,"category":{"id":9,"name":"Footwear & Sneakers","slug":"footwear-sneakers"},"brand":{"id":5,"name":"Adidas","slug":"adidas"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":29,"name":"Nike Pegasus 41 Road Running Shoes","slug":"nike-pegasus-41-road-running-shoes-197","sku":"NIKE-PEG-5693","type":"variable","price":140,"compare_at_price":160,"discount_percentage":13,"is_in_stock":true,"stock_quantity":60,"is_featured":false,"average_rating":4,"reviews_count":2,"thumbnail":null,"category":{"id":9,"name":"Footwear & Sneakers","slug":"footwear-sneakers"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":30,"name":"Puma Suede Classic XXI Sneakers","slug":"puma-suede-classic-xxi-sneakers-226","sku":"PUMA-SUE-8678","type":"variable","price":75,"compare_at_price":85,"discount_percentage":12,"is_in_stock":true,"stock_quantity":50,"is_featured":false,"average_rating":4,"reviews_count":1,"thumbnail":null,"category":{"id":9,"name":"Footwear & Sneakers","slug":"footwear-sneakers"},"brand":{"id":10,"name":"Puma","slug":"puma"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":31,"name":"Philips Hue Smart Bridge & Bulb Starter Kit","slug":"philips-hue-smart-bridge-bulb-starter-kit-168","sku":"PHILIPS-6314","type":"simple","price":159.99,"compare_at_price":189.99,"discount_percentage":16,"is_in_stock":true,"stock_quantity":35,"is_featured":true,"average_rating":5,"reviews_count":2,"thumbnail":null,"category":{"id":12,"name":"Smart Home Devices","slug":"smart-home-devices"},"brand":{"id":1,"name":"Apple","slug":"apple"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":32,"name":"Sonos Era 100 Smart Speaker","slug":"sonos-era-100-smart-speaker-266","sku":"SONOS-ER-2844","type":"simple","price":249,"compare_at_price":279,"discount_percentage":11,"is_in_stock":true,"stock_quantity":28,"is_featured":false,"average_rating":4,"reviews_count":1,"thumbnail":null,"category":{"id":12,"name":"Smart Home Devices","slug":"smart-home-devices"},"brand":{"id":8,"name":"Bose","slug":"bose"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":33,"name":"Breville Barista Touch Espresso Machine","slug":"breville-barista-touch-espresso-machine-185","sku":"BREVILLE-5145","type":"simple","price":999.95,"compare_at_price":1099.95,"discount_percentage":9,"is_in_stock":true,"stock_quantity":12,"is_featured":true,"average_rating":4.67,"reviews_count":3,"thumbnail":null,"category":{"id":13,"name":"Kitchen Appliances","slug":"kitchen-appliances"},"brand":{"id":6,"name":"Dell","slug":"dell"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":34,"name":"Ninja Air Fryer Pro 4-in-1","slug":"ninja-air-fryer-pro-4-in-1-869","sku":"NINJA-AI-6372","type":"simple","price":119.99,"compare_at_price":139.99,"discount_percentage":14,"is_in_stock":true,"stock_quantity":45,"is_featured":false,"average_rating":5,"reviews_count":1,"thumbnail":null,"category":{"id":13,"name":"Kitchen Appliances","slug":"kitchen-appliances"},"brand":{"id":2,"name":"Samsung","slug":"samsung"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":16,"name":"Sony PlayStation 5 Slim Digital Edition","slug":"sony-playstation-5-slim-digital-edition-186","sku":"SONY-PLA-8187","type":"simple","price":449.99,"compare_at_price":499.99,"discount_percentage":10,"is_in_stock":true,"stock_quantity":30,"is_featured":true,"average_rating":4.5,"reviews_count":2,"thumbnail":null,"category":{"id":5,"name":"Gaming & Consoles","slug":"gaming-consoles"},"brand":{"id":3,"name":"Sony","slug":"sony"},"created_at":"2026-09-05T10:51:59+00:00"},{"id":17,"name":"PlayStation DualSense Wireless Controller","slug":"playstation-dualsense-wireless-controller-508","sku":"PLAYSTAT-9509","type":"variable","price":69.99,"compare_at_price":74.99,"discount_percentage":7,"is_in_stock":true,"stock_quantity":75,"is_featured":false,"average_rating":5,"reviews_count":1,"thumbnail":null,"category":{"id":5,"name":"Gaming & Consoles","slug":"gaming-consoles"},"brand":{"id":3,"name":"Sony","slug":"sony"},"created_at":"2026-09-05T10:51:59+00:00"},{"id":1,"name":"Apple iPhone 16 Pro Max","slug":"apple-iphone-16-pro-max-476","sku":"APPLE-IP-5440","type":"variable","price":1199,"compare_at_price":1299,"discount_percentage":8,"is_in_stock":true,"stock_quantity":45,"is_featured":true,"average_rating":4,"reviews_count":1,"thumbnail":null,"category":{"id":2,"name":"Smartphones & Accessories","slug":"smartphones-accessories"},"brand":{"id":1,"name":"Apple","slug":"apple"},"created_at":"2026-09-05T10:51:59+00:00"},{"id":19,"name":"Nike Dri-FIT UV Running Shirt","slug":"nike-dri-fit-uv-running-shirt-281","sku":"NIKE-DRI-1259","type":"variable","price":42,"compare_at_price":55,"discount_percentage":24,"is_in_stock":true,"stock_quantity":100,"is_featured":true,"average_rating":4.67,"reviews_count":3,"thumbnail":null,"category":{"id":7,"name":"Men''s Clothing","slug":"mens-clothing"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:51:59+00:00"},{"id":20,"name":"Adidas Essentials 3-Stripes Track Jacket","slug":"adidas-essentials-3-stripes-track-jacket-523","sku":"ADIDAS-E-2961","type":"variable","price":55,"compare_at_price":70,"discount_percentage":21,"is_in_stock":true,"stock_quantity":80,"is_featured":false,"average_rating":5,"reviews_count":3,"thumbnail":null,"category":{"id":7,"name":"Men''s Clothing","slug":"mens-clothing"},"brand":{"id":5,"name":"Adidas","slug":"adidas"},"created_at":"2026-09-05T10:51:59+00:00"}],"pagination":{"type":"offset","current_page":1,"last_page":2,"per_page":20,"total":35,"from":1,"to":20,"has_more":true,"path":"http:\/\/one_dashboard.test\/api\/v1\/store\/products"}}'
+        content: '{"status":true,"message":"Products fetched successfully.","code":200,"data":[],"pagination":{"type":"offset","current_page":1,"last_page":1,"per_page":20,"total":0,"from":null,"to":null,"has_more":false,"path":"http:\/\/one_dashboard.test\/api\/v1\/store\/products"}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -5391,7 +6039,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Featured products fetched successfully.","code":200,"data":[{"id":35,"name":"Ergonomic Mesh Office Chair with Lumbar Support","slug":"ergonomic-mesh-office-chair-with-lumbar-support-399","sku":"ERGONOMI-5991","type":"simple","price":289,"compare_at_price":349,"discount_percentage":17,"is_in_stock":true,"stock_quantity":22,"is_featured":true,"average_rating":4.5,"reviews_count":2,"thumbnail":null,"category":{"id":14,"name":"Workspace & Office","slug":"workspace-office"},"brand":{"id":7,"name":"Logitech","slug":"logitech"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":33,"name":"Breville Barista Touch Espresso Machine","slug":"breville-barista-touch-espresso-machine-185","sku":"BREVILLE-5145","type":"simple","price":999.95,"compare_at_price":1099.95,"discount_percentage":9,"is_in_stock":true,"stock_quantity":12,"is_featured":true,"average_rating":4.67,"reviews_count":3,"thumbnail":null,"category":{"id":13,"name":"Kitchen Appliances","slug":"kitchen-appliances"},"brand":{"id":6,"name":"Dell","slug":"dell"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":31,"name":"Philips Hue Smart Bridge & Bulb Starter Kit","slug":"philips-hue-smart-bridge-bulb-starter-kit-168","sku":"PHILIPS-6314","type":"simple","price":159.99,"compare_at_price":189.99,"discount_percentage":16,"is_in_stock":true,"stock_quantity":35,"is_featured":true,"average_rating":5,"reviews_count":2,"thumbnail":null,"category":{"id":12,"name":"Smart Home Devices","slug":"smart-home-devices"},"brand":{"id":1,"name":"Apple","slug":"apple"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":28,"name":"Adidas Samba OG Shoes","slug":"adidas-samba-og-shoes-626","sku":"ADIDAS-S-6172","type":"variable","price":100,"compare_at_price":120,"discount_percentage":17,"is_in_stock":true,"stock_quantity":95,"is_featured":true,"average_rating":5,"reviews_count":1,"thumbnail":null,"category":{"id":9,"name":"Footwear & Sneakers","slug":"footwear-sneakers"},"brand":{"id":5,"name":"Adidas","slug":"adidas"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":27,"name":"Nike Air Force 1 07 Classic","slug":"nike-air-force-1-07-classic-995","sku":"NIKE-AIR-5126","type":"variable","price":115,"compare_at_price":130,"discount_percentage":12,"is_in_stock":true,"stock_quantity":110,"is_featured":true,"average_rating":4.67,"reviews_count":3,"thumbnail":null,"category":{"id":9,"name":"Footwear & Sneakers","slug":"footwear-sneakers"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":26,"name":"Zara Oversized Double-Breasted Blazer","slug":"zara-oversized-double-breasted-blazer-681","sku":"ZARA-OVE-2393","type":"simple","price":119,"compare_at_price":139,"discount_percentage":14,"is_in_stock":true,"stock_quantity":40,"is_featured":true,"average_rating":4,"reviews_count":1,"thumbnail":null,"category":{"id":8,"name":"Women''s Clothing","slug":"womens-clothing"},"brand":{"id":9,"name":"Zara","slug":"zara"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":24,"name":"Nike Zenvy Gentle-Support High-Waisted Leggings","slug":"nike-zenvy-gentle-support-high-waisted-leggings-933","sku":"NIKE-ZEN-6438","type":"variable","price":95,"compare_at_price":110,"discount_percentage":14,"is_in_stock":true,"stock_quantity":70,"is_featured":true,"average_rating":4.33,"reviews_count":3,"thumbnail":null,"category":{"id":8,"name":"Women''s Clothing","slug":"womens-clothing"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"},{"id":21,"name":"Nike Club Fleece Pullover Hoodie","slug":"nike-club-fleece-pullover-hoodie-888","sku":"NIKE-CLU-1090","type":"variable","price":65,"compare_at_price":75,"discount_percentage":13,"is_in_stock":true,"stock_quantity":90,"is_featured":true,"average_rating":4.5,"reviews_count":2,"thumbnail":null,"category":{"id":7,"name":"Men''s Clothing","slug":"mens-clothing"},"brand":{"id":4,"name":"Nike","slug":"nike"},"created_at":"2026-09-05T10:52:00+00:00"}]}'
+        content: '{"status":true,"message":"Featured products fetched successfully.","code":200,"data":[]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -5587,7 +6235,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Category tree fetched successfully.","code":200,"data":[{"id":1,"parent_id":null,"name":"Electronics","slug":"electronics","description":"Explore premium collection of Electronics","icon":"fa-tv","image":null,"order":1,"is_active":true,"is_featured":true,"children":[{"id":2,"parent_id":1,"name":"Smartphones & Accessories","slug":"smartphones-accessories","description":"Best selection of Smartphones & Accessories","icon":null,"image":null,"order":1,"is_active":true,"is_featured":true,"children":[]},{"id":3,"parent_id":1,"name":"Laptops & Computers","slug":"laptops-computers","description":"Best selection of Laptops & Computers","icon":null,"image":null,"order":2,"is_active":true,"is_featured":true,"children":[]},{"id":4,"parent_id":1,"name":"Audio & Headphones","slug":"audio-headphones","description":"Best selection of Audio & Headphones","icon":null,"image":null,"order":3,"is_active":true,"is_featured":true,"children":[]},{"id":5,"parent_id":1,"name":"Gaming & Consoles","slug":"gaming-consoles","description":"Best selection of Gaming & Consoles","icon":null,"image":null,"order":4,"is_active":true,"is_featured":true,"children":[]}]},{"id":6,"parent_id":null,"name":"Fashion & Apparel","slug":"fashion-apparel","description":"Explore premium collection of Fashion & Apparel","icon":"fa-tshirt","image":null,"order":2,"is_active":true,"is_featured":true,"children":[{"id":7,"parent_id":6,"name":"Men''s Clothing","slug":"mens-clothing","description":"Best selection of Men''s Clothing","icon":null,"image":null,"order":1,"is_active":true,"is_featured":true,"children":[]},{"id":8,"parent_id":6,"name":"Women''s Clothing","slug":"womens-clothing","description":"Best selection of Women''s Clothing","icon":null,"image":null,"order":2,"is_active":true,"is_featured":true,"children":[]},{"id":9,"parent_id":6,"name":"Footwear & Sneakers","slug":"footwear-sneakers","description":"Best selection of Footwear & Sneakers","icon":null,"image":null,"order":3,"is_active":true,"is_featured":true,"children":[]},{"id":10,"parent_id":6,"name":"Watches & Accessories","slug":"watches-accessories","description":"Best selection of Watches & Accessories","icon":null,"image":null,"order":4,"is_active":true,"is_featured":true,"children":[]}]},{"id":11,"parent_id":null,"name":"Home & Lifestyle","slug":"home-lifestyle","description":"Explore premium collection of Home & Lifestyle","icon":"fa-couch","image":null,"order":3,"is_active":true,"is_featured":true,"children":[{"id":12,"parent_id":11,"name":"Smart Home Devices","slug":"smart-home-devices","description":"Best selection of Smart Home Devices","icon":null,"image":null,"order":1,"is_active":true,"is_featured":true,"children":[]},{"id":13,"parent_id":11,"name":"Kitchen Appliances","slug":"kitchen-appliances","description":"Best selection of Kitchen Appliances","icon":null,"image":null,"order":2,"is_active":true,"is_featured":true,"children":[]},{"id":14,"parent_id":11,"name":"Workspace & Office","slug":"workspace-office","description":"Best selection of Workspace & Office","icon":null,"image":null,"order":3,"is_active":true,"is_featured":true,"children":[]}]}]}'
+        content: '{"status":true,"message":"Category tree fetched successfully.","code":200,"data":[]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -5679,7 +6327,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Brands fetched successfully.","code":200,"data":[{"id":5,"name":"Adidas","slug":"adidas","logo":null,"website":"https:\/\/adidas.com","description":"Official products from Adidas","is_active":true,"is_featured":true,"products_count":3},{"id":1,"name":"Apple","slug":"apple","logo":null,"website":"https:\/\/apple.com","description":"Official products from Apple","is_active":true,"is_featured":true,"products_count":7},{"id":8,"name":"Bose","slug":"bose","logo":null,"website":"https:\/\/bose.com","description":"Official products from Bose","is_active":true,"is_featured":false,"products_count":2},{"id":6,"name":"Dell","slug":"dell","logo":null,"website":"https:\/\/dell.com","description":"Official products from Dell","is_active":true,"is_featured":false,"products_count":3},{"id":7,"name":"Logitech","slug":"logitech","logo":null,"website":"https:\/\/logitech.com","description":"Official products from Logitech","is_active":true,"is_featured":true,"products_count":4},{"id":4,"name":"Nike","slug":"nike","logo":null,"website":"https:\/\/nike.com","description":"Official products from Nike","is_active":true,"is_featured":true,"products_count":5},{"id":10,"name":"Puma","slug":"puma","logo":null,"website":"https:\/\/puma.com","description":"Official products from Puma","is_active":true,"is_featured":false,"products_count":2},{"id":2,"name":"Samsung","slug":"samsung","logo":null,"website":"https:\/\/samsung.com","description":"Official products from Samsung","is_active":true,"is_featured":true,"products_count":3},{"id":3,"name":"Sony","slug":"sony","logo":null,"website":"https:\/\/sony.com","description":"Official products from Sony","is_active":true,"is_featured":true,"products_count":4},{"id":9,"name":"Zara","slug":"zara","logo":null,"website":"https:\/\/zara.com","description":"Official products from Zara","is_active":true,"is_featured":false,"products_count":2}]}'
+        content: '{"status":true,"message":"Brands fetched successfully.","code":200,"data":[]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -5999,7 +6647,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Cart retrieved successfully.","code":200,"data":{"id":2,"guest_token":"a0683cc7-a932-4210-9be8-e1b212363095","items_count":0,"subtotal":0,"discount_amount":0,"coupon_code":null,"grand_total":0,"items":[]}}'
+        content: '{"status":true,"message":"Cart retrieved successfully.","code":200,"data":{"id":1,"guest_token":"e221d450-aa7e-4187-bf21-a5ab640bf20a","items_count":0,"subtotal":0,"discount_amount":0,"coupon_code":null,"grand_total":0,"items":[]}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -6402,7 +7050,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: percentage
+        example: fixed
         type: string
         enumValues:
           - percentage
@@ -6470,7 +7118,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-06T06:09:29'
+        example: '2026-09-07T03:48:34'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -6481,7 +7129,7 @@ endpoints:
         name: end_date
         description: 'Must be a valid date. Must be a date after or equal to <code>start_date</code>.'
         required: false
-        example: '2052-09-29'
+        example: '2052-09-30'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -6492,7 +7140,7 @@ endpoints:
         name: is_active
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -6500,15 +7148,15 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       code: b
-      type: percentage
+      type: fixed
       value: 39
       min_order_amount: 84
       max_discount_amount: 12
       usage_limit: 27
       usage_limit_per_user: 35
-      start_date: '2026-09-06T06:09:29'
-      end_date: '2052-09-29'
-      is_active: true
+      start_date: '2026-09-07T03:48:34'
+      end_date: '2052-09-30'
+      is_active: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -6619,7 +7267,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: percentage
+        example: fixed
         type: string
         enumValues:
           - percentage
@@ -6687,7 +7335,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-06T06:09:29'
+        example: '2026-09-07T03:48:34'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -6698,7 +7346,7 @@ endpoints:
         name: end_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-06T06:09:29'
+        example: '2026-09-07T03:48:34'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -6716,14 +7364,14 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: percentage
+      type: fixed
       value: 27
       min_order_amount: 39
       max_discount_amount: 84
       usage_limit: 66
       usage_limit_per_user: 27
-      start_date: '2026-09-06T06:09:29'
-      end_date: '2026-09-06T06:09:29'
+      start_date: '2026-09-07T03:48:34'
+      end_date: '2026-09-07T03:48:34'
       is_active: false
     fileParameters: []
     responses: []
@@ -6804,7 +7452,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Shipping methods fetched successfully.","code":200,"data":[{"id":3,"name":"Local Store Pickup","code":"pickup","cost":0,"free_shipping_threshold":null,"estimated_delivery_days":"Ready in 2 hours","description":"Pick up your order directly from our nearest hub.","is_active":true},{"id":1,"name":"Standard Ground Shipping","code":"standard","cost":5,"free_shipping_threshold":100,"estimated_delivery_days":"3-5 business days","description":"Reliable and cost-effective ground delivery across the nation.","is_active":true},{"id":2,"name":"Express Priority Air","code":"express","cost":15,"free_shipping_threshold":250,"estimated_delivery_days":"1-2 business days","description":"Fast expedited delivery with priority handling.","is_active":true}]}'
+        content: '{"status":true,"message":"Shipping methods fetched successfully.","code":200,"data":[]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -6883,7 +7531,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: shipping
+        example: billing
         type: string
         enumValues:
           - shipping
@@ -6984,14 +7632,14 @@ endpoints:
         name: is_default
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: shipping
+      type: billing
       recipient_name: b
       phone: 'n'
       street_address: g
@@ -7000,7 +7648,7 @@ endpoints:
       state: i
       postal_code: yvdljnikhwaykcmy
       country: u
-      is_default: true
+      is_default: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -7048,7 +7696,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: shipping
+        example: billing
         type: string
         enumValues:
           - shipping
@@ -7156,7 +7804,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: shipping
+      type: billing
       recipient_name: b
       phone: 'n'
       street_address: g
@@ -7946,14 +8594,14 @@ endpoints:
         name: comment_id
         description: 'The ID of the comment.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      comment_id: 1
+      comment_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -8323,7 +8971,7 @@ endpoints:
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
       type:
         custom: []
@@ -8334,7 +8982,7 @@ endpoints:
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
       subject_id:
         custom: []
@@ -8345,7 +8993,7 @@ endpoints:
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
       id:
         custom: []
@@ -8356,7 +9004,7 @@ endpoints:
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
       collection:
         custom: []
@@ -8373,6 +9021,3283 @@ endpoints:
       subject_type: architecto
       type: architecto
       collection: 'n'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/payments/gateways
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List active payment gateways'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"status":true,"message":"Available payment gateways retrieved successfully","code":200,"data":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+      - POST
+    uri: 'api/payments/verify/{paymentId}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Verify payment return callback / redirect'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      paymentId:
+        custom: []
+        name: paymentId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      paymentId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 400
+        content: '{"status":false,"message":"No query results for model [App\\Modules\\Payment\\Models\\Payment].","code":400,"errors":{"error":400}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+      - POST
+    uri: 'api/payments/cancel/{paymentId}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Cancel payment return callback'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      paymentId:
+        custom: []
+        name: paymentId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      paymentId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"status":false,"message":"No query results for model [App\\Modules\\Payment\\Models\\Payment].","code":404,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/payments/webhooks/{gateway}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Handle incoming gateway IPN / Webhooks'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      gateway:
+        custom: []
+        name: gateway
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      gateway: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/payments
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "User's payment history"
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/payments/{paymentId}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Single payment details'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      paymentId:
+        custom: []
+        name: paymentId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      paymentId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/payments/initiate
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Initiate payment for an order or payable item'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      payable_type:
+        custom: []
+        name: payable_type
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      payable_id:
+        custom: []
+        name: payable_id
+        description: ''
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      amount:
+        custom: []
+        name: amount
+        description: 'Must be at least 0.01.'
+        required: true
+        example: 39
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      method:
+        custom: []
+        name: method
+        description: ''
+        required: true
+        example: cod
+        type: string
+        enumValues:
+          - stripe
+          - paypal
+          - sslcommerz
+          - bkash
+          - wallet
+          - manual_bank
+          - cod
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      currency:
+        custom: []
+        name: currency
+        description: 'Must be 3 characters.'
+        required: false
+        example: gzm
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      metadata:
+        custom: []
+        name: metadata
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      payable_type: architecto
+      payable_id: 16
+      amount: 39
+      method: cod
+      currency: gzm
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/wallet
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Get user's wallet overview"
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/wallet/transactions
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Get user's wallet transactions"
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/wallet/deposit
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Deposit into wallet via payment gateway'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      amount:
+        custom: []
+        name: amount
+        description: 'Must be at least 1. Must not be greater than 1000000.'
+        required: true
+        example: 1
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      method:
+        custom: []
+        name: method
+        description: ''
+        required: true
+        example: manual_bank
+        type: string
+        enumValues:
+          - stripe
+          - paypal
+          - sslcommerz
+          - bkash
+          - manual_bank
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      currency:
+        custom: []
+        name: currency
+        description: 'Must be 3 characters.'
+        required: false
+        example: ngz
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      amount: 1
+      method: manual_bank
+      currency: ngz
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/wallet/transfer
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Peer-to-peer transfer to another user'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      recipient_email:
+        custom: []
+        name: recipient_email
+        description: 'This field is required when <code>recipient_id</code> is not present. Must be a valid email address. Must match an existing stored value.'
+        required: false
+        example: gbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      recipient_id:
+        custom: []
+        name: recipient_id
+        description: 'This field is required when <code>recipient_email</code> is not present. Must match an existing stored value.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      amount:
+        custom: []
+        name: amount
+        description: 'Must be at least 0.5. Must not be greater than 50000.'
+        required: true
+        example: 22
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      note:
+        custom: []
+        name: note
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      recipient_email: gbailey@example.net
+      recipient_id: 16
+      amount: 22
+      note: g
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/withdrawals
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "User's withdrawal requests"
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/withdrawals
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Request a withdrawal'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      amount:
+        custom: []
+        name: amount
+        description: 'Must be at least 5. Must not be greater than 100000.'
+        required: true
+        example: 1
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      method:
+        custom: []
+        name: method
+        description: 'Must not be greater than 50 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      account_details:
+        custom: []
+        name: account_details
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      account_details.account_number:
+        custom: []
+        name: account_details.account_number
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      account_details.account_name:
+        custom: []
+        name: account_details.account_name
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      account_details.bank_name:
+        custom: []
+        name: account_details.bank_name
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      account_details.branch:
+        custom: []
+        name: account_details.branch
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      amount: 1
+      method: 'n'
+      account_details:
+        account_number: architecto
+        account_name: architecto
+        bank_name: architecto
+        branch: architecto
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/withdrawals/{id}/cancel'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Cancel a pending withdrawal request'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the withdrawal.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/plans
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List all public active subscription plans'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"status":true,"message":"Subscription plans retrieved successfully","code":200,"data":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/plans/{slug}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Plan details with feature matrix'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      slug:
+        custom: []
+        name: slug
+        description: 'The slug of the plan.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      slug: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"status":false,"message":"No query results for model [App\\Modules\\Subscription\\Models\\Plan].","code":404,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/subscriptions/current
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Get user's current subscription & usages"
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/subscriptions/subscribe
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Subscribe to a plan'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      plan_id:
+        custom: []
+        name: plan_id
+        description: 'Must match an existing stored value.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      payment_method:
+        custom: []
+        name: payment_method
+        description: ''
+        required: false
+        example: wallet
+        type: string
+        enumValues:
+          - wallet
+          - stripe
+          - paypal
+          - sslcommerz
+          - bkash
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      auto_renew:
+        custom: []
+        name: auto_renew
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      plan_id: 16
+      payment_method: wallet
+      auto_renew: false
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/subscriptions/cancel
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Cancel active subscription'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/subscriptions/resume
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Resume a canceled subscription on grace period'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/subscriptions/features/{featureCode}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Check access or remaining usage for a specific feature code'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      featureCode:
+        custom: []
+        name: featureCode
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      featureCode: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/rewards/tiers
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List all reward tiers & perks'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"status":true,"message":"Reward tiers retrieved","code":200,"data":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/rewards/leaderboard
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Points Leaderboard'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"status":true,"message":"Leaderboard retrieved","code":200,"data":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/rewards
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "User's reward profile overview"
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/rewards/checkin
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Claim daily check-in bonus'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/rewards/redeem
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Convert points to in-app wallet balance'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      points:
+        custom: []
+        name: points
+        description: 'Must be at least 100. Must not be greater than 1000000.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      points: 1
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/rewards/history
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Point transaction history'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/rewards/badges
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List all badges with user unlock status'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/tickets/categories
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List active ticket categories.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/tickets
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "List user's tickets."
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/tickets
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Create a new ticket.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      subject:
+        custom: []
+        name: subject
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      category_id:
+        custom: []
+        name: category_id
+        description: 'Must match an existing stored value.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      priority:
+        custom: []
+        name: priority
+        description: ''
+        required: false
+        example: urgent
+        type: string
+        enumValues:
+          - low
+          - medium
+          - high
+          - urgent
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      message:
+        custom: []
+        name: message
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attachments:
+        custom: []
+        name: attachments
+        description: 'Must be a file. Must not be greater than 10240 kilobytes.'
+        required: false
+        example:
+          - null
+        type: 'file[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      subject: b
+      priority: urgent
+      message: architecto
+    fileParameters:
+      attachments:
+        - null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/tickets/{id}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show single ticket details with thread.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the ticket.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/tickets/{ticket_id}/reply'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Reply to a ticket.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters:
+      ticket_id:
+        custom: []
+        name: ticket_id
+        description: 'The ID of the ticket.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      ticket_id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      message:
+        custom: []
+        name: message
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      attachments:
+        custom: []
+        name: attachments
+        description: 'Must be a file. Must not be greater than 10240 kilobytes.'
+        required: false
+        example:
+          - null
+        type: 'file[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      message: architecto
+    fileParameters:
+      attachments:
+        - null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/tickets/{ticket_id}/close'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Close a ticket.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      ticket_id:
+        custom: []
+        name: ticket_id
+        description: 'The ID of the ticket.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      ticket_id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/reviews
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List reviews for a specific reviewable item.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reviewable_type:
+        custom: []
+        name: reviewable_type
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reviewable_id:
+        custom: []
+        name: reviewable_id
+        description: ''
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      reviewable_type: architecto
+      reviewable_id: 16
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 400
+        content: '{"status":false,"message":"Invalid reviewable type.","code":400,"errors":{"error":422}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/reviews/summary
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get review summary breakdown for an item.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reviewable_type:
+        custom: []
+        name: reviewable_type
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reviewable_id:
+        custom: []
+        name: reviewable_id
+        description: ''
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      reviewable_type: architecto
+      reviewable_id: 16
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 400
+        content: '{"status":false,"message":"Invalid reviewable type.","code":400,"errors":{"error":422}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/reviews
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Create or update a review.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reviewable_type:
+        custom: []
+        name: reviewable_type
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reviewable_id:
+        custom: []
+        name: reviewable_id
+        description: ''
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      rating:
+        custom: []
+        name: rating
+        description: 'Must be at least 1. Must not be greater than 5.'
+        required: true
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      title:
+        custom: []
+        name: title
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      comment:
+        custom: []
+        name: comment
+        description: 'Must be at least 5 characters.'
+        required: true
+        example: zmiyvdljnikhwaykcmyuwpwlvqwrsitcpscqldzsnrwtujwvlxjklqppwqbewtnnoqitpxntltcv
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      criteria_ratings:
+        custom: []
+        name: criteria_ratings
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      media:
+        custom: []
+        name: media
+        description: 'Must be a file. Must not be greater than 10240 kilobytes.'
+        required: false
+        example:
+          - null
+        type: 'file[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      reviewable_type: architecto
+      reviewable_id: 16
+      rating: 2
+      title: g
+      comment: zmiyvdljnikhwaykcmyuwpwlvqwrsitcpscqldzsnrwtujwvlxjklqppwqbewtnnoqitpxntltcv
+    fileParameters:
+      media:
+        - null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/reviews/{review_id}/vote'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Vote on review helpfulness.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      review_id:
+        custom: []
+        name: review_id
+        description: 'The ID of the review.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      review_id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      is_helpful:
+        custom: []
+        name: is_helpful
+        description: ''
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      is_helpful: true
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/reviews/{id}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Delete user's own review."
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the review.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/affiliate/track
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Track an inbound referral visit (Public).'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      ref:
+        custom: []
+        name: ref
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      landing_page:
+        custom: []
+        name: landing_page
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      campaign:
+        custom: []
+        name: campaign
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      ref: architecto
+      landing_page: architecto
+      campaign: architecto
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/affiliate/account
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Get or create current user's affiliate account."
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/affiliate/referrals
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "List affiliate's referral visits and signups."
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/affiliate/commissions
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "List affiliate's commissions."
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: api/v1/affiliate/slug
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update custom referral vanity slug.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      custom_slug:
+        custom: []
+        name: custom_slug
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/affiliate/payout
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Request payout from affiliate balance directly to Wallet.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      amount:
+        custom: []
+        name: amount
+        description: 'Must be at least 1.'
+        required: true
+        example: 16
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      amount: 16
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendors
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List active vendor stores (Public).'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"status":true,"message":"Vendor stores retrieved successfully.","code":200,"data":[],"pagination":{"type":"offset","current_page":1,"last_page":1,"per_page":15,"total":0,"from":null,"to":null,"has_more":false,"path":"http:\/\/one_dashboard.test\/api\/v1\/vendors"}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/vendors/store/{slug}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show single vendor store profile (Public).'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      slug:
+        custom: []
+        name: slug
+        description: 'The slug of the store.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      slug: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"status":false,"message":"Vendor store not found or not active.","code":404,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendors/my-store
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Get current user's vendor store."
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/vendors/register
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Register a new vendor store.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      slug:
+        custom: []
+        name: slug
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      description:
+        custom: []
+        name: description
+        description: ''
+        required: false
+        example: 'Eius et animi quos velit et.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      phone:
+        custom: []
+        name: phone
+        description: 'Must not be greater than 30 characters.'
+        required: false
+        example: v
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: jdach@example.org
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      address:
+        custom: []
+        name: address
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: i
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      logo:
+        custom: []
+        name: logo
+        description: 'Must be an image. Must not be greater than 5120 kilobytes.'
+        required: false
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      banner:
+        custom: []
+        name: banner
+        description: 'Must be an image. Must not be greater than 10240 kilobytes.'
+        required: false
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      name: b
+      slug: 'n'
+      description: 'Eius et animi quos velit et.'
+      phone: v
+      email: jdach@example.org
+      address: i
+    fileParameters:
+      logo: null
+      banner: null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/vendors/update
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Update current user's vendor store."
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      slug:
+        custom: []
+        name: slug
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      description:
+        custom: []
+        name: description
+        description: ''
+        required: false
+        example: 'Eius et animi quos velit et.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      phone:
+        custom: []
+        name: phone
+        description: 'Must not be greater than 30 characters.'
+        required: false
+        example: v
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: jdach@example.org
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      address:
+        custom: []
+        name: address
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: i
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      logo:
+        custom: []
+        name: logo
+        description: 'Must be an image. Must not be greater than 5120 kilobytes.'
+        required: false
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      banner:
+        custom: []
+        name: banner
+        description: 'Must be an image. Must not be greater than 10240 kilobytes.'
+        required: false
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      name: b
+      description: 'Eius et animi quos velit et.'
+      phone: v
+      email: jdach@example.org
+      address: i
+    fileParameters:
+      logo: null
+      banner: null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendors/payouts
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List vendor store payouts.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/vendors/payouts/request
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Request a store payout to Wallet.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      amount:
+        custom: []
+        name: amount
+        description: 'Must be at least 1.'
+        required: true
+        example: 16
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      method:
+        custom: []
+        name: method
+        description: ''
+        required: false
+        example: wallet
+        type: string
+        enumValues:
+          - wallet
+          - bank_transfer
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      amount: 16
+      method: wallet
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/ai/faqs
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List knowledge-base FAQs.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"status":true,"message":"Data retrieved successfully.","code":200,"data":[],"pagination":{"type":"offset","current_page":1,"last_page":1,"per_page":20,"total":0,"from":null,"to":null,"has_more":false,"path":"http:\/\/one_dashboard.test\/api\/v1\/ai\/faqs"}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/ai/chat
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Send a message to the AI Assistant.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      message:
+        custom: []
+        name: message
+        description: 'Must not be greater than 4000 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      conversation_id:
+        custom: []
+        name: conversation_id
+        description: 'Must match an existing stored value.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      persona:
+        custom: []
+        name: persona
+        description: ''
+        required: false
+        example: support_agent
+        type: string
+        enumValues:
+          - support_agent
+          - shopping_assistant
+          - content_writer
+          - ticket_triage
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      provider:
+        custom: []
+        name: provider
+        description: ''
+        required: false
+        example: gemini
+        type: string
+        enumValues:
+          - gemini
+          - openai
+          - knowledge_base
+          - mock
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      message: b
+      conversation_id: 16
+      persona: support_agent
+      provider: gemini
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/ai/conversations
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List user conversations.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/ai/conversations/{id}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show single conversation with messages.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the conversation.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/ai/conversations/{id}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Delete conversation.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the conversation.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/ai/ticket-suggest
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Suggest ticket resolution for support staff or user.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      ticket_id:
+        custom: []
+        name: ticket_id
+        description: 'Must match an existing stored value.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      ticket_id: 16
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/ai/ticket-triage
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Triage incoming ticket / classify urgency and category.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      subject:
+        custom: []
+        name: subject
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      message:
+        custom: []
+        name: message
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      subject: b
+      message: architecto
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/ai/generate-content
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Generate content (product description, marketing copy, etc.).'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      type:
+        custom: []
+        name: type
+        description: ''
+        required: true
+        example: seo_meta
+        type: string
+        enumValues:
+          - product_description
+          - marketing_email
+          - seo_meta
+          - social_post
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      prompt:
+        custom: []
+        name: prompt
+        description: 'Must not be greater than 2000 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      context:
+        custom: []
+        name: context
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      type: seo_meta
+      prompt: b
     fileParameters: []
     responses: []
     responseFields: []
@@ -8849,7 +12774,7 @@ endpoints:
         name: provider
         description: ''
         required: true
-        example: google
+        example: facebook
         type: string
         enumValues:
           - google
@@ -8860,7 +12785,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       token: architecto
-      provider: google
+      provider: facebook
     fileParameters: []
     responses: []
     responseFields: []
@@ -8907,7 +12832,7 @@ endpoints:
         name: purpose
         description: ''
         required: true
-        example: password_reset
+        example: email_verification
         type: string
         enumValues:
           - email_verification
@@ -8917,7 +12842,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       token: architecto
-      purpose: password_reset
+      purpose: email_verification
     fileParameters: []
     responses:
       -
@@ -9082,14 +13007,14 @@ endpoints:
         name: user_id
         description: 'The ID of the user.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      user_id: 1
+      user_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -9665,7 +13590,7 @@ endpoints:
         name: purpose
         description: ''
         required: true
-        example: email_verification
+        example: password_reset
         type: string
         enumValues:
           - email_verification
@@ -9700,7 +13625,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      purpose: email_verification
+      purpose: password_reset
       type: otp
       channel: email
     fileParameters: []
@@ -9808,7 +13733,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: token
+        example: otp
         type: string
         enumValues:
           - otp
@@ -9831,7 +13756,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       purpose: email_verification
-      type: token
+      type: otp
       channel: sms
     fileParameters: []
     responses: []
@@ -9994,654 +13919,6 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/firebase/tokens
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get all active device sessions for authenticated user'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/firebase/tokens
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Save / Update Firebase Token & Register Device Session'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      token:
-        custom: []
-        name: token
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      device_id:
-        custom: []
-        name: device_id
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      device_name:
-        custom: []
-        name: device_name
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: 'n'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      platform:
-        custom: []
-        name: platform
-        description: 'Must not be greater than 50 characters.'
-        required: false
-        example: g
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      token: architecto
-      device_id: architecto
-      device_name: 'n'
-      platform: g
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - DELETE
-    uri: api/firebase/tokens/others
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Revoke All Other Devices (except the current one)'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - DELETE
-    uri: api/firebase/tokens/all
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Revoke All Devices for current user'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - DELETE
-    uri: 'api/firebase/tokens/{deviceId?}'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Revoke / Remove a Specific Device Session'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      deviceId:
-        custom: []
-        name: deviceId
-        description: ''
-        required: false
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      deviceId: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/firebase/tokens/touch
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Refresh Last Activity & Device Info'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      device_id:
-        custom: []
-        name: device_id
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      device_id: architecto
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/firebase/firebase-token
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Save / Update Firebase Token & Register Device Session'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      token:
-        custom: []
-        name: token
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      device_id:
-        custom: []
-        name: device_id
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      device_name:
-        custom: []
-        name: device_name
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: 'n'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      platform:
-        custom: []
-        name: platform
-        description: 'Must not be greater than 50 characters.'
-        required: false
-        example: g
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      token: architecto
-      device_id: architecto
-      device_name: 'n'
-      platform: g
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/firebase/firebase-token/delete
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Revoke / Remove a Specific Device Session'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/firebase/firebase-token/touch
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Refresh Last Activity & Device Info'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      device_id:
-        custom: []
-        name: device_id
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      device_id: architecto
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/notifications
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Notification List'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/notifications/unread-count
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Unread Count'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"status":false,"message":"Unauthenticated.","code":401,"errors":[]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: 'api/notifications/{notification_id}/read'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Mark as Read'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      notification_id:
-        custom: []
-        name: notification_id
-        description: 'The ID of the notification.'
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      notification_id: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/notifications/read-all
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Mark All Read'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - DELETE
-    uri: api/notifications/destroy-all
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Delete All Notifications'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - DELETE
-    uri: 'api/notifications/{id}'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Delete Notification'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        custom: []
-        name: id
-        description: 'The ID of the notification.'
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      id: architecto
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
