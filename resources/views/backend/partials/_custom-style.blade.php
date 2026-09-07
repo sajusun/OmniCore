@@ -121,4 +121,25 @@
     .btn i, .btn svg {
         color: inherit !important;
     }
+
+    /* Remove dots/bullets (::before pseudo-elements) from sidebar sub-menu items */
+    .slide-menu a::before,
+    .slide-menu a:before,
+    .slide-menu li a::before,
+    .slide-menu li a:before,
+    .slide-menu li .slide-item::before,
+    .slide-menu li .slide-item:before,
+    .slide-item::before,
+    .slide-item:before,
+    .sub-slide-item::before,
+    .sub-slide-item:before,
+    .sub-slide-item2::before,
+    .sub-slide-item2:before,
+    .sub-side-menu__item::before,
+    .sub-side-menu__item:before,
+    .sub-side-menu__item2::before,
+    .sub-side-menu__item2:before {
+        content: none !important;
+        display: none !important;
+    }
 </style>
