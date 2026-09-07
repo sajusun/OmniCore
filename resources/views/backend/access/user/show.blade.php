@@ -83,61 +83,61 @@
             </div>
         </div>
 
-        {{-- Events Card --}}
+        {{-- Orders Card --}}
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="card border-0 shadow-sm h-100" style="border-radius: 0; border-top: 4px solid #10b981 !important;">
                 <div class="card-body p-4 d-flex flex-column justify-content-between">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div>
-                            <span class="text-muted small text-uppercase fw-bold">User Events</span>
-                            <h2 class="fw-bold text-dark mb-0 mt-1">{{ $user->events_count ?? 0 }}</h2>
+                            <span class="text-muted small text-uppercase fw-bold">User Orders</span>
+                            <h2 class="fw-bold text-dark mb-0 mt-1">{{ $ordersCount ?? 0 }}</h2>
                         </div>
                         <div class="p-3 bg-success-light text-success rounded-circle">
-                            <i class="fa fa-calendar-days fs-3" style="color: #10b981;"></i>
+                            <i class="fa fa-shopping-cart fs-3" style="color: #10b981;"></i>
                         </div>
                     </div>
-                    <a href="{{ route('admin.events.index', ['user' => $user->id]) }}" class="btn btn-success w-100 mt-2 fw-semibold">
-                        <i class="fa fa-eye me-1"></i> View User Events
+                    <a href="{{ route('admin.orders.index', ['user' => $user->id]) }}" class="btn btn-success w-100 mt-2 fw-semibold">
+                        <i class="fa fa-eye me-1"></i> View User Orders
                     </a>
                 </div>
             </div>
         </div>
 
-        {{-- Clubs Card --}}
+        {{-- Tickets Card --}}
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="card border-0 shadow-sm h-100" style="border-radius: 0; border-top: 4px solid #06b6d4 !important;">
                 <div class="card-body p-4 d-flex flex-column justify-content-between">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div>
-                            <span class="text-muted small text-uppercase fw-bold">User Clubs</span>
-                            <h2 class="fw-bold text-dark mb-0 mt-1">{{ $user->clubs_count ?? 0 }}</h2>
+                            <span class="text-muted small text-uppercase fw-bold">User Tickets</span>
+                            <h2 class="fw-bold text-dark mb-0 mt-1">{{ $user->tickets_count ?? 0 }}</h2>
                         </div>
                         <div class="p-3 bg-info-light text-info rounded-circle">
-                            <i class="fa fa-shield-halved fs-3" style="color: #06b6d4;"></i>
+                            <i class="fa fa-ticket fs-3" style="color: #06b6d4;"></i>
                         </div>
                     </div>
-                    <a href="{{ route('admin.clubs.index', ['user' => $user->id]) }}" class="btn btn-info w-100 mt-2 fw-semibold">
-                        <i class="fa fa-eye me-1"></i> View User Clubs
+                    <a href="{{ route('admin.tickets.index', ['user' => $user->id]) }}" class="btn btn-info w-100 mt-2 fw-semibold">
+                        <i class="fa fa-eye me-1"></i> View User Tickets
                     </a>
                 </div>
             </div>
         </div>
 
-        {{-- Vehicles Card --}}
+        {{-- Reviews Card --}}
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="card border-0 shadow-sm h-100" style="border-radius: 0; border-top: 4px solid #f59e0b !important;">
                 <div class="card-body p-4 d-flex flex-column justify-content-between">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div>
-                            <span class="text-muted small text-uppercase fw-bold">User Vehicles</span>
-                            <h2 class="fw-bold text-dark mb-0 mt-1">{{ $user->vehicles_count ?? 0 }}</h2>
+                            <span class="text-muted small text-uppercase fw-bold">User Reviews</span>
+                            <h2 class="fw-bold text-dark mb-0 mt-1">{{ $user->reviews_count ?? 0 }}</h2>
                         </div>
                         <div class="p-3 bg-warning-light text-warning rounded-circle">
-                            <i class="fa fa-car fs-3" style="color: #f59e0b;"></i>
+                            <i class="fa fa-star fs-3" style="color: #f59e0b;"></i>
                         </div>
                     </div>
-                    <a href="{{ route('admin.vehicles.index', ['user' => $user->id]) }}" class="btn btn-warning w-100 mt-2 fw-semibold">
-                        <i class="fa fa-eye me-1"></i> View User Vehicles
+                    <a href="{{ route('admin.reviews.index', ['user' => $user->id]) }}" class="btn btn-warning w-100 mt-2 fw-semibold">
+                        <i class="fa fa-eye me-1"></i> View User Reviews
                     </a>
                 </div>
             </div>

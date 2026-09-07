@@ -3,11 +3,15 @@
 namespace App\Services;
 
 use Carbon\Carbon;
-use App\Models\Club;
-use App\Models\Post;
 use App\Models\User;
-use App\Models\Event;
-use App\Models\Verification;
+use App\Modules\Auth\Models\Verification;
+use App\Modules\Order\Models\Order;
+use App\Modules\Post\Models\Post;
+use App\Modules\Product\Models\Product;
+use App\Modules\Review\Models\Review;
+use App\Modules\Subscription\Models\Subscription;
+use App\Modules\Ticket\Models\Ticket;
+use App\Modules\Vendor\Models\VendorStore;
 
 class DashboardService
 {
@@ -34,23 +38,24 @@ class DashboardService
         ];
     }
 
-    // ─── Event Stats ───────────────────────────────────────────────────────────
+    // ─── E-Commerce & Orders Stats ─────────────────────────────────────────────
 
-    public function getEventStats(): array
+    public function getEcommerceStats(): array
     {
         $now = Carbon::now();
 
         return [
-            'total_events'     => Event::count(),
-            'upcoming_events'  => Event::where('event_date', '>=', $now->toDateString())
-                ->where('status', 'published')
+            'total_orders'    => Order::count(),
+            'total_products'  => Product::count(),
+            'total_revenue'   => (float) Order::where('payment_status', 'paid')->sum('total_amount'),
+            'pending_orders'  => Order::where('status', 'pending')->count(),
+            'month_orders'    => Order::whereMonth('created_at', $now->month)
+                ->whereYear('created_at', $now->year)
                 ->count(),
-            'total_going'      => \App\Models\EventRsvp::where('status', 'going')->count(),
-            'total_interested' => \App\Models\EventRsvp::where('status', 'interested')->count(),
         ];
     }
 
-    // ─── Post Stats ────────────────────────────────────────────────────────────
+    // ─── Post & Content Stats ──────────────────────────────────────────────────
 
     public function getPostStats(): array
     {
@@ -65,13 +70,16 @@ class DashboardService
         ];
     }
 
-    // ─── Club Stats ────────────────────────────────────────────────────────────
+    // ─── Operations & Support Stats ────────────────────────────────────────────
 
-    public function getClubStats(): array
+    public function getOperationsStats(): array
     {
         return [
-            'total_clubs'     => Club::count(),
-            'total_members'   => \App\Models\ClubMember::where('status', 'approved')->count(),
+            'total_tickets'   => Ticket::count(),
+            'open_tickets'    => Ticket::whereIn('status', ['open', 'in_progress', 'pending'])->count(),
+            'total_vendors'   => VendorStore::count(),
+            'total_reviews'   => Review::count(),
+            'subscriptions'   => Subscription::where('status', 'active')->count(),
         ];
     }
 
@@ -82,12 +90,12 @@ class DashboardService
         return User::latest()->limit($limit)->get(['id', 'name', 'email', 'avatar', 'created_at', 'status']);
     }
 
-    public function getRecentEvents(int $limit = 5)
+    public function getRecentOrders(int $limit = 5)
     {
-        return Event::with('user:id,name')
+        return Order::with('user:id,name,email')
             ->latest()
             ->limit($limit)
-            ->get(['id', 'title', 'event_type', 'event_date', 'status', 'user_id', 'location']);
+            ->get();
     }
 
     public function getRecentPosts(int $limit = 5)
@@ -98,6 +106,14 @@ class DashboardService
             ->get(['id', 'title', 'status', 'user_id', 'created_at']);
     }
 
+    public function getRecentTickets(int $limit = 5)
+    {
+        return Ticket::with('user:id,name')
+            ->latest()
+            ->limit($limit)
+            ->get();
+    }
+
     // ─── Monthly Chart Data ────────────────────────────────────────────────────
 
     public function getMonthlySignups(): array
@@ -105,7 +121,7 @@ class DashboardService
         $categories = [];
         $userData   = [];
         $subData    = [];
-        $eventData  = [];
+        $orderData  = [];
         $postData   = [];
 
         for ($i = 5; $i >= 0; $i--) {
@@ -115,13 +131,15 @@ class DashboardService
             $userData[]  = User::whereMonth('created_at', $month->month)
                 ->whereYear('created_at', $month->year)
                 ->count();
-            $subData[]   = User::where('is_subscribed', true)
-                ->whereMonth('created_at', $month->month)
+
+            $subData[]   = Subscription::whereMonth('created_at', $month->month)
                 ->whereYear('created_at', $month->year)
                 ->count();
-            $eventData[] = Event::whereMonth('created_at', $month->month)
+
+            $orderData[] = Order::whereMonth('created_at', $month->month)
                 ->whereYear('created_at', $month->year)
                 ->count();
+
             $postData[]  = Post::whereMonth('created_at', $month->month)
                 ->whereYear('created_at', $month->year)
                 ->count();
@@ -132,7 +150,8 @@ class DashboardService
             'data'          => $userData,
             'users'         => $userData,
             'subscriptions' => $subData,
-            'events'        => $eventData,
+            'orders'        => $orderData,
+            'events'        => $orderData, // backward compatibility alias
             'posts'         => $postData,
         ];
     }
@@ -141,15 +160,35 @@ class DashboardService
 
     public function getDashboardMetrics(): array
     {
+        $ecommerceStats = $this->getEcommerceStats();
+        $operationsStats = $this->getOperationsStats();
+        $userStats = $this->getUserStats();
+        $postStats = $this->getPostStats();
+
         return [
-            'users'           => $this->getUserStats(),
-            'events'          => $this->getEventStats(),
-            'posts'           => $this->getPostStats(),
-            'clubs'           => $this->getClubStats(),
-            'vehicles'        => ['total_vehicles' => \App\Models\Vehicle::count()],
+            'users'           => $userStats,
+            'ecommerce'       => $ecommerceStats,
+            'posts'           => $postStats,
+            'operations'      => $operationsStats,
+            // Aliases for dashboard view compatibility
+            'events'          => [
+                'total_events'     => $ecommerceStats['total_orders'],
+                'upcoming_events'  => $ecommerceStats['pending_orders'],
+                'total_going'      => $operationsStats['total_tickets'],
+                'total_interested' => $operationsStats['open_tickets'],
+            ],
+            'clubs'           => [
+                'total_clubs'     => $operationsStats['total_vendors'],
+                'total_members'   => $operationsStats['total_reviews'],
+            ],
+            'vehicles'        => [
+                'total_vehicles'  => $ecommerceStats['total_products'],
+            ],
             'recent_users'    => $this->getRecentUsers(5),
-            'recent_events'   => $this->getRecentEvents(5),
+            'recent_events'   => $this->getRecentOrders(5),
+            'recent_orders'   => $this->getRecentOrders(5),
             'recent_posts'    => $this->getRecentPosts(5),
+            'recent_tickets'  => $this->getRecentTickets(5),
             'monthly_signups' => $this->getMonthlySignups(),
         ];
     }

@@ -92,10 +92,10 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::withCount(['events', 'clubs', 'vehicles'])->findOrFail($id);
-        $postsCount = \App\Models\Post::where('user_id', $user->id)->count();
+        $user = User::withCount(['posts', 'tickets', 'reviews'])->findOrFail($id);
+        $ordersCount = \App\Modules\Order\Models\Order::where('user_id', $user->id)->count();
 
-        return view('backend.access.user.show', compact('user', 'postsCount'));
+        return view('backend.access.user.show', compact('user', 'ordersCount'));
     }
 
     /**
