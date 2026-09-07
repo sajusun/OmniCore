@@ -19,12 +19,12 @@ class LikeService
         $morphMap = Relation::morphMap();
         $modelClass = $morphMap[$type] ?? (class_exists($type) ? $type : null);
 
-        if (!$modelClass || !class_exists($modelClass)) {
+        if (! $modelClass || ! class_exists($modelClass)) {
             throw new InvalidArgumentException("Invalid likeable type: {$type}");
         }
 
         $model = $modelClass::find($id);
-        if (!$model) {
+        if (! $model) {
             throw new InvalidArgumentException("Target model not found for {$type} #{$id}");
         }
 
@@ -126,7 +126,7 @@ class LikeService
      */
     public function isLiked(Model $model, User|int|null $user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 

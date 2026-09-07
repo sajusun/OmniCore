@@ -8,13 +8,10 @@ use App\Modules\Product\Http\Resources\CategoryResource;
 use App\Modules\Product\Models\ProductCategory;
 use App\Modules\Product\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class AdminCategoryController extends Controller
 {
-    public function __construct(protected CategoryService $categoryService)
-    {
-    }
+    public function __construct(protected CategoryService $categoryService) {}
 
     public function index(): JsonResponse
     {

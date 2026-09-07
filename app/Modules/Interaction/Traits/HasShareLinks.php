@@ -70,7 +70,7 @@ trait HasShareLinks
         ?User $user = null,
         string $type = 'private'
     ): ShareLink {
-        $token = 'sec_' . Str::random(32) . '_' . dechex(time());
+        $token = 'sec_'.Str::random(32).'_'.dechex(time());
 
         return $this->shareLinks()->create([
             'user_id' => $user?->id,
@@ -92,16 +92,16 @@ trait HasShareLinks
             return $this->getShareableSlug();
         }
 
-        if (!empty($this->slug)) {
+        if (! empty($this->slug)) {
             return (string) $this->slug;
         }
 
-        if (!empty($this->title)) {
-            return Str::slug($this->title) . '-' . $this->getKey();
+        if (! empty($this->title)) {
+            return Str::slug($this->title).'-'.$this->getKey();
         }
 
-        if (!empty($this->name)) {
-            return Str::slug($this->name) . '-' . $this->getKey();
+        if (! empty($this->name)) {
+            return Str::slug($this->name).'-'.$this->getKey();
         }
 
         return (string) $this->getKey();

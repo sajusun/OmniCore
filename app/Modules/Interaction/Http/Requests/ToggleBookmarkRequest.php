@@ -25,6 +25,7 @@ class ToggleBookmarkRequest extends FormRequest
     public function getTargetType(): ?string
     {
         $val = $this->input('subject_type') ?? $this->input('type');
+
         return $val !== null ? (string) $val : null;
     }
 

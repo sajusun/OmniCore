@@ -28,6 +28,8 @@ class AuthHelper
 
     public static function userRole(): ?string
     {
-        return Auth::user()?->role ?? null;
+        $user = Auth::user();
+
+        return $user ? $user->role : null;
     }
 }

@@ -62,6 +62,7 @@ trait HasEcommerce
 
         if ($existing) {
             $existing->delete();
+
             return [
                 'action' => 'removed',
                 'in_wishlist' => false,

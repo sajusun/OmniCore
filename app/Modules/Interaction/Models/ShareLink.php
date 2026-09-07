@@ -77,7 +77,7 @@ class ShareLink extends Model
      */
     public function isValid(): bool
     {
-        if (!$this->is_active) {
+        if (! $this->is_active) {
             return false;
         }
 
@@ -111,9 +111,10 @@ class ShareLink extends Model
     {
         if ($this->type === 'public') {
             $typeAlias = class_basename($this->shareable_type);
-            return url("/share/" . strtolower($typeAlias) . "/" . ($this->slug ?? $this->shareable_id));
+
+            return url('/share/'.strtolower($typeAlias).'/'.($this->slug ?? $this->shareable_id));
         }
 
-        return url("/s/" . $this->token);
+        return url('/s/'.$this->token);
     }
 }

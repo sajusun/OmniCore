@@ -28,21 +28,21 @@ class UserAddressController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'type'            => 'nullable|in:shipping,billing',
-            'recipient_name'  => 'required|string|max:255',
-            'phone'           => 'required|string|max:30',
-            'street_address'  => 'required|string|max:255',
+            'type' => 'nullable|in:shipping,billing',
+            'recipient_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:30',
+            'street_address' => 'required|string|max:255',
             'apartment_suite' => 'nullable|string|max:100',
-            'city'            => 'required|string|max:100',
-            'state'           => 'nullable|string|max:100',
-            'postal_code'     => 'required|string|max:20',
-            'country'         => 'nullable|string|max:100',
-            'is_default'      => 'nullable|boolean',
+            'city' => 'required|string|max:100',
+            'state' => 'nullable|string|max:100',
+            'postal_code' => 'required|string|max:20',
+            'country' => 'nullable|string|max:100',
+            'is_default' => 'nullable|boolean',
         ]);
 
         $user = $request->user();
 
-        if (!empty($validated['is_default'])) {
+        if (! empty($validated['is_default'])) {
             UserAddress::where('user_id', $user->id)->update(['is_default' => false]);
         }
 
@@ -64,19 +64,19 @@ class UserAddressController extends Controller
         $address = UserAddress::where('user_id', $request->user()->id)->findOrFail($id);
 
         $validated = $request->validate([
-            'type'            => 'nullable|in:shipping,billing',
-            'recipient_name'  => 'sometimes|required|string|max:255',
-            'phone'           => 'sometimes|required|string|max:30',
-            'street_address'  => 'sometimes|required|string|max:255',
+            'type' => 'nullable|in:shipping,billing',
+            'recipient_name' => 'sometimes|required|string|max:255',
+            'phone' => 'sometimes|required|string|max:30',
+            'street_address' => 'sometimes|required|string|max:255',
             'apartment_suite' => 'nullable|string|max:100',
-            'city'            => 'sometimes|required|string|max:100',
-            'state'           => 'nullable|string|max:100',
-            'postal_code'     => 'sometimes|required|string|max:20',
-            'country'         => 'nullable|string|max:100',
-            'is_default'      => 'nullable|boolean',
+            'city' => 'sometimes|required|string|max:100',
+            'state' => 'nullable|string|max:100',
+            'postal_code' => 'sometimes|required|string|max:20',
+            'country' => 'nullable|string|max:100',
+            'is_default' => 'nullable|boolean',
         ]);
 
-        if (!empty($validated['is_default'])) {
+        if (! empty($validated['is_default'])) {
             UserAddress::where('user_id', $request->user()->id)->where('id', '!=', $id)->update(['is_default' => false]);
         }
 

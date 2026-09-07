@@ -84,14 +84,14 @@ class CatalogController extends Controller
             ->take(6)
             ->get()
             ->map(fn ($p) => [
-                'id'               => $p->id,
-                'name'             => $p->name,
-                'slug'             => $p->slug,
-                'price'            => (float) $p->price,
+                'id' => $p->id,
+                'name' => $p->name,
+                'slug' => $p->slug,
+                'price' => (float) $p->price,
                 'compare_at_price' => $p->compare_at_price ? (float) $p->compare_at_price : null,
-                'thumbnail'        => $p->thumbnail_url,
-                'category'         => $p->category?->name,
-                'average_rating'   => (float) $p->average_rating,
+                'thumbnail' => $p->thumbnail_url,
+                'category' => $p->category?->name,
+                'average_rating' => (float) $p->average_rating,
             ]);
 
         return $this->success($products, 'Autocomplete preview fetched.');
@@ -104,7 +104,7 @@ class CatalogController extends Controller
     {
         $mainProduct = Product::with(['category', 'media'])->where('slug', $slug)->first();
 
-        if (!$mainProduct) {
+        if (! $mainProduct) {
             return $this->notFound('Product not found.');
         }
 
@@ -126,12 +126,12 @@ class CatalogController extends Controller
         $bundlePrice = round($totalOriginalPrice * (1 - ($bundleDiscountPercent / 100)), 2);
 
         return $this->success([
-            'main_product'               => new ProductListResource($mainProduct),
-            'bundle_items'               => ProductListResource::collection($bundleItems),
-            'total_regular_price'        => (float) $totalOriginalPrice,
-            'bundle_price'               => (float) $bundlePrice,
+            'main_product' => new ProductListResource($mainProduct),
+            'bundle_items' => ProductListResource::collection($bundleItems),
+            'total_regular_price' => (float) $totalOriginalPrice,
+            'bundle_price' => (float) $bundlePrice,
             'bundle_discount_percentage' => $bundleDiscountPercent,
-            'savings'                    => round($totalOriginalPrice - $bundlePrice, 2),
+            'savings' => round($totalOriginalPrice - $bundlePrice, 2),
         ], 'Bundle recommendations fetched.');
     }
 }

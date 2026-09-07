@@ -42,7 +42,7 @@ class CartController extends Controller
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
             'variant_id' => 'nullable|integer|exists:product_variants,id',
-            'quantity'   => 'nullable|integer|min:1',
+            'quantity' => 'nullable|integer|min:1',
         ]);
 
         $user = $request->user();
@@ -59,8 +59,8 @@ class CartController extends Controller
 
             return $this->success([
                 'guest_token' => $cart->guest_token,
-                'item'        => new CartItemResource($item),
-                'cart'        => new CartResource($cart->fresh('items.product.media')),
+                'item' => new CartItemResource($item),
+                'cart' => new CartResource($cart->fresh('items.product.media')),
             ], 'Item added to cart.', 201);
         } catch (Exception $e) {
             return $this->error($e->getMessage(), null, 422);
@@ -155,7 +155,7 @@ class CartController extends Controller
 
         $result = $this->cartService->applyCoupon($cart, $request->coupon_code, $user);
 
-        if (!$result['success']) {
+        if (! $result['success']) {
             return $this->error($result['message'] ?? 'Coupon could not be applied.', null, 422);
         }
 

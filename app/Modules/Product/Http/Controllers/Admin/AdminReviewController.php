@@ -11,9 +11,7 @@ use Illuminate\Http\Request;
 
 class AdminReviewController extends Controller
 {
-    public function __construct(protected ReviewService $reviewService)
-    {
-    }
+    public function __construct(protected ReviewService $reviewService) {}
 
     /**
      * Moderation list of reviews

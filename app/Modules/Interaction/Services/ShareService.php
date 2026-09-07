@@ -20,12 +20,12 @@ class ShareService
         $morphMap = Relation::morphMap();
         $modelClass = $morphMap[$type] ?? (class_exists($type) ? $type : null);
 
-        if (!$modelClass || !class_exists($modelClass)) {
+        if (! $modelClass || ! class_exists($modelClass)) {
             throw new InvalidArgumentException("Invalid shareable type: {$type}");
         }
 
         $model = $modelClass::find($id);
-        if (!$model) {
+        if (! $model) {
             throw new InvalidArgumentException("Target model not found for {$type} #{$id}");
         }
 
@@ -62,7 +62,7 @@ class ShareService
         ?DateTimeInterface $expiresAt = null,
         ?int $maxClicks = 1
     ): ShareLink {
-        $token = 'sec_' . Str::random(32) . '_' . dechex(time());
+        $token = 'sec_'.Str::random(32).'_'.dechex(time());
         $type = $maxClicks === 1 ? 'single_use' : ($expiresAt ? 'expiring' : 'private');
 
         return ShareLink::create([
@@ -85,7 +85,7 @@ class ShareService
     {
         $shareLink = ShareLink::where('token', $token)->with('shareable')->first();
 
-        if (!$shareLink || !$shareLink->isValid()) {
+        if (! $shareLink || ! $shareLink->isValid()) {
             return null;
         }
 
@@ -102,7 +102,7 @@ class ShareService
         $morphMap = Relation::morphMap();
         $modelClass = $morphMap[$type] ?? (class_exists($type) ? $type : null);
 
-        if (!$modelClass || !class_exists($modelClass)) {
+        if (! $modelClass || ! class_exists($modelClass)) {
             return null;
         }
 
@@ -115,6 +115,7 @@ class ShareService
 
         if ($shareLink) {
             $shareLink->recordClick();
+
             return $shareLink->shareable;
         }
 
@@ -142,16 +143,16 @@ class ShareService
             return $model->getShareableSlug();
         }
 
-        if (!empty($model->slug)) {
+        if (! empty($model->slug)) {
             return (string) $model->slug;
         }
 
-        if (!empty($model->title)) {
-            return Str::slug($model->title) . '-' . $model->getKey();
+        if (! empty($model->title)) {
+            return Str::slug($model->title).'-'.$model->getKey();
         }
 
-        if (!empty($model->name)) {
-            return Str::slug($model->name) . '-' . $model->getKey();
+        if (! empty($model->name)) {
+            return Str::slug($model->name).'-'.$model->getKey();
         }
 
         return (string) $model->getKey();

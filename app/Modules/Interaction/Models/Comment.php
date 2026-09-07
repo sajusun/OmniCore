@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
-    use SoftDeletes, HasLikes;
+    use HasLikes, SoftDeletes;
 
     protected $table = 'comments';
 
@@ -58,10 +58,12 @@ class Comment extends Model
 
     /**
      * Replies belonging to this comment.
+     *
+     * @return HasMany<Comment, $this>
      */
     public function replies(): HasMany
     {
-        return $this->hasMany(self::class, 'parent_id')->latest();
+        return $this->hasMany(self::class, 'parent_id');
     }
 
     /**
@@ -69,7 +71,7 @@ class Comment extends Model
      */
     public function isReply(): bool
     {
-        return !is_null($this->parent_id);
+        return ! is_null($this->parent_id);
     }
 
     /**

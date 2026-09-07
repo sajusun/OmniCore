@@ -37,7 +37,7 @@ trait HasComments
                 'user:id,name,avatar,email',
                 'replies' => function ($query) {
                     $query->with('user:id,name,avatar,email')->latest('id');
-                }
+                },
             ])
             ->paginate($perPage);
     }

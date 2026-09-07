@@ -11,9 +11,7 @@ use Illuminate\Http\Request;
 
 class AdminCouponController extends Controller
 {
-    public function __construct(protected CouponService $couponService)
-    {
-    }
+    public function __construct(protected CouponService $couponService) {}
 
     public function index(Request $request): JsonResponse
     {
@@ -72,7 +70,7 @@ class AdminCouponController extends Controller
         $coupon = Coupon::findOrFail($id);
 
         $validated = $request->validate([
-            'code' => 'sometimes|required|string|max:50|unique:coupons,code,' . $coupon->id,
+            'code' => 'sometimes|required|string|max:50|unique:coupons,code,'.$coupon->id,
             'type' => 'sometimes|required|in:percentage,fixed',
             'value' => 'sometimes|required|numeric|min:0.01',
             'min_order_amount' => 'nullable|numeric|min:0',

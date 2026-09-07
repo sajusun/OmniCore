@@ -7,9 +7,7 @@ use App\Modules\Order\Services\OrderService;
 
 class OrderAnalyticsController extends Controller
 {
-    public function __construct(protected OrderService $orderService)
-    {
-    }
+    public function __construct(protected OrderService $orderService) {}
 
     public function index()
     {

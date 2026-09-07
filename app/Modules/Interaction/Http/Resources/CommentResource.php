@@ -24,7 +24,7 @@ class CommentResource extends JsonResource
             'parent_id' => $this->parent_id,
             'body' => $this->body,
             'likes_count' => $this->likes_count,
-            'is_liked' => $currentUser ? $this->isLikedBy($currentUser) : false,
+            'is_liked' => $currentUser && method_exists($this->resource, 'isLikedBy') ? $this->resource->isLikedBy($currentUser) : false,
             'replies_count' => $this->replies_count,
             'replies' => CommentResource::collection($this->whenLoaded('replies')),
             'created_at' => $this->created_at?->toISOString(),

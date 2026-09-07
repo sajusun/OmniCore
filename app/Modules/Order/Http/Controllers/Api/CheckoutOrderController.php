@@ -23,18 +23,18 @@ class CheckoutOrderController extends Controller
     public function checkout(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'address_id'                      => 'nullable|integer|exists:user_addresses,id',
-            'shipping_address'                => 'required_without:address_id|array',
+            'address_id' => 'nullable|integer|exists:user_addresses,id',
+            'shipping_address' => 'required_without:address_id|array',
             'shipping_address.recipient_name' => 'required_with:shipping_address|string|max:255',
-            'shipping_address.phone'          => 'required_with:shipping_address|string|max:30',
+            'shipping_address.phone' => 'required_with:shipping_address|string|max:30',
             'shipping_address.street_address' => 'required_with:shipping_address|string|max:255',
-            'shipping_address.city'           => 'required_with:shipping_address|string|max:100',
-            'shipping_address.postal_code'    => 'required_with:shipping_address|string|max:20',
-            'shipping_address.country'        => 'nullable|string|max:100',
-            'billing_address'                 => 'nullable|array',
-            'shipping_method_id'              => 'nullable|integer|exists:shipping_methods,id',
-            'payment_method'                  => 'required|in:cod,stripe,sslcommerz,bkash,bank_transfer',
-            'customer_notes'                  => 'nullable|string|max:1000',
+            'shipping_address.city' => 'required_with:shipping_address|string|max:100',
+            'shipping_address.postal_code' => 'required_with:shipping_address|string|max:20',
+            'shipping_address.country' => 'nullable|string|max:100',
+            'billing_address' => 'nullable|array',
+            'shipping_method_id' => 'nullable|integer|exists:shipping_methods,id',
+            'payment_method' => 'required|in:cod,stripe,sslcommerz,bkash,bank_transfer',
+            'customer_notes' => 'nullable|string|max:1000',
         ]);
 
         $user = $request->user();
@@ -95,14 +95,14 @@ class CheckoutOrderController extends Controller
             ->firstOrFail();
 
         return $this->success([
-            'order_number'   => $order->order_number,
+            'order_number' => $order->order_number,
             'current_status' => $order->status,
             'payment_status' => $order->payment_status,
-            'created_at'     => $order->created_at->toIso8601String(),
-            'timeline'       => $order->histories->map(fn ($h) => [
-                'status'  => $h->status,
+            'created_at' => $order->created_at->toIso8601String(),
+            'timeline' => $order->histories->map(fn ($h) => [
+                'status' => $h->status,
                 'comment' => $h->comment,
-                'time'    => $h->created_at->toIso8601String(),
+                'time' => $h->created_at->toIso8601String(),
             ]),
         ], 'Order tracking status fetched.');
     }

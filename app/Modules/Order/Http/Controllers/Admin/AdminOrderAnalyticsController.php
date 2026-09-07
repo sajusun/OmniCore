@@ -8,9 +8,7 @@ use Illuminate\Http\JsonResponse;
 
 class AdminOrderAnalyticsController extends Controller
 {
-    public function __construct(protected OrderService $orderService)
-    {
-    }
+    public function __construct(protected OrderService $orderService) {}
 
     /**
      * Get executive e-commerce sales, revenue and metrics dashboard

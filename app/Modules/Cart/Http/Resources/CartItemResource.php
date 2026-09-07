@@ -24,6 +24,7 @@ class CartItemResource extends JsonResource
                 if (! $this->variant) {
                     return null;
                 }
+
                 return [
                     'id' => $this->variant->id,
                     'sku' => $this->variant->sku,

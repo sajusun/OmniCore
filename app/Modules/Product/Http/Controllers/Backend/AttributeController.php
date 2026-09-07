@@ -19,13 +19,14 @@ class AttributeController extends Controller
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('name_display', function ($row) {
-                    return '<div class="fw-bold">' . e($row->name) . '</div><small class="text-muted">Slug: ' . e($row->slug) . '</small>';
+                    return '<div class="fw-bold">'.e($row->name).'</div><small class="text-muted">Slug: '.e($row->slug).'</small>';
                 })
-                ->addColumn('type', fn ($row) => '<span class="badge bg-info text-capitalize">' . e($row->type) . '</span>')
+                ->addColumn('type', fn ($row) => '<span class="badge bg-info text-capitalize">'.e($row->type).'</span>')
                 ->addColumn('values_display', function ($row) {
                     $badges = $row->values->map(function ($val) {
-                        $colorIndicator = $val->code ? '<span class="d-inline-block me-1 border" style="width: 10px; height: 10px; background-color: ' . e($val->code) . ';"></span>' : '';
-                        return '<span class="badge bg-light text-dark border me-1 mb-1 d-inline-flex align-items-center">' . $colorIndicator . e($val->value) . ' <button type="button" class="btn-close ms-1" style="font-size: 0.5rem;" onclick="deleteAttributeValue(' . $val->id . ')" title="Remove"></button></span>';
+                        $colorIndicator = $val->code ? '<span class="d-inline-block me-1 border" style="width: 10px; height: 10px; background-color: '.e($val->code).';"></span>' : '';
+
+                        return '<span class="badge bg-light text-dark border me-1 mb-1 d-inline-flex align-items-center">'.$colorIndicator.e($val->value).' <button type="button" class="btn-close ms-1" style="font-size: 0.5rem;" onclick="deleteAttributeValue('.$val->id.')" title="Remove"></button></span>';
                     })->implode(' ');
 
                     return $badges ?: '<span class="text-muted small">No values yet</span>';
@@ -38,9 +39,9 @@ class AttributeController extends Controller
                     ]), ENT_QUOTES, 'UTF-8');
 
                     return '<div class="d-flex align-items-center gap-1">
-                                <button type="button" class="btn btn-sm btn-success" onclick="openAddValueModal(' . $row->id . ', \'' . e($row->name) . '\', \'' . e($row->type) . '\')" title="Add Value"><i class="fa fa-plus"></i></button>
-                                <button type="button" class="btn btn-sm btn-primary" onclick=\'openEditAttributeModal(' . $json . ')\' title="Edit"><i class="fa fa-pencil"></i></button>
-                                <button type="button" class="btn btn-sm btn-danger" onclick="deleteAttribute(' . $row->id . ')" title="Delete"><i class="fa fa-trash"></i></button>
+                                <button type="button" class="btn btn-sm btn-success" onclick="openAddValueModal('.$row->id.', \''.e($row->name).'\', \''.e($row->type).'\')" title="Add Value"><i class="fa fa-plus"></i></button>
+                                <button type="button" class="btn btn-sm btn-primary" onclick=\'openEditAttributeModal('.$json.')\' title="Edit"><i class="fa fa-pencil"></i></button>
+                                <button type="button" class="btn btn-sm btn-danger" onclick="deleteAttribute('.$row->id.')" title="Delete"><i class="fa fa-trash"></i></button>
                             </div>';
                 })
                 ->rawColumns(['name_display', 'type', 'values_display', 'action'])

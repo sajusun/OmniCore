@@ -26,11 +26,11 @@ class InteractionServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(CommentService::class, fn() => new CommentService());
-        $this->app->singleton(LikeService::class, fn() => new LikeService());
-        $this->app->singleton(ShareService::class, fn() => new ShareService());
-        $this->app->singleton(ViewService::class, fn() => new ViewService());
-        $this->app->singleton(BookmarkService::class, fn() => new BookmarkService());
+        $this->app->singleton(CommentService::class, fn () => new CommentService);
+        $this->app->singleton(LikeService::class, fn () => new LikeService);
+        $this->app->singleton(ShareService::class, fn () => new ShareService);
+        $this->app->singleton(ViewService::class, fn () => new ViewService);
+        $this->app->singleton(BookmarkService::class, fn () => new BookmarkService);
     }
 
     /**
@@ -39,26 +39,26 @@ class InteractionServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // 1. Load Migrations
-        if (is_dir(__DIR__ . '/../Database/Migrations')) {
-            $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+        if (is_dir(__DIR__.'/../Database/Migrations')) {
+            $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
         }
 
         // 2. Load API Routes
-        if (file_exists(__DIR__ . '/../Routes/api.php')) {
+        if (file_exists(__DIR__.'/../Routes/api.php')) {
             Route::prefix('api')
                 ->middleware('api')
-                ->group(__DIR__ . '/../Routes/api.php');
+                ->group(__DIR__.'/../Routes/api.php');
         }
 
         // 3. Load Web Share Routes
-        if (file_exists(__DIR__ . '/../Routes/web.php')) {
+        if (file_exists(__DIR__.'/../Routes/web.php')) {
             Route::middleware('web')
-                ->group(__DIR__ . '/../Routes/web.php');
+                ->group(__DIR__.'/../Routes/web.php');
         }
 
         // 4. Load Views
-        if (is_dir(__DIR__ . '/../Views')) {
-            $this->loadViewsFrom(__DIR__ . '/../Views', 'interaction');
+        if (is_dir(__DIR__.'/../Views')) {
+            $this->loadViewsFrom(__DIR__.'/../Views', 'interaction');
         }
 
         // 5. Morph Map Registration for polymorphic relations

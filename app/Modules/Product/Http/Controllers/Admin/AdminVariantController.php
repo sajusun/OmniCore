@@ -17,8 +17,7 @@ class AdminVariantController extends Controller
     public function __construct(
         protected VariantMatrixService $variantMatrixService,
         protected MediaService $mediaService
-    ) {
-    }
+    ) {}
 
     /**
      * Auto generate Cartesian Variant Matrix for a product
@@ -46,7 +45,7 @@ class AdminVariantController extends Controller
         $variant = ProductVariant::where('product_id', $productId)->findOrFail($variantId);
 
         $validated = $request->validate([
-            'sku' => 'sometimes|required|string|unique:product_variants,sku,' . $variant->id,
+            'sku' => 'sometimes|required|string|unique:product_variants,sku,'.$variant->id,
             'barcode' => 'nullable|string',
             'price' => 'sometimes|required|numeric|min:0',
             'compare_at_price' => 'nullable|numeric',

@@ -10,9 +10,7 @@ use Illuminate\Http\Request;
 
 class AdminInventoryController extends Controller
 {
-    public function __construct(protected InventoryService $inventoryService)
-    {
-    }
+    public function __construct(protected InventoryService $inventoryService) {}
 
     /**
      * Get low stock alerts list

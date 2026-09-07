@@ -18,15 +18,17 @@ class StringHelper
     {
         $length = strlen($string);
 
-        if ($length <= $visible) return $string;
+        if ($length <= $visible) {
+            return $string;
+        }
 
-        return substr($string, 0, $visible) . str_repeat('*', $length - $visible);
+        return substr($string, 0, $visible).str_repeat('*', $length - $visible);
     }
 
     public static function initials(string $name): string
     {
         return collect(explode(' ', $name))
-            ->map(fn($word) => strtoupper($word[0]))
+            ->map(fn ($word) => strtoupper($word[0]))
             ->implode('');
     }
 }

@@ -10,9 +10,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
 {
-    public function __construct(protected OrderService $orderService)
-    {
-    }
+    public function __construct(protected OrderService $orderService) {}
 
     public function index(Request $request)
     {
@@ -30,19 +28,20 @@ class OrderController extends Controller
                 ->addIndexColumn()
                 ->addColumn('order_number_display', function ($row) {
                     return '<div>
-                                <a href="' . route('admin.orders.show', $row->id) . '" class="fw-bold text-primary text-decoration-none">#' . e($row->order_number) . '</a>
-                                <div class="text-muted small">' . $row->created_at->format('M d, Y - h:i A') . '</div>
+                                <a href="'.route('admin.orders.show', $row->id).'" class="fw-bold text-primary text-decoration-none">#'.e($row->order_number).'</a>
+                                <div class="text-muted small">'.$row->created_at->format('M d, Y - h:i A').'</div>
                             </div>';
                 })
                 ->addColumn('customer', function ($row) {
                     if ($row->user) {
-                        return '<div class="fw-bold">' . e($row->user->name) . '</div><small class="text-muted">' . e($row->user->email) . '</small>';
+                        return '<div class="fw-bold">'.e($row->user->name).'</div><small class="text-muted">'.e($row->user->email).'</small>';
                     }
                     $name = $row->shipping_address['recipient_name'] ?? 'Guest';
-                    return '<div class="fw-bold">' . e($name) . '</div><small class="text-muted">Guest Checkout</small>';
+
+                    return '<div class="fw-bold">'.e($name).'</div><small class="text-muted">Guest Checkout</small>';
                 })
-                ->addColumn('items_count', fn ($row) => '<span class="badge bg-light text-dark border">' . $row->items->sum('quantity') . ' items</span>')
-                ->editColumn('total_amount', fn ($row) => '<span class="fw-bold text-success fs-6">$' . number_format($row->total_amount, 2) . '</span>')
+                ->addColumn('items_count', fn ($row) => '<span class="badge bg-light text-dark border">'.$row->items->sum('quantity').' items</span>')
+                ->editColumn('total_amount', fn ($row) => '<span class="fw-bold text-success fs-6">$'.number_format($row->total_amount, 2).'</span>')
                 ->editColumn('status', function ($row) {
                     $badge = match ($row->status) {
                         'delivered' => 'bg-success',
@@ -52,19 +51,21 @@ class OrderController extends Controller
                         'cancelled', 'refunded' => 'bg-danger',
                         default => 'bg-secondary'
                     };
-                    return '<span class="badge ' . $badge . ' text-capitalize">' . ucfirst(str_replace('_', ' ', $row->status)) . '</span>';
+
+                    return '<span class="badge '.$badge.' text-capitalize">'.ucfirst(str_replace('_', ' ', $row->status)).'</span>';
                 })
                 ->editColumn('payment_status', function ($row) {
                     $badge = $row->payment_status === 'paid' ? 'bg-success' : ($row->payment_status === 'failed' ? 'bg-danger' : 'bg-warning text-dark');
-                    return '<span class="badge ' . $badge . ' text-capitalize">' . ucfirst($row->payment_status) . '</span>';
+
+                    return '<span class="badge '.$badge.' text-capitalize">'.ucfirst($row->payment_status).'</span>';
                 })
                 ->addColumn('action', function ($row) {
                     $showUrl = route('admin.orders.show', $row->id);
                     $invoiceUrl = route('admin.orders.invoice', $row->id);
 
                     return '<div class="d-flex align-items-center gap-1">
-                                <a href="' . $showUrl . '" class="btn btn-sm btn-info text-white" title="View Order Details"><i class="fa fa-eye"></i></a>
-                                <a href="' . $invoiceUrl . '" target="_blank" class="btn btn-sm btn-secondary" title="Print Invoice"><i class="fa fa-print"></i></a>
+                                <a href="'.$showUrl.'" class="btn btn-sm btn-info text-white" title="View Order Details"><i class="fa fa-eye"></i></a>
+                                <a href="'.$invoiceUrl.'" target="_blank" class="btn btn-sm btn-secondary" title="Print Invoice"><i class="fa fa-print"></i></a>
                             </div>';
                 })
                 ->rawColumns(['order_number_display', 'customer', 'items_count', 'total_amount', 'status', 'payment_status', 'action'])
@@ -77,6 +78,7 @@ class OrderController extends Controller
     public function show(int $id)
     {
         $order = Order::with(['user', 'items.product', 'items.variant', 'shippingMethod', 'histories.admin'])->findOrFail($id);
+
         return view('order::backend.orders.show', compact('order'));
     }
 
@@ -89,19 +91,20 @@ class OrderController extends Controller
         ]);
 
         $order = Order::findOrFail($id);
-        $this->orderService->updateStatus($order, $request->status, $request->notes, auth()->id());
+        $this->orderService->updateOrderStatus($order, $request->status, $request->notes, $request->user()?->id);
 
         if ($request->filled('tracking_number')) {
             $order->tracking_number = $request->tracking_number;
             $order->save();
         }
 
-        return redirect()->route('admin.orders.show', $order->id)->with('success', 'Order status updated to ' . ucfirst($request->status));
+        return redirect()->route('admin.orders.show', $order->id)->with('success', 'Order status updated to '.ucfirst($request->status));
     }
 
     public function invoice(int $id)
     {
         $order = Order::with(['user', 'items.product', 'items.variant', 'shippingMethod'])->findOrFail($id);
+
         return view('order::backend.orders.invoice', compact('order'));
     }
 

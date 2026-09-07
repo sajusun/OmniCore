@@ -18,7 +18,7 @@ class StoreCategoryRequest extends FormRequest
         return [
             'parent_id' => 'nullable|exists:product_categories,id',
             'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:product_categories,slug,' . $categoryId,
+            'slug' => 'nullable|string|max:255|unique:product_categories,slug,'.$categoryId,
             'description' => 'nullable|string',
             'order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',

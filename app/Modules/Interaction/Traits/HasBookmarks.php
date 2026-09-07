@@ -29,7 +29,7 @@ trait HasBookmarks
             ->where('collection', $collection)
             ->first();
 
-        if (!$existing) {
+        if (! $existing) {
             $this->bookmarks()->create([
                 'user_id' => $userId,
                 'collection' => $collection,
@@ -90,7 +90,7 @@ trait HasBookmarks
      */
     public function isBookmarkedBy(User|int|null $user, string $collection = 'default'): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 

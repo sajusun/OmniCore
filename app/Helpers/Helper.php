@@ -4,14 +4,8 @@ namespace App\Helpers;
 
 use App\Services\FileService;
 use Exception;
-use Illuminate\Contracts\Pagination\CursorPaginator as CursorPaginatorContract;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Contracts\Pagination\Paginator as PaginatorContract;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Pagination\AbstractCursorPaginator;
-use Illuminate\Pagination\AbstractPaginator;
-use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
@@ -67,7 +61,7 @@ class Helper
         $slug = Str::slug($title);
         while ($model::where('slug', $slug)->exists()) {
             $randomString = Str::random(5);
-            $slug = Str::slug($title) . '-' . $randomString;
+            $slug = Str::slug($title).'-'.$randomString;
         }
 
         return $slug;
@@ -84,7 +78,7 @@ class Helper
         bool $paginate = false,
         mixed $paginateData = null
     ): JsonResponse {
-        if (!$status) {
+        if (! $status) {
             return ApiResponse::error($message, $code, $data);
         }
 
@@ -105,13 +99,19 @@ class Helper
     public static function sendNotifyMobile(string $token, array $payload): void
     {
         try {
-            $factory = (new Factory)->withServiceAccount(storage_path(config('firebase.credentials')));
+            $factory = (new Factory)->withServiceAccount(storage_path((string) config('firebase.credentials')));
             $messaging = $factory->createMessaging();
-            $notification = Notification::create($payload['title'], Str::limit($payload['body'], 100), $payload['icon']);
-            $message = CloudMessage::withTarget('token', $token)->withNotification($notification);
+            $message = CloudMessage::fromArray([
+                'token' => $token,
+                'notification' => [
+                    'title' => $payload['title'] ?? '',
+                    'body' => Str::limit($payload['body'] ?? '', 100),
+                    'image' => $payload['icon'] ?? null,
+                ],
+            ]);
             $messaging->send($message);
         } catch (Exception $exception) {
-            \Illuminate\Support\Facades\Log::error($exception->getMessage());
+            Log::error($exception->getMessage());
         }
     }
 }

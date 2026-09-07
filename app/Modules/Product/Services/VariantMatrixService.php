@@ -13,9 +13,8 @@ class VariantMatrixService
     /**
      * Generate Cartesian Product of attribute values and create ProductVariant records
      *
-     * @param Product $product
-     * @param array $attributeValueIds e.g. [[1, 2], [5, 6, 7]] (array of attribute value arrays)
-     * @param array $options Optional base price, manage_stock, default stock_quantity
+     * @param  array  $attributeValueIds  e.g. [[1, 2], [5, 6, 7]] (array of attribute value arrays)
+     * @param  array  $options  Optional base price, manage_stock, default stock_quantity
      * @return array Created variants
      */
     public function generateMatrix(Product $product, array $attributeValueIds, array $options = []): array
@@ -35,12 +34,12 @@ class VariantMatrixService
             // Build deterministic SKU e.g. PROD-RED-XL
             $skuSuffix = $valueModels->map(fn ($v) => Str::upper(Str::slug($v->value)))->implode('-');
             $baseSku = $product->sku ?: Str::upper(Str::slug($product->name));
-            $variantSku = $baseSku . '-' . $skuSuffix;
+            $variantSku = $baseSku.'-'.$skuSuffix;
 
             // Ensure unique SKU if already exists
             $skuCount = ProductVariant::where('sku', $variantSku)->count();
             if ($skuCount > 0) {
-                $variantSku .= '-' . ($skuCount + 1);
+                $variantSku .= '-'.($skuCount + 1);
             }
 
             // Create or find variant

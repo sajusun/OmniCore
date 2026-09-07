@@ -10,9 +10,7 @@ use Illuminate\Support\Str;
 
 class CategoryService
 {
-    public function __construct(protected MediaService $mediaService)
-    {
-    }
+    public function __construct(protected MediaService $mediaService) {}
 
     /**
      * Get nested category tree

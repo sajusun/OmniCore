@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, HasMedia, HasInteractions, HasReviews, SoftDeletes;
+    use HasFactory, HasInteractions, HasMedia, HasReviews, SoftDeletes;
 
     protected $table = 'products';
 
@@ -145,6 +145,7 @@ class Product extends Model
     {
         if ($this->compare_at_price && $this->compare_at_price > $this->price) {
             $diff = $this->compare_at_price - $this->price;
+
             return (int) round(($diff / $this->compare_at_price) * 100);
         }
 

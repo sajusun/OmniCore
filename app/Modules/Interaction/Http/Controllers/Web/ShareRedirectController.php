@@ -4,7 +4,6 @@ namespace App\Modules\Interaction\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Interaction\Services\ShareService;
-use Illuminate\Http\Request;
 
 class ShareRedirectController extends Controller
 {
@@ -19,7 +18,7 @@ class ShareRedirectController extends Controller
     {
         $shareLink = $this->shareService->resolvePrivateToken($token);
 
-        if (!$shareLink) {
+        if (! $shareLink) {
             abort(410, 'This share link has expired, reached its click limit, or is no longer valid.');
         }
 
@@ -39,7 +38,7 @@ class ShareRedirectController extends Controller
     {
         $model = $this->shareService->resolvePublicSlug($type, $slug);
 
-        if (!$model) {
+        if (! $model) {
             abort(404, 'Shared item not found.');
         }
 

@@ -9,7 +9,7 @@ use App\Models\User;
  */
 trait HasInteractions
 {
-    use HasComments, HasLikes, HasShareLinks, HasViews, HasBookmarks;
+    use HasBookmarks, HasComments, HasLikes, HasShareLinks, HasViews;
 
     /**
      * Get complete interaction statistics in one unified array.
@@ -34,7 +34,7 @@ trait HasInteractions
      */
     public function userInteractions(User|int|null $user): array
     {
-        if (!$user) {
+        if (! $user) {
             return [
                 'is_liked' => false,
                 'is_bookmarked' => false,

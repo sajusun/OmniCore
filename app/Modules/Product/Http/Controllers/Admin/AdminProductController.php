@@ -14,9 +14,7 @@ use Illuminate\Http\Request;
 
 class AdminProductController extends Controller
 {
-    public function __construct(protected ProductService $productService)
-    {
-    }
+    public function __construct(protected ProductService $productService) {}
 
     /**
      * List all products for admin table
@@ -38,7 +36,7 @@ class AdminProductController extends Controller
         }
 
         if ($request->filled('search')) {
-            $s = '%' . $request->search . '%';
+            $s = '%'.$request->search.'%';
             $query->where(fn ($q) => $q->where('name', 'like', $s)->orWhere('sku', 'like', $s));
         }
 

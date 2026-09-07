@@ -46,7 +46,7 @@ class WishlistController extends Controller
         $result = $user->toggleWishlist($product->id);
 
         return $this->success([
-            'action'      => $result['action'],
+            'action' => $result['action'],
             'in_wishlist' => $result['in_wishlist'],
         ], $result['message']);
     }

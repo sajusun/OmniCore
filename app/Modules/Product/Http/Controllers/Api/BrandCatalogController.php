@@ -44,7 +44,7 @@ class BrandCatalogController extends Controller
             ->where('is_active', true)
             ->first();
 
-        if (!$brand) {
+        if (! $brand) {
             return $this->notFound('Brand not found.');
         }
 
@@ -52,13 +52,13 @@ class BrandCatalogController extends Controller
         $products = $this->productService->getFilteredCatalog($filters, (int) $request->get('per_page', 20));
 
         return $this->success([
-            'brand'    => new BrandResource($brand),
+            'brand' => new BrandResource($brand),
             'products' => ProductListResource::collection($products),
         ], 'Brand details fetched successfully.', 200, [
             'current_page' => $products->currentPage(),
-            'last_page'    => $products->lastPage(),
-            'per_page'     => $products->perPage(),
-            'total'        => $products->total(),
+            'last_page' => $products->lastPage(),
+            'per_page' => $products->perPage(),
+            'total' => $products->total(),
         ]);
     }
 }

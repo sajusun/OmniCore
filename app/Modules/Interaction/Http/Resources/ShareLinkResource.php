@@ -12,7 +12,7 @@ class ShareLinkResource extends JsonResource
         return [
             'id' => $this->id,
             'type' => $this->type,
-            'url' => $this->getUrl(),
+            'url' => $this->resource->getUrl(),
             'slug' => $this->slug,
             'token' => $this->token,
             'expires_at' => $this->expires_at?->toISOString(),

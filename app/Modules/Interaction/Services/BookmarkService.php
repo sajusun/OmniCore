@@ -20,12 +20,12 @@ class BookmarkService
         $morphMap = Relation::morphMap();
         $modelClass = $morphMap[$type] ?? (class_exists($type) ? $type : null);
 
-        if (!$modelClass || !class_exists($modelClass)) {
+        if (! $modelClass || ! class_exists($modelClass)) {
             throw new InvalidArgumentException("Invalid bookmarkable type: {$type}");
         }
 
         $model = $modelClass::find($id);
-        if (!$model) {
+        if (! $model) {
             throw new InvalidArgumentException("Target model not found for {$type} #{$id}");
         }
 
@@ -119,11 +119,11 @@ class BookmarkService
             ->with(['bookmarkable'])
             ->latest('id');
 
-        if (!empty($collection)) {
+        if (! empty($collection)) {
             $query->where('collection', $collection);
         }
 
-        if (!empty($type)) {
+        if (! empty($type)) {
             $morphMap = Relation::morphMap();
             $morphType = $morphMap[$type] ?? $type;
             $query->where('bookmarkable_type', $morphType);
@@ -150,7 +150,7 @@ class BookmarkService
      */
     public function isBookmarked(Model $model, User|int|null $user, string $collection = 'default'): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 

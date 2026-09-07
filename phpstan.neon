@@ -1,0 +1,22 @@
+parameters:
+    paths:
+        - app/Modules/Interaction
+        - app/Modules/Order
+        - app/Modules/Cart
+        - app/Modules/Coupon
+        - app/Helpers
+
+    level: 4
+
+    universalObjectCratesClasses:
+        - Illuminate\Database\Eloquent\Model
+        - Illuminate\Http\Request
+        - Illuminate\Support\Collection
+
+    treatPhpDocTypesAsCertain: false
+
+    ignoreErrors:
+        - '#Call to an undefined static method [a-zA-Z0-9\\_]+::(where|find|findOrFail|first|firstOrCreate|create|updateOrCreate|whereIn|whereNull|whereNotNull|whereDate|latest|orderBy|orderByDesc|count|sum|avg|select|selectRaw|paginate|cursorPaginate|lockForUpdate|has|whereHas)\(\)#'
+        - '#Call to protected method (increment|decrement)\(\) of class Illuminate\\Database\\Eloquent\\Model#'
+        - '#Access to an undefined property [a-zA-Z0-9\\_]+::\$[a-zA-Z0-9\\_]+#'
+        - '#Trait [a-zA-Z0-9\\_]+ is used zero times and is not analysed#'

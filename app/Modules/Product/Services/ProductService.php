@@ -12,9 +12,7 @@ use Illuminate\Support\Str;
 
 class ProductService
 {
-    public function __construct(protected MediaService $mediaService)
-    {
-    }
+    public function __construct(protected MediaService $mediaService) {}
 
     /**
      * Deep Multi-Facet Catalog Filtering Engine
@@ -26,7 +24,7 @@ class ProductService
 
         // 1. Full-text search (Name, SKU, Short Description)
         if (! empty($filters['search'])) {
-            $searchTerm = '%' . $filters['search'] . '%';
+            $searchTerm = '%'.$filters['search'].'%';
             $query->where(function (Builder $q) use ($searchTerm) {
                 $q->where('name', 'like', $searchTerm)
                     ->orWhere('sku', 'like', $searchTerm)
@@ -142,11 +140,11 @@ class ProductService
         // Ensure unique slug
         $slugCount = Product::where('slug', $data['slug'])->count();
         if ($slugCount > 0) {
-            $data['slug'] .= '-' . ($slugCount + 1);
+            $data['slug'] .= '-'.($slugCount + 1);
         }
 
         if (empty($data['sku']) && ! empty($data['name'])) {
-            $data['sku'] = Str::upper(Str::slug(Str::substr($data['name'], 0, 8))) . '-' . rand(1000, 9999);
+            $data['sku'] = Str::upper(Str::slug(Str::substr($data['name'], 0, 8))).'-'.rand(1000, 9999);
         }
 
         // Auto manage stock flag

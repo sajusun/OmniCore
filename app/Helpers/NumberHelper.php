@@ -11,14 +11,16 @@ class NumberHelper
 
     public static function percentage($value, $total): float
     {
-        if ($total == 0) return 0;
+        if ($total == 0) {
+            return 0;
+        }
 
         return ($value / $total) * 100;
     }
 
     public static function currency($amount, string $symbol = '৳'): string
     {
-        return $symbol . number_format($amount, 2);
+        return $symbol.number_format($amount, 2);
     }
 
     public static function clamp($value, $min, $max)

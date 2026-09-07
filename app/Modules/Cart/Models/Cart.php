@@ -3,7 +3,6 @@
 namespace App\Modules\Cart\Models;
 
 use App\Models\User;
-use App\Modules\Coupon\Models\Coupon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

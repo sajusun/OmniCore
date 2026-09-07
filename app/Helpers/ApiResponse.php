@@ -16,11 +16,10 @@ class ApiResponse
     /**
      * Send a standardized success API response.
      *
-     * @param mixed $data Data payload, resource, or paginator
-     * @param string $message Friendly success message
-     * @param int $code HTTP status code
-     * @param mixed $pagination Optional explicit pagination metadata or paginator instance
-     * @return JsonResponse
+     * @param  mixed  $data  Data payload, resource, or paginator
+     * @param  string  $message  Friendly success message
+     * @param  int  $code  HTTP status code
+     * @param  mixed  $pagination  Optional explicit pagination metadata or paginator instance
      */
     public static function success(
         mixed $data = null,
@@ -40,6 +39,7 @@ class ApiResponse
             $paginator = $data->resource;
             $response['data'] = $data->response()->getData(true)['data'] ?? $data;
             $response['pagination'] = static::extractPaginationMeta($paginator);
+
             return response()->json($response, $code);
         }
 
@@ -47,17 +47,19 @@ class ApiResponse
         if ($data instanceof LengthAwarePaginator || $data instanceof AbstractPaginator) {
             $response['data'] = $data->items();
             $response['pagination'] = static::extractPaginationMeta($data);
+
             return response()->json($response, $code);
         }
 
-        if ($data instanceof CursorPaginatorContract || $data instanceof AbstractCursorPaginator || $data instanceof CursorPaginator) {
+        if ($data instanceof CursorPaginatorContract || $data instanceof AbstractCursorPaginator) {
             $response['data'] = $data->items();
             $response['pagination'] = static::extractPaginationMeta($data);
+
             return response()->json($response, $code);
         }
 
         // 3. Explicit pagination object passed
-        if (!empty($pagination)) {
+        if (! empty($pagination)) {
             if ($pagination instanceof PaginatorContract || $pagination instanceof CursorPaginatorContract) {
                 $response['pagination'] = static::extractPaginationMeta($pagination);
             } elseif (is_array($pagination)) {
@@ -74,10 +76,9 @@ class ApiResponse
      * - error(message, code, errors)
      * - error(message, errors, code)
      *
-     * @param string $message Error description
-     * @param mixed $codeOrErrors HTTP status code OR errors payload
-     * @param mixed $errorsOrCode Detailed field errors OR HTTP status code
-     * @return JsonResponse
+     * @param  string  $message  Error description
+     * @param  mixed  $codeOrErrors  HTTP status code OR errors payload
+     * @param  mixed  $errorsOrCode  Detailed field errors OR HTTP status code
      */
     public static function error(
         string $message = 'Something went wrong',
@@ -100,10 +101,10 @@ class ApiResponse
             : (empty($errors) ? [] : ['error' => $errors]);
 
         $response = [
-            'status'  => false,
+            'status' => false,
             'message' => $message,
-            'code'    => $code,
-            'errors'  => $formattedErrors,
+            'code' => $code,
+            'errors' => $formattedErrors,
         ];
 
         return response()->json($response, $code);
@@ -112,11 +113,10 @@ class ApiResponse
     /**
      * Send a paginated response with optional resource transformation.
      *
-     * @param mixed $paginator Paginator or CursorPaginator instance
-     * @param string|null $resourceClass Optional JsonResource class to transform items
-     * @param string $message Success message
-     * @param int $code HTTP status code
-     * @return JsonResponse
+     * @param  mixed  $paginator  Paginator or CursorPaginator instance
+     * @param  string|null  $resourceClass  Optional JsonResource class to transform items
+     * @param  string  $message  Success message
+     * @param  int  $code  HTTP status code
      */
     public static function paginated(
         mixed $paginator,
@@ -195,7 +195,7 @@ class ApiResponse
     public static function extractPaginationMeta(mixed $paginator): array
     {
         // 1. Cursor Pagination
-        if ($paginator instanceof CursorPaginatorContract || $paginator instanceof AbstractCursorPaginator || $paginator instanceof CursorPaginator) {
+        if ($paginator instanceof CursorPaginatorContract || $paginator instanceof AbstractCursorPaginator) {
             return [
                 'type' => 'cursor',
                 'per_page' => $paginator->perPage(),

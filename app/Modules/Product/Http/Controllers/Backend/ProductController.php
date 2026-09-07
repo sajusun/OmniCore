@@ -22,8 +22,7 @@ class ProductController extends Controller
         protected ProductService $productService,
         protected VariantMatrixService $variantMatrixService,
         protected MediaService $mediaService
-    ) {
-    }
+    ) {}
 
     public function index(Request $request)
     {
@@ -47,22 +46,25 @@ class ProductController extends Controller
                 ->addIndexColumn()
                 ->addColumn('thumbnail', function ($row) {
                     $thumb = $row->thumbnail_url ?? asset('default/product.png');
-                    return '<img src="' . $thumb . '" class="shadow-sm" style="width: 46px; height: 46px; object-fit: cover; border: 1px solid #e2e8f0;" onError="this.src=\'https://placehold.co/100x100?text=Product\';">';
+
+                    return '<img src="'.$thumb.'" class="shadow-sm" style="width: 46px; height: 46px; object-fit: cover; border: 1px solid #e2e8f0;" onError="this.src=\'https://placehold.co/100x100?text=Product\';">';
                 })
                 ->addColumn('name_info', function ($row) {
                     $badge = $row->is_featured ? ' <span class="badge bg-warning text-dark"><i class="fa fa-star"></i> Featured</span>' : '';
+
                     return '<div>
-                                <a href="' . route('admin.products.show', $row->id) . '" class="fw-bold text-dark text-decoration-none">' . e($row->name) . '</a>' . $badge . '
-                                <div class="text-muted small">SKU: <code>' . e($row->sku ?? 'N/A') . '</code></div>
+                                <a href="'.route('admin.products.show', $row->id).'" class="fw-bold text-dark text-decoration-none">'.e($row->name).'</a>'.$badge.'
+                                <div class="text-muted small">SKU: <code>'.e($row->sku ?? 'N/A').'</code></div>
                             </div>';
                 })
-                ->addColumn('category', fn ($row) => $row->category ? '<span class="badge bg-light text-dark border">' . e($row->category->name) . '</span>' : '<span class="text-muted small">None</span>')
-                ->addColumn('brand', fn ($row) => $row->brand ? '<span class="fw-medium text-secondary">' . e($row->brand->name) . '</span>' : '<span class="text-muted small">None</span>')
+                ->addColumn('category', fn ($row) => $row->category ? '<span class="badge bg-light text-dark border">'.e($row->category->name).'</span>' : '<span class="text-muted small">None</span>')
+                ->addColumn('brand', fn ($row) => $row->brand ? '<span class="fw-medium text-secondary">'.e($row->brand->name).'</span>' : '<span class="text-muted small">None</span>')
                 ->addColumn('price_display', function ($row) {
-                    $html = '<span class="fw-bold text-success">$' . number_format($row->price, 2) . '</span>';
+                    $html = '<span class="fw-bold text-success">$'.number_format($row->price, 2).'</span>';
                     if ($row->compare_at_price && $row->compare_at_price > $row->price) {
-                        $html .= '<br><del class="text-muted small">$' . number_format($row->compare_at_price, 2) . '</del>';
+                        $html .= '<br><del class="text-muted small">$'.number_format($row->compare_at_price, 2).'</del>';
                     }
+
                     return $html;
                 })
                 ->addColumn('stock', function ($row) {
@@ -73,11 +75,12 @@ class ProductController extends Controller
                         return '<span class="badge bg-danger">Out of Stock</span>';
                     }
                     if ($row->stock_quantity <= $row->low_stock_threshold) {
-                        return '<span class="badge bg-warning text-dark">' . $row->stock_quantity . ' (Low)</span>';
+                        return '<span class="badge bg-warning text-dark">'.$row->stock_quantity.' (Low)</span>';
                     }
-                    return '<span class="badge bg-success">' . $row->stock_quantity . ' In Stock</span>';
+
+                    return '<span class="badge bg-success">'.$row->stock_quantity.' In Stock</span>';
                 })
-                ->editColumn('type', fn ($row) => '<span class="badge bg-info text-capitalize">' . e($row->type) . '</span>')
+                ->editColumn('type', fn ($row) => '<span class="badge bg-info text-capitalize">'.e($row->type).'</span>')
                 ->editColumn('status', function ($row) {
                     $badge = match ($row->status) {
                         'published' => 'bg-success',
@@ -85,15 +88,17 @@ class ProductController extends Controller
                         'archived' => 'bg-dark',
                         default => 'bg-light text-dark'
                     };
-                    return '<span class="badge ' . $badge . ' text-capitalize">' . e($row->status) . '</span>';
+
+                    return '<span class="badge '.$badge.' text-capitalize">'.e($row->status).'</span>';
                 })
                 ->addColumn('action', function ($row) {
                     $showUrl = route('admin.products.show', $row->id);
                     $editUrl = route('admin.products.edit', $row->id);
+
                     return '<div class="d-flex align-items-center gap-1">
-                                <a href="' . $showUrl . '" class="btn btn-sm btn-info text-white" title="View Product"><i class="fa fa-eye"></i></a>
-                                <a href="' . $editUrl . '" class="btn btn-sm btn-primary" title="Edit Product"><i class="fa fa-pencil"></i></a>
-                                <button type="button" class="btn btn-sm btn-danger" onclick="deleteProduct(' . $row->id . ')" title="Delete"><i class="fa fa-trash"></i></button>
+                                <a href="'.$showUrl.'" class="btn btn-sm btn-info text-white" title="View Product"><i class="fa fa-eye"></i></a>
+                                <a href="'.$editUrl.'" class="btn btn-sm btn-primary" title="Edit Product"><i class="fa fa-pencil"></i></a>
+                                <button type="button" class="btn btn-sm btn-danger" onclick="deleteProduct('.$row->id.')" title="Delete"><i class="fa fa-trash"></i></button>
                             </div>';
                 })
                 ->rawColumns(['thumbnail', 'name_info', 'category', 'brand', 'price_display', 'stock', 'type', 'status', 'action'])
@@ -141,8 +146,8 @@ class ProductController extends Controller
             'gallery.*' => 'nullable|image|max:4096',
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']) . '-' . Str::random(5);
-        $validated['sku'] = $validated['sku'] ?: strtoupper(Str::slug(substr($validated['name'], 0, 3))) . '-' . rand(1000, 9999);
+        $validated['slug'] = Str::slug($validated['name']).'-'.Str::random(5);
+        $validated['sku'] = $validated['sku'] ?: strtoupper(Str::slug(substr($validated['name'], 0, 3))).'-'.rand(1000, 9999);
         $validated['manage_stock'] = $request->boolean('manage_stock');
         $validated['stock_quantity'] = $validated['manage_stock'] ? ($request->input('stock_quantity') ?? 0) : 0;
         $validated['low_stock_threshold'] = $request->input('low_stock_threshold') ?? 5;
@@ -182,7 +187,7 @@ class ProductController extends Controller
                 if (! empty($varData['name'])) {
                     $product->variants()->create([
                         'name' => $varData['name'],
-                        'sku' => $varData['sku'] ?? ($product->sku . '-' . Str::random(4)),
+                        'sku' => $varData['sku'] ?? ($product->sku.'-'.Str::random(4)),
                         'price' => $varData['price'] ?? $product->price,
                         'compare_at_price' => $varData['compare_at_price'] ?? $product->compare_at_price,
                         'cost_price' => $varData['cost_price'] ?? $product->cost_price,
@@ -202,6 +207,7 @@ class ProductController extends Controller
     public function show(int $id)
     {
         $product = Product::with(['category', 'brand', 'variants', 'tags', 'media', 'reviews.user'])->findOrFail($id);
+
         return view('product::backend.products.show', compact('product'));
     }
 
@@ -228,7 +234,7 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'compare_at_price' => 'nullable|numeric|min:0',
             'cost_price' => 'nullable|numeric|min:0',
-            'sku' => 'nullable|string|max:100|unique:products,sku,' . $product->id,
+            'sku' => 'nullable|string|max:100|unique:products,sku,'.$product->id,
             'manage_stock' => 'nullable|boolean',
             'stock_quantity' => 'nullable|integer|min:0',
             'low_stock_threshold' => 'nullable|integer|min:0',

@@ -10,9 +10,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ReviewService
 {
-    public function __construct(protected MediaService $mediaService)
-    {
-    }
+    public function __construct(protected MediaService $mediaService) {}
 
     /**
      * Get approved reviews for a product with pagination

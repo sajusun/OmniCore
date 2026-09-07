@@ -43,7 +43,7 @@ class CategoryCatalogController extends Controller
             ->where('is_active', true)
             ->first();
 
-        if (!$category) {
+        if (! $category) {
             return $this->notFound('Category not found.');
         }
 
@@ -51,14 +51,14 @@ class CategoryCatalogController extends Controller
         $products = $this->productService->getFilteredCatalog($filters, (int) $request->get('per_page', 20));
 
         return $this->success([
-            'category'    => new CategoryResource($category),
+            'category' => new CategoryResource($category),
             'breadcrumbs' => $category->getBreadcrumbs(),
-            'products'    => ProductListResource::collection($products),
+            'products' => ProductListResource::collection($products),
         ], 'Category products fetched successfully.', 200, [
             'current_page' => $products->currentPage(),
-            'last_page'    => $products->lastPage(),
-            'per_page'     => $products->perPage(),
-            'total'        => $products->total(),
+            'last_page' => $products->lastPage(),
+            'per_page' => $products->perPage(),
+            'total' => $products->total(),
         ]);
     }
 }

@@ -22,7 +22,7 @@ trait HasLikes
      */
     public function isLikedBy(User|int|null $user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 

@@ -25,7 +25,7 @@ class OrderResource extends JsonResource
             'shipping_address' => $this->shipping_address,
             'billing_address' => $this->billing_address,
             'customer_notes' => $this->customer_notes,
-            'can_be_cancelled' => $this->canBeCancelled(),
+            'can_be_cancelled' => $this->resource->canBeCancelled(),
             'paid_at' => $this->paid_at?->toIso8601String(),
             'shipped_at' => $this->shipped_at?->toIso8601String(),
             'delivered_at' => $this->delivered_at?->toIso8601String(),

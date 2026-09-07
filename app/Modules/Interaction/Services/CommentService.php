@@ -19,12 +19,12 @@ class CommentService
         $morphMap = Relation::morphMap();
         $modelClass = $morphMap[$type] ?? (class_exists($type) ? $type : null);
 
-        if (!$modelClass || !class_exists($modelClass)) {
+        if (! $modelClass || ! class_exists($modelClass)) {
             throw new InvalidArgumentException("Invalid commentable type: {$type}");
         }
 
         $model = $modelClass::find($id);
-        if (!$model) {
+        if (! $model) {
             throw new InvalidArgumentException("Target model not found for {$type} #{$id}");
         }
 
@@ -46,7 +46,7 @@ class CommentService
                     if ($status) {
                         $query->where('status', $status);
                     }
-                }
+                },
             ])
             ->latest('id');
 
@@ -103,7 +103,7 @@ class CommentService
         $userId = $user instanceof User ? $user->id : $user;
 
         if ($comment->user_id !== $userId) {
-            throw new InvalidArgumentException("Unauthorized to delete this comment.");
+            throw new InvalidArgumentException('Unauthorized to delete this comment.');
         }
 
         return $this->adminDeleteComment($comment);
@@ -132,11 +132,12 @@ class CommentService
     public function updateStatus(Comment $comment, string $status): Comment
     {
         $allowed = ['approved', 'spam', 'pending', 'rejected'];
-        if (!in_array($status, $allowed)) {
+        if (! in_array($status, $allowed)) {
             throw new InvalidArgumentException("Invalid status: {$status}");
         }
 
         $comment->update(['status' => $status]);
+
         return $comment;
     }
 

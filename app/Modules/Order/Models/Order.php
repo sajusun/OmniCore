@@ -3,6 +3,7 @@
 namespace App\Modules\Order\Models;
 
 use App\Models\User;
+use App\Modules\Payment\Enums\PaymentMethod;
 use App\Modules\Payment\Models\Payment;
 use App\Modules\Payment\Traits\Payable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory, SoftDeletes, Payable;
+    use HasFactory, Payable, SoftDeletes;
 
     protected $table = 'orders';
 
@@ -65,9 +66,12 @@ class Order extends Model
         return $this->hasMany(OrderItem::class, 'order_id');
     }
 
+    /**
+     * @return HasMany<OrderHistory, $this>
+     */
     public function histories(): HasMany
     {
-        return $this->hasMany(OrderHistory::class, 'order_id')->latest();
+        return $this->hasMany(OrderHistory::class, 'order_id');
     }
 
     public function shippingMethod(): BelongsTo
@@ -87,12 +91,15 @@ class Order extends Model
 
     public function addHistory(string $status, ?string $comment = null, ?int $userId = null, bool $notified = false): OrderHistory
     {
-        return $this->histories()->create([
+        /** @var OrderHistory $history */
+        $history = $this->histories()->create([
             'status' => $status,
             'comment' => $comment,
             'user_id' => $userId,
             'customer_notified' => $notified,
         ]);
+
+        return $history;
     }
 
     public function onPaymentSuccess(Payment $payment): void
@@ -102,7 +109,7 @@ class Order extends Model
             'transaction_id' => $payment->gateway_transaction_id ?: $payment->payment_id,
             'paid_at' => now(),
         ]);
-        $methodName = $payment->method instanceof \App\Modules\Payment\Enums\PaymentMethod ? $payment->method->value : ($payment->gateway ?: (string) $payment->method);
+        $methodName = $payment->method instanceof PaymentMethod ? $payment->method->value : ($payment->gateway ?: (string) $payment->method);
         $this->addHistory('payment_received', "Payment #{$payment->payment_id} received successfully via {$methodName}");
     }
 

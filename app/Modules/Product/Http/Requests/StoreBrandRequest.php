@@ -17,7 +17,7 @@ class StoreBrandRequest extends FormRequest
 
         return [
             'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:product_brands,slug,' . $brandId,
+            'slug' => 'nullable|string|max:255|unique:product_brands,slug,'.$brandId,
             'website' => 'nullable|url|max:255',
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',

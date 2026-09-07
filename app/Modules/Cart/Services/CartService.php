@@ -29,6 +29,7 @@ class CartService
             // If a guest token was passed alongside logged-in user, sync it
             if ($guestToken) {
                 $this->syncGuestCart($user, $guestToken);
+
                 return $cart->fresh(['items.product.media', 'items.variant']);
             }
 
@@ -105,6 +106,7 @@ class CartService
                 $cart = $item->cart;
                 $item->delete();
                 $this->recalculateCouponDiscount($cart);
+
                 return $item;
             }
 
@@ -244,12 +246,14 @@ class CartService
         $coupon = Coupon::where('code', $cart->coupon_code)->first();
         if (! $coupon || ! $coupon->is_active) {
             $this->removeCoupon($cart);
+
             return;
         }
 
         $subtotal = $cart->subtotal;
         if ($coupon->min_order_amount && $subtotal < $coupon->min_order_amount) {
             $this->removeCoupon($cart);
+
             return;
         }
 

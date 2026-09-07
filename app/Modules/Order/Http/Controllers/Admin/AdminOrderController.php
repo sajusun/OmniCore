@@ -11,9 +11,7 @@ use Illuminate\Http\Request;
 
 class AdminOrderController extends Controller
 {
-    public function __construct(protected OrderService $orderService)
-    {
-    }
+    public function __construct(protected OrderService $orderService) {}
 
     public function index(Request $request): JsonResponse
     {

@@ -5,7 +5,6 @@ namespace App\Modules\Interaction\Services;
 use App\Models\User;
 use App\Modules\Interaction\Models\View;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use InvalidArgumentException;
@@ -20,12 +19,12 @@ class ViewService
         $morphMap = Relation::morphMap();
         $modelClass = $morphMap[$type] ?? (class_exists($type) ? $type : null);
 
-        if (!$modelClass || !class_exists($modelClass)) {
+        if (! $modelClass || ! class_exists($modelClass)) {
             throw new InvalidArgumentException("Invalid viewable type: {$type}");
         }
 
         $model = $modelClass::find($id);
-        if (!$model) {
+        if (! $model) {
             throw new InvalidArgumentException("Target model not found for {$type} #{$id}");
         }
 

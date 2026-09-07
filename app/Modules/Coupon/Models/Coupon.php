@@ -94,6 +94,7 @@ class Coupon extends Model
             if ($this->max_discount_amount && $discount > $this->max_discount_amount) {
                 $discount = (float) $this->max_discount_amount;
             }
+
             return round(min($subtotal, $discount), 2);
         }
 

@@ -26,15 +26,20 @@ class ViewApiController extends Controller
                 $request->input('subject_id')
             );
 
-            $result = $this->viewService->recordView(
+            $recorded = $this->viewService->recordView(
                 $model,
                 $request->user('api'),
                 $request->ip(),
-                $request->userAgent(),
-                (int) $request->input('cooldown_minutes', 60)
+                (int) $request->input('cooldown_minutes', 60),
+                $request->userAgent()
             );
 
-            $message = $result['recorded'] ? 'View recorded successfully.' : 'View already counted recently (cooldown active).';
+            $result = [
+                'recorded' => $recorded,
+                'views_count' => method_exists($model, 'viewsCount') ? $model->viewsCount() : ($model->views_count ?? 0),
+            ];
+
+            $message = $recorded ? 'View recorded successfully.' : 'View already counted recently (cooldown active).';
 
             return $this->success($result, $message);
         } catch (Exception $e) {
@@ -50,6 +55,7 @@ class ViewApiController extends Controller
         $request->validate([
             'subject_type' => ['required', 'string'],
             'subject_id' => ['required'],
+            'days' => ['nullable', 'integer', 'min:1', 'max:90'],
         ]);
 
         try {
@@ -58,7 +64,7 @@ class ViewApiController extends Controller
                 $request->input('subject_id')
             );
 
-            $stats = $this->viewService->getViewStats($model);
+            $stats = $this->viewService->getDailyStats($model, (int) $request->input('days', 7));
 
             return $this->success($stats, 'View stats retrieved successfully.');
         } catch (Exception $e) {

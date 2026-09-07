@@ -2,7 +2,6 @@
 
 namespace App\Modules\Interaction\Http\Controllers\Api;
 
-use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Modules\Interaction\Http\Requests\ToggleBookmarkRequest;
 use App\Modules\Interaction\Http\Resources\BookmarkResource;

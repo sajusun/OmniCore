@@ -14,8 +14,6 @@ use App\Modules\Order\Models\Order;
 use App\Modules\Order\Models\OrderItem;
 use App\Modules\Order\Models\ShippingMethod;
 use App\Modules\Order\Models\UserAddress;
-use App\Modules\Product\Models\Product;
-use App\Modules\Product\Models\ProductVariant;
 use App\Modules\Product\Services\InventoryService;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -28,8 +26,7 @@ class OrderService
         protected CartService $cartService,
         protected InventoryService $inventoryService,
         protected CouponService $couponService
-    ) {
-    }
+    ) {}
 
     /**
      * Atomic Checkout: Place order from user's active cart
@@ -93,7 +90,7 @@ class OrderService
             $totalAmount = max(0.00, round($subtotal - $discountAmount + $shippingFee + $taxAmount, 2));
 
             // 6. Generate Unique Order Number e.g. ORD-2026-9281
-            $orderNumber = 'ORD-' . date('Ymd') . '-' . strtoupper(Str::random(5));
+            $orderNumber = 'ORD-'.date('Ymd').'-'.strtoupper(Str::random(5));
 
             // 7. Create Order Record
             $order = Order::create([
@@ -242,7 +239,7 @@ class OrderService
         }
 
         if (! empty($filters['search'])) {
-            $s = '%' . $filters['search'] . '%';
+            $s = '%'.$filters['search'].'%';
             $query->where(function ($q) use ($s) {
                 $q->where('order_number', 'like', $s)
                     ->orWhereHas('user', fn ($u) => $u->where('name', 'like', $s)->orWhere('email', 'like', $s));

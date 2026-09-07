@@ -12,9 +12,7 @@ use Illuminate\Support\Str;
 
 class AdminBrandController extends Controller
 {
-    public function __construct(protected MediaService $mediaService)
-    {
-    }
+    public function __construct(protected MediaService $mediaService) {}
 
     public function index(): JsonResponse
     {

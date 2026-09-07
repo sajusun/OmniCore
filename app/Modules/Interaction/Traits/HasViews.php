@@ -20,10 +20,10 @@ trait HasViews
     /**
      * Record a view/impression with anti-spam cooldown.
      *
-     * @param User|int|null $user Authenticated user instance or ID
-     * @param string|null $ip Visitor IP address
-     * @param int $cooldownMinutes Minimum minutes required before recording another view from same user/IP
-     * @param string|null $userAgent Visitor browser User-Agent
+     * @param  User|int|null  $user  Authenticated user instance or ID
+     * @param  string|null  $ip  Visitor IP address
+     * @param  int  $cooldownMinutes  Minimum minutes required before recording another view from same user/IP
+     * @param  string|null  $userAgent  Visitor browser User-Agent
      * @return bool True if a new view was recorded, false if ignored due to cooldown
      */
     public function recordView(
@@ -90,7 +90,7 @@ trait HasViews
      */
     public function isViewedBy(User|int|null $user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 

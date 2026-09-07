@@ -24,7 +24,7 @@ class ProductDetailController extends Controller
     {
         $product = $this->productService->getProductBySlug($slug);
 
-        if (!$product || $product->status !== 'published') {
+        if (! $product || $product->status !== 'published') {
             return $this->notFound('Product not found or unavailable.');
         }
 
@@ -41,7 +41,7 @@ class ProductDetailController extends Controller
     {
         $product = Product::where('slug', $slug)->first();
 
-        if (!$product) {
+        if (! $product) {
             return $this->notFound('Product not found.');
         }
 

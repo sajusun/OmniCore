@@ -23,7 +23,7 @@ class CouponService
         }
 
         if (! empty($filters['search'])) {
-            $query->where('code', 'like', '%' . $filters['search'] . '%');
+            $query->where('code', 'like', '%'.$filters['search'].'%');
         }
 
         return $query->latest()->paginate($perPage);
@@ -35,6 +35,7 @@ class CouponService
     public function createCoupon(array $data): Coupon
     {
         $data['code'] = Str::upper(trim($data['code']));
+
         return Coupon::create($data);
     }
 
@@ -47,6 +48,7 @@ class CouponService
             $data['code'] = Str::upper(trim($data['code']));
         }
         $coupon->update($data);
+
         return $coupon;
     }
 
