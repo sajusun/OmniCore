@@ -15,13 +15,15 @@ class AiAdminController extends Controller
 {
     public function index(): View
     {
-        $knowledgeBases = AiKnowledgeBase::latest()->paginate(15);
+        $faqs = AiKnowledgeBase::latest()->paginate(15);
+        $knowledgeBases = $faqs;
         $totalConversations = AiConversation::count();
         $totalMessages = AiMessage::count();
         $totalFaqs = AiKnowledgeBase::count();
         $totalTokens = AiConversation::sum('tokens_used');
 
         return view('ai::admin.knowledge_base.index', compact(
+            'faqs',
             'knowledgeBases',
             'totalConversations',
             'totalMessages',

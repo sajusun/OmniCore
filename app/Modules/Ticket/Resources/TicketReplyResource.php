@@ -18,7 +18,7 @@ class TicketReplyResource extends JsonResource
                 'id'         => $this->user?->id,
                 'name'       => $this->user?->name,
                 'avatar_url' => $this->user?->avatar_url,
-                'is_staff'   => $this->user?->hasRole(['Super Admin', 'Admin', 'Staff']) ?? false,
+                'is_staff'   => $this->user?->hasAnyRole(['super_admin', 'admin', 'staff', 'Super Admin', 'Admin', 'Staff']) ?? false,
             ],
             'is_internal_note' => (bool) $this->is_internal_note,
             'message'          => $this->message,

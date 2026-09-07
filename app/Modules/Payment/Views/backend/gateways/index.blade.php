@@ -44,7 +44,7 @@
 
                         <p class="text-muted small mb-3">{{ $gateway->description }}</p>
 
-                        <form method="POST" action="{{ route('gateways.update', $gateway) }}">
+                        <form method="POST" action="{{ route('admin.gateways.update', $gateway) }}">
                             @csrf
                             @method('PUT')
 

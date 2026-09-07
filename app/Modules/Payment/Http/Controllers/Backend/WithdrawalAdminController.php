@@ -34,7 +34,7 @@ class WithdrawalAdminController extends Controller
             'pending_count' => WithdrawalRequest::pending()->count(),
             'pending_amount' => (float) WithdrawalRequest::pending()->sum('amount'),
             'approved_count' => WithdrawalRequest::approved()->count(),
-            'approved_amount' => (float) WithdrawalRequest::approved()->sum('payable_amount'),
+            'approved_amount' => (float) WithdrawalRequest::approved()->sum('net_amount'),
         ];
 
         return view('payment::backend.withdrawals.index', compact('withdrawals', 'stats'));

@@ -42,9 +42,10 @@ class UserSeeder extends Seeder
         }
 
         // ── Create unique single roles ─────────────────────────────────────────
-        $superAdminRole = Role::create(['name' => 'super_admin', 'display_name' => 'Super Admin', 'guard_name' => 'web']);
-        $adminRole      = Role::create(['name' => 'admin', 'display_name' => 'Admin', 'guard_name' => 'web']);
-        $userRole       = Role::create(['name' => 'user', 'display_name' => 'User', 'guard_name' => 'web']);
+        $superAdminRole = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web'], ['display_name' => 'Super Admin']);
+        $adminRole      = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web'], ['display_name' => 'Admin']);
+        $staffRole      = Role::firstOrCreate(['name' => 'staff', 'guard_name' => 'web'], ['display_name' => 'Staff']);
+        $userRole       = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web'], ['display_name' => 'User']);
 
         // ── Assign permissions to roles ───────────────────────────────────────
         $webPermissions = Permission::where('guard_name', 'web')->get();
@@ -52,6 +53,7 @@ class UserSeeder extends Seeder
         // Super Admin & Admin get all permissions
         $superAdminRole->syncPermissions($webPermissions);
         $adminRole->syncPermissions($webPermissions);
+        $staffRole->syncPermissions(Permission::where('guard_name', 'web')->where('name', 'like', 'ticket.%')->get());
 
         // User gets minimal dashboard access
         $userRole->syncPermissions(Permission::where('guard_name', 'web')->where('name', 'dashboard.access')->get());

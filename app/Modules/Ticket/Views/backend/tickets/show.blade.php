@@ -1,4 +1,4 @@
-@extends('backend.layouts.app')
+@extends('backend.app')
 
 @section('title', "Ticket #{$ticket->ticket_number}")
 

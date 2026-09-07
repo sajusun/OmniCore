@@ -19,8 +19,8 @@ class RewardAdminController extends Controller
     public function tiers(): View
     {
         $tiers = RewardTier::orderBy('min_points')->get();
-        $totalPointsIssued = PointTransaction::where('points', '>', 0)->sum('points');
-        $totalRedeemedPoints = PointTransaction::where('points', '<', 0)->sum('points');
+        $totalPointsIssued = PointTransaction::where('amount', '>', 0)->sum('amount');
+        $totalRedeemedPoints = abs(PointTransaction::where('amount', '<', 0)->sum('amount'));
 
         return view('reward_module::admin.tiers.index', compact(
             'tiers',
@@ -102,7 +102,7 @@ class RewardAdminController extends Controller
     public function leaderboard(): View
     {
         $topUsers = UserReward::with('user')
-            ->orderByDesc('current_points')
+            ->orderByDesc('points_balance')
             ->take(25)
             ->get();
 

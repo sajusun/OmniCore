@@ -10,7 +10,7 @@
                 <h4 class="fw-bold mb-1"><i class="bi bi-clock-history me-2 text-primary"></i> Payment Transactions & Gateway Logs</h4>
                 <p class="text-muted small mb-0">Audit customer checkout payments, gateway response signatures, refunds, and settlement records.</p>
             </div>
-            <a href="{{ route('gateways.index') }}" class="btn btn-outline-secondary px-3">
+            <a href="{{ route('admin.gateways.index') }}" class="btn btn-outline-secondary px-3">
                 <i class="bi bi-gear me-1"></i> Gateway Settings
             </a>
         </div>
@@ -56,7 +56,7 @@
 
         {{-- Search & Filter Card --}}
         <x-card title="Search & Filter Transactions" class="mb-4">
-            <form method="GET" action="{{ route('payments.index') }}" class="row g-3 align-items-center">
+            <form method="GET" action="{{ route('admin.payments.index') }}" class="row g-3 align-items-center">
                 <div class="col-md-4">
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Payment UUID, Trx ID, Customer..." class="form-control">
                 </div>
@@ -81,7 +81,7 @@
                 </div>
                 <div class="col-md-2 d-flex gap-2">
                     <button type="submit" class="btn btn-primary px-3 w-100"><i class="bi bi-funnel me-1"></i> Filter</button>
-                    <a href="{{ route('payments.index') }}" class="btn btn-light border px-3">Reset</a>
+                    <a href="{{ route('admin.payments.index') }}" class="btn btn-light border px-3">Reset</a>
                 </div>
             </form>
         </x-card>
@@ -105,7 +105,7 @@
                     @forelse($payments as $payment)
                         <tr>
                             <x-table.td>
-                                <a href="{{ route('payments.show', $payment) }}" class="fw-bold text-primary font-monospace text-decoration-none small">
+                                <a href="{{ route('admin.payments.show', $payment) }}" class="fw-bold text-primary font-monospace text-decoration-none small">
                                     {{ Str::limit($payment->payment_id, 12, '...') }}
                                 </a>
                                 @if($payment->gateway_transaction_id)
@@ -142,7 +142,7 @@
                                 {{ $payment->created_at->format('M d, Y H:i') }}
                             </x-table.td>
                             <x-table.td class="text-end">
-                                <a href="{{ route('payments.show', $payment) }}" class="btn btn-sm btn-outline-primary px-2.5">
+                                <a href="{{ route('admin.payments.show', $payment) }}" class="btn btn-sm btn-outline-primary px-2.5">
                                     <i class="bi bi-eye me-1"></i> Details
                                 </a>
                             </x-table.td>

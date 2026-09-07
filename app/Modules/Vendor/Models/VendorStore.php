@@ -69,6 +69,11 @@ class VendorStore extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function members(): HasMany
     {
         return $this->hasMany(VendorMember::class, 'vendor_id');

@@ -38,7 +38,7 @@ class TicketDetailResource extends JsonResource
                 $this->whenLoaded('replies', function () use ($request) {
                     // Filter internal notes if viewer is a regular customer
                     $user = $request->user();
-                    $isStaff = $user && $user->hasRole(['Super Admin', 'Admin', 'Staff']);
+                    $isStaff = $user && $user->hasAnyRole(['super_admin', 'admin', 'staff', 'Super Admin', 'Admin', 'Staff']);
                     return $this->replies->filter(function ($reply) use ($isStaff) {
                         return $isStaff || !$reply->is_internal_note;
                     });

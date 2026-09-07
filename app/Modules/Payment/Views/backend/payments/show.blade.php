@@ -4,7 +4,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Payment Details #{{ $payment->payment_id }}</h2>
-            <a href="{{ route('payments.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200">
+            <a href="{{ route('admin.payments.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200">
                 Back to List
             </a>
         </div>
@@ -80,7 +80,7 @@
                             </div>
                             <div class="flex justify-between border-b pb-2">
                                 <dt class="font-bold text-gray-800">Total Charged:</dt>
-                                <dd class="font-bold text-emerald-600 text-base">${{ number_format($payment->total_amount, 2) }} {{ $payment->currency }}</dd>
+                                <dd class="font-bold text-emerald-600 text-base">${{ number_format($payment->amount + ($payment->fee ?? 0), 2) }} {{ $payment->currency }}</dd>
                             </div>
                         </dl>
                     </div>
@@ -89,7 +89,7 @@
                 <!-- Admin Action Buttons -->
                 <div class="mt-8 pt-6 border-t flex gap-4">
                     @if($payment->isPending())
-                    <form method="POST" action="{{ route('payments.mark-paid', $payment) }}" onsubmit="return confirm('Mark this payment as manually completed?')">
+                    <form method="POST" action="{{ route('admin.payments.mark-paid', $payment) }}" onsubmit="return confirm('Mark this payment as manually completed?')">
                         @csrf
                         <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-md shadow-sm">
                             Mark as Paid (Admin Confirm)
@@ -98,7 +98,7 @@
                     @endif
 
                     @if($payment->isCompleted())
-                    <form method="POST" action="{{ route('payments.refund', $payment) }}" onsubmit="return confirm('Process refund for this payment?')">
+                    <form method="POST" action="{{ route('admin.payments.refund', $payment) }}" onsubmit="return confirm('Process refund for this payment?')">
                         @csrf
                         <input type="text" name="reason" placeholder="Refund reason (optional)" class="text-xs border rounded px-2 py-1 mr-2">
                         <button type="submit" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold rounded-md shadow-sm">

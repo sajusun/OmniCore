@@ -58,7 +58,7 @@ class ReviewService
             }
 
             // Notify owner or admins
-            $admins = User::role('Super Admin')->get();
+            $admins = User::whereHas('roles', fn($q) => $q->whereIn('name', ['super_admin', 'admin', 'Super Admin', 'Admin']))->get();
             if ($admins->isNotEmpty()) {
                 $this->notificationService->sendMany(
                     $admins,

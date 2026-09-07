@@ -97,6 +97,9 @@ Route::middleware('permission:settings.access')->prefix('setting/general')->name
     Route::post('/mail/send', [SettingController::class, 'sendMail'])->name('mail.send');
 });
 
+Route::post('setting/mail/update', [SettingController::class, 'updateMail'])->middleware('permission:settings.edit')->name('setting.mail.update');
+Route::post('setting/mail/send', [SettingController::class, 'sendMail'])->name('setting.mail.send');
+
 // ─── System Optimization ──────────────────────────────────────────────────────
 Route::middleware('permission:system.optimize')->get('/optimize', function () {
     Artisan::call('optimize:clear');

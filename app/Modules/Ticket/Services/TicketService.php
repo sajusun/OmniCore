@@ -49,7 +49,7 @@ class TicketService
             }
 
             // Notify admins
-            $admins = User::role('Super Admin')->get();
+            $admins = User::whereHas('roles', fn($q) => $q->whereIn('name', ['super_admin', 'admin', 'Super Admin', 'Admin']))->get();
             if ($admins->isNotEmpty()) {
                 $this->notificationService->sendMany(
                     $admins,
@@ -118,7 +118,7 @@ class TicketService
                     }
 
                     // Notify assigned staff or super admins
-                    $recipient = $ticket->assignee ?? User::role('Super Admin')->first();
+                    $recipient = $ticket->assignee ?? User::whereHas('roles', fn($q) => $q->whereIn('name', ['super_admin', 'admin', 'Super Admin', 'Admin']))->first();
                     if ($recipient) {
                         $this->notificationService->send(
                             $recipient,

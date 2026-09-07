@@ -21,7 +21,7 @@ class WalletManagementController extends Controller
     public function index(Request $request): View
     {
         $wallets = Wallet::with('user')
-            ->when($request->filled('frozen'), fn($q) => $q->where('is_frozen', $request->boolean('frozen')))
+            ->when($request->filled('frozen'), fn($q) => $q->where('status', $request->boolean('frozen') ? 'locked' : 'active'))
             ->when($request->filled('search'), function ($q) use ($request) {
                 $search = $request->input('search');
                 $q->whereHas('user', fn($u) => $u->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%"));
@@ -32,7 +32,7 @@ class WalletManagementController extends Controller
         $stats = [
             'total_wallets' => Wallet::count(),
             'total_circulation' => (float) Wallet::sum('balance'),
-            'frozen_wallets' => Wallet::where('is_frozen', true)->count(),
+            'frozen_wallets' => Wallet::where('status', 'locked')->count(),
         ];
 
         return view('payment::backend.wallets.index', compact('wallets', 'stats'));
@@ -55,10 +55,10 @@ class WalletManagementController extends Controller
 
     public function toggleFreeze(Wallet $wallet): RedirectResponse
     {
-        $wallet->is_frozen = !$wallet->is_frozen;
+        $wallet->status = $wallet->status === 'locked' ? 'active' : 'locked';
         $wallet->save();
 
-        $status = $wallet->is_frozen ? 'frozen' : 'unfrozen';
+        $status = $wallet->status === 'locked' ? 'frozen' : 'unfrozen';
         return back()->with('success', "Wallet has been {$status} successfully.");
     }
 

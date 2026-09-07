@@ -36,7 +36,7 @@ class PaymentHistoryController extends Controller
 
         $stats = [
             'total_payments' => Payment::count(),
-            'total_revenue' => (float) Payment::completed()->sum('total_amount'),
+            'total_revenue' => (float) Payment::completed()->sum('amount'),
             'completed_count' => Payment::completed()->count(),
             'pending_count' => Payment::pending()->count(),
         ];

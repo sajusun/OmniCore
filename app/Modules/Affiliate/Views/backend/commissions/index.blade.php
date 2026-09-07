@@ -1,4 +1,4 @@
-@extends('backend.layouts.app')
+@extends('backend.app')
 
 @section('title', 'Affiliate Commissions')
 

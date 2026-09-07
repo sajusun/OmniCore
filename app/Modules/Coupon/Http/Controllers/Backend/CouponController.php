@@ -69,6 +69,11 @@ class CouponController extends Controller
         return view('coupon::backend.coupons.index');
     }
 
+    public function create()
+    {
+        return redirect()->route('admin.coupons.index');
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

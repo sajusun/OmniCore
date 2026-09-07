@@ -37,7 +37,9 @@ class AiServiceProvider extends ServiceProvider
 
         // 3. Auto-load Admin Routes
         if (file_exists(__DIR__ . '/../Routes/admin.php')) {
-            Route::middleware(['web', 'auth'])
+            Route::prefix('admin')
+                ->name('admin.')
+                ->middleware(['web', 'auth'])
                 ->group(__DIR__ . '/../Routes/admin.php');
         }
 

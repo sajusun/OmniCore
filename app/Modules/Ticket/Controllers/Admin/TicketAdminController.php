@@ -56,7 +56,7 @@ class TicketAdminController extends Controller
 
         $tickets = $query->paginate(20)->withQueryString();
         $categories = TicketCategory::all();
-        $staffMembers = User::role(['Super Admin', 'Admin', 'Staff'])->get();
+        $staffMembers = User::whereHas('roles', fn($q) => $q->whereIn('name', ['super_admin', 'admin', 'staff', 'Super Admin', 'Admin', 'Staff']))->get();
 
         $stats = [
             'total'       => Ticket::count(),
@@ -71,7 +71,7 @@ class TicketAdminController extends Controller
     public function show(Ticket $ticket): View
     {
         $ticket->load(['user', 'category', 'assignee', 'attachments', 'replies.user', 'replies.attachments']);
-        $staffMembers = User::role(['Super Admin', 'Admin', 'Staff'])->get();
+        $staffMembers = User::whereHas('roles', fn($q) => $q->whereIn('name', ['super_admin', 'admin', 'staff', 'Super Admin', 'Admin', 'Staff']))->get();
         $cannedResponses = CannedResponse::active()->get();
 
         return view('Ticket::backend.tickets.show', compact('ticket', 'staffMembers', 'cannedResponses'));

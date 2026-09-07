@@ -170,7 +170,7 @@ class ReviewApiController extends Controller
      */
     public function destroy(Request $request, Review $review): JsonResponse
     {
-        if ($review->user_id !== $request->user()->id && !$request->user()->hasRole(['Super Admin', 'Admin'])) {
+        if ($review->user_id !== $request->user()->id && !$request->user()->hasAnyRole(['super_admin', 'admin', 'Super Admin', 'Admin'])) {
             return $this->forbidden('Unauthorized to delete this review.');
         }
 

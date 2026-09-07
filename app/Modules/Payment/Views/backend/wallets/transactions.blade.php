@@ -4,7 +4,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Double-Entry Wallet Ledger</h2>
-            <a href="{{ route('wallets.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200">
+            <a href="{{ route('admin.wallets.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200">
                 Back to Wallets
             </a>
         </div>
@@ -14,7 +14,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Filter -->
             <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 mb-6">
-                <form method="GET" action="{{ route('wallets.transactions') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <form method="GET" action="{{ route('admin.wallets.transactions') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Trx ID, User name/email..." class="px-3 py-2 border rounded-md text-sm">
                     <select name="type" class="px-3 py-2 border rounded-md text-sm">
                         <option value="">All Transaction Types</option>
@@ -28,7 +28,7 @@
                     </select>
                     <div class="flex gap-2">
                         <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-md text-sm font-semibold hover:bg-emerald-700">Filter</button>
-                        <a href="{{ route('wallets.transactions') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200">Reset</a>
+                        <a href="{{ route('admin.wallets.transactions') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200">Reset</a>
                     </div>
                 </form>
             </div>

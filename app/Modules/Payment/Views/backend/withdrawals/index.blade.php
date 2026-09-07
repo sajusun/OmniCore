@@ -10,7 +10,7 @@
                 <h4 class="fw-bold mb-1"><i class="bi bi-bank me-2 text-primary"></i> User Withdrawal Requests</h4>
                 <p class="text-muted small mb-0">Review pending user wallet cashout requests, approve bank disbursements, or reject with reason.</p>
             </div>
-            <a href="{{ route('wallets.index') }}" class="btn btn-outline-secondary px-3">
+            <a href="{{ route('admin.wallets.index') }}" class="btn btn-outline-secondary px-3">
                 <i class="bi bi-wallet2 me-1"></i> User Wallets
             </a>
         </div>
@@ -56,7 +56,7 @@
 
         {{-- Filter Card --}}
         <x-card title="Search & Filter Withdrawals" class="mb-4">
-            <form method="GET" action="{{ route('withdrawals.index') }}" class="row g-3 align-items-center">
+            <form method="GET" action="{{ route('admin.withdrawals.index') }}" class="row g-3 align-items-center">
                 <div class="col-md-6">
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Search customer name or email..." class="form-control">
                 </div>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="col-md-3 d-flex gap-2">
                     <button type="submit" class="btn btn-primary px-4 w-100"><i class="bi bi-funnel me-1"></i> Filter</button>
-                    <a href="{{ route('withdrawals.index') }}" class="btn btn-light border px-3">Reset</a>
+                    <a href="{{ route('admin.withdrawals.index') }}" class="btn btn-light border px-3">Reset</a>
                 </div>
             </form>
         </x-card>
@@ -126,7 +126,7 @@
                             <x-table.td class="text-end">
                                 @if($withdrawal->status === 'pending')
                                     <div class="d-inline-flex gap-2 justify-content-end">
-                                        <form method="POST" action="{{ route('withdrawals.approve', $withdrawal) }}">
+                                        <form method="POST" action="{{ route('admin.withdrawals.approve', $withdrawal) }}">
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-success px-3">
                                                 <i class="bi bi-check-lg me-1"></i> Approve
@@ -141,7 +141,7 @@
                                     <div class="modal fade text-start" id="rejectModal_{{ $withdrawal->id }}" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content border-0 shadow">
-                                                <form method="POST" action="{{ route('withdrawals.reject', $withdrawal) }}">
+                                                <form method="POST" action="{{ route('admin.withdrawals.reject', $withdrawal) }}">
                                                     @csrf
                                                     <div class="modal-header border-bottom">
                                                         <h5 class="modal-title fw-bold">Reject Withdrawal #{{ $withdrawal->id }}</h5>

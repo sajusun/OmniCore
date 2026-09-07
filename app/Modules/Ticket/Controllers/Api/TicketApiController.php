@@ -94,7 +94,7 @@ class TicketApiController extends Controller
      */
     public function show(Request $request, Ticket $ticket): JsonResponse
     {
-        if ($ticket->user_id !== $request->user()->id && !$request->user()->hasRole(['Super Admin', 'Admin', 'Staff'])) {
+        if ($ticket->user_id !== $request->user()->id && !$request->user()->hasAnyRole(['super_admin', 'admin', 'staff', 'Super Admin', 'Admin', 'Staff'])) {
             return $this->forbidden('Unauthorized to view this ticket.');
         }
 
@@ -111,7 +111,7 @@ class TicketApiController extends Controller
      */
     public function reply(Request $request, Ticket $ticket): JsonResponse
     {
-        if ($ticket->user_id !== $request->user()->id && !$request->user()->hasRole(['Super Admin', 'Admin', 'Staff'])) {
+        if ($ticket->user_id !== $request->user()->id && !$request->user()->hasAnyRole(['super_admin', 'admin', 'staff', 'Super Admin', 'Admin', 'Staff'])) {
             return $this->forbidden('Unauthorized to reply to this ticket.');
         }
 
@@ -140,7 +140,7 @@ class TicketApiController extends Controller
      */
     public function close(Request $request, Ticket $ticket): JsonResponse
     {
-        if ($ticket->user_id !== $request->user()->id && !$request->user()->hasRole(['Super Admin', 'Admin', 'Staff'])) {
+        if ($ticket->user_id !== $request->user()->id && !$request->user()->hasAnyRole(['super_admin', 'admin', 'staff', 'Super Admin', 'Admin', 'Staff'])) {
             return $this->forbidden('Unauthorized.');
         }
 

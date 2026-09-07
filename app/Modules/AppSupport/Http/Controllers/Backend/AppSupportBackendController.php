@@ -44,10 +44,12 @@ class AppSupportBackendController extends Controller
         ];
 
         $categories = SupportCategory::cases();
+        $types = array_map(fn($c) => $c->value, SupportCategory::cases());
         $statuses = SupportStatus::cases();
+        $priorities = ['low', 'normal', 'high', 'urgent'];
+        $supports = $reports;
 
-        $viewName = view()->exists('app_support::backend.index') ? 'app_support::backend.index' : 'backend.app_support.index';
-        return view($viewName, compact('reports', 'counts', 'categories', 'statuses', 'filters'));
+        return view('app_support::backend.index', compact('reports', 'supports', 'counts', 'categories', 'types', 'statuses', 'priorities', 'filters'));
     }
 
     /**
@@ -58,8 +60,7 @@ class AppSupportBackendController extends Controller
         $report = $this->supportService->getReportDetail($id);
         $statuses = SupportStatus::cases();
 
-        $viewName = view()->exists('app_support::backend.show') ? 'app_support::backend.show' : 'backend.app_support.show';
-        return view($viewName, compact('report', 'statuses'));
+        return view('app_support::backend.show', compact('report', 'statuses'));
     }
 
     /**

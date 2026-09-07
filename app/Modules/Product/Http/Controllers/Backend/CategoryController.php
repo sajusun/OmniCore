@@ -50,6 +50,11 @@ class CategoryController extends Controller
         return view('product::backend.categories.index', compact('parentCategories'));
     }
 
+    public function create()
+    {
+        return redirect()->route('admin.categories.index');
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

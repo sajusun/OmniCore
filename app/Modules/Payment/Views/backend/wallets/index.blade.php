@@ -10,7 +10,7 @@
                 <h4 class="fw-bold mb-1"><i class="bi bi-wallet2 me-2 text-primary"></i> User Wallets & Ledger Balances</h4>
                 <p class="text-muted small mb-0">Monitor stored balance in circulation, manual admin balance adjustments, and freeze controls.</p>
             </div>
-            <a href="{{ route('wallets.transactions') }}" class="btn btn-primary px-3 shadow-sm">
+            <a href="{{ route('admin.wallets.transactions') }}" class="btn btn-primary px-3 shadow-sm">
                 <i class="bi bi-journal-text me-1"></i> Ledger Audit Trail
             </a>
         </div>
@@ -48,13 +48,13 @@
 
         {{-- Search Card --}}
         <x-card title="Search Wallets" class="mb-4">
-            <form method="GET" action="{{ route('wallets.index') }}" class="row g-3 align-items-center">
+            <form method="GET" action="{{ route('admin.wallets.index') }}" class="row g-3 align-items-center">
                 <div class="col-md-9">
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Search customer name or email..." class="form-control">
                 </div>
                 <div class="col-md-3 d-flex gap-2">
                     <button type="submit" class="btn btn-primary px-4 w-100"><i class="bi bi-search me-1"></i> Search</button>
-                    <a href="{{ route('wallets.index') }}" class="btn btn-light border px-3">Reset</a>
+                    <a href="{{ route('admin.wallets.index') }}" class="btn btn-light border px-3">Reset</a>
                 </div>
             </form>
         </x-card>
@@ -96,7 +96,7 @@
                                     <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#adjustModal_{{ $wallet->id }}">
                                         <i class="bi bi-sliders me-1"></i> Adjust
                                     </button>
-                                    <form method="POST" action="{{ route('wallets.toggle-freeze', $wallet) }}">
+                                    <form method="POST" action="{{ route('admin.wallets.toggle-freeze', $wallet) }}">
                                         @csrf
                                         @if($wallet->is_active ?? true)
                                             <button type="submit" class="btn btn-sm btn-outline-danger" title="Freeze Wallet">
@@ -114,7 +114,7 @@
                                 <div class="modal fade text-start" id="adjustModal_{{ $wallet->id }}" tabindex="-1">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content border-0 shadow">
-                                            <form method="POST" action="{{ route('wallets.adjust-balance', $wallet) }}">
+                                            <form method="POST" action="{{ route('admin.wallets.adjust-balance', $wallet) }}">
                                                 @csrf
                                                 <div class="modal-header border-bottom">
                                                     <h5 class="modal-title fw-bold">Adjust Balance: {{ $wallet->user?->name }}</h5>

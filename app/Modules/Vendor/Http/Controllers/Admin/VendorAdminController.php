@@ -37,8 +37,8 @@ class VendorAdminController extends Controller
 
         $stores = $query->paginate(15);
         $totalStores = VendorStore::count();
-        $verifiedStores = VendorStore::where('is_verified', true)->count();
-        $totalRevenue = VendorStore::sum('total_sales');
+        $verifiedStores = VendorStore::where('status', 'active')->count();
+        $totalRevenue = (float) VendorStore::sum('total_sales');
 
         return view('vendor_module::admin.stores.index', compact(
             'stores',

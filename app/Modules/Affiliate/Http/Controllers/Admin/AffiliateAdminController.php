@@ -28,8 +28,8 @@ class AffiliateAdminController extends Controller
 
         $affiliates = $query->paginate(15);
         $totalAffiliates = AffiliateAccount::count();
-        $totalPaidCommissions = AffiliateCommission::where('status', 'paid')->sum('commission_amount');
-        $totalClicks = AffiliateAccount::sum('total_clicks');
+        $totalPaidCommissions = (float) AffiliateCommission::where('status', 'paid')->sum('commission_amount');
+        $totalClicks = (int) AffiliateAccount::sum('lifetime_referrals');
 
         return view('affiliate_module::admin.index', compact(
             'affiliates',
