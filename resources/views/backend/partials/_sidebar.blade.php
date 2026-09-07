@@ -87,7 +87,7 @@ use Illuminate\Support\Facades\Route;
                     <ul class="slide-menu">
                         <li><a href="{{ Route::has('admin.orders.index') ? route('admin.orders.index') : url('admin/orders') }}"
                                 class="slide-item {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">All Orders</a></li>
-                        <li><a href="{{ Route::has('admin.coupons.index') ? route('admin.coupons.index') : url('api/v1/admin/coupons') }}"
+                        <li><a href="{{ route('admin.coupons.index') }}"
                                 class="slide-item {{ request()->routeIs('admin.coupons.*') ? 'active' : '' }}">Discount Coupons</a></li>
                     </ul>
                 </li>
@@ -112,46 +112,80 @@ use Illuminate\Support\Facades\Route;
                 <li>
                     <h3>Wallets & Finance</h3>
                 </li>
-                <li class="slide {{ request()->routeIs(['admin.wallets.*', 'admin.withdrawals.*']) ? 'is-expanded' : '' }}">
+                <li class="slide {{ request()->routeIs(['admin.wallets.*', 'admin.withdrawals.*', 'admin.payments.*', 'admin.gateways.*']) ? 'is-expanded' : '' }}">
                     <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
                         <i class="fa-solid fa-wallet side-menu__icon"></i>
-                        <span class="side-menu__label">Wallets & Payouts</span>
+                        <span class="side-menu__label">Wallets & Finance</span>
                         <i class="angle fe fe-chevron-right"></i>
                     </a>
                     <ul class="slide-menu">
-                        <li><a href="{{ Route::has('admin.wallets.index') ? route('admin.wallets.index') : url('admin/wallets') }}"
+                        <li><a href="{{ route('admin.payments.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">Payment Logs</a></li>
+                        <li><a href="{{ route('admin.wallets.index') }}"
                                 class="slide-item {{ request()->routeIs('admin.wallets.*') ? 'active' : '' }}">User Wallets</a></li>
-                        <li><a href="{{ Route::has('admin.withdrawals.index') ? route('admin.withdrawals.index') : url('admin/withdrawals') }}"
+                        <li><a href="{{ route('admin.withdrawals.index') }}"
                                 class="slide-item {{ request()->routeIs('admin.withdrawals.*') ? 'active' : '' }}">Withdrawal Requests</a></li>
+                        <li><a href="{{ route('admin.gateways.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.gateways.*') ? 'active' : '' }}">Payment Gateways</a></li>
                     </ul>
                 </li>
 
                 <li>
                     <h3>Growth & Monetization</h3>
                 </li>
-                <li class="slide">
-                    <a class="side-menu__item" href="{{ Route::has('admin.vendors.index') ? route('admin.vendors.index') : url('api/v1/vendors') }}">
+                <li class="slide {{ request()->routeIs('admin.vendor.*') ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
                         <i class="fa-solid fa-store side-menu__icon"></i>
                         <span class="side-menu__label">Vendor Stores</span>
+                        <i class="angle fe fe-chevron-right"></i>
                     </a>
+                    <ul class="slide-menu">
+                        <li><a href="{{ route('admin.vendor.stores.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.vendor.stores.*') ? 'active' : '' }}">All Stores</a></li>
+                        <li><a href="{{ route('admin.vendor.payouts.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.vendor.payouts.*') ? 'active' : '' }}">Vendor Payouts</a></li>
+                    </ul>
                 </li>
-                <li class="slide">
-                    <a class="side-menu__item" href="{{ Route::has('admin.plans.index') ? route('admin.plans.index') : url('api/v1/subscription/plans') }}">
+                <li class="slide {{ request()->routeIs('admin.subscription.*') ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
                         <i class="fa-solid fa-gem side-menu__icon"></i>
-                        <span class="side-menu__label">Subscription Plans</span>
+                        <span class="side-menu__label">Subscriptions</span>
+                        <i class="angle fe fe-chevron-right"></i>
                     </a>
+                    <ul class="slide-menu">
+                        <li><a href="{{ route('admin.subscription.plans.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.subscription.plans.*') ? 'active' : '' }}">Subscription Plans</a></li>
+                        <li><a href="{{ route('admin.subscription.subscriptions.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.subscription.subscriptions.*') ? 'active' : '' }}">Subscribers</a></li>
+                    </ul>
                 </li>
-                <li class="slide">
-                    <a class="side-menu__item" href="{{ Route::has('admin.rewards.index') ? route('admin.rewards.index') : url('api/v1/rewards') }}">
+                <li class="slide {{ request()->routeIs('admin.reward.*') ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
                         <i class="fa-solid fa-award side-menu__icon"></i>
-                        <span class="side-menu__label">Rewards & Points</span>
+                        <span class="side-menu__label">Rewards & Loyalty</span>
+                        <i class="angle fe fe-chevron-right"></i>
                     </a>
+                    <ul class="slide-menu">
+                        <li><a href="{{ route('admin.reward.tiers.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.reward.tiers.*') ? 'active' : '' }}">Loyalty Tiers</a></li>
+                        <li><a href="{{ route('admin.reward.badges.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.reward.badges.*') ? 'active' : '' }}">Badges</a></li>
+                        <li><a href="{{ route('admin.reward.leaderboard.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.reward.leaderboard.*') ? 'active' : '' }}">Leaderboard</a></li>
+                    </ul>
                 </li>
-                <li class="slide">
-                    <a class="side-menu__item" href="{{ Route::has('admin.commissions.index') ? route('admin.commissions.index') : url('api/v1/affiliate') }}">
+                <li class="slide {{ request()->routeIs('admin.affiliate.*') ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);">
                         <i class="fa-solid fa-bullhorn side-menu__icon"></i>
                         <span class="side-menu__label">Affiliate Network</span>
+                        <i class="angle fe fe-chevron-right"></i>
                     </a>
+                    <ul class="slide-menu">
+                        <li><a href="{{ route('admin.affiliate.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.affiliate.index') ? 'active' : '' }}">Affiliate Partners</a></li>
+                        <li><a href="{{ route('admin.affiliate.commissions.index') }}"
+                                class="slide-item {{ request()->routeIs('admin.affiliate.commissions.*') ? 'active' : '' }}">Commission Logs</a></li>
+                    </ul>
                 </li>
 
                 @if(env('ENABLE_ROLE_MANAGEMENT'))
