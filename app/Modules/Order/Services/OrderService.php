@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Order\Services;
 
 use App\Models\User;
@@ -7,6 +9,7 @@ use App\Modules\Cart\Models\Cart;
 use App\Modules\Cart\Services\CartService;
 use App\Modules\Coupon\Models\Coupon;
 use App\Modules\Coupon\Services\CouponService;
+use App\Modules\Order\Enums\OrderStatus;
 use App\Modules\Order\Models\Order;
 use App\Modules\Order\Models\OrderItem;
 use App\Modules\Order\Models\ShippingMethod;
@@ -163,23 +166,32 @@ class OrderService
     }
 
     /**
-     * Update order status with auto stock restoration if cancelled
+     * Update order status with auto stock restoration if cancelled & state machine validation
      */
-    public function updateOrderStatus(Order $order, string $newStatus, ?string $comment = null, ?int $userId = null): Order
+    public function updateOrderStatus(Order $order, string|OrderStatus $newStatus, ?string $comment = null, ?int $userId = null): Order
     {
         $oldStatus = $order->status;
+        $targetStatusValue = $newStatus instanceof OrderStatus ? $newStatus->value : $newStatus;
 
-        if ($oldStatus === $newStatus) {
+        if ($oldStatus === $targetStatusValue) {
             return $order;
         }
 
-        $order->update(['status' => $newStatus]);
+        // Validate state machine transition
+        $currentEnum = OrderStatus::tryFrom($oldStatus);
+        $targetEnum = $newStatus instanceof OrderStatus ? $newStatus : OrderStatus::tryFrom($newStatus);
 
-        if ($newStatus === 'shipped') {
+        if ($currentEnum && $targetEnum && ! $currentEnum->canTransitionTo($targetEnum)) {
+            throw new Exception("Invalid order status transition from '{$currentEnum->label()}' to '{$targetEnum->label()}'.");
+        }
+
+        $order->update(['status' => $targetStatusValue]);
+
+        if ($targetStatusValue === OrderStatus::SHIPPED->value) {
             $order->update(['shipped_at' => now()]);
-        } elseif ($newStatus === 'delivered') {
+        } elseif ($targetStatusValue === OrderStatus::DELIVERED->value) {
             $order->update(['delivered_at' => now(), 'payment_status' => 'paid', 'paid_at' => $order->paid_at ?: now()]);
-        } elseif (in_array($newStatus, ['cancelled', 'refunded']) && ! in_array($oldStatus, ['cancelled', 'refunded'])) {
+        } elseif (in_array($targetStatusValue, [OrderStatus::CANCELLED->value, OrderStatus::REFUNDED->value]) && ! in_array($oldStatus, [OrderStatus::CANCELLED->value, OrderStatus::REFUNDED->value])) {
             $order->update(['cancelled_at' => now()]);
 
             // Auto-restore inventory stock
@@ -193,7 +205,7 @@ class OrderService
             }
         }
 
-        $order->addHistory($newStatus, $comment ?: "Order status changed from {$oldStatus} to {$newStatus}.", $userId, true);
+        $order->addHistory($targetStatusValue, $comment ?: "Order status changed from {$oldStatus} to {$targetStatusValue}.", $userId, true);
 
         return $order->fresh(['items', 'histories']);
     }

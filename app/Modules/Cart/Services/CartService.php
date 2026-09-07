@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Cart\Services;
 
 use App\Models\User;
@@ -9,6 +11,7 @@ use App\Modules\Coupon\Models\Coupon;
 use App\Modules\Product\Models\Product;
 use App\Modules\Product\Models\ProductVariant;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CartService
@@ -42,79 +45,84 @@ class CartService
     }
 
     /**
-     * Add item to cart with stock validation
+     * Add item to cart with atomic stock validation
      */
     public function addItem(Cart $cart, int $productId, ?int $variantId = null, int $quantity = 1): CartItem
     {
-        $product = Product::findOrFail($productId);
-        $variant = $variantId ? ProductVariant::where('product_id', $productId)->findOrFail($variantId) : null;
+        return DB::transaction(function () use ($cart, $productId, $variantId, $quantity) {
+            $product = Product::where('id', $productId)->lockForUpdate()->firstOrFail();
+            $variant = $variantId ? ProductVariant::where('product_id', $productId)->where('id', $variantId)->lockForUpdate()->firstOrFail() : null;
 
-        // 1. Stock Validation
-        $availableStock = $variant ? $variant->stock_quantity : $product->stock_quantity;
-        $manageStock = $variant ? $variant->manage_stock : $product->manage_stock;
+            // 1. Stock Validation
+            $availableStock = $variant ? $variant->stock_quantity : $product->stock_quantity;
+            $manageStock = $variant ? $variant->manage_stock : $product->manage_stock;
 
-        if ($manageStock && $availableStock < $quantity) {
-            throw new Exception("Only {$availableStock} units available in stock.");
-        }
-
-        // 2. Determine Unit Price
-        $unitPrice = $variant ? (float) $variant->price : (float) $product->price;
-
-        // 3. Find existing item or create new
-        $item = $cart->items()
-            ->where('product_id', $productId)
-            ->where('variant_id', $variantId)
-            ->first();
-
-        if ($item) {
-            $newQuantity = $item->quantity + $quantity;
-            if ($manageStock && $availableStock < $newQuantity) {
-                throw new Exception("Cannot add more. You already have {$item->quantity} in your cart, and only {$availableStock} are available.");
+            if ($manageStock && $availableStock < $quantity) {
+                throw new Exception("Only {$availableStock} units available in stock.");
             }
-            $item->update([
-                'quantity' => $newQuantity,
-                'unit_price' => $unitPrice,
-            ]);
-        } else {
-            $item = $cart->items()->create([
-                'product_id' => $productId,
-                'variant_id' => $variantId,
-                'quantity' => $quantity,
-                'unit_price' => $unitPrice,
-            ]);
-        }
 
-        // Re-evaluate coupon if applied
-        $this->recalculateCouponDiscount($cart);
+            // 2. Determine Unit Price
+            $unitPrice = $variant ? (float) $variant->price : (float) $product->price;
 
-        return $item->load(['product.media', 'variant.attributeValues.attribute']);
+            // 3. Find existing item or create new
+            $item = $cart->items()
+                ->where('product_id', $productId)
+                ->where('variant_id', $variantId)
+                ->first();
+
+            if ($item) {
+                $newQuantity = $item->quantity + $quantity;
+                if ($manageStock && $availableStock < $newQuantity) {
+                    throw new Exception("Cannot add more. You already have {$item->quantity} in your cart, and only {$availableStock} are available.");
+                }
+                $item->update([
+                    'quantity' => $newQuantity,
+                    'unit_price' => $unitPrice,
+                ]);
+            } else {
+                $item = $cart->items()->create([
+                    'product_id' => $productId,
+                    'variant_id' => $variantId,
+                    'quantity' => $quantity,
+                    'unit_price' => $unitPrice,
+                ]);
+            }
+
+            // Re-evaluate coupon if applied
+            $this->recalculateCouponDiscount($cart);
+
+            return $item->load(['product.media', 'variant.attributeValues.attribute']);
+        });
     }
 
     /**
-     * Update quantity of item in cart
+     * Update quantity of item in cart with atomic stock check
      */
     public function updateItemQuantity(CartItem $item, int $quantity): CartItem
     {
-        if ($quantity <= 0) {
-            $cart = $item->cart;
-            $item->delete();
-            $this->recalculateCouponDiscount($cart);
+        return DB::transaction(function () use ($item, $quantity) {
+            if ($quantity <= 0) {
+                $cart = $item->cart;
+                $item->delete();
+                $this->recalculateCouponDiscount($cart);
+                return $item;
+            }
+
+            $product = Product::where('id', $item->product_id)->lockForUpdate()->firstOrFail();
+            $variant = $item->variant_id ? ProductVariant::where('product_id', $item->product_id)->where('id', $item->variant_id)->lockForUpdate()->firstOrFail() : null;
+
+            $availableStock = $variant ? $variant->stock_quantity : $product->stock_quantity;
+            $manageStock = $variant ? $variant->manage_stock : $product->manage_stock;
+
+            if ($manageStock && $availableStock < $quantity) {
+                throw new Exception("Only {$availableStock} units available in stock.");
+            }
+
+            $item->update(['quantity' => $quantity]);
+            $this->recalculateCouponDiscount($item->cart);
+
             return $item;
-        }
-
-        $product = $item->product;
-        $variant = $item->variant;
-        $availableStock = $variant ? $variant->stock_quantity : $product->stock_quantity;
-        $manageStock = $variant ? $variant->manage_stock : $product->manage_stock;
-
-        if ($manageStock && $availableStock < $quantity) {
-            throw new Exception("Only {$availableStock} units available in stock.");
-        }
-
-        $item->update(['quantity' => $quantity]);
-        $this->recalculateCouponDiscount($item->cart);
-
-        return $item;
+        });
     }
 
     /**

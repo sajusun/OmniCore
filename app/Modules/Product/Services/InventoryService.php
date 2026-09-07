@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Product\Services;
 
 use App\Modules\Product\Models\Product;
@@ -21,12 +23,12 @@ class InventoryService
     }
 
     /**
-     * Adjust stock for simple product or variant
+     * Adjust stock for simple product or variant with pessimistic row-level locking (concurrency-safe)
      */
     public function adjustStock(int $productId, ?int $variantId, int $quantity, string $action = 'set'): array
     {
         if ($variantId) {
-            $variant = ProductVariant::findOrFail($variantId);
+            $variant = ProductVariant::where('id', $variantId)->lockForUpdate()->firstOrFail();
             $oldStock = $variant->stock_quantity;
 
             if ($action === 'increment') {
@@ -48,7 +50,7 @@ class InventoryService
             ];
         }
 
-        $product = Product::findOrFail($productId);
+        $product = Product::where('id', $productId)->lockForUpdate()->firstOrFail();
         $oldStock = $product->stock_quantity;
 
         if ($action === 'increment') {
