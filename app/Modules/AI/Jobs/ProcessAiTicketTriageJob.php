@@ -18,6 +18,7 @@ class ProcessAiTicketTriageJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 2;
+
     public int $backoff = 5;
 
     /**
@@ -35,7 +36,7 @@ class ProcessAiTicketTriageJob implements ShouldQueue
         try {
             $triage = $aiService->triageTicket($this->ticket);
 
-            if (!empty($triage['priority'])) {
+            if (! empty($triage['priority'])) {
                 $priorityEnum = match (strtolower($triage['priority'])) {
                     'critical', 'urgent' => TicketPriority::CRITICAL ?? TicketPriority::HIGH,
                     'high' => TicketPriority::HIGH,
@@ -56,7 +57,7 @@ class ProcessAiTicketTriageJob implements ShouldQueue
                 ]);
             }
         } catch (Throwable $e) {
-            Log::error('ProcessAiTicketTriageJob error: ' . $e->getMessage(), [
+            Log::error('ProcessAiTicketTriageJob error: '.$e->getMessage(), [
                 'ticket_id' => $this->ticket->id,
             ]);
             throw $e;

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Modules\AI\Models\AiConversation;
 use App\Modules\AI\Models\AiKnowledgeBase;
 use App\Modules\AI\Models\AiMessage;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;

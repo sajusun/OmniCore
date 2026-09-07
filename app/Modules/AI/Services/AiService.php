@@ -7,7 +7,6 @@ use App\Modules\AI\Enums\AiPersona;
 use App\Modules\AI\Enums\AiProvider;
 use App\Modules\AI\Models\AiConversation;
 use App\Modules\AI\Models\AiKnowledgeBase;
-use App\Modules\AI\Models\AiMessage;
 use App\Modules\Ticket\Models\Ticket;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -80,11 +79,11 @@ class AiService
      */
     public function suggestTicketReply(Ticket $ticket): array
     {
-        $kbMatch = $this->matchKnowledgeBase($ticket->subject . ' ' . $ticket->description);
+        $kbMatch = $this->matchKnowledgeBase($ticket->subject.' '.$ticket->description);
 
         if ($kbMatch) {
             return [
-                'suggested_reply' => "Hello {$ticket->user?->name},\n\n" . $kbMatch->answer . "\n\nBest regards,\nCustomer Support Team",
+                'suggested_reply' => "Hello {$ticket->user?->name},\n\n".$kbMatch->answer."\n\nBest regards,\nCustomer Support Team",
                 'confidence' => 0.95,
                 'source' => 'knowledge_base',
                 'matched_kb_id' => $kbMatch->id,
@@ -108,8 +107,8 @@ class AiService
      */
     public function classifyTicket(string $subject, string $message): array
     {
-        $combined = strtolower($subject . ' ' . $message);
-        
+        $combined = strtolower($subject.' '.$message);
+
         $priority = 'medium';
         $confidence = 0.80;
 
@@ -145,7 +144,8 @@ class AiService
                 $content = "Discover the unparalleled excellence of **{$productName}** in our {$category} collection. Crafted with precision and premium quality materials, it elevates your everyday experience. Key features include modern aesthetics, exceptional durability, and effortless usability. Order now to experience top-tier quality.";
                 break;
             case 'marketing_email':
-                $content = "Subject: Special Exclusive Deal on {$productName}!\n\nHey there,\n\nWe noticed you have great taste. For a limited time only, elevate your experience with {$productName}. Enjoy premium quality, fast shipping, and our 100% satisfaction guarantee.\n\nShop now before stocks run out!\n\nCheers,\nThe OmniCore Team";
+                $appName = config('app.name', 'OmniCore');
+                $content = "Subject: Special Exclusive Deal on {$productName}!\n\nHey there,\n\nWe noticed you have great taste. For a limited time only, elevate your experience with {$productName}. Enjoy premium quality, fast shipping, and our 100% satisfaction guarantee.\n\nShop now before stocks run out!\n\nCheers,\nThe {$appName} Team";
                 break;
             case 'seo_meta':
                 $content = "Shop {$productName} online at best prices. High-quality {$category} with authentic guarantee and fast nationwide delivery.";
@@ -171,7 +171,7 @@ class AiService
     public function matchKnowledgeBase(string $query): ?AiKnowledgeBase
     {
         $cleaned = trim(strtolower($query));
-        $words = array_filter(explode(' ', preg_replace('/[^\w\s]/', '', $cleaned)), fn($w) => strlen($w) > 2);
+        $words = array_filter(explode(' ', preg_replace('/[^\w\s]/', '', $cleaned)), fn ($w) => strlen($w) > 2);
 
         // 1. Direct question match
         $direct = AiKnowledgeBase::active()
@@ -180,6 +180,7 @@ class AiService
 
         if ($direct) {
             $direct->increment('hit_count');
+
             return $direct;
         }
 
@@ -262,14 +263,14 @@ class AiService
         }
 
         // Provider: Gemini
-        if (!app()->runningUnitTests() && $provider === AiProvider::GEMINI && env('GEMINI_API_KEY') && env('GEMINI_API_KEY') !== 'your-gemini-key') {
+        if (! app()->runningUnitTests() && $provider === AiProvider::GEMINI && env('GEMINI_API_KEY') && env('GEMINI_API_KEY') !== 'your-gemini-key') {
             try {
                 $response = Http::timeout(5)->post(
-                    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' . env('GEMINI_API_KEY'),
+                    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='.env('GEMINI_API_KEY'),
                     [
                         'contents' => [
-                            ['parts' => [['text' => $persona->systemPrompt() . "\nUser: " . $message]]]
-                        ]
+                            ['parts' => [['text' => $persona->systemPrompt()."\nUser: ".$message]]],
+                        ],
                     ]
                 );
 
@@ -280,12 +281,12 @@ class AiService
                     }
                 }
             } catch (\Throwable $e) {
-                Log::warning('Gemini API call failed: ' . $e->getMessage());
+                Log::warning('Gemini API call failed: '.$e->getMessage());
             }
         }
 
         // Provider: OpenAI
-        if (!app()->runningUnitTests() && $provider === AiProvider::OPENAI && env('OPENAI_API_KEY') && env('OPENAI_API_KEY') !== 'your-openai-key') {
+        if (! app()->runningUnitTests() && $provider === AiProvider::OPENAI && env('OPENAI_API_KEY') && env('OPENAI_API_KEY') !== 'your-openai-key') {
             try {
                 $response = Http::timeout(5)->withToken(env('OPENAI_API_KEY'))->post(
                     'https://api.openai.com/v1/chat/completions',
@@ -305,14 +306,15 @@ class AiService
                     }
                 }
             } catch (\Throwable $e) {
-                Log::warning('OpenAI API call failed: ' . $e->getMessage());
+                Log::warning('OpenAI API call failed: '.$e->getMessage());
             }
         }
 
         // Fallback Mock / Intelligent Assistant Answer
+        $appName = config('app.name', 'OmniCore');
         $smartReplies = [
-            AiPersona::SUPPORT_AGENT->value => "Hello! Thank you for reaching out to OmniCore support. I understand you're asking about \"{$message}\". How can I further assist you with this today?",
-            AiPersona::SHOPPING_ASSISTANT->value => "Welcome to OmniCore Shopping Assistant! Based on your query \"{$message}\", I can help you find the best trending products, deals, and vendor offers.",
+            AiPersona::SUPPORT_AGENT->value => "Hello! Thank you for reaching out to {$appName} support. I understand you're asking about \"{$message}\". How can I further assist you with this today?",
+            AiPersona::SHOPPING_ASSISTANT->value => "Welcome to {$appName} Shopping Assistant! Based on your query \"{$message}\", I can help you find the best trending products, deals, and vendor offers.",
             AiPersona::CONTENT_WRITER->value => "Here is a compelling draft tailored for \"{$message}\": Elevate your lifestyle with top-tier quality and seamless performance today!",
             AiPersona::TICKET_TRIAGE->value => "Ticket analysis completed for: \"{$message}\". Prioritized for fast resolution.",
         ];

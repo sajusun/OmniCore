@@ -5,7 +5,6 @@ namespace App\Modules\AI\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Modules\AI\Http\Resources\AiConversationResource;
 use App\Modules\AI\Http\Resources\AiKnowledgeBaseResource;
-use App\Modules\AI\Models\AiConversation;
 use App\Modules\AI\Models\AiKnowledgeBase;
 use App\Modules\AI\Services\AiService;
 use App\Modules\Ticket\Models\Ticket;
@@ -17,9 +16,7 @@ class AiApiController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(protected AiService $aiService)
-    {
-    }
+    public function __construct(protected AiService $aiService) {}
 
     /**
      * Send a message to the AI Assistant.
@@ -148,7 +145,7 @@ class AiApiController extends Controller
         if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('question', 'LIKE', "%{$search}%")
-                  ->orWhere('answer', 'LIKE', "%{$search}%");
+                    ->orWhere('answer', 'LIKE', "%{$search}%");
             });
         }
 

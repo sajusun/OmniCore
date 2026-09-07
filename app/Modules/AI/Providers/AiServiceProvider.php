@@ -24,28 +24,28 @@ class AiServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // 1. Auto-load Migrations
-        if (is_dir(__DIR__ . '/../Database/Migrations')) {
-            $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+        if (is_dir(__DIR__.'/../Database/Migrations')) {
+            $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
         }
 
         // 2. Auto-load API Routes
-        if (file_exists(__DIR__ . '/../Routes/api.php')) {
+        if (file_exists(__DIR__.'/../Routes/api.php')) {
             Route::prefix('api')
                 ->middleware('api')
-                ->group(__DIR__ . '/../Routes/api.php');
+                ->group(__DIR__.'/../Routes/api.php');
         }
 
         // 3. Auto-load Admin Routes
-        if (file_exists(__DIR__ . '/../Routes/admin.php')) {
+        if (file_exists(__DIR__.'/../Routes/admin.php')) {
             Route::prefix('admin')
                 ->name('admin.')
                 ->middleware(['web', 'auth'])
-                ->group(__DIR__ . '/../Routes/admin.php');
+                ->group(__DIR__.'/../Routes/admin.php');
         }
 
         // 4. Auto-load Views
-        if (is_dir(__DIR__ . '/../Resources/views')) {
-            $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'ai');
+        if (is_dir(__DIR__.'/../Resources/views')) {
+            $this->loadViewsFrom(__DIR__.'/../Resources/views', 'ai');
         }
     }
 }
