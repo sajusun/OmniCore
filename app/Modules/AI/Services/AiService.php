@@ -145,7 +145,7 @@ class AiService
                 $content = "Discover the unparalleled excellence of **{$productName}** in our {$category} collection. Crafted with precision and premium quality materials, it elevates your everyday experience. Key features include modern aesthetics, exceptional durability, and effortless usability. Order now to experience top-tier quality.";
                 break;
             case 'marketing_email':
-                $content = "Subject: Special Exclusive Deal on {$productName}!\n\nHey there,\n\nWe noticed you have great taste. For a limited time only, elevate your experience with {$productName}. Enjoy premium quality, fast shipping, and our 100% satisfaction guarantee.\n\nShop now before stocks run out!\n\nCheers,\nThe One-Dashboard Team";
+                $content = "Subject: Special Exclusive Deal on {$productName}!\n\nHey there,\n\nWe noticed you have great taste. For a limited time only, elevate your experience with {$productName}. Enjoy premium quality, fast shipping, and our 100% satisfaction guarantee.\n\nShop now before stocks run out!\n\nCheers,\nThe OmniCore Team";
                 break;
             case 'seo_meta':
                 $content = "Shop {$productName} online at best prices. High-quality {$category} with authentic guarantee and fast nationwide delivery.";
@@ -311,8 +311,8 @@ class AiService
 
         // Fallback Mock / Intelligent Assistant Answer
         $smartReplies = [
-            AiPersona::SUPPORT_AGENT->value => "Hello! Thank you for reaching out to One-Dashboard support. I understand you're asking about \"{$message}\". How can I further assist you with this today?",
-            AiPersona::SHOPPING_ASSISTANT->value => "Welcome to One-Dashboard Shopping Assistant! Based on your query \"{$message}\", I can help you find the best trending products, deals, and vendor offers.",
+            AiPersona::SUPPORT_AGENT->value => "Hello! Thank you for reaching out to OmniCore support. I understand you're asking about \"{$message}\". How can I further assist you with this today?",
+            AiPersona::SHOPPING_ASSISTANT->value => "Welcome to OmniCore Shopping Assistant! Based on your query \"{$message}\", I can help you find the best trending products, deals, and vendor offers.",
             AiPersona::CONTENT_WRITER->value => "Here is a compelling draft tailored for \"{$message}\": Elevate your lifestyle with top-tier quality and seamless performance today!",
             AiPersona::TICKET_TRIAGE->value => "Ticket analysis completed for: \"{$message}\". Prioritized for fast resolution.",
         ];

@@ -1,4 +1,4 @@
-# ⚡ One-Dashboard — Enterprise Modular Backend & E-Commerce Platform
+# ⚡ OmniCore — Enterprise Modular Backend & E-Commerce Platform
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="320" alt="Laravel Logo">
@@ -19,7 +19,7 @@
 
 ## 📖 Executive Summary
 
-**One-Dashboard** is a production-grade, enterprise backend and application ecosystem built on **Laravel 12** and **PHP 8.4** utilizing a **Modular Monolith Architecture**. Engineered for high-scale applications requiring concurrency-safe e-commerce, real-time messaging, WebRTC calling, universal polymorphic interactions, automated audit trails, and multi-gateway payment integrations.
+**OmniCore** is a production-grade, enterprise backend and application ecosystem built on **Laravel 12** and **PHP 8.4** utilizing a **Modular Monolith Architecture**. Engineered for high-scale applications requiring concurrency-safe e-commerce, real-time messaging, WebRTC calling, universal polymorphic interactions, automated audit trails, and multi-gateway payment integrations.
 
 Designed following strict Clean Architecture, Domain-Driven Design (DDD) principles, and SOLID design patterns.
 
@@ -143,8 +143,8 @@ php artisan scribe:generate --force
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/your-username/One-Dashboard.git
-cd One-Dashboard
+git clone https://github.com/your-username/OmniCore.git
+cd OmniCore
 
 # 2. Install dependencies
 composer install

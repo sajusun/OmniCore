@@ -9,14 +9,14 @@ use function Knuckles\Scribe\Config\{removeStrategies, configureStrategy};
 
 return [
     // The HTML <title> for the generated documentation.
-    'title' => 'One-Dashboard API Reference',
+    'title' => 'OmniCore API Reference',
 
     // A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
-    'description' => 'Comprehensive, production-ready RESTful API for One-Dashboard Mobile Apps (Flutter, React Native, iOS, Android) and Web Clients.',
+    'description' => 'Comprehensive, production-ready RESTful API for OmniCore Mobile Apps (Flutter, React Native, iOS, Android) and Web Clients.',
 
     // Text to place in the "Introduction" section, right after the `description`. Markdown and HTML are supported.
     'intro_text' => <<<INTRO
-        Welcome to the **One-Dashboard API Reference**.
+        Welcome to the **OmniCore API Reference**.
         
         All API requests must be made over HTTPS. Responses are returned in standard JSON format containing `status`, `message`, and `data` objects.
         

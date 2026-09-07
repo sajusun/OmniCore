@@ -43,7 +43,7 @@ class InteractionSeeder extends Seeder
                 }
 
                 // Views
-                $viewService->recordView($product, $user, '127.0.0.' . ($index + 1), 0);
+                $viewService->recordView($product, $user, '127.0.0.'.($index + 1), 0);
             }
 
             // Seed some comments
@@ -78,7 +78,7 @@ class InteractionSeeder extends Seeder
                     $bookmarkService->bookmark($post, $user, 'saved');
                 }
 
-                $viewService->recordView($post, $user, '192.168.1.' . ($index + 1), 0);
+                $viewService->recordView($post, $user, '192.168.1.'.($index + 1), 0);
             }
 
             $postComments = [

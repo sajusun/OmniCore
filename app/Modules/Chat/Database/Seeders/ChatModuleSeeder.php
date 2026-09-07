@@ -46,7 +46,7 @@ class ChatModuleSeeder extends Seeder
             'chat_room_id' => $singleRoom->id,
             'sender_id'    => $user1->id,
             'message_type' => 'text',
-            'message'      => 'Hey! Welcome to the One-Dashboard platform.',
+            'message'      => 'Hey! Welcome to the OmniCore platform.',
         ]);
 
         Message::create([

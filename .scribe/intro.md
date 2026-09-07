@@ -1,12 +1,12 @@
 # Introduction
 
-Comprehensive, production-ready RESTful API for One-Dashboard Mobile Apps (Flutter, React Native, iOS, Android) and Web Clients.
+Comprehensive, production-ready RESTful API for OmniCore Mobile Apps (Flutter, React Native, iOS, Android) and Web Clients.
 
 <aside>
     <strong>Base URL</strong>: <code>http://one_dashboard.test</code>
 </aside>
 
-    Welcome to the **One-Dashboard API Reference**.
+    Welcome to the **OmniCore API Reference**.
     
     All API requests must be made over HTTPS. Responses are returned in standard JSON format containing `status`, `message`, and `data` objects.
     

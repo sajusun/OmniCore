@@ -19,7 +19,7 @@ class PostModuleSeeder extends Seeder
 
         $samplePosts = [
             [
-                'content'    => '🚀 Just launched the brand new One-Dashboard core architecture! Super excited about the scalable, modular foundation and clean API standards.',
+                'content'    => '🚀 Just launched the brand new OmniCore architecture! Super excited about the scalable, modular foundation and clean API standards.',
                 'visibility' => 'public',
                 'tags'       => ['tech', 'laravel', 'release'],
             ],

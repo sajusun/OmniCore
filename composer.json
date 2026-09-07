@@ -2,10 +2,13 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "OmniCore — Modular Monolith Enterprise Backend & E-Commerce Platform.",
     "keywords": [
         "laravel",
-        "framework"
+        "omnicore",
+        "modular-monolith",
+        "ecommerce",
+        "enterprise"
     ],
     "license": "MIT",
     "require": {

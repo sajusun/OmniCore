@@ -16,7 +16,7 @@ parameters:
     treatPhpDocTypesAsCertain: false
 
     ignoreErrors:
-        - '#Call to an undefined static method [a-zA-Z0-9\\_]+::(where|find|findOrFail|first|firstOrCreate|create|updateOrCreate|whereIn|whereNull|whereNotNull|whereDate|latest|orderBy|orderByDesc|count|sum|avg|select|selectRaw|paginate|cursorPaginate|lockForUpdate|has|whereHas)\(\)#'
+        - '#Call to an undefined static method [a-zA-Z0-9\\_]+::(where|find|findOrFail|first|firstOrCreate|create|updateOrCreate|whereIn|whereNull|whereNotNull|whereDate|latest|orderBy|orderByDesc|take|limit|count|sum|avg|select|selectRaw|paginate|cursorPaginate|lockForUpdate|has|whereHas)\(\)#'
         - '#Call to protected method (increment|decrement)\(\) of class Illuminate\\Database\\Eloquent\\Model#'
         - '#Access to an undefined property [a-zA-Z0-9\\_]+::\$[a-zA-Z0-9\\_]+#'
         - '#Trait [a-zA-Z0-9\\_]+ is used zero times and is not analysed#'

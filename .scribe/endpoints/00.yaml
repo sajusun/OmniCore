@@ -80,7 +80,7 @@ endpoints:
         name: category
         description: ''
         required: true
-        example: billing
+        example: feedback
         type: string
         enumValues:
           - bug
@@ -152,7 +152,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       subject: b
-      category: billing
+      category: feedback
       message: 'n'
       device_os: g
       device_model: z
@@ -2401,14 +2401,14 @@ endpoints:
         name: is_typing
         description: ''
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      is_typing: false
+      is_typing: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -2570,7 +2570,7 @@ endpoints:
         name: message_type
         description: ''
         required: false
-        example: text
+        example: document
         type: string
         enumValues:
           - text
@@ -2624,7 +2624,7 @@ endpoints:
     cleanBodyParameters:
       chat_room_id: 16
       receiver_id: 16
-      message_type: text
+      message_type: document
       message: 'n'
       reply_to: 16
     fileParameters:
@@ -2940,7 +2940,7 @@ endpoints:
         name: enabled
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -2958,7 +2958,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      enabled: false
+      enabled: true
       mute_until: '2052-09-30'
     fileParameters: []
     responses: []
@@ -3007,7 +3007,7 @@ endpoints:
         name: enabled
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -3025,7 +3025,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      enabled: true
+      enabled: false
       mute_until: '2052-09-30'
     fileParameters: []
     responses: []
@@ -3075,7 +3075,7 @@ endpoints:
         name: duration
         description: ''
         required: true
-        example: forever
+        example: custom
         type: string
         enumValues:
           - 1_hour
@@ -3099,7 +3099,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      duration: forever
+      duration: custom
       mute_until: '2052-09-30'
     fileParameters: []
     responses: []
@@ -5738,7 +5738,7 @@ endpoints:
         name: is_screen_sharing
         description: ''
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -5747,7 +5747,7 @@ endpoints:
     cleanBodyParameters:
       is_muted: false
       is_video_enabled: false
-      is_screen_sharing: false
+      is_screen_sharing: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -6647,7 +6647,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Cart retrieved successfully.","code":200,"data":{"id":3,"guest_token":"33a07e46-aa60-4d35-ba97-85f824152862","items_count":0,"subtotal":0,"discount_amount":0,"coupon_code":null,"grand_total":0,"items":[]}}'
+        content: '{"status":true,"message":"Cart retrieved successfully.","code":200,"data":{"id":4,"guest_token":"4681ef95-49b2-484c-aa82-a61336e246c8","items_count":0,"subtotal":0,"discount_amount":0,"coupon_code":null,"grand_total":0,"items":[]}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -7050,7 +7050,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: fixed
+        example: percentage
         type: string
         enumValues:
           - percentage
@@ -7118,7 +7118,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-07T10:03:43'
+        example: '2026-09-07T10:14:57'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -7148,13 +7148,13 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       code: b
-      type: fixed
+      type: percentage
       value: 39
       min_order_amount: 84
       max_discount_amount: 12
       usage_limit: 27
       usage_limit_per_user: 35
-      start_date: '2026-09-07T10:03:43'
+      start_date: '2026-09-07T10:14:57'
       end_date: '2052-09-30'
       is_active: false
     fileParameters: []
@@ -7267,7 +7267,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: fixed
+        example: percentage
         type: string
         enumValues:
           - percentage
@@ -7335,7 +7335,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-07T10:03:43'
+        example: '2026-09-07T10:14:57'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -7346,7 +7346,7 @@ endpoints:
         name: end_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-07T10:03:43'
+        example: '2026-09-07T10:14:57'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -7364,14 +7364,14 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: fixed
+      type: percentage
       value: 27
       min_order_amount: 39
       max_discount_amount: 84
       usage_limit: 66
       usage_limit_per_user: 27
-      start_date: '2026-09-07T10:03:43'
-      end_date: '2026-09-07T10:03:43'
+      start_date: '2026-09-07T10:14:57'
+      end_date: '2026-09-07T10:14:57'
       is_active: false
     fileParameters: []
     responses: []
@@ -7531,7 +7531,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: billing
+        example: shipping
         type: string
         enumValues:
           - shipping
@@ -7639,7 +7639,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: billing
+      type: shipping
       recipient_name: b
       phone: 'n'
       street_address: g
@@ -9382,7 +9382,7 @@ endpoints:
         name: method
         description: ''
         required: true
-        example: stripe
+        example: wallet
         type: string
         enumValues:
           - stripe
@@ -9421,7 +9421,7 @@ endpoints:
       payable_type: architecto
       payable_id: 16
       amount: 39
-      method: stripe
+      method: wallet
       currency: gzm
     fileParameters: []
     responses: []
@@ -10030,7 +10030,7 @@ endpoints:
         name: payment_method
         description: ''
         required: false
-        example: paypal
+        example: stripe
         type: string
         enumValues:
           - wallet
@@ -10046,7 +10046,7 @@ endpoints:
         name: auto_renew
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -10054,8 +10054,8 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       plan_id: 16
-      payment_method: paypal
-      auto_renew: true
+      payment_method: stripe
+      auto_renew: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -10581,7 +10581,7 @@ endpoints:
         name: priority
         description: ''
         required: false
-        example: low
+        example: urgent
         type: string
         enumValues:
           - low
@@ -10616,7 +10616,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       subject: b
-      priority: low
+      priority: urgent
       message: architecto
     fileParameters:
       attachments:
@@ -11075,14 +11075,14 @@ endpoints:
         name: is_helpful
         description: ''
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      is_helpful: false
+      is_helpful: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -12275,7 +12275,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: product_description
+        example: social_post
         type: string
         enumValues:
           - product_description
@@ -12308,7 +12308,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: product_description
+      type: social_post
       prompt: b
     fileParameters: []
     responses: []
@@ -12378,7 +12378,7 @@ endpoints:
         name: agree
         description: ''
         required: true
-        example: '1'
+        example: 'true'
         type: string
         enumValues:
           - 'true'
@@ -12390,7 +12390,7 @@ endpoints:
       name: b
       email: zbailey@example.net
       password: '-0pBNvYgxw'
-      agree: '1'
+      agree: 'true'
     fileParameters: []
     responses: []
     responseFields: []
@@ -12786,7 +12786,7 @@ endpoints:
         name: provider
         description: ''
         required: true
-        example: facebook
+        example: google
         type: string
         enumValues:
           - google
@@ -12797,7 +12797,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       token: architecto
-      provider: facebook
+      provider: google
     fileParameters: []
     responses: []
     responseFields: []
@@ -13602,7 +13602,7 @@ endpoints:
         name: purpose
         description: ''
         required: true
-        example: email_verification
+        example: password_reset
         type: string
         enumValues:
           - email_verification
@@ -13628,7 +13628,7 @@ endpoints:
         name: channel
         description: ''
         required: false
-        example: email
+        example: sms
         type: string
         enumValues:
           - email
@@ -13637,9 +13637,9 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      purpose: email_verification
+      purpose: password_reset
       type: otp
-      channel: email
+      channel: sms
     fileParameters: []
     responses: []
     responseFields: []

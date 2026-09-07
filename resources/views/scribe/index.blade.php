@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>One-Dashboard API Reference</title>
+    <title>OmniCore API Reference</title>
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 
@@ -841,11 +841,11 @@
     <div class="dark-box"></div>
     <div class="content">
         <h1 id="introduction">Introduction</h1>
-<p>Comprehensive, production-ready RESTful API for One-Dashboard Mobile Apps (Flutter, React Native, iOS, Android) and Web Clients.</p>
+<p>Comprehensive, production-ready RESTful API for OmniCore Mobile Apps (Flutter, React Native, iOS, Android) and Web Clients.</p>
 <aside>
     <strong>Base URL</strong>: <code>http://one_dashboard.test</code>
 </aside>
-<pre><code>Welcome to the **One-Dashboard API Reference**.
+<pre><code>Welcome to the **OmniCore API Reference**.
 
 All API requests must be made over HTTPS. Responses are returned in standard JSON format containing `status`, `message`, and `data` objects.
 
@@ -1075,12 +1075,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "subject=b"\
-    --form "category=billing"\
+    --form "category=feedback"\
     --form "message=n"\
     --form "device_os=g"\
     --form "device_model=z"\
     --form "app_version=m"\
-    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\phpC87A.tmp" </code></pre></div>
+    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\php134E.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -1095,7 +1095,7 @@ const headers = {
 
 const body = new FormData();
 body.append('subject', 'b');
-body.append('category', 'billing');
+body.append('category', 'feedback');
 body.append('message', 'n');
 body.append('device_os', 'g');
 body.append('device_model', 'z');
@@ -1126,7 +1126,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'category',
-                'contents' =&gt; 'billing'
+                'contents' =&gt; 'feedback'
             ],
             [
                 'name' =&gt; 'message',
@@ -1146,7 +1146,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'attachments[]',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpC87A.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php134E.tmp', 'r')
             ],
         ],
     ]
@@ -1162,15 +1162,15 @@ import json
 url = 'http://one_dashboard.test/api/app-support'
 files = {
   'subject': (None, 'b'),
-  'category': (None, 'billing'),
+  'category': (None, 'feedback'),
   'message': (None, 'n'),
   'device_os': (None, 'g'),
   'device_model': (None, 'z'),
   'app_version': (None, 'm'),
-  'attachments[]': open('C:\Users\sakhawat\AppData\Local\Temp\phpC87A.tmp', 'rb')}
+  'attachments[]': open('C:\Users\sakhawat\AppData\Local\Temp\php134E.tmp', 'rb')}
 payload = {
     "subject": "b",
-    "category": "billing",
+    "category": "feedback",
     "message": "n",
     "device_os": "g",
     "device_model": "z",
@@ -1279,10 +1279,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="category"                data-endpoint="POSTapi-app-support"
-               value="billing"
+               value="feedback"
                data-component="body">
     <br>
-<p>Example: <code>billing</code></p>
+<p>Example: <code>feedback</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>bug</code></li> <li><code>account</code></li> <li><code>event</code></li> <li><code>club</code></li> <li><code>vehicle</code></li> <li><code>billing</code></li> <li><code>feedback</code></li> <li><code>other</code></li></ul>
         </div>
@@ -1700,7 +1700,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "message=b"\
-    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\phpC9F2.tmp" </code></pre></div>
+    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\php138D.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -1741,7 +1741,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'attachments[]',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpC9F2.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php138D.tmp', 'r')
             ],
         ],
     ]
@@ -1757,7 +1757,7 @@ import json
 url = 'http://one_dashboard.test/api/app-support/architecto/reply'
 files = {
   'message': (None, 'b'),
-  'attachments[]': open('C:\Users\sakhawat\AppData\Local\Temp\phpC9F2.tmp', 'rb')}
+  'attachments[]': open('C:\Users\sakhawat\AppData\Local\Temp\php138D.tmp', 'rb')}
 payload = {
     "message": "b"
 }
@@ -8969,7 +8969,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"is_typing\": false
+    \"is_typing\": true
 }"
 </code></pre></div>
 
@@ -8985,7 +8985,7 @@ const headers = {
 };
 
 let body = {
-    "is_typing": false
+    "is_typing": true
 };
 
 fetch(url, {
@@ -9006,7 +9006,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'is_typing' =&gt; false,
+            'is_typing' =&gt; true,
         ],
     ]
 );
@@ -9020,7 +9020,7 @@ import json
 
 url = 'http://one_dashboard.test/api/chat/rooms/16/typing'
 payload = {
-    "is_typing": false
+    "is_typing": true
 }
 headers = {
   'Content-Type': 'application/json',
@@ -9139,7 +9139,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
         </form>
 
@@ -9507,10 +9507,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --form "chat_room_id=16"\
     --form "receiver_id=16"\
-    --form "message_type=text"\
+    --form "message_type=document"\
     --form "message=n"\
     --form "reply_to=16"\
-    --form "files[]=@C:\Users\sakhawat\AppData\Local\Temp\phpCAAF.tmp" </code></pre></div>
+    --form "files[]=@C:\Users\sakhawat\AppData\Local\Temp\php1469.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -9526,7 +9526,7 @@ const headers = {
 const body = new FormData();
 body.append('chat_room_id', '16');
 body.append('receiver_id', '16');
-body.append('message_type', 'text');
+body.append('message_type', 'document');
 body.append('message', 'n');
 body.append('reply_to', '16');
 body.append('files[]', document.querySelector('input[name="files[]"]').files[0]);
@@ -9559,7 +9559,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'message_type',
-                'contents' =&gt; 'text'
+                'contents' =&gt; 'document'
             ],
             [
                 'name' =&gt; 'message',
@@ -9571,7 +9571,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'files[]',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCAAF.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php1469.tmp', 'r')
             ],
         ],
     ]
@@ -9588,14 +9588,14 @@ url = 'http://one_dashboard.test/api/chat/messages'
 files = {
   'chat_room_id': (None, '16'),
   'receiver_id': (None, '16'),
-  'message_type': (None, 'text'),
+  'message_type': (None, 'document'),
   'message': (None, 'n'),
   'reply_to': (None, '16'),
-  'files[]': open('C:\Users\sakhawat\AppData\Local\Temp\phpCAAF.tmp', 'rb')}
+  'files[]': open('C:\Users\sakhawat\AppData\Local\Temp\php1469.tmp', 'rb')}
 payload = {
     "chat_room_id": 16,
     "receiver_id": 16,
-    "message_type": "text",
+    "message_type": "document",
     "message": "n",
     "reply_to": 16
 }
@@ -9714,10 +9714,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="message_type"                data-endpoint="POSTapi-chat-messages"
-               value="text"
+               value="document"
                data-component="body">
     <br>
-<p>Example: <code>text</code></p>
+<p>Example: <code>document</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>text</code></li> <li><code>image</code></li> <li><code>video</code></li> <li><code>voice</code></li> <li><code>audio</code></li> <li><code>document</code></li> <li><code>location</code></li> <li><code>contact</code></li> <li><code>sticker</code></li> <li><code>gif</code></li> <li><code>system</code></li></ul>
         </div>
@@ -10667,7 +10667,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"enabled\": false,
+    \"enabled\": true,
     \"mute_until\": \"2052-09-30\"
 }"
 </code></pre></div>
@@ -10684,7 +10684,7 @@ const headers = {
 };
 
 let body = {
-    "enabled": false,
+    "enabled": true,
     "mute_until": "2052-09-30"
 };
 
@@ -10706,7 +10706,7 @@ $response = $client-&gt;patch(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'enabled' =&gt; false,
+            'enabled' =&gt; true,
             'mute_until' =&gt; '2052-09-30',
         ],
     ]
@@ -10721,7 +10721,7 @@ import json
 
 url = 'http://one_dashboard.test/api/chat/rooms/16/settings/notification'
 payload = {
-    "enabled": false,
+    "enabled": true,
     "mute_until": "2052-09-30"
 }
 headers = {
@@ -10841,7 +10841,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>mute_until</code></b>&nbsp;&nbsp;
@@ -10874,7 +10874,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"enabled\": true,
+    \"enabled\": false,
     \"mute_until\": \"2052-09-30\"
 }"
 </code></pre></div>
@@ -10891,7 +10891,7 @@ const headers = {
 };
 
 let body = {
-    "enabled": true,
+    "enabled": false,
     "mute_until": "2052-09-30"
 };
 
@@ -10913,7 +10913,7 @@ $response = $client-&gt;patch(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'enabled' =&gt; true,
+            'enabled' =&gt; false,
             'mute_until' =&gt; '2052-09-30',
         ],
     ]
@@ -10928,7 +10928,7 @@ import json
 
 url = 'http://one_dashboard.test/api/chat/rooms/16/settings/sound'
 payload = {
-    "enabled": true,
+    "enabled": false,
     "mute_until": "2052-09-30"
 }
 headers = {
@@ -11048,7 +11048,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>mute_until</code></b>&nbsp;&nbsp;
@@ -11081,7 +11081,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"duration\": \"forever\",
+    \"duration\": \"custom\",
     \"mute_until\": \"2052-09-30\"
 }"
 </code></pre></div>
@@ -11098,7 +11098,7 @@ const headers = {
 };
 
 let body = {
-    "duration": "forever",
+    "duration": "custom",
     "mute_until": "2052-09-30"
 };
 
@@ -11120,7 +11120,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'duration' =&gt; 'forever',
+            'duration' =&gt; 'custom',
             'mute_until' =&gt; '2052-09-30',
         ],
     ]
@@ -11135,7 +11135,7 @@ import json
 
 url = 'http://one_dashboard.test/api/chat/rooms/16/settings/mute'
 payload = {
-    "duration": "forever",
+    "duration": "custom",
     "mute_until": "2052-09-30"
 }
 headers = {
@@ -11246,10 +11246,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="duration"                data-endpoint="POSTapi-chat-rooms--room_id--settings-mute"
-               value="forever"
+               value="custom"
                data-component="body">
     <br>
-<p>Example: <code>forever</code></p>
+<p>Example: <code>custom</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>1_hour</code></li> <li><code>8_hours</code></li> <li><code>1_day</code></li> <li><code>7_days</code></li> <li><code>forever</code></li> <li><code>custom</code></li></ul>
         </div>
@@ -12587,8 +12587,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --form "title=b"\
     --form "content=architecto"\
-    --form "thumbnail=@C:\Users\sakhawat\AppData\Local\Temp\phpCAEE.tmp" \
-    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\phpCAEF.tmp" </code></pre></div>
+    --form "thumbnail=@C:\Users\sakhawat\AppData\Local\Temp\php14A9.tmp" \
+    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\php14AA.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -12635,11 +12635,11 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'thumbnail',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCAEE.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php14A9.tmp', 'r')
             ],
             [
                 'name' =&gt; 'media[]',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCAEF.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php14AA.tmp', 'r')
             ],
         ],
     ]
@@ -12656,8 +12656,8 @@ url = 'http://one_dashboard.test/api/posts/store'
 files = {
   'title': (None, 'b'),
   'content': (None, 'architecto'),
-  'thumbnail': open('C:\Users\sakhawat\AppData\Local\Temp\phpCAEE.tmp', 'rb'),
-  'media[]': open('C:\Users\sakhawat\AppData\Local\Temp\phpCAEF.tmp', 'rb')}
+  'thumbnail': open('C:\Users\sakhawat\AppData\Local\Temp\php14A9.tmp', 'rb'),
+  'media[]': open('C:\Users\sakhawat\AppData\Local\Temp\php14AA.tmp', 'rb')}
 payload = {
     "title": "b",
     "content": "architecto"
@@ -12780,7 +12780,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpCAEE.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php14A9.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>media</code></b>&nbsp;&nbsp;
@@ -13039,8 +13039,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --form "title=b"\
     --form "content=architecto"\
-    --form "thumbnail=@C:\Users\sakhawat\AppData\Local\Temp\phpCB00.tmp" \
-    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\phpCB01.tmp" </code></pre></div>
+    --form "thumbnail=@C:\Users\sakhawat\AppData\Local\Temp\php14BA.tmp" \
+    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\php14BB.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -13087,11 +13087,11 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'thumbnail',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCB00.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php14BA.tmp', 'r')
             ],
             [
                 'name' =&gt; 'media[]',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCB01.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php14BB.tmp', 'r')
             ],
         ],
     ]
@@ -13108,8 +13108,8 @@ url = 'http://one_dashboard.test/api/posts/16/update'
 files = {
   'title': (None, 'b'),
   'content': (None, 'architecto'),
-  'thumbnail': open('C:\Users\sakhawat\AppData\Local\Temp\phpCB00.tmp', 'rb'),
-  'media[]': open('C:\Users\sakhawat\AppData\Local\Temp\phpCB01.tmp', 'rb')}
+  'thumbnail': open('C:\Users\sakhawat\AppData\Local\Temp\php14BA.tmp', 'rb'),
+  'media[]': open('C:\Users\sakhawat\AppData\Local\Temp\php14BB.tmp', 'rb')}
 payload = {
     "title": "b",
     "content": "architecto"
@@ -13245,7 +13245,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpCB00.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php14BA.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>media</code></b>&nbsp;&nbsp;
@@ -19920,7 +19920,7 @@ Must be one of:
     --data "{
     \"is_muted\": false,
     \"is_video_enabled\": false,
-    \"is_screen_sharing\": false
+    \"is_screen_sharing\": true
 }"
 </code></pre></div>
 
@@ -19938,7 +19938,7 @@ const headers = {
 let body = {
     "is_muted": false,
     "is_video_enabled": false,
-    "is_screen_sharing": false
+    "is_screen_sharing": true
 };
 
 fetch(url, {
@@ -19961,7 +19961,7 @@ $response = $client-&gt;post(
         'json' =&gt; [
             'is_muted' =&gt; false,
             'is_video_enabled' =&gt; false,
-            'is_screen_sharing' =&gt; false,
+            'is_screen_sharing' =&gt; true,
         ],
     ]
 );
@@ -19977,7 +19977,7 @@ url = 'http://one_dashboard.test/api/calls/16/tracks'
 payload = {
     "is_muted": false,
     "is_video_enabled": false,
-    "is_screen_sharing": false
+    "is_screen_sharing": true
 }
 headers = {
   'Content-Type': 'application/json',
@@ -20140,7 +20140,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
         </form>
 
@@ -22659,7 +22659,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "rating=1"\
     --form "title=n"\
     --form "comment=g"\
-    --form "photos[]=@C:\Users\sakhawat\AppData\Local\Temp\phpCBCD.tmp" </code></pre></div>
+    --form "photos[]=@C:\Users\sakhawat\AppData\Local\Temp\php15E5.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -22710,7 +22710,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'photos[]',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCBCD.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php15E5.tmp', 'r')
             ],
         ],
     ]
@@ -22728,7 +22728,7 @@ files = {
   'rating': (None, '1'),
   'title': (None, 'n'),
   'comment': (None, 'g'),
-  'photos[]': open('C:\Users\sakhawat\AppData\Local\Temp\phpCBCD.tmp', 'rb')}
+  'photos[]': open('C:\Users\sakhawat\AppData\Local\Temp\php15E5.tmp', 'rb')}
 payload = {
     "rating": 1,
     "title": "n",
@@ -23281,8 +23281,8 @@ access-control-allow-origin: *
     &quot;message&quot;: &quot;Cart retrieved successfully.&quot;,
     &quot;code&quot;: 200,
     &quot;data&quot;: {
-        &quot;id&quot;: 3,
-        &quot;guest_token&quot;: &quot;33a07e46-aa60-4d35-ba97-85f824152862&quot;,
+        &quot;id&quot;: 4,
+        &quot;guest_token&quot;: &quot;4681ef95-49b2-484c-aa82-a61336e246c8&quot;,
         &quot;items_count&quot;: 0,
         &quot;subtotal&quot;: 0,
         &quot;discount_amount&quot;: 0,
@@ -24697,13 +24697,13 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"code\": \"b\",
-    \"type\": \"fixed\",
+    \"type\": \"percentage\",
     \"value\": 39,
     \"min_order_amount\": 84,
     \"max_discount_amount\": 12,
     \"usage_limit\": 27,
     \"usage_limit_per_user\": 35,
-    \"start_date\": \"2026-09-07T10:03:43\",
+    \"start_date\": \"2026-09-07T10:14:57\",
     \"end_date\": \"2052-09-30\",
     \"is_active\": false
 }"
@@ -24722,13 +24722,13 @@ const headers = {
 
 let body = {
     "code": "b",
-    "type": "fixed",
+    "type": "percentage",
     "value": 39,
     "min_order_amount": 84,
     "max_discount_amount": 12,
     "usage_limit": 27,
     "usage_limit_per_user": 35,
-    "start_date": "2026-09-07T10:03:43",
+    "start_date": "2026-09-07T10:14:57",
     "end_date": "2052-09-30",
     "is_active": false
 };
@@ -24752,13 +24752,13 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'code' =&gt; 'b',
-            'type' =&gt; 'fixed',
+            'type' =&gt; 'percentage',
             'value' =&gt; 39,
             'min_order_amount' =&gt; 84,
             'max_discount_amount' =&gt; 12,
             'usage_limit' =&gt; 27,
             'usage_limit_per_user' =&gt; 35,
-            'start_date' =&gt; '2026-09-07T10:03:43',
+            'start_date' =&gt; '2026-09-07T10:14:57',
             'end_date' =&gt; '2052-09-30',
             'is_active' =&gt; false,
         ],
@@ -24775,13 +24775,13 @@ import json
 url = 'http://one_dashboard.test/api/v1/admin/coupons'
 payload = {
     "code": "b",
-    "type": "fixed",
+    "type": "percentage",
     "value": 39,
     "min_order_amount": 84,
     "max_discount_amount": 12,
     "usage_limit": 27,
     "usage_limit_per_user": 35,
-    "start_date": "2026-09-07T10:03:43",
+    "start_date": "2026-09-07T10:14:57",
     "end_date": "2052-09-30",
     "is_active": false
 }
@@ -24888,10 +24888,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="POSTapi-v1-admin-coupons"
-               value="fixed"
+               value="percentage"
                data-component="body">
     <br>
-<p>Example: <code>fixed</code></p>
+<p>Example: <code>percentage</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>percentage</code></li> <li><code>fixed</code></li></ul>
         </div>
@@ -24962,10 +24962,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="start_date"                data-endpoint="POSTapi-v1-admin-coupons"
-               value="2026-09-07T10:03:43"
+               value="2026-09-07T10:14:57"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-09-07T10:03:43</code></p>
+<p>Must be a valid date. Example: <code>2026-09-07T10:14:57</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>end_date</code></b>&nbsp;&nbsp;
@@ -25193,14 +25193,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"type\": \"fixed\",
+    \"type\": \"percentage\",
     \"value\": 27,
     \"min_order_amount\": 39,
     \"max_discount_amount\": 84,
     \"usage_limit\": 66,
     \"usage_limit_per_user\": 27,
-    \"start_date\": \"2026-09-07T10:03:43\",
-    \"end_date\": \"2026-09-07T10:03:43\",
+    \"start_date\": \"2026-09-07T10:14:57\",
+    \"end_date\": \"2026-09-07T10:14:57\",
     \"is_active\": false
 }"
 </code></pre></div>
@@ -25217,14 +25217,14 @@ const headers = {
 };
 
 let body = {
-    "type": "fixed",
+    "type": "percentage",
     "value": 27,
     "min_order_amount": 39,
     "max_discount_amount": 84,
     "usage_limit": 66,
     "usage_limit_per_user": 27,
-    "start_date": "2026-09-07T10:03:43",
-    "end_date": "2026-09-07T10:03:43",
+    "start_date": "2026-09-07T10:14:57",
+    "end_date": "2026-09-07T10:14:57",
     "is_active": false
 };
 
@@ -25246,14 +25246,14 @@ $response = $client-&gt;put(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'type' =&gt; 'fixed',
+            'type' =&gt; 'percentage',
             'value' =&gt; 27,
             'min_order_amount' =&gt; 39,
             'max_discount_amount' =&gt; 84,
             'usage_limit' =&gt; 66,
             'usage_limit_per_user' =&gt; 27,
-            'start_date' =&gt; '2026-09-07T10:03:43',
-            'end_date' =&gt; '2026-09-07T10:03:43',
+            'start_date' =&gt; '2026-09-07T10:14:57',
+            'end_date' =&gt; '2026-09-07T10:14:57',
             'is_active' =&gt; false,
         ],
     ]
@@ -25268,14 +25268,14 @@ import json
 
 url = 'http://one_dashboard.test/api/v1/admin/coupons/architecto'
 payload = {
-    "type": "fixed",
+    "type": "percentage",
     "value": 27,
     "min_order_amount": 39,
     "max_discount_amount": 84,
     "usage_limit": 66,
     "usage_limit_per_user": 27,
-    "start_date": "2026-09-07T10:03:43",
-    "end_date": "2026-09-07T10:03:43",
+    "start_date": "2026-09-07T10:14:57",
+    "end_date": "2026-09-07T10:14:57",
     "is_active": false
 }
 headers = {
@@ -25394,10 +25394,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="PUTapi-v1-admin-coupons--id-"
-               value="fixed"
+               value="percentage"
                data-component="body">
     <br>
-<p>Example: <code>fixed</code></p>
+<p>Example: <code>percentage</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>percentage</code></li> <li><code>fixed</code></li></ul>
         </div>
@@ -25468,10 +25468,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="start_date"                data-endpoint="PUTapi-v1-admin-coupons--id-"
-               value="2026-09-07T10:03:43"
+               value="2026-09-07T10:14:57"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-09-07T10:03:43</code></p>
+<p>Must be a valid date. Example: <code>2026-09-07T10:14:57</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>end_date</code></b>&nbsp;&nbsp;
@@ -25480,10 +25480,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="end_date"                data-endpoint="PUTapi-v1-admin-coupons--id-"
-               value="2026-09-07T10:03:43"
+               value="2026-09-07T10:14:57"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-09-07T10:03:43</code></p>
+<p>Must be a valid date. Example: <code>2026-09-07T10:14:57</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>is_active</code></b>&nbsp;&nbsp;
@@ -26000,7 +26000,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"type\": \"billing\",
+    \"type\": \"shipping\",
     \"recipient_name\": \"b\",
     \"phone\": \"n\",
     \"street_address\": \"g\",
@@ -26025,7 +26025,7 @@ const headers = {
 };
 
 let body = {
-    "type": "billing",
+    "type": "shipping",
     "recipient_name": "b",
     "phone": "n",
     "street_address": "g",
@@ -26055,7 +26055,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'type' =&gt; 'billing',
+            'type' =&gt; 'shipping',
             'recipient_name' =&gt; 'b',
             'phone' =&gt; 'n',
             'street_address' =&gt; 'g',
@@ -26078,7 +26078,7 @@ import json
 
 url = 'http://one_dashboard.test/api/v1/store/addresses'
 payload = {
-    "type": "billing",
+    "type": "shipping",
     "recipient_name": "b",
     "phone": "n",
     "street_address": "g",
@@ -26180,10 +26180,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="POSTapi-v1-store-addresses"
-               value="billing"
+               value="shipping"
                data-component="body">
     <br>
-<p>Example: <code>billing</code></p>
+<p>Example: <code>shipping</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>shipping</code></li> <li><code>billing</code></li></ul>
         </div>
@@ -31117,7 +31117,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"payable_type\": \"architecto\",
     \"payable_id\": 16,
     \"amount\": 39,
-    \"method\": \"stripe\",
+    \"method\": \"wallet\",
     \"currency\": \"gzm\"
 }"
 </code></pre></div>
@@ -31137,7 +31137,7 @@ let body = {
     "payable_type": "architecto",
     "payable_id": 16,
     "amount": 39,
-    "method": "stripe",
+    "method": "wallet",
     "currency": "gzm"
 };
 
@@ -31162,7 +31162,7 @@ $response = $client-&gt;post(
             'payable_type' =&gt; 'architecto',
             'payable_id' =&gt; 16,
             'amount' =&gt; 39,
-            'method' =&gt; 'stripe',
+            'method' =&gt; 'wallet',
             'currency' =&gt; 'gzm',
         ],
     ]
@@ -31180,7 +31180,7 @@ payload = {
     "payable_type": "architecto",
     "payable_id": 16,
     "amount": 39,
-    "method": "stripe",
+    "method": "wallet",
     "currency": "gzm"
 }
 headers = {
@@ -31310,10 +31310,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="method"                data-endpoint="POSTapi-payments-initiate"
-               value="stripe"
+               value="wallet"
                data-component="body">
     <br>
-<p>Example: <code>stripe</code></p>
+<p>Example: <code>wallet</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>stripe</code></li> <li><code>paypal</code></li> <li><code>sslcommerz</code></li> <li><code>bkash</code></li> <li><code>wallet</code></li> <li><code>manual_bank</code></li> <li><code>cod</code></li></ul>
         </div>
@@ -33169,8 +33169,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"plan_id\": 16,
-    \"payment_method\": \"paypal\",
-    \"auto_renew\": true
+    \"payment_method\": \"stripe\",
+    \"auto_renew\": false
 }"
 </code></pre></div>
 
@@ -33187,8 +33187,8 @@ const headers = {
 
 let body = {
     "plan_id": 16,
-    "payment_method": "paypal",
-    "auto_renew": true
+    "payment_method": "stripe",
+    "auto_renew": false
 };
 
 fetch(url, {
@@ -33210,8 +33210,8 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'plan_id' =&gt; 16,
-            'payment_method' =&gt; 'paypal',
-            'auto_renew' =&gt; true,
+            'payment_method' =&gt; 'stripe',
+            'auto_renew' =&gt; false,
         ],
     ]
 );
@@ -33226,8 +33226,8 @@ import json
 url = 'http://one_dashboard.test/api/subscriptions/subscribe'
 payload = {
     "plan_id": 16,
-    "payment_method": "paypal",
-    "auto_renew": true
+    "payment_method": "stripe",
+    "auto_renew": false
 }
 headers = {
   'Content-Type': 'application/json',
@@ -33332,10 +33332,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="payment_method"                data-endpoint="POSTapi-subscriptions-subscribe"
-               value="paypal"
+               value="stripe"
                data-component="body">
     <br>
-<p>Example: <code>paypal</code></p>
+<p>Example: <code>stripe</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>wallet</code></li> <li><code>stripe</code></li> <li><code>paypal</code></li> <li><code>sslcommerz</code></li> <li><code>bkash</code></li></ul>
         </div>
@@ -33359,7 +33359,7 @@ Must be one of:
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
         </form>
 
@@ -35264,9 +35264,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "subject=b"\
-    --form "priority=low"\
+    --form "priority=urgent"\
     --form "message=architecto"\
-    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\phpCF29.tmp" </code></pre></div>
+    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\php170F.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -35281,7 +35281,7 @@ const headers = {
 
 const body = new FormData();
 body.append('subject', 'b');
-body.append('priority', 'low');
+body.append('priority', 'urgent');
 body.append('message', 'architecto');
 body.append('attachments[]', document.querySelector('input[name="attachments[]"]').files[0]);
 
@@ -35309,7 +35309,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'priority',
-                'contents' =&gt; 'low'
+                'contents' =&gt; 'urgent'
             ],
             [
                 'name' =&gt; 'message',
@@ -35317,7 +35317,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'attachments[]',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCF29.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php170F.tmp', 'r')
             ],
         ],
     ]
@@ -35333,12 +35333,12 @@ import json
 url = 'http://one_dashboard.test/api/v1/tickets'
 files = {
   'subject': (None, 'b'),
-  'priority': (None, 'low'),
+  'priority': (None, 'urgent'),
   'message': (None, 'architecto'),
-  'attachments[]': open('C:\Users\sakhawat\AppData\Local\Temp\phpCF29.tmp', 'rb')}
+  'attachments[]': open('C:\Users\sakhawat\AppData\Local\Temp\php170F.tmp', 'rb')}
 payload = {
     "subject": "b",
-    "priority": "low",
+    "priority": "urgent",
     "message": "architecto"
 }
 headers = {
@@ -35456,10 +35456,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="priority"                data-endpoint="POSTapi-v1-tickets"
-               value="low"
+               value="urgent"
                data-component="body">
     <br>
-<p>Example: <code>low</code></p>
+<p>Example: <code>urgent</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>low</code></li> <li><code>medium</code></li> <li><code>high</code></li> <li><code>urgent</code></li></ul>
         </div>
@@ -35681,7 +35681,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "message=architecto"\
-    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\phpCF2A.tmp" </code></pre></div>
+    --form "attachments[]=@C:\Users\sakhawat\AppData\Local\Temp\php1720.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -35722,7 +35722,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'attachments[]',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCF2A.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php1720.tmp', 'r')
             ],
         ],
     ]
@@ -35738,7 +35738,7 @@ import json
 url = 'http://one_dashboard.test/api/v1/tickets/16/reply'
 files = {
   'message': (None, 'architecto'),
-  'attachments[]': open('C:\Users\sakhawat\AppData\Local\Temp\phpCF2A.tmp', 'rb')}
+  'attachments[]': open('C:\Users\sakhawat\AppData\Local\Temp\php1720.tmp', 'rb')}
 payload = {
     "message": "architecto"
 }
@@ -36452,7 +36452,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "rating=2"\
     --form "title=g"\
     --form "comment=zmiyvdljnikhwaykcmyuwpwlvqwrsitcpscqldzsnrwtujwvlxjklqppwqbewtnnoqitpxntltcv"\
-    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\phpCF3B.tmp" </code></pre></div>
+    --form "media[]=@C:\Users\sakhawat\AppData\Local\Temp\php1730.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -36513,7 +36513,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'media[]',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCF3B.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php1730.tmp', 'r')
             ],
         ],
     ]
@@ -36533,7 +36533,7 @@ files = {
   'rating': (None, '2'),
   'title': (None, 'g'),
   'comment': (None, 'zmiyvdljnikhwaykcmyuwpwlvqwrsitcpscqldzsnrwtujwvlxjklqppwqbewtnnoqitpxntltcv'),
-  'media[]': open('C:\Users\sakhawat\AppData\Local\Temp\phpCF3B.tmp', 'rb')}
+  'media[]': open('C:\Users\sakhawat\AppData\Local\Temp\php1730.tmp', 'rb')}
 payload = {
     "reviewable_type": "architecto",
     "reviewable_id": 16,
@@ -36730,7 +36730,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"is_helpful\": false
+    \"is_helpful\": true
 }"
 </code></pre></div>
 
@@ -36746,7 +36746,7 @@ const headers = {
 };
 
 let body = {
-    "is_helpful": false
+    "is_helpful": true
 };
 
 fetch(url, {
@@ -36767,7 +36767,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'is_helpful' =&gt; false,
+            'is_helpful' =&gt; true,
         ],
     ]
 );
@@ -36781,7 +36781,7 @@ import json
 
 url = 'http://one_dashboard.test/api/v1/reviews/16/vote'
 payload = {
-    "is_helpful": false
+    "is_helpful": true
 }
 headers = {
   'Content-Type': 'application/json',
@@ -36900,7 +36900,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
         </form>
 
@@ -38587,8 +38587,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "phone=v"\
     --form "email=jdach@example.org"\
     --form "address=i"\
-    --form "logo=@C:\Users\sakhawat\AppData\Local\Temp\phpCF5B.tmp" \
-    --form "banner=@C:\Users\sakhawat\AppData\Local\Temp\phpCF5C.tmp" </code></pre></div>
+    --form "logo=@C:\Users\sakhawat\AppData\Local\Temp\php1770.tmp" \
+    --form "banner=@C:\Users\sakhawat\AppData\Local\Temp\php1771.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -38655,11 +38655,11 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'logo',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCF5B.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php1770.tmp', 'r')
             ],
             [
                 'name' =&gt; 'banner',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCF5C.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php1771.tmp', 'r')
             ],
         ],
     ]
@@ -38680,8 +38680,8 @@ files = {
   'phone': (None, 'v'),
   'email': (None, 'jdach@example.org'),
   'address': (None, 'i'),
-  'logo': open('C:\Users\sakhawat\AppData\Local\Temp\phpCF5B.tmp', 'rb'),
-  'banner': open('C:\Users\sakhawat\AppData\Local\Temp\phpCF5C.tmp', 'rb')}
+  'logo': open('C:\Users\sakhawat\AppData\Local\Temp\php1770.tmp', 'rb'),
+  'banner': open('C:\Users\sakhawat\AppData\Local\Temp\php1771.tmp', 'rb')}
 payload = {
     "name": "b",
     "slug": "n",
@@ -38856,7 +38856,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpCF5B.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php1770.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>banner</code></b>&nbsp;&nbsp;
@@ -38868,7 +38868,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpCF5C.tmp</code></p>
+<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php1771.tmp</code></p>
         </div>
         </form>
 
@@ -38893,8 +38893,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "phone=v"\
     --form "email=jdach@example.org"\
     --form "address=i"\
-    --form "logo=@C:\Users\sakhawat\AppData\Local\Temp\phpCF6D.tmp" \
-    --form "banner=@C:\Users\sakhawat\AppData\Local\Temp\phpCF6E.tmp" </code></pre></div>
+    --form "logo=@C:\Users\sakhawat\AppData\Local\Temp\php1772.tmp" \
+    --form "banner=@C:\Users\sakhawat\AppData\Local\Temp\php1773.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -38956,11 +38956,11 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'logo',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCF6D.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php1772.tmp', 'r')
             ],
             [
                 'name' =&gt; 'banner',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCF6E.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php1773.tmp', 'r')
             ],
         ],
     ]
@@ -38980,8 +38980,8 @@ files = {
   'phone': (None, 'v'),
   'email': (None, 'jdach@example.org'),
   'address': (None, 'i'),
-  'logo': open('C:\Users\sakhawat\AppData\Local\Temp\phpCF6D.tmp', 'rb'),
-  'banner': open('C:\Users\sakhawat\AppData\Local\Temp\phpCF6E.tmp', 'rb')}
+  'logo': open('C:\Users\sakhawat\AppData\Local\Temp\php1772.tmp', 'rb'),
+  'banner': open('C:\Users\sakhawat\AppData\Local\Temp\php1773.tmp', 'rb')}
 payload = {
     "name": "b",
     "description": "Eius et animi quos velit et.",
@@ -39155,7 +39155,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpCF6D.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php1772.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>banner</code></b>&nbsp;&nbsp;
@@ -39167,7 +39167,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpCF6E.tmp</code></p>
+<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php1773.tmp</code></p>
         </div>
         </form>
 
@@ -40764,7 +40764,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"type\": \"product_description\",
+    \"type\": \"social_post\",
     \"prompt\": \"b\"
 }"
 </code></pre></div>
@@ -40781,7 +40781,7 @@ const headers = {
 };
 
 let body = {
-    "type": "product_description",
+    "type": "social_post",
     "prompt": "b"
 };
 
@@ -40803,7 +40803,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'type' =&gt; 'product_description',
+            'type' =&gt; 'social_post',
             'prompt' =&gt; 'b',
         ],
     ]
@@ -40818,7 +40818,7 @@ import json
 
 url = 'http://one_dashboard.test/api/v1/ai/generate-content'
 payload = {
-    "type": "product_description",
+    "type": "social_post",
     "prompt": "b"
 }
 headers = {
@@ -40912,10 +40912,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="POSTapi-v1-ai-generate-content"
-               value="product_description"
+               value="social_post"
                data-component="body">
     <br>
-<p>Example: <code>product_description</code></p>
+<p>Example: <code>social_post</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>product_description</code></li> <li><code>marketing_email</code></li> <li><code>seo_meta</code></li> <li><code>social_post</code></li></ul>
         </div>
@@ -40965,7 +40965,7 @@ Must be one of:
     \"name\": \"b\",
     \"email\": \"zbailey@example.net\",
     \"password\": \"-0pBNvYgxw\",
-    \"agree\": \"1\"
+    \"agree\": \"true\"
 }"
 </code></pre></div>
 
@@ -40984,7 +40984,7 @@ let body = {
     "name": "b",
     "email": "zbailey@example.net",
     "password": "-0pBNvYgxw",
-    "agree": "1"
+    "agree": "true"
 };
 
 fetch(url, {
@@ -41008,7 +41008,7 @@ $response = $client-&gt;post(
             'name' =&gt; 'b',
             'email' =&gt; 'zbailey@example.net',
             'password' =&gt; '-0pBNvYgxw',
-            'agree' =&gt; '1',
+            'agree' =&gt; 'true',
         ],
     ]
 );
@@ -41025,7 +41025,7 @@ payload = {
     "name": "b",
     "email": "zbailey@example.net",
     "password": "-0pBNvYgxw",
-    "agree": "1"
+    "agree": "true"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -41154,10 +41154,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="agree"                data-endpoint="POSTapi-register"
-               value="1"
+               value="true"
                data-component="body">
     <br>
-<p>Example: <code>1</code></p>
+<p>Example: <code>true</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>true</code></li> <li><code>1</code></li></ul>
         </div>
@@ -42410,7 +42410,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"token\": \"architecto\",
-    \"provider\": \"facebook\"
+    \"provider\": \"google\"
 }"
 </code></pre></div>
 
@@ -42427,7 +42427,7 @@ const headers = {
 
 let body = {
     "token": "architecto",
-    "provider": "facebook"
+    "provider": "google"
 };
 
 fetch(url, {
@@ -42449,7 +42449,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'token' =&gt; 'architecto',
-            'provider' =&gt; 'facebook',
+            'provider' =&gt; 'google',
         ],
     ]
 );
@@ -42464,7 +42464,7 @@ import json
 url = 'http://one_dashboard.test/api/social-login'
 payload = {
     "token": "architecto",
-    "provider": "facebook"
+    "provider": "google"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -42569,10 +42569,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="provider"                data-endpoint="POSTapi-social-login"
-               value="facebook"
+               value="google"
                data-component="body">
     <br>
-<p>Example: <code>facebook</code></p>
+<p>Example: <code>google</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>google</code></li> <li><code>facebook</code></li> <li><code>apple</code></li></ul>
         </div>
@@ -43454,9 +43454,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "latitude=y"\
     --form "longitude=u"\
     --form "bio=architecto"\
-    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\phpCFEC.tmp" \
-    --form "cover_photo=@C:\Users\sakhawat\AppData\Local\Temp\phpCFED.tmp" \
-    --form "cover_image=@C:\Users\sakhawat\AppData\Local\Temp\phpCFEE.tmp" </code></pre></div>
+    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\php17E1.tmp" \
+    --form "cover_photo=@C:\Users\sakhawat\AppData\Local\Temp\php17E2.tmp" \
+    --form "cover_image=@C:\Users\sakhawat\AppData\Local\Temp\php17E3.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -43564,15 +43564,15 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'avatar',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCFEC.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php17E1.tmp', 'r')
             ],
             [
                 'name' =&gt; 'cover_photo',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCFED.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php17E2.tmp', 'r')
             ],
             [
                 'name' =&gt; 'cover_image',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCFEE.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php17E3.tmp', 'r')
             ],
         ],
     ]
@@ -43601,9 +43601,9 @@ files = {
   'latitude': (None, 'y'),
   'longitude': (None, 'u'),
   'bio': (None, 'architecto'),
-  'avatar': open('C:\Users\sakhawat\AppData\Local\Temp\phpCFEC.tmp', 'rb'),
-  'cover_photo': open('C:\Users\sakhawat\AppData\Local\Temp\phpCFED.tmp', 'rb'),
-  'cover_image': open('C:\Users\sakhawat\AppData\Local\Temp\phpCFEE.tmp', 'rb')}
+  'avatar': open('C:\Users\sakhawat\AppData\Local\Temp\php17E1.tmp', 'rb'),
+  'cover_photo': open('C:\Users\sakhawat\AppData\Local\Temp\php17E2.tmp', 'rb'),
+  'cover_image': open('C:\Users\sakhawat\AppData\Local\Temp\php17E3.tmp', 'rb')}
 payload = {
     "first_name": "b",
     "last_name": "n",
@@ -43750,7 +43750,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpCFEC.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php17E1.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>cover_photo</code></b>&nbsp;&nbsp;
@@ -43762,7 +43762,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpCFED.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php17E2.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>cover_image</code></b>&nbsp;&nbsp;
@@ -43774,7 +43774,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpCFEE.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php17E3.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
@@ -43935,7 +43935,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "state=v"\
     --form "city=d"\
     --form "zip_code=l"\
-    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\phpCFEF.tmp" </code></pre></div>
+    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\php17E4.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -44016,7 +44016,7 @@ $response = $client-&gt;post(
             ],
             [
                 'name' =&gt; 'avatar',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpCFEF.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php17E4.tmp', 'r')
             ],
         ],
     ]
@@ -44040,7 +44040,7 @@ files = {
   'state': (None, 'v'),
   'city': (None, 'd'),
   'zip_code': (None, 'l'),
-  'avatar': open('C:\Users\sakhawat\AppData\Local\Temp\phpCFEF.tmp', 'rb')}
+  'avatar': open('C:\Users\sakhawat\AppData\Local\Temp\php17E4.tmp', 'rb')}
 payload = {
     "first_name": "b",
     "last_name": "n",
@@ -44170,7 +44170,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpCFEF.tmp</code></p>
+<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php17E4.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
@@ -44274,7 +44274,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://one_dashboard.test/api/update-avatar" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\phpD000.tmp" </code></pre></div>
+    --form "avatar=@C:\Users\sakhawat\AppData\Local\Temp\php17F5.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -44310,7 +44310,7 @@ $response = $client-&gt;post(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'avatar',
-                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\phpD000.tmp', 'r')
+                'contents' =&gt; fopen('C:\Users\sakhawat\AppData\Local\Temp\php17F5.tmp', 'r')
             ],
         ],
     ]
@@ -44325,7 +44325,7 @@ import json
 
 url = 'http://one_dashboard.test/api/update-avatar'
 files = {
-  'avatar': open('C:\Users\sakhawat\AppData\Local\Temp\phpD000.tmp', 'rb')}
+  'avatar': open('C:\Users\sakhawat\AppData\Local\Temp\php17F5.tmp', 'rb')}
 headers = {
   'Content-Type': 'multipart/form-data',
   'Accept': 'application/json'
@@ -44420,7 +44420,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\phpD000.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\sakhawat\AppData\Local\Temp\php17F5.tmp</code></p>
         </div>
         </form>
 
@@ -44782,9 +44782,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"purpose\": \"email_verification\",
+    \"purpose\": \"password_reset\",
     \"type\": \"otp\",
-    \"channel\": \"email\"
+    \"channel\": \"sms\"
 }"
 </code></pre></div>
 
@@ -44800,9 +44800,9 @@ const headers = {
 };
 
 let body = {
-    "purpose": "email_verification",
+    "purpose": "password_reset",
     "type": "otp",
-    "channel": "email"
+    "channel": "sms"
 };
 
 fetch(url, {
@@ -44823,9 +44823,9 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'purpose' =&gt; 'email_verification',
+            'purpose' =&gt; 'password_reset',
             'type' =&gt; 'otp',
-            'channel' =&gt; 'email',
+            'channel' =&gt; 'sms',
         ],
     ]
 );
@@ -44839,9 +44839,9 @@ import json
 
 url = 'http://one_dashboard.test/api/verification/send'
 payload = {
-    "purpose": "email_verification",
+    "purpose": "password_reset",
     "type": "otp",
-    "channel": "email"
+    "channel": "sms"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -44934,10 +44934,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="purpose"                data-endpoint="POSTapi-verification-send"
-               value="email_verification"
+               value="password_reset"
                data-component="body">
     <br>
-<p>Example: <code>email_verification</code></p>
+<p>Example: <code>password_reset</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>email_verification</code></li> <li><code>password_reset</code></li></ul>
         </div>
@@ -44962,10 +44962,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="channel"                data-endpoint="POSTapi-verification-send"
-               value="email"
+               value="sms"
                data-component="body">
     <br>
-<p>Example: <code>email</code></p>
+<p>Example: <code>sms</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>email</code></li> <li><code>sms</code></li></ul>
         </div>

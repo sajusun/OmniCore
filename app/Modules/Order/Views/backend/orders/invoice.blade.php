@@ -46,7 +46,7 @@
             {{-- Header --}}
             <div class="d-flex justify-content-between align-items-start border-bottom pb-4 mb-4">
                 <div>
-                    <h3 class="fw-bold text-primary mb-1">{{ config('app.name', 'One-Dashboard') }} Store</h3>
+                    <h3 class="fw-bold text-primary mb-1">{{ config('app.name', 'OmniCore') }} Store</h3>
                     <p class="text-muted small mb-0">E-Commerce Invoice & Packing Slip</p>
                 </div>
                 <div class="text-end">
