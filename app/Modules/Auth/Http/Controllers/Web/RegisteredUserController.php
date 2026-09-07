@@ -48,13 +48,9 @@ class RegisteredUserController extends Controller
             ]);
         }
 
-        do {
-            $slug = "user_".rand(1000000000, 9999999999);
-        } while (User::where('slug', $slug)->exists());
-
         $user = User::create([
             'name'           => $request->name,
-            'slug'           => $slug,
+            'slug'           => User::generateUniqueSlug($request->name),
             'email'          => $request->email,
             'password'       => Hash::make($request->password),
             'otp'            => rand(1000, 9999),

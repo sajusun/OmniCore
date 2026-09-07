@@ -56,7 +56,7 @@ class AdminController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'slug' => Helper::makeSlug(User::class, $request->name),
+            'slug' => User::generateUniqueSlug($request->name),
             'status' => 'active'
         ]);
 

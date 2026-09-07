@@ -40,7 +40,7 @@ class RegisterApiController extends Controller
 
             $user = User::create([
                 'name'             => $request->input('name'),
-                'slug'             => $this->makeSlug($request->input('name')),
+                'slug'             => User::generateUniqueSlug($request->input('name')),
                 'email'            => strtolower($request->input('email')),
                 'password'         => Hash::make($request->input('password')),
                 'status'           => 'active',

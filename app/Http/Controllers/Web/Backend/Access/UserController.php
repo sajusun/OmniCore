@@ -78,7 +78,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'avatar' => $avatarPath,
-            'slug' => Helper::makeSlug(User::class, $request->name),
+            'slug' => User::generateUniqueSlug($request->name),
             'status' => 'active',
         ]);
 

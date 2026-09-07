@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -99,9 +100,32 @@ class User extends Authenticatable implements JWTSubject
 
     protected static function booted(): void
     {
+        static::creating(function ($user) {
+            if (empty($user->slug)) {
+                $user->slug = static::generateUniqueSlug($user->name);
+            }
+        });
+
         static::created(function ($user) {
             $user->profile()->create();
         });
+    }
+
+    /**
+     * Generate a unique slug based on user name + random string.
+     */
+    public static function generateUniqueSlug(?string $name = null): string
+    {
+        $base = Str::slug($name ?: 'user');
+        if (empty($base)) {
+            $base = 'user';
+        }
+
+        do {
+            $slug = $base . '-' . Str::lower(Str::random(6));
+        } while (static::where('slug', $slug)->exists());
+
+        return $slug;
     }
 
     public function profile(): HasOne
