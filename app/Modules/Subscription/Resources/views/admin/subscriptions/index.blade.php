@@ -2,67 +2,74 @@
     @slot('title')
         Active Subscriptions
     @endslot
-    @slot('header')
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                Active Member Subscriptions
-            </h2>
-            <a href="{{ route('admin.subscription.plans.index') }}" class="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-medium transition border border-gray-300 dark:border-gray-700">
-                &larr; Manage Plans
+
+    <div class="container-fluid py-4">
+        {{-- Header --}}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold mb-1">Active Member Subscriptions</h4>
+                <p class="text-muted small mb-0">Monitor active customer memberships, subscription validity dates, and auto-renewal states.</p>
+            </div>
+            <a href="{{ route('admin.subscription.plans.index') }}" class="btn btn-outline-secondary px-3">
+                <i class="bi bi-arrow-left me-1"></i> Manage Plans
             </a>
         </div>
-    @endslot
 
-    <div class="max-w-7xl mx-auto mt-8 space-y-6">
-        <x-card title="Subscribers List">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-50 dark:bg-gray-800">
+        {{-- Status Notification Modal --}}
+        <x-modal.status />
+
+        {{-- Subscriptions Table --}}
+        <x-card title="Subscribers Directory">
+            <x-table>
+                <thead>
+                    <tr>
+                        <x-table.th>Subscriber</x-table.th>
+                        <x-table.th>Subscribed Plan</x-table.th>
+                        <x-table.th>Status</x-table.th>
+                        <x-table.th>Started At</x-table.th>
+                        <x-table.th>Expires At</x-table.th>
+                        <x-table.th class="text-end">Auto Renew</x-table.th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($subscriptions as $sub)
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Plan</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Started At</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Expires At</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Auto Renew</th>
+                            <x-table.td>
+                                <div class="fw-bold text-dark">{{ $sub->user?->name ?? 'N/A' }}</div>
+                                <div class="text-muted small">{{ $sub->user?->email }}</div>
+                            </x-table.td>
+                            <x-table.td>
+                                <div class="fw-bold text-primary">{{ $sub->plan?->name ?? 'Custom Plan' }}</div>
+                                <div class="text-muted small">${{ number_format($sub->plan?->price ?? 0, 2) }}</div>
+                            </x-table.td>
+                            <x-table.td>
+                                @if($sub->status === 'active')
+                                    <x-badge color="success">Active</x-badge>
+                                @else
+                                    <x-badge color="danger">{{ ucfirst($sub->status) }}</x-badge>
+                                @endif
+                            </x-table.td>
+                            <x-table.td class="text-muted small">
+                                {{ $sub->starts_at?->format('M d, Y') ?? 'N/A' }}
+                            </x-table.td>
+                            <x-table.td class="text-muted small">
+                                {{ $sub->expires_at?->format('M d, Y') ?? 'Lifetime' }}
+                            </x-table.td>
+                            <x-table.td class="text-end">
+                                @if($sub->auto_renew)
+                                    <span class="text-success small fw-semibold"><i class="bi bi-check-circle-fill me-1"></i> Enabled</span>
+                                @else
+                                    <span class="text-muted small"><i class="bi bi-dash-circle me-1"></i> Disabled</span>
+                                @endif
+                            </x-table.td>
                         </tr>
-                    </thead>
-                    <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
-                        @forelse($subscriptions as $sub)
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="font-semibold text-gray-900 dark:text-white">{{ $sub->user?->name ?? 'N/A' }}</div>
-                                    <div class="text-xs text-gray-500">{{ $sub->user?->email }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="font-bold text-indigo-600">{{ $sub->plan?->name ?? 'Custom Plan' }}</span>
-                                    <div class="text-xs text-gray-500">${{ number_format($sub->plan?->price ?? 0, 2) }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium {{ $sub->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                        {{ ucfirst($sub->status) }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $sub->starts_at?->format('M d, Y') ?? 'N/A' }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $sub->expires_at?->format('M d, Y') ?? 'Lifetime' }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    {{ $sub->auto_renew ? '✓ Yes' : '✕ No' }}
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">No active subscribers found.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                    @empty
+                        <x-empty-state colspan="6" title="No Active Subscribers Found" description="There are currently no active user subscriptions recorded." />
+                    @endforelse
+                </tbody>
+            </x-table>
 
-            <div class="mt-4">
+            <div class="mt-3">
                 {{ $subscriptions->links() }}
             </div>
         </x-card>

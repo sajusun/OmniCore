@@ -2,134 +2,142 @@
     @slot('title')
         Vendor Stores Management
     @endslot
-    @slot('header')
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                Vendor Stores & Merchant Network
-            </h2>
-            <a href="{{ route('admin.vendor.payouts.index') }}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition shadow-sm">
-                View Payout Requests &rarr;
+
+    <div class="container-fluid py-4">
+        {{-- Header --}}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold mb-1">Vendor Stores & Merchant Network</h4>
+                <p class="text-muted small mb-0">Manage registered seller shops, platform commission rates, verification status, and merchant balances.</p>
+            </div>
+            <a href="{{ route('admin.vendor.payouts.index') }}" class="btn btn-primary px-3 shadow-sm">
+                <i class="bi bi-wallet2 me-1"></i> Payout Requests
             </a>
         </div>
-    @endslot
 
-    <div class="max-w-7xl mx-auto mt-8 space-y-6">
-        <!-- Metric Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <p class="text-sm font-medium text-gray-500">Total Registered Stores</p>
-                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($totalStores) }}</h3>
+        {{-- Status Notification Modal --}}
+        <x-modal.status />
+
+        {{-- Top Metrics --}}
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <x-stat-card 
+                    title="Total Registered Stores" 
+                    value="{{ number_format($totalStores) }}" 
+                    color="primary" 
+                    icon="<i class='bi bi-shop fs-3'></i>" 
+                />
             </div>
-            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <p class="text-sm font-medium text-gray-500">Verified Merchants</p>
-                <h3 class="text-2xl font-bold text-emerald-600 mt-1">{{ number_format($verifiedStores) }}</h3>
+            <div class="col-md-4">
+                <x-stat-card 
+                    title="Verified Merchants" 
+                    value="{{ number_format($verifiedStores) }}" 
+                    color="emerald" 
+                    icon="<i class='bi bi-patch-check-fill fs-3'></i>" 
+                />
             </div>
-            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <p class="text-sm font-medium text-gray-500">Total Vendor Sales Revenue</p>
-                <h3 class="text-2xl font-bold text-indigo-600 mt-1">${{ number_format($totalRevenue, 2) }}</h3>
+            <div class="col-md-4">
+                <x-stat-card 
+                    title="Total Vendor Sales Volume" 
+                    value="${{ number_format($totalRevenue, 2) }}" 
+                    color="indigo" 
+                    icon="<i class='bi bi-graph-up-arrow fs-3'></i>" 
+                />
             </div>
         </div>
 
-        @if(session('success'))
-            <div class="p-4 text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <!-- Filter & Search -->
-        <x-card title="Search & Filter Stores">
-            <form method="GET" action="{{ route('admin.vendor.stores.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, email, phone..." class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white text-sm">
+        {{-- Search & Filter Card --}}
+        <x-card title="Search & Filter Stores" class="mb-4">
+            <form method="GET" action="{{ route('admin.vendor.stores.index') }}" class="row g-3 align-items-center">
+                <div class="col-md-5">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search store name, email, owner..." class="form-control">
                 </div>
-                <div>
-                    <select name="status" class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white text-sm">
+                <div class="col-md-4">
+                    <select name="status" class="form-select">
                         <option value="">All Statuses</option>
                         <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
                         <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending Review</option>
                         <option value="suspended" {{ request('status') === 'suspended' ? 'selected' : '' }}>Suspended</option>
                     </select>
                 </div>
-                <div class="flex gap-2">
-                    <button type="submit" class="px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-md text-sm font-medium">Filter</button>
-                    <a href="{{ route('admin.vendor.stores.index') }}" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md text-sm font-medium">Reset</a>
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary px-4"><i class="bi bi-funnel me-1"></i> Filter</button>
+                    <a href="{{ route('admin.vendor.stores.index') }}" class="btn btn-light border px-3">Reset</a>
                 </div>
             </form>
         </x-card>
 
-        <!-- Stores Table -->
-        <x-card title="Stores Index">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-50 dark:bg-gray-800">
+        {{-- Stores Table --}}
+        <x-card title="Merchant Stores Directory">
+            <x-table>
+                <thead>
+                    <tr>
+                        <x-table.th>Store Name</x-table.th>
+                        <x-table.th>Owner</x-table.th>
+                        <x-table.th>Balance</x-table.th>
+                        <x-table.th>Commission %</x-table.th>
+                        <x-table.th>Status</x-table.th>
+                        <x-table.th>Verified</x-table.th>
+                        <x-table.th class="text-end">Quick Actions</x-table.th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($stores as $store)
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Store Name</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Owner</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Balance</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Commission %</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Verified</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                            <x-table.td>
+                                <div class="fw-bold text-dark">{{ $store->name }}</div>
+                                <div class="text-muted small font-monospace">/store/{{ $store->slug }}</div>
+                            </x-table.td>
+                            <x-table.td>
+                                <div class="text-dark">{{ $store->user?->name ?? 'N/A' }}</div>
+                                <div class="text-muted small">{{ $store->user?->email }}</div>
+                            </x-table.td>
+                            <x-table.td>
+                                <span class="fw-bold text-success">${{ number_format($store->balance, 2) }}</span>
+                            </x-table.td>
+                            <x-table.td class="text-muted">
+                                {{ $store->commission_rate }}%
+                            </x-table.td>
+                            <x-table.td>
+                                @if($store->status === 'active')
+                                    <x-badge color="success">Active</x-badge>
+                                @elseif($store->status === 'pending')
+                                    <x-badge color="warning">Pending</x-badge>
+                                @else
+                                    <x-badge color="danger">Suspended</x-badge>
+                                @endif
+                            </x-table.td>
+                            <x-table.td>
+                                @if($store->is_verified)
+                                    <span class="text-success small fw-semibold"><i class="bi bi-patch-check-fill me-1"></i> Verified</span>
+                                @else
+                                    <span class="text-muted small">Unverified</span>
+                                @endif
+                            </x-table.td>
+                            <x-table.td class="text-end">
+                                <form action="{{ route('admin.vendor.stores.update', $store->id) }}" method="POST" class="d-inline-flex align-items-center gap-2 justify-content-end">
+                                    @csrf
+                                    @method('PUT')
+                                    <select name="status" class="form-select form-select-sm" style="width: 105px;">
+                                        <option value="active" {{ $store->status === 'active' ? 'selected' : '' }}>Active</option>
+                                        <option value="suspended" {{ $store->status === 'suspended' ? 'selected' : '' }}>Suspend</option>
+                                        <option value="pending" {{ $store->status === 'pending' ? 'selected' : '' }}>Pending</option>
+                                    </select>
+                                    <div class="form-check form-switch mb-0">
+                                        <input class="form-check-input" type="checkbox" name="is_verified" value="1" id="verify_{{ $store->id }}" {{ $store->is_verified ? 'checked' : '' }}>
+                                        <label class="form-check-label small text-muted" for="verify_{{ $store->id }}">Verify</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-primary px-3">Save</button>
+                                </form>
+                            </x-table.td>
                         </tr>
-                    </thead>
-                    <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
-                        @forelse($stores as $store)
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="font-semibold text-gray-900 dark:text-white">{{ $store->name }}</div>
-                                    <div class="text-xs text-gray-500">{{ $store->slug }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $store->user?->name ?? 'N/A' }}
-                                    <div class="text-xs text-gray-400">{{ $store->user?->email }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-emerald-600">
-                                    ${{ number_format($store->balance, 2) }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                                    {{ $store->commission_rate }}%
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium {{ $store->status === 'active' ? 'bg-green-100 text-green-800' : ($store->status === 'pending' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800') }}">
-                                        {{ ucfirst($store->status) }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    @if($store->is_verified)
-                                        <span class="inline-flex items-center text-xs font-medium text-emerald-600">
-                                            ✓ Verified
-                                        </span>
-                                    @else
-                                        <span class="text-xs text-gray-400">Unverified</span>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                                    <form action="{{ route('admin.vendor.stores.update', $store->id) }}" method="POST" class="flex items-center justify-end gap-2">
-                                        @csrf
-                                        @method('PUT')
-                                        <select name="status" class="rounded border-gray-300 text-xs py-1">
-                                            <option value="active" {{ $store->status === 'active' ? 'selected' : '' }}>Active</option>
-                                            <option value="suspended" {{ $store->status === 'suspended' ? 'selected' : '' }}>Suspend</option>
-                                            <option value="pending" {{ $store->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                        </select>
-                                        <label class="inline-flex items-center text-xs text-gray-600 dark:text-gray-400">
-                                            <input type="checkbox" name="is_verified" value="1" {{ $store->is_verified ? 'checked' : '' }} class="rounded border-gray-300 mr-1">
-                                            Verify
-                                        </label>
-                                        <button type="submit" class="px-2.5 py-1 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700">Save</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">No vendor stores found.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                    @empty
+                        <x-empty-state colspan="7" title="No Vendor Stores Found" description="No merchant stores match your search filters." />
+                    @endforelse
+                </tbody>
+            </x-table>
 
-            <div class="mt-4">
+            <div class="mt-3">
                 {{ $stores->links() }}
             </div>
         </x-card>

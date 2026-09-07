@@ -2,73 +2,81 @@
     @slot('title')
         Reward Tiers & Points
     @endslot
-    @slot('header')
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                Loyalty Reward Tiers & Multipliers
-            </h2>
-            <div class="space-x-2">
-                <a href="{{ route('admin.reward.badges.index') }}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition shadow-sm">
-                    Manage Badges
+
+    <div class="container-fluid py-4">
+        {{-- Header --}}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold mb-1">Loyalty Reward Tiers & Multipliers</h4>
+                <p class="text-muted small mb-0">Configure gamification tier progressions, points multipliers, and cashback percentages.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{{ route('admin.reward.badges.index') }}" class="btn btn-outline-primary px-3">
+                    <i class="bi bi-award me-1"></i> Badges
                 </a>
-                <a href="{{ route('admin.reward.leaderboard.index') }}" class="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-medium transition border border-gray-300 dark:border-gray-700">
-                    Leaderboard &rarr;
+                <a href="{{ route('admin.reward.leaderboard.index') }}" class="btn btn-primary px-3 shadow-sm">
+                    <i class="bi bi-trophy me-1"></i> Leaderboard
                 </a>
             </div>
         </div>
-    @endslot
 
-    <div class="max-w-7xl mx-auto mt-8 space-y-6">
-        <!-- Metric Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <p class="text-sm font-medium text-gray-500">Total Points Awarded</p>
-                <h3 class="text-2xl font-bold text-indigo-600 mt-1">{{ number_format($totalPointsIssued) }} pts</h3>
+        {{-- Status Notification Modal --}}
+        <x-modal.status />
+
+        {{-- Top Metrics --}}
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <x-stat-card 
+                    title="Total Loyalty Points Awarded" 
+                    value="{{ number_format($totalPointsIssued) }} pts" 
+                    color="primary" 
+                    icon="<i class='bi bi-stars fs-3'></i>" 
+                />
             </div>
-            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <p class="text-sm font-medium text-gray-500">Total Points Redeemed to Cash</p>
-                <h3 class="text-2xl font-bold text-emerald-600 mt-1">{{ number_format(abs($totalRedeemedPoints)) }} pts</h3>
+            <div class="col-md-6">
+                <x-stat-card 
+                    title="Total Points Redeemed to Cash" 
+                    value="{{ number_format(abs($totalRedeemedPoints)) }} pts" 
+                    color="emerald" 
+                    icon="<i class='bi bi-currency-dollar fs-3'></i>" 
+                />
             </div>
         </div>
 
-        @if(session('success'))
-            <div class="p-4 text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <!-- Tiers Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {{-- Tiers Grid --}}
+        <div class="row g-4">
             @foreach($tiers as $tier)
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 space-y-4">
-                    <form action="{{ route('admin.reward.tiers.update', $tier->id) }}" method="POST" class="space-y-3">
-                        @csrf
-                        @method('PUT')
+                <div class="col-md-3">
+                    <x-card title="Tier {{ $loop->iteration }}: {{ $tier->name }}" class="h-100">
+                        <form action="{{ route('admin.reward.tiers.update', $tier->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
 
-                        <div>
-                            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Level {{ $loop->iteration }}</span>
-                            <input type="text" name="name" value="{{ $tier->name }}" class="mt-1 block w-full font-bold text-gray-900 dark:text-white rounded border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-sm">
-                        </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Tier Name</label>
+                                <input type="text" name="name" value="{{ $tier->name }}" class="form-control form-control-sm">
+                            </div>
 
-                        <div>
-                            <label class="block text-xs text-gray-500">Min Points Required</label>
-                            <input type="number" name="min_points" value="{{ $tier->min_points }}" class="mt-1 block w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-xs">
-                        </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Min Lifetime Points</label>
+                                <input type="number" name="min_points" value="{{ $tier->min_points }}" class="form-control form-control-sm">
+                            </div>
 
-                        <div>
-                            <label class="block text-xs text-gray-500">Point Multiplier (e.g. 1.25x)</label>
-                            <input type="number" step="0.05" name="point_multiplier" value="{{ $tier->point_multiplier }}" class="mt-1 block w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-xs">
-                        </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Point Multiplier (e.g. 1.25x)</label>
+                                <input type="number" step="0.05" name="point_multiplier" value="{{ $tier->point_multiplier }}" class="form-control form-control-sm">
+                            </div>
 
-                        <div>
-                            <label class="block text-xs text-gray-500">Cashback %</label>
-                            <input type="number" step="0.5" name="cashback_percentage" value="{{ $tier->cashback_percentage }}" class="mt-1 block w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-xs">
-                        </div>
+                            <div class="mb-4">
+                                <label class="form-label small fw-semibold">Cashback %</label>
+                                <input type="number" step="0.5" name="cashback_percentage" value="{{ $tier->cashback_percentage }}" class="form-control form-control-sm">
+                            </div>
 
-                        <button type="submit" class="w-full py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold">
-                            Update Tier
-                        </button>
-                    </form>
+                            <button type="submit" class="btn btn-sm btn-primary w-100 shadow-sm">
+                                <i class="bi bi-check2 me-1"></i> Update Tier
+                            </button>
+                        </form>
+                    </x-card>
                 </div>
             @endforeach
         </div>

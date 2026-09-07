@@ -2,66 +2,90 @@
     @slot('title')
         Loyalty Leaderboard
     @endslot
-    @slot('header')
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                User Streaks & Points Leaderboard
-            </h2>
-            <a href="{{ route('admin.reward.tiers.index') }}" class="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-medium transition border border-gray-300 dark:border-gray-700">
-                &larr; Back to Tiers
+
+    <div class="container-fluid py-4">
+        {{-- Header --}}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold mb-1">User Streaks & Points Leaderboard</h4>
+                <p class="text-muted small mb-0">Live community rankings by accumulated reward points and consecutive daily check-ins.</p>
+            </div>
+            <a href="{{ route('admin.reward.tiers.index') }}" class="btn btn-outline-secondary px-3">
+                <i class="bi bi-arrow-left me-1"></i> Back to Tiers
             </a>
         </div>
-    @endslot
 
-    <div class="max-w-7xl mx-auto mt-8 space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Points Leaderboard -->
-            <x-card title="Top Point Earners">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        {{-- Status Notification Modal --}}
+        <x-modal.status />
+
+        <div class="row g-4">
+            {{-- Points Leaderboard --}}
+            <div class="col-md-6">
+                <x-card title="Top Points Earners">
+                    <x-table>
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Rank</th>
-                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">User</th>
-                                <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">Points</th>
+                                <x-table.th>Rank</x-table.th>
+                                <x-table.th>User</x-table.th>
+                                <x-table.th class="text-end">Points</x-table.th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
-                            @foreach($topUsers as $userReward)
+                        <tbody>
+                            @forelse($topUsers as $userReward)
                                 <tr>
-                                    <td class="px-4 py-3 text-sm font-bold text-gray-500">#{{ $loop->iteration }}</td>
-                                    <td class="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white">{{ $userReward->user?->name ?? 'N/A' }}</td>
-                                    <td class="px-4 py-3 text-sm font-bold text-indigo-600 text-right">{{ number_format($userReward->current_points) }}</td>
+                                    <x-table.td>
+                                        @if($loop->iteration === 1)
+                                            <span class="badge bg-warning text-dark"><i class="bi bi-trophy-fill"></i> #1</span>
+                                        @elseif($loop->iteration === 2)
+                                            <span class="badge bg-secondary text-white">#2</span>
+                                        @elseif($loop->iteration === 3)
+                                            <span class="badge bg-danger text-white">#3</span>
+                                        @else
+                                            <span class="text-muted small">#{{ $loop->iteration }}</span>
+                                        @endif
+                                    </x-table.td>
+                                    <x-table.td class="fw-bold text-dark">{{ $userReward->user?->name ?? 'N/A' }}</x-table.td>
+                                    <x-table.td class="text-end fw-bold text-primary">{{ number_format($userReward->current_points) }} pts</x-table.td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <x-empty-state colspan="3" title="No Points Recorded" description="No users have earned reward points yet." />
+                            @endforelse
                         </tbody>
-                    </table>
-                </div>
-            </x-card>
+                    </x-table>
+                </x-card>
+            </div>
 
-            <!-- Streak Leaderboard -->
-            <x-card title="Top Check-in Streaks">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            {{-- Streak Leaderboard --}}
+            <div class="col-md-6">
+                <x-card title="Top Daily Check-in Streaks">
+                    <x-table>
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Rank</th>
-                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">User</th>
-                                <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">Streak</th>
+                                <x-table.th>Rank</x-table.th>
+                                <x-table.th>User</x-table.th>
+                                <x-table.th class="text-end">Streak</x-table.th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
-                            @foreach($topStreaks as $userReward)
+                        <tbody>
+                            @forelse($topStreaks as $userReward)
                                 <tr>
-                                    <td class="px-4 py-3 text-sm font-bold text-gray-500">#{{ $loop->iteration }}</td>
-                                    <td class="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white">{{ $userReward->user?->name ?? 'N/A' }}</td>
-                                    <td class="px-4 py-3 text-sm font-bold text-amber-500 text-right">🔥 {{ $userReward->streak_days }} Days</td>
+                                    <x-table.td>
+                                        @if($loop->iteration === 1)
+                                            <span class="badge bg-warning text-dark"><i class="bi bi-fire"></i> #1</span>
+                                        @else
+                                            <span class="text-muted small">#{{ $loop->iteration }}</span>
+                                        @endif
+                                    </x-table.td>
+                                    <x-table.td class="fw-bold text-dark">{{ $userReward->user?->name ?? 'N/A' }}</x-table.td>
+                                    <x-table.td class="text-end fw-bold text-warning">🔥 {{ $userReward->streak_days }} Days</x-table.td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <x-empty-state colspan="3" title="No Active Streaks" description="No users have started daily check-in streaks." />
+                            @endforelse
                         </tbody>
-                    </table>
-                </div>
-            </x-card>
+                    </x-table>
+                </x-card>
+            </div>
         </div>
     </div>
 </x-admin-layout>
