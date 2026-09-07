@@ -104,4 +104,4 @@ jobs:
           CACHE_DRIVER: array
           SESSION_DRIVER: array
           QUEUE_CONNECTION: sync
-        run: php artisan test tests/Feature/InteractionModuleTest.php tests/Feature/OrderCheckoutConcurrencyTest.php --without-tty
+        run: php artisan test tests/Feature/InteractionModuleTest.php tests/Feature/OrderCheckoutConcurrencyTest.php
