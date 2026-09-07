@@ -5,7 +5,7 @@
     @slot('header')
     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
         <nav
-            class="small fw-medium text-muted d-none d-sm-flex align-items-center bg-light px-3 py-2 rounded-pill shadow-sm border">
+            class="small fw-medium text-muted d-none d-sm-flex align-items-center bg-light px-3 py-2 shadow-sm border">
             <ol class="d-flex list-unstyled m-0 gap-2">
                 <li class="d-flex align-items-center">
                     <a href="javascript:void(0);" class="text-decoration-none text-secondary">Settings</a>
@@ -24,7 +24,7 @@
             <!-- Enhanced card with deeper shadow & glass-morphism effect -->
             <div class="card shadow-sm border overflow-hidden">
                 <div class="card-header bg-light d-flex align-items-center gap-2 py-3 px-4">
-                    <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-3">
+                    <div class="p-2 bg-primary bg-opacity-10 text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -132,7 +132,7 @@
             <div class="row g-3 mt-4">
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
-                        <div class="p-2 bg-success bg-opacity-10 text-success rounded-circle">
+                        <div class="p-2 bg-success bg-opacity-10 text-success">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -147,7 +147,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
-                        <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-circle">
+                        <div class="p-2 bg-primary bg-opacity-10 text-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -162,7 +162,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
-                        <div class="p-2 bg-warning bg-opacity-10 text-warning rounded-circle">
+                        <div class="p-2 bg-warning bg-opacity-10 text-warning">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"

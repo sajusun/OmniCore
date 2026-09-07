@@ -4,7 +4,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Membership & Pricing Plans</h2>
-            <a href="{{ route('admin.plans.create') }}" class="px-4 py-2 bg-emerald-600 text-white rounded-md text-sm font-semibold hover:bg-emerald-700">
+            <a href="{{ route('admin.plans.create') }}" class="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700">
                 + Create New Plan
             </a>
         </div>
@@ -13,13 +13,13 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             @if(session('success'))
-            <div class="p-4 bg-green-50 text-green-700 rounded-lg text-sm border border-green-200">
+            <div class="p-4 bg-green-50 text-green-700 text-sm border border-green-200">
                 {{ session('success') }}
             </div>
             @endif
 
             @if(session('error'))
-            <div class="p-4 bg-red-50 text-red-700 rounded-lg text-sm border border-red-200">
+            <div class="p-4 bg-red-50 text-red-700 text-sm border border-red-200">
                 {{ session('error') }}
             </div>
             @endif
@@ -27,9 +27,9 @@
             <!-- Plans Grid -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 @forelse($plans as $plan)
-                <div class="bg-white rounded-lg shadow-sm border {{ $plan->is_popular ? 'border-emerald-500 ring-2 ring-emerald-500/20' : 'border-gray-100' }} p-6 flex flex-col justify-between relative">
+                <div class="bg-white shadow-sm border {{ $plan->is_popular ? 'border-emerald-500 ring-2 ring-emerald-500/20' : 'border-gray-100' }} p-6 flex flex-col justify-between relative">
                     @if($plan->is_popular)
-                    <span class="absolute -top-3 right-4 px-3 py-0.5 bg-emerald-500 text-white text-[11px] uppercase font-bold rounded-full shadow-sm">
+                    <span class="absolute -top-3 right-4 px-3 py-0.5 bg-emerald-500 text-white text-[11px] uppercase font-bold shadow-sm">
                         Popular
                     </span>
                     @endif
@@ -37,7 +37,7 @@
                     <div>
                         <div class="flex justify-between items-start mb-3">
                             <h3 class="font-bold text-gray-900 text-lg">{{ $plan->name }}</h3>
-                            <span class="px-2 py-0.5 text-xs font-semibold rounded {{ $plan->is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
+                            <span class="px-2 py-0.5 text-xs font-semibold {{ $plan->is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
                                 {{ $plan->is_active ? 'Active' : 'Disabled' }}
                             </span>
                         </div>
@@ -81,7 +81,7 @@
                     </div>
                 </div>
                 @empty
-                <div class="col-span-4 bg-white p-8 rounded-lg text-center text-gray-400">
+                <div class="col-span-4 bg-white p-8 text-center text-gray-400 border border-gray-100">
                     No subscription plans configured yet.
                 </div>
                 @endforelse

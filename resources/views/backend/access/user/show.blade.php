@@ -36,7 +36,7 @@
                         ? (filter_var($user->avatar, FILTER_VALIDATE_URL) ? $user->avatar : asset($user->avatar))
                         : asset('default/profile.png');
                 @endphp
-                <img src="{{ $avatarUrl }}" alt="{{ $user->name }}" class="rounded-circle border p-1" style="width: 100px; height: 100px; object-fit: cover;" onError="this.onerror=null;this.src='{{ asset('default/profile.png') }}';">
+                <img src="{{ $avatarUrl }}" alt="{{ $user->name }}" class="border p-1" style="width: 100px; height: 100px; object-fit: cover;" onError="this.onerror=null;this.src='{{ asset('default/profile.png') }}';">
                 
                 <div class="flex-grow-1 text-center text-md-start">
                     <div class="d-flex flex-column flex-md-row align-items-center justify-content-between mb-2">
@@ -72,7 +72,7 @@
                             <span class="text-muted small text-uppercase fw-bold">User Posts</span>
                             <h2 class="fw-bold text-dark mb-0 mt-1">{{ $postsCount }}</h2>
                         </div>
-                        <div class="p-3 bg-indigo-light text-indigo rounded-circle">
+                        <div class="p-3 bg-indigo-light text-indigo">
                             <i class="fa fa-newspaper fs-3" style="color: #4f46e5;"></i>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                             <span class="text-muted small text-uppercase fw-bold">User Orders</span>
                             <h2 class="fw-bold text-dark mb-0 mt-1">{{ $ordersCount ?? 0 }}</h2>
                         </div>
-                        <div class="p-3 bg-success-light text-success rounded-circle">
+                        <div class="p-3 bg-success-light text-success">
                             <i class="fa fa-shopping-cart fs-3" style="color: #10b981;"></i>
                         </div>
                     </div>
@@ -112,7 +112,7 @@
                             <span class="text-muted small text-uppercase fw-bold">User Tickets</span>
                             <h2 class="fw-bold text-dark mb-0 mt-1">{{ $user->tickets_count ?? 0 }}</h2>
                         </div>
-                        <div class="p-3 bg-info-light text-info rounded-circle">
+                        <div class="p-3 bg-info-light text-info">
                             <i class="fa fa-ticket fs-3" style="color: #06b6d4;"></i>
                         </div>
                     </div>
@@ -132,7 +132,7 @@
                             <span class="text-muted small text-uppercase fw-bold">User Reviews</span>
                             <h2 class="fw-bold text-dark mb-0 mt-1">{{ $user->reviews_count ?? 0 }}</h2>
                         </div>
-                        <div class="p-3 bg-warning-light text-warning rounded-circle">
+                        <div class="p-3 bg-warning-light text-warning">
                             <i class="fa fa-star fs-3" style="color: #f59e0b;"></i>
                         </div>
                     </div>

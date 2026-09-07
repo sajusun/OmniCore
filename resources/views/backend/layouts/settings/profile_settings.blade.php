@@ -27,7 +27,7 @@
                             <div class="row align-items-center">
                                 <div class="col-lg-12 col-md-12 col-xl-6">
                                     <div class="d-flex flex-wrap align-items-center">
-                                        <div class="profile-img-main rounded"
+                                        <div class="profile-img-main"
                                             style="width: 125px; height: 125px; overflow: hidden;">
                                             <img src="{{ Auth::user()->avatar ? asset(Auth::user()->avatar) : asset('default/profile.png') }}"
                                                 alt="Profile Picture" class="m-0 p-1"

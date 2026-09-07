@@ -20,7 +20,7 @@
                     <div class="col-md-3 col-6 mb-3 position-relative old-image-box">
 
                         <img src="{{ asset($img) }}"
-                             class="img-thumbnail rounded shadow-sm old-image"
+                             class="img-thumbnail shadow-sm old-image"
                              style="height: 150px; width:100%; object-fit:cover;">
 
                         {{-- Delete Button --}}
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 col.innerHTML = `
                     <div class="position-relative">
                         <img src="${e.target.result}"
-                             class="img-thumbnail rounded shadow-sm"
+                             class="img-thumbnail shadow-sm"
                              style="height: 150px; width:100%; object-fit:cover;">
                     </div>
                 `;

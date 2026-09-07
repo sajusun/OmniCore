@@ -88,7 +88,7 @@
                     <hr>
                     <p><strong>Message:</strong></p>
                     <div id="modal-message" class="border p-3 
-                <div class=" modal-footer">
+ <div class=" modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>

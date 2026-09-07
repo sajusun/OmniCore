@@ -5,7 +5,7 @@
 
     @slot('header')
     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
-        <nav class="small fw-medium text-muted d-none d-sm-flex align-items-center bg-light px-3 py-2 rounded-pill shadow-sm border">
+        <nav class="small fw-medium text-muted d-none d-sm-flex align-items-center bg-light px-3 py-2 shadow-sm border">
             <ol class="d-flex list-unstyled m-0 gap-2">
                 <li class="d-flex align-items-center">
                     <a href="javascript:void(0);" class="text-decoration-none text-secondary">Settings</a>
@@ -27,7 +27,7 @@
 
                 <!-- Card Header -->
                 <div class="card-header bg-light d-flex align-items-center gap-2 py-3 px-4">
-                    <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-3">
+                    <div class="p-2 bg-primary bg-opacity-10 text-primary">
                         <!-- Google "G" icon -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -74,7 +74,7 @@
                         </div>
 
                         <!-- Hint box -->
-                        <div class="mt-4 p-3 bg-light border rounded-3 d-flex align-items-start gap-2">
+                        <div class="mt-4 p-3 bg-light border d-flex align-items-start gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="text-primary flex-shrink-0 mt-1"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -118,7 +118,7 @@
             <div class="row g-3 mt-4">
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
-                        <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-circle">
+                        <div class="p-2 bg-primary bg-opacity-10 text-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -132,7 +132,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
-                        <div class="p-2 bg-success bg-opacity-10 text-success rounded-circle">
+                        <div class="p-2 bg-success bg-opacity-10 text-success">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -146,7 +146,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
-                        <div class="p-2 bg-purple bg-opacity-10 text-purple rounded-circle">
+                        <div class="p-2 bg-purple bg-opacity-10 text-purple">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />

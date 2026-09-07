@@ -267,7 +267,7 @@
                                                                     ? (filter_var($user->avatar, FILTER_VALIDATE_URL) ? $user->avatar : asset($user->avatar))
                                                                     : asset('default/profile.png');
                                                             @endphp
-                                                            <img src="{{ $inappAvatarUrl }}" alt="{{ $user->name }}" class="me-2.5 rounded-circle" style="width: 34px; height: 34px; object-fit: cover; border: 1px solid #e2e8f0; flex-shrink: 0;" onError="this.onerror=null;this.src='{{ asset('default/profile.png') }}';">
+                                                            <img src="{{ $inappAvatarUrl }}" alt="{{ $user->name }}" class="me-2.5" style="width: 34px; height: 34px; object-fit: cover; border: 1px solid #e2e8f0; flex-shrink: 0;" onError="this.onerror=null;this.src='{{ asset('default/profile.png') }}';">
                                                             <span class="fw-semibold text-dark">{{ $user->name }}</span>
                                                         </label>
                                                     </td>
@@ -413,7 +413,7 @@
                                                                     ? (filter_var($user->avatar, FILTER_VALIDATE_URL) ? $user->avatar : asset($user->avatar))
                                                                     : asset('default/profile.png');
                                                             @endphp
-                                                            <img src="{{ $emailAvatarUrl }}" alt="{{ $user->name }}" class="me-2.5 rounded-circle" style="width: 34px; height: 34px; object-fit: cover; border: 1px solid #e2e8f0; flex-shrink: 0;" onError="this.onerror=null;this.src='{{ asset('default/profile.png') }}';">
+                                                            <img src="{{ $emailAvatarUrl }}" alt="{{ $user->name }}" class="me-2.5" style="width: 34px; height: 34px; object-fit: cover; border: 1px solid #e2e8f0; flex-shrink: 0;" onError="this.onerror=null;this.src='{{ asset('default/profile.png') }}';">
                                                             <span class="fw-semibold text-dark">{{ $user->name }}</span>
                                                         </label>
                                                     </td>

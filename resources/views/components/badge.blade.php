@@ -15,7 +15,7 @@
         'dark' => $soft ? 'bg-dark bg-opacity-10 text-dark border border-dark border-opacity-20' : 'bg-dark text-white',
     ];
 
-    $classes = 'badge px-2.5 py-1.5 ' . ($pill ? 'rounded-pill ' : 'rounded ') . ($colorMap[$color] ?? $colorMap['primary']);
+    $classes = 'badge px-2.5 py-1.5 ' . ($colorMap[$color] ?? $colorMap['primary']);
 @endphp
 
 <span {{ $attributes->merge(['class' => $classes]) }}>

@@ -30,7 +30,7 @@
                             ? (filter_var($post->user->avatar, FILTER_VALIDATE_URL) ? $post->user->avatar : asset($post->user->avatar))
                             : asset('default/profile.png');
                     @endphp
-                    <img src="{{ $userAvatar }}" alt="{{ $post->user->name ?? 'User' }}" class="rounded-circle me-3" style="width: 48px; height: 48px; object-fit: cover; border: 1px solid #e2e8f0;" onError="this.onerror=null;this.src='{{ asset('default/profile.png') }}';">
+                    <img src="{{ $userAvatar }}" alt="{{ $post->user->name ?? 'User' }}" class="me-3" style="width: 48px; height: 48px; object-fit: cover; border: 1px solid #e2e8f0;" onError="this.onerror=null;this.src='{{ asset('default/profile.png') }}';">
                     <div>
                         <h6 class="fw-bold text-dark mb-0">{{ $post->user->name ?? 'N/A' }}</h6>
                         <small class="text-muted">{{ $post->user->email ?? 'N/A' }}</small>

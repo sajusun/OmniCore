@@ -68,7 +68,7 @@
                                 <div class="text-muted small">{{ $affiliate->user?->email }}</div>
                             </x-table.td>
                             <x-table.td>
-                                <span class="font-monospace bg-light px-2 py-1 border rounded small">{{ $affiliate->referral_code }}</span>
+                                <span class="font-monospace bg-light px-2 py-1 border small">{{ $affiliate->referral_code }}</span>
                                 @if($affiliate->custom_slug)
                                     <div class="text-primary small mt-1">/ref/{{ $affiliate->custom_slug }}</div>
                                 @endif

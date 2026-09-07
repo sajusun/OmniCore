@@ -4,7 +4,7 @@
     <!-- Table Header with Search on Right -->
     <div class="card-header bg-light border-bottom d-flex flex-wrap align-items-center gap-3 py-3 px-4">
         <div class="d-flex align-items-center gap-2">
-            <div class=" bg-opacity-10 text-primary p-2 rounded-3">
+            <div class="bg-opacity-10 text-primary p-2">
                 <i class="fas fa-users"></i>
             </div>
             <span class="text-muted small">Manage your database records</span>
@@ -18,7 +18,7 @@
                 <i class="fas fa-search fa-xs"></i>
             </span>
             <input type="text" id="search-input-{{ $id }}" placeholder="Search records..."
-                class="form-control form-control-sm ps-5" style="border-radius: 5px;">
+                class="form-control form-control-sm ps-5">
         </div>
     </div>
 
@@ -139,7 +139,7 @@
 
             .dataTables_wrapper .dataTables_processing {
                 background: rgba(255, 255, 255, 0.9) !important;
-                border-radius: 0.5rem !important;
+                border-radius: 0 !important;
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
                 padding: 1rem !important;
                 position: absolute;

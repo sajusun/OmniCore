@@ -39,7 +39,7 @@
     {{-- Card Header with subtle gradient bg --}}
     <div class="card-header border-0 px-4 py-3" style="background: linear-gradient(to right, #f8fafc, #f1f5f9);">
         <div class="d-flex align-items-center gap-3">
-            <div class="d-flex align-items-center justify-content-center bg-primary text-white shadow-sm rounded-3"
+            <div class="d-flex align-items-center justify-content-center bg-primary text-white shadow-sm"
                 style="width: 2.5rem; height: 2.5rem;">
                 <svg style="width: 1.25rem; height: 1.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />

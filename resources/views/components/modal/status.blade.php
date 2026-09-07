@@ -20,12 +20,12 @@ $shouldShow = $show || !empty($statusMessage);
             <div class="modal-body p-4 text-center">
 
                 @if($statusType === 'success')
-                <div class="mx-auto d-flex align-items-center justify-content-center rounded-circle bg-success bg-opacity-10 text-success mb-3"
+                <div class="mx-auto d-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success mb-3"
                     style="width: 56px; height: 56px;">
                     <i class="bi bi-check-circle-fill fs-4"></i>
                 </div>
                 @else
-                <div class="mx-auto d-flex align-items-center justify-content-center rounded-circle bg-danger bg-opacity-10 text-danger mb-3"
+                <div class="mx-auto d-flex align-items-center justify-content-center bg-danger bg-opacity-10 text-danger mb-3"
                     style="width: 56px; height: 56px;">
                     <i class="bi bi-x-circle-fill fs-4"></i>
                 </div>

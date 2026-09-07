@@ -27,7 +27,7 @@
 
             {{-- Back Button --}}
             <a href="{{ route('admin.roles.index') }}"
-                class="btn btn-sm btn-light border px-3 d-inline-flex align-items-center gap-2 rounded-0"
+                class="btn btn-sm btn-light border px-3 d-inline-flex align-items-center gap-2 -0"
                 style="height: 38px; transition: all 0.2s ease;">
                 <i class="fa-solid fa-arrow-left small"></i>
                 <span>Back</span>
@@ -35,12 +35,12 @@
         </div>
 
         {{-- Main Card Content Container --}}
-        <div class="card border border-light-subtle shadow-sm overflow-hidden rounded-0">
+        <div class="card border border-light-subtle shadow-sm overflow-hidden -0">
 
             {{-- Card Header with Dynamic Subtle Gradient (Tailwind Alternative Accent) --}}
             <div class="card-header border-bottom border-light-subtle px-4 py-3 bg-light">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-0"
+                    <div class="d-flex align-items-center justify-content-center bg-primary text-white -0"
                         style="width: 40px; height: 40px; font-size: 1.15rem;">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </div>
@@ -70,7 +70,7 @@
                         class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2 border-light-subtle">
                         <label class="form-label fw-bold text-dark mb-0 d-inline-flex align-items-center gap-2">
                             <span>Permissions</span>
-                            <span class="badge bg-primary text-white font-monospace rounded-0"
+                            <span class="badge bg-primary text-white font-monospace -0"
                                 style="font-size: 0.7rem; padding: 0.35em 0.65em;">
                                 {{ $permissions->count() }} total
                             </span>
@@ -90,7 +90,7 @@
 
                     {{-- Permissions Grid grouped by suffix --}}
                     @if($permissions->count())
-                    <div class="border border-light-subtle rounded-0 overflow-hidden">
+                    <div class="border border-light-subtle -0 overflow-hidden">
                         @php
                         $grouped = $permissions->groupBy(function($p) {
                         $parts = explode('-', $p->name);
@@ -122,7 +122,7 @@
                                         style="background-color: {{ $isChecked ? 'var(--bs-light-bg-subtle)' : '#ffffff' }}; font-size: 0.8rem;">
 
                                         <input
-                                            class="form-check-input permission-checkbox m-0 flex-shrink-0 cursor-pointer rounded-0 border-secondary-subtle"
+                                            class="form-check-input permission-checkbox m-0 flex-shrink-0 cursor-pointer -0 border-secondary-subtle"
                                             type="checkbox" name="permissions[]" value="{{ $permission->name }}"
                                             id="perm-{{ $permission->id }}" {{ $isChecked ? 'checked' : '' }}>
                                         <span class="text-dark-emphasis text-capitalize ms-4">
@@ -136,18 +136,18 @@
                         @endforeach
                     </div>
                     @else
-                    <div class="text-center py-5 border border-dashed border-light-subtle bg-light rounded-0">
+                    <div class="text-center py-5 border border-dashed border-light-subtle bg-light -0">
                         <p class="small text-muted mb-0">No permissions found. Create permissions first.</p>
                     </div>
                     @endif
                 </div>
 
                 {{-- Action Action Bottom Footer Panel --}}
-                <div class="pt-3 border-top border-light-subtle d-flex justify-content-end align-items-center gap-2 ">
-                    <x-form.submit class="btn btn-primary px-4 rounded-0">
+                <div class="pt-3 border-top border-light-subtle d-flex justify-content-end align-items-center gap-2">
+                    <x-form.submit class="btn btn-primary px-4 -0">
                         <i class="fa-solid fa-check me-1.5 small"></i> Update Role
                     </x-form.submit>
-                    <x-form.cancel :href="route('admin.roles.index')" class="btn btn-light border rounded-0">Cancel
+                    <x-form.cancel :href="route('admin.roles.index')" class="btn btn-light border -0">Cancel
                     </x-form.cancel>
                 </div>
             </form>

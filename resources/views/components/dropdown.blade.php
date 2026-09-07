@@ -30,7 +30,7 @@ $widthClass = match ($width) {
          {!! $widthClass !!}
          style="display: none;"
          @click="open = false">
-        <div class="shadow border rounded py-1 bg-white {{ $contentClasses }}">
+        <div class="shadow border py-1 bg-white {{ $contentClasses }}">
             {{ $content }}
         </div>
     </div>

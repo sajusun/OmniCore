@@ -4,7 +4,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Reward & Loyalty Tiers</h2>
-            <a href="{{ route('admin.tiers.create') }}" class="px-4 py-2 bg-emerald-600 text-white rounded-md text-sm font-semibold hover:bg-emerald-700">
+            <a href="{{ route('admin.tiers.create') }}" class="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700">
                 + Create New Tier
             </a>
         </div>
@@ -13,20 +13,20 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             @if(session('success'))
-            <div class="p-4 bg-green-50 text-green-700 rounded-lg text-sm border border-green-200">
+            <div class="p-4 bg-green-50 text-green-700 text-sm border border-green-200">
                 {{ session('success') }}
             </div>
             @endif
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 @forelse($tiers as $tier)
-                <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
+                <div class="bg-white shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-center mb-3">
-                            <span class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-white text-xs" style="background-color: {{ $tier->color }}">
+                            <span class="w-8 h-8 flex items-center justify-center font-bold text-white text-xs" style="background-color: {{ $tier->color }}">
                                 {{ substr($tier->name, 0, 1) }}
                             </span>
-                            <span class="px-2 py-0.5 text-xs font-semibold rounded bg-gray-100 text-gray-700 font-mono">
+                            <span class="px-2 py-0.5 text-xs font-semibold bg-gray-100 text-gray-700 font-mono">
                                 {{ number_format($tier->min_points) }}+ pts
                             </span>
                         </div>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
                 @empty
-                <div class="col-span-4 bg-white p-8 text-center text-gray-400">
+                <div class="col-span-4 bg-white p-8 text-center text-gray-400 border border-gray-100">
                     No reward tiers configured yet.
                 </div>
                 @endforelse

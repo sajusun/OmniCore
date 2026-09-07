@@ -35,7 +35,7 @@ $tag = $isLink ? 'a' : 'button';
 
 <{{ $tag }} {{ $isLink ? "href={$href}" : "type=button" }} @if(!empty($onclick)) onclick="{{ $onclick }}" @endif
     title="{{ $title ?? $configs['default_title'] }}"
-    class="btn btn-sm d-inline-flex align-items-center justify-content-center p-0 border rounded-0 {{ $configs['class'] }}"
+    class="btn btn-sm d-inline-flex align-items-center justify-content-center p-0 border -0 {{ $configs['class'] }}"
     style="width: 32px; height: 32px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); vertical-align: middle;"
     onmouseover="this.style.backgroundColor='{{ $configs['hover_bg'] }}'; this.style.setProperty('color', '#ffffff', 'important');"
     onmouseout="this.style.backgroundColor=''; this.style.setProperty('color', '', '');" {{ $attributes }}>

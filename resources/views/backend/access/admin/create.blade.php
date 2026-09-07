@@ -28,7 +28,7 @@
             <form action="{{ route('admin.stuff.store') }}" method="POST">
                 @csrf
 
-                <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+                <div class="overflow-hidden border border-gray-200 bg-white shadow-sm">
 
                     {{-- Card Header --}}
                     <div class="border-b border-gray-200 px-6 py-5">
@@ -39,7 +39,7 @@
 
                     {{-- Card Body --}}
                     <div class="w-full">
-                        <div class="bg-transparent dark:bg-gray-900/90 p-5 ">
+                        <div class="bg-transparent dark:bg-gray-900/90 p-5">
                             <x-form.file name="image" label="Profile Photo" file="{{ $user->image ?? '' }}">
                             </x-form.file>
                         </div>

@@ -55,7 +55,7 @@
                                         <label for="logo" class="form-label">Logo</label>
                                         @if($subscriptionPlan->logo)
                                             <div class="mb-2">
-                                                <img src="{{ asset($subscriptionPlan->logo) }}" alt="Logo" width="50" height="50" class="rounded">
+                                                <img src="{{ asset($subscriptionPlan->logo) }}" alt="Logo" width="50" height="50" class="">
                                             </div>
                                         @endif
                                         <input type="file" class="form-control @error('logo') is-invalid @enderror" id="logo" name="logo" accept="image/*">
@@ -65,7 +65,7 @@
                                         <label for="bg" class="form-label">Background Image (bg)</label>
                                         @if($subscriptionPlan->bg)
                                             <div class="mb-2">
-                                                <img src="{{ asset($subscriptionPlan->bg) }}" alt="BG" width="50" height="50" class="rounded">
+                                                <img src="{{ asset($subscriptionPlan->bg) }}" alt="BG" width="50" height="50" class="">
                                             </div>
                                         @endif
                                         <input type="file" class="form-control @error('bg') is-invalid @enderror" id="bg" name="bg" accept="image/*">

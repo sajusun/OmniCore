@@ -46,7 +46,7 @@
                                             <td>{{ $sn++ }}</td>
                                             <td>
                                                 @if($plan->logo)
-                                                    <img src="{{ asset($plan->logo) }}" alt="Logo" width="40" height="40" class="rounded">
+                                                    <img src="{{ asset($plan->logo) }}" alt="Logo" width="40" height="40" class="">
                                                 @else
                                                     N/A
                                                 @endif

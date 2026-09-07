@@ -5,7 +5,7 @@
 
     @slot('header')
     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
-        <nav class="small fw-medium text-muted d-none d-sm-flex align-items-center bg-light px-3 py-2 rounded-pill shadow-sm border">
+        <nav class="small fw-medium text-muted d-none d-sm-flex align-items-center bg-light px-3 py-2 shadow-sm border">
             <ol class="d-flex list-unstyled m-0 gap-2">
                 <li class="d-flex align-items-center">
                     <a href="javascript:void(0);" class="text-decoration-none text-secondary">Settings</a>
@@ -23,7 +23,7 @@
         <div class="container-fluid">
 
             <!-- Warning Banner -->
-            <div class="alert alert-warning d-flex align-items-start gap-3 px-4 py-3 rounded-3" role="alert">
+            <div class="alert alert-warning d-flex align-items-start gap-3 px-4 py-3" role="alert">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="flex-shrink-0 mt-1">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -38,7 +38,7 @@
 
                 <!-- Card Header -->
                 <div class="card-header bg-light d-flex align-items-center gap-2 py-3 px-4">
-                    <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-3">
+                    <div class="p-2 bg-primary bg-opacity-10 text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -120,7 +120,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                     </svg>
-                                    Updates write directly to your <code class="bg-light text-dark px-1 rounded small font-monospace">.env</code> file
+                                    Updates write directly to your <code class="bg-light text-dark px-1 small font-monospace">.env</code> file
                                 </span>
                             </div>
                             <button class="btn btn-primary d-inline-flex align-items-center px-4 py-2" type="submit">
@@ -141,7 +141,7 @@
 
                 <!-- Card Header -->
                 <div class="card-header bg-light d-flex align-items-center gap-2 py-3 px-4">
-                    <div class="p-2 bg-success bg-opacity-10 text-success rounded-3">
+                    <div class="p-2 bg-success bg-opacity-10 text-success">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

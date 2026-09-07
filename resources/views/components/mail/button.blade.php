@@ -9,7 +9,7 @@
     CONTENT-LEVEL COMPONENT: renders a full-width table with a centered button.
     Use inside <x-bootstrap-mail.body>.
 
-    OUTLOOK: Uses VML v:roundrect for rounded gradient button.
+    OUTLOOK: Uses VML v:roundrect for  gradient button.
     MODERN:  Uses a standard <a> tag with inline gradient.
 --}}
 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
@@ -17,7 +17,7 @@
     <tr>
         <td align="{{ $align }}">
 
-            {{-- OUTLOOK (MSO): VML rounded rectangle button. --}}
+            {{-- OUTLOOK (MSO): VML  rectangle button. --}}
             <!--[if mso]>
             <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml"
                          xmlns:w="urn:schemas-microsoft-com:office:word"

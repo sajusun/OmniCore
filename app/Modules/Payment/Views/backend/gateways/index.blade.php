@@ -27,7 +27,7 @@
                     <x-card class="h-100">
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-light border d-flex align-items-center justify-content-center fw-bold text-dark text-uppercase shadow-sm" style="width: 44px; height: 44px;">
+                                <div class="bg-light border d-flex align-items-center justify-content-center fw-bold text-dark text-uppercase shadow-sm" style="width: 44px; height: 44px;">
                                     {{ substr($gateway->code, 0, 2) }}
                                 </div>
                                 <div>

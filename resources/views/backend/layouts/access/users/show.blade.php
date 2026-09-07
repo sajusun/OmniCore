@@ -43,9 +43,9 @@
                                     <th>Roles</th>
                                     <td>
                                         @forelse ($user->roles as $role)
-                                        <span class="badge rounded-pill bg-primary">{{ $role->name }}</span>
+                                        <span class="badge bg-primary">{{ $role->name }}</span>
                                         @empty
-                                        <span class="badge rounded-pill bg-primary">N/A</span>
+                                        <span class="badge bg-primary">N/A</span>
                                         @endforelse
                                     </td>
                                 </tr>

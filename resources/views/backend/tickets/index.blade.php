@@ -11,7 +11,7 @@
     <div class="max-w-7xl mx-auto mt-8">
         <x-card title="All Tickets">
             @if(session('success'))
-                <div class="mb-4 p-4 text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800">
+                <div class="mb-4 p-4 text-green-700 bg-green-100 dark:bg-green-200 dark:text-green-800">
                     {{ session('success') }}
                 </div>
             @endif
@@ -36,12 +36,12 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">{{ $ticket->user->name ?? 'Unknown' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">{{ $ticket->subject }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-{{ $ticket->priority == 'high' ? 'red' : ($ticket->priority == 'medium' ? 'yellow' : 'blue') }}-100 text-{{ $ticket->priority == 'high' ? 'red' : ($ticket->priority == 'medium' ? 'yellow' : 'blue') }}-800">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold bg-{{ $ticket->priority == 'high' ? 'red' : ($ticket->priority == 'medium' ? 'yellow' : 'blue') }}-100 text-{{ $ticket->priority == 'high' ? 'red' : ($ticket->priority == 'medium' ? 'yellow' : 'blue') }}-800">
                                     {{ ucfirst($ticket->priority) }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-{{ $ticket->status == 'open' ? 'green' : 'gray' }}-100 text-{{ $ticket->status == 'open' ? 'green' : 'gray' }}-800">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold bg-{{ $ticket->status == 'open' ? 'green' : 'gray' }}-100 text-{{ $ticket->status == 'open' ? 'green' : 'gray' }}-800">
                                     {{ ucfirst($ticket->status) }}
                                 </span>
                             </td>

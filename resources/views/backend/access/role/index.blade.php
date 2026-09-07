@@ -18,7 +18,7 @@
     </div>
     <div>
         <a href="{{ route('admin.roles.create') }}"
-            class="btn btn-primary px-3 py-2 rounded-3 shadow-sm d-inline-flex align-items-center gap-2">
+            class="btn btn-primary px-3 py-2 shadow-sm d-inline-flex align-items-center gap-2">
             <i class="fas fa-plus"></i>
             Add New Role
         </a>
@@ -26,7 +26,7 @@
 </div>
 
 {{-- Datatable Section --}}
-<div class="card border-0 shadow-sm rounded-3 p-3">
+<div class="card border-0 shadow-sm p-3">
     <x-datatable id="role-datatable" url="{{ route('admin.roles.index') }}" :columns="[
             ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => '#', 'orderable' => false, 'searchable' => false],
             ['data' => 'name', 'name' => 'name', 'title' => 'Role Name'],

@@ -4,7 +4,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Achievement & Milestone Badges</h2>
-            <a href="{{ route('admin.badges.create') }}" class="px-4 py-2 bg-emerald-600 text-white rounded-md text-sm font-semibold hover:bg-emerald-700">
+            <a href="{{ route('admin.badges.create') }}" class="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700">
                 + Create New Badge
             </a>
         </div>
@@ -13,20 +13,20 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             @if(session('success'))
-            <div class="p-4 bg-green-50 text-green-700 rounded-lg text-sm border border-green-200">
+            <div class="p-4 bg-green-50 text-green-700 text-sm border border-green-200">
                 {{ session('success') }}
             </div>
             @endif
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 @forelse($badges as $badge)
-                <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
+                <div class="bg-white shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-start mb-3">
-                            <span class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
+                            <span class="w-10 h-10 bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
                                 🏆
                             </span>
-                            <span class="px-2 py-0.5 text-xs font-semibold rounded {{ $badge->is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
+                            <span class="px-2 py-0.5 text-xs font-semibold {{ $badge->is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
                                 {{ $badge->is_active ? 'Active' : 'Disabled' }}
                             </span>
                         </div>
@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 @empty
-                <div class="col-span-4 bg-white p-8 text-center text-gray-400">
+                <div class="col-span-4 bg-white p-8 text-center text-gray-400 border border-gray-100">
                     No achievement badges configured yet.
                 </div>
                 @endforelse

@@ -17,7 +17,7 @@ $medias = $model->media ?? collect();
             <i class="fas fa-images text-primary fa-lg"></i>
             <h6 class="card-title font-weight-bold mb-0">
                 {{ $label }}
-                <span class="badge bg-primary bg-opacity-10 text-primary ms-2 rounded-pill">
+                <span class="badge bg-primary bg-opacity-10 text-primary ms-2">
                     {{ $medias->count() }}
                 </span>
             </h6>
@@ -30,7 +30,7 @@ $medias = $model->media ?? collect();
     <div class="card-body p-4">
         @if($medias->isEmpty())
         <div class="text-center py-5">
-            <div class="p-3 bg-light text-muted rounded-3 d-inline-flex align-items-center justify-content-center mb-3">
+            <div class="p-3 bg-light text-muted d-inline-flex align-items-center justify-content-center mb-3">
                 <i class="fas fa-images fa-2x text-muted"></i>
             </div>
             <p class="text-muted small mb-0">No images yet</p>
@@ -70,7 +70,7 @@ $medias = $model->media ?? collect();
             <label class="form-label font-weight-bold mb-2">Add New Images</label>
 
             <label for="{{ $instance }}_upload"
-                class="media-upload border border-dashed border-2 border-primary border-opacity-25 rounded-3 p-4 text-center cursor-pointer d-flex flex-column align-items-center justify-content-center gap-2 w-100"
+                class="media-upload border border-dashed border-2 border-primary border-opacity-25 p-4 text-center cursor-pointer d-flex flex-column align-items-center justify-content-center gap-2 w-100"
                 style="background-color: rgba(13, 110, 253, 0.02); transition: border-color 0.2s;"
                 onmouseover="this.style.borderColor='#0d6efd'"
                 onmouseout="this.style.borderColor='rgba(13, 110, 253, 0.25)'">
@@ -123,7 +123,7 @@ $medias = $model->media ?? collect();
                                 <div class="ratio ratio-16x9">
                                     <img src="${e.target.result}" class="object-fit-cover w-100 h-100">
                                 </div>
-                                <button type="button" class="remove-preview btn btn-danger btn-sm position-absolute top-0 end-0 m-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; padding: 0;">
+                                <button type="button" class="remove-preview btn btn-danger btn-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; padding: 0;">
                                     <i class="fas fa-times small"></i>
                                 </button>
                             </div>

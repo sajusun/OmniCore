@@ -7,7 +7,7 @@
     <div class="d-flex flex-row justify-content-between align-items-center gap-3 w-100">
         <span class="fs-5 fw-bold">Profile Settings</span>
         <nav
-            class="small fw-medium text-muted d-none d-sm-flex align-items-center bg-light px-3 py-2 rounded-pill shadow-sm border">
+            class="small fw-medium text-muted d-none d-sm-flex align-items-center bg-light px-3 py-2 shadow-sm border">
             <ol class="d-flex list-unstyled m-0 gap-2">
                 <li class="d-flex align-items-center">
                     <a href="javascript:void(0);" class="text-decoration-none text-secondary">Settings</a>
@@ -31,13 +31,13 @@
                     <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-4">
                         <!-- Avatar Section -->
                         <div class="position-relative flex-shrink-0">
-                            <div class="profile-img-main rounded-circle overflow-hidden border border-4 border-white shadow-sm"
+                            <div class="profile-img-main overflow-hidden border border-4 border-white shadow-sm"
                                 style="width: 120px; height: 120px;">
                                 <img src="{{ Auth::user()->avatar ? asset(Auth::user()->avatar) : asset('default/profile.png') }}"
                                     alt="Profile Picture" class="w-full h-full object-cover">
                             </div>
                             <button id="uploadImageBtn"
-                                class="btn btn-primary btn-sm rounded-circle position-absolute bottom-0 end-0 p-2 d-flex align-items-center justify-content-center shadow"
+                                class="btn btn-primary btn-sm position-absolute bottom-0 end-0 p-2 d-flex align-items-center justify-content-center shadow"
                                 style="width: 32px; height: 32px;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -77,11 +77,11 @@
 
                         <!-- Quick Stats -->
                         <div class="d-flex flex-row flex-lg-column gap-2 flex-shrink-0">
-                            <div class="bg-white px-3 py-2 rounded border text-center min-w-[100px] shadow-sm">
+                            <div class="bg-white px-3 py-2 border text-center min-w-[100px] shadow-sm">
                                 <p class="text-muted small text-uppercase fw-semibold mb-0">Role</p>
                                 <p class="small fw-bold mb-0 text-dark">{{ Auth::user()->role ?? 'User' }}</p>
                             </div>
-                            <div class="bg-white px-3 py-2 rounded border text-center min-w-[100px] shadow-sm">
+                            <div class="bg-white px-3 py-2 border text-center min-w-[100px] shadow-sm">
                                 <p class="text-muted small text-uppercase fw-semibold mb-0">Status</p>
                                 <p class="small fw-bold mb-0 text-success">Verified</p>
                             </div>
@@ -94,7 +94,7 @@
                     <ul class="nav nav-tabs border-bottom-0 px-3 pt-2 gap-1 flex-nowrap" id="profileTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <a href="#editProfile" id="edit-profile-tab"
-                                class="nav-link active d-flex align-items-center gap-2 px-4 py-2 small fw-medium rounded-top border-bottom-0"
+                                class="nav-link active d-flex align-items-center gap-2 px-4 py-2 small fw-medium border-bottom-0"
                                 data-bs-toggle="tab" role="tab" aria-controls="editProfile" aria-selected="true">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -106,7 +106,7 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <a href="#updatePassword" id="update-password-tab"
-                                class="nav-link d-flex align-items-center gap-2 px-4 py-2 small fw-medium rounded-top border-bottom-0"
+                                class="nav-link d-flex align-items-center gap-2 px-4 py-2 small fw-medium border-bottom-0"
                                 data-bs-toggle="tab" role="tab" aria-controls="updatePassword" aria-selected="false">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -127,7 +127,7 @@
                     aria-labelledby="edit-profile-tab">
                     <div class="card shadow-sm border overflow-hidden">
                         <div class="card-header bg-light d-flex align-items-center gap-2 py-3 px-4">
-                            <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-3">
+                            <div class="p-2 bg-primary bg-opacity-10 text-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -182,7 +182,7 @@
                 <div class="tab-pane fade" id="updatePassword" role="tabpanel" aria-labelledby="update-password-tab">
                     <div class="card shadow-sm border overflow-hidden">
                         <div class="card-header bg-light d-flex align-items-center gap-2 py-3 px-4">
-                            <div class="p-2 bg-warning bg-opacity-10 text-warning rounded-3">
+                            <div class="p-2 bg-warning bg-opacity-10 text-warning">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -216,7 +216,7 @@
                                 </div>
 
                                 <!-- Password strength indicator -->
-                                <div class="mt-4 p-3 bg-light border rounded-3 d-flex align-items-start gap-2">
+                                <div class="mt-4 p-3 bg-light border d-flex align-items-start gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                         class="text-primary flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24"
                                         stroke="currentColor" stroke-width="2">
@@ -249,7 +249,7 @@
             <div class="row g-3 mt-4">
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
-                        <div class="p-2 bg-success bg-opacity-10 text-success rounded-circle">
+                        <div class="p-2 bg-success bg-opacity-10 text-success">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -264,7 +264,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
-                        <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-circle">
+                        <div class="p-2 bg-primary bg-opacity-10 text-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -279,7 +279,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
-                        <div class="p-2 bg-purple bg-opacity-10 text-purple rounded-circle">
+                        <div class="p-2 bg-purple bg-opacity-10 text-purple">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"

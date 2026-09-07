@@ -58,7 +58,7 @@
         <div class="modal-content border-0 shadow" style="border-radius: 1rem;">
             <div class="modal-body p-4">
                 <div class="d-flex align-items-start gap-3">
-                    <div class="flex-shrink-0 d-flex align-items-center justify-content-center bg-danger-subtle text-danger rounded-circle" style="width: 3rem; height: 3rem;">
+                    <div class="flex-shrink-0 d-flex align-items-center justify-content-center bg-danger-subtle text-danger" style="width: 3rem; height: 3rem;">
                         <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>

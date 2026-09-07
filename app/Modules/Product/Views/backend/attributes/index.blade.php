@@ -211,7 +211,7 @@
                         html += `
                             <tr>
                                 <td class="fw-bold">${val.value}</td>
-                                <td>${val.color_code ? '<span class="d-inline-block border rounded me-1" style="width:16px;height:16px;background-color:'+val.color_code+'"></span> ' + val.color_code : '-'}</td>
+                                <td>${val.color_code ? '<span class="d-inline-block border me-1" style="width:16px;height:16px;background-color:'+val.color_code+'"></span> ' + val.color_code : '-'}</td>
                                 <td class="text-end">
                                     <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteAttributeValue(${val.id})">
                                         <i class="fa fa-trash"></i>

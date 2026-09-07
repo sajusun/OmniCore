@@ -4,7 +4,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Double-Entry Wallet Ledger</h2>
-            <a href="{{ route('admin.wallets.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200">
+            <a href="{{ route('admin.wallets.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm hover:bg-gray-200">
                 Back to Wallets
             </a>
         </div>
@@ -13,10 +13,10 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Filter -->
-            <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 mb-6">
+            <div class="bg-white p-4 shadow-sm border border-gray-100 mb-6">
                 <form method="GET" action="{{ route('admin.wallets.transactions') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Trx ID, User name/email..." class="px-3 py-2 border rounded-md text-sm">
-                    <select name="type" class="px-3 py-2 border rounded-md text-sm">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Trx ID, User name/email..." class="px-3 py-2 border text-sm">
+                    <select name="type" class="px-3 py-2 border text-sm">
                         <option value="">All Transaction Types</option>
                         <option value="deposit" {{ request('type') === 'deposit' ? 'selected' : '' }}>Deposit</option>
                         <option value="withdrawal" {{ request('type') === 'withdrawal' ? 'selected' : '' }}>Withdrawal</option>
@@ -27,14 +27,14 @@
                         <option value="adjustment" {{ request('type') === 'adjustment' ? 'selected' : '' }}>Admin Adjustment</option>
                     </select>
                     <div class="flex gap-2">
-                        <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-md text-sm font-semibold hover:bg-emerald-700">Filter</button>
-                        <a href="{{ route('admin.wallets.transactions') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200">Reset</a>
+                        <button type="submit" class="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700">Filter</button>
+                        <a href="{{ route('admin.wallets.transactions') }}" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm hover:bg-gray-200">Reset</a>
                     </div>
                 </form>
             </div>
 
             <!-- Ledger Table -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-white shadow-sm border border-gray-100 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-sm">
                         <thead class="bg-gray-50 border-b text-gray-600 uppercase text-xs">
@@ -57,8 +57,8 @@
                                     <div class="text-xs text-gray-500">{{ $trx->user?->email }}</div>
                                 </td>
                                 <td class="p-3">
-                                    <span class="px-2 py-0.5 uppercase rounded text-[11px] font-semibold font-sans
-                                        {{ in_array($trx->type?->value ?? $trx->type, ['deposit', 'refund', 'transfer_received']) ? 'bg-green-100 text-green-800' : 'bg-rose-100 text-rose-800' }}">
+                                    <span class="px-2 py-0.5 uppercase text-[11px] font-semibold font-sans
+ {{ in_array($trx->type?->value ?? $trx->type, ['deposit', 'refund', 'transfer_received']) ? 'bg-green-100 text-green-800' : 'bg-rose-100 text-rose-800' }}">
                                         {{ str_replace('_', ' ', $trx->type?->value ?? $trx->type) }}
                                     </span>
                                 </td>

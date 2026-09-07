@@ -69,7 +69,7 @@
                             Preview
                         </h2>
 
-                        <div class="d-flex justify-content-center bg-light p-3 rounded border">
+                        <div class="d-flex justify-content-center bg-light p-3 border">
 
                             <img id="logo-preview" src="{{ !empty($setting->logo) && file_exists(public_path($setting->logo))
                                     ? asset($setting->logo)

@@ -62,16 +62,16 @@
                                             <td>{{ $user->slug }}</td>
                                             <td>
                                                 @forelse ($user->roles as $role)
-                                                <span class="badge rounded-pill bg-primary">{{ $role->name }}</span>
+                                                <span class="badge bg-primary">{{ $role->name }}</span>
                                                 @empty
-                                                <span class="badge rounded-pill bg-primary">N/A</span>
+                                                <span class="badge bg-primary">N/A</span>
                                                 @endforelse
                                             </td>
                                             <td>
                                                 @forelse ($user->roles as $role)
-                                                <span class="badge rounded-pill bg-primary">{{ $role->guard_name }}</span>
+                                                <span class="badge bg-primary">{{ $role->guard_name }}</span>
                                                 @empty
-                                                <span class="badge rounded-pill bg-primary">N/A</span>
+                                                <span class="badge bg-primary">N/A</span>
                                                 @endforelse
                                             </td>
                                             <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d-m-Y') }}</td>

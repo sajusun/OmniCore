@@ -6,7 +6,7 @@
 'method' => 'DELETE',
 ])
 
-{{-- Bootstrap Modal Component without any rounded properties --}}
+{{-- Bootstrap Modal Component without any  properties --}}
 <div class="modal fade" id="modal_{{ $name }}" tabindex="-1" aria-labelledby="modal_{{ $name }}_label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow" style="border-radius: 0;">
@@ -66,7 +66,7 @@
                                 window.location.reload();
                             }
 
-                            // SweetAlert with custom clean classes to strip out rounded layouts
+                            // SweetAlert with custom clean classes to strip out  layouts
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Deleted!',
@@ -74,7 +74,7 @@
                                 timer: 2000,
                                 showConfirmButton: false,
                                 customClass: {
-                                    popup: 'border-0 rounded-0 shadow'
+                                    popup: 'border-0 -0 shadow'
                                 }
                             });
                         } else {
@@ -83,8 +83,8 @@
                                 title: 'Error!',
                                 text: response.message || 'Something went wrong.',
                                 customClass: {
-                                    popup: 'border-0 rounded-0 shadow',
-                                    confirmButton: 'btn btn-danger rounded-0 px-4'
+                                    popup: 'border-0 -0 shadow',
+                                    confirmButton: 'btn btn-danger -0 px-4'
                                 },
                                 buttonsStyling: false
                             });
@@ -100,8 +100,8 @@
                             title: 'Error!',
                             text: 'An error occurred while deleting.',
                             customClass: {
-                                popup: 'border-0 rounded-0 shadow',
-                                confirmButton: 'btn btn-danger rounded-0 px-4'
+                                popup: 'border-0 -0 shadow',
+                                confirmButton: 'btn btn-danger -0 px-4'
                             },
                             buttonsStyling: false
                         });

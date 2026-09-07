@@ -32,7 +32,7 @@
                             <!-- Profile Header -->
                             <div class="d-flex align-items-center gap-4 pb-4 mb-3 border-bottom">
                                 <img src="{{ $user->avatar ? asset($user->avatar) : asset('default/profile.jpg') }}"
-                                    class="rounded-circle" width="80" height="80" style="object-fit: cover;"
+                                    class="" width="80" height="80" style="object-fit: cover;"
                                     alt="Profile">
                                 <div>
                                     <h4 class="mb-1 fw-semibold">{{ $user->name }}</h4>

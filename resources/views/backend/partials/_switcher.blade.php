@@ -156,7 +156,7 @@
                                         <label for="myonoffswitch6" class="onoffswitch2-label"></label>
                                     </p>
                                 </div>
-                                <div class="switch-toggle  colorHeader d-flex mt-2">
+                                <div class="switch-toggle colorHeader d-flex mt-2">
                                     <span class="me-auto">Color Header</span>
                                     <p class="onoffswitch2">
                                         <input type="radio" name="onoffswitch3" value="color" id="myonoffswitch7" class="onoffswitch2-checkbox" autocomplete="off" readonly onmousedown="this.removeAttribute('readonly');" {{ old('onoffswitch3') == 'color' ? 'checked' : '' }}>

@@ -62,7 +62,7 @@
             <div class="row g-3">
                 @forelse($badges as $badge)
                     <div class="col-md-4">
-                        <div class="p-3 bg-light rounded border d-flex justify-content-between align-items-center">
+                        <div class="p-3 bg-light border d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="fw-bold mb-1 text-dark">{{ $badge->name }}</h6>
                                 <p class="text-muted small mb-2">{{ $badge->description }}</p>

@@ -25,7 +25,7 @@
         {{-- Card Header --}}
         <div class="card-header bg-white border-bottom py-3">
             <div class="d-flex align-items-center gap-3">
-                <div class="rounded-3 bg-primary d-flex align-items-center justify-content-center shadow"
+                <div class="bg-primary d-flex align-items-center justify-content-center shadow"
                     style="width: 42px; height: 42px; flex-shrink: 0;">
                     <svg class="text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         style="width: 20px; height: 20px;">
@@ -167,7 +167,7 @@
                             const reader = new FileReader();
                             reader.onload = e => {
                                 const div = document.createElement('div');
-                                div.className = 'rounded overflow-hidden border';
+                                div.className = ' overflow-hidden border';
                                 div.innerHTML = `<img src="${e.target.result}" class="img-fluid w-100" style="object-fit:cover; aspect-ratio:16/9;">`;
                                 previewGrid.appendChild(div);
                             };

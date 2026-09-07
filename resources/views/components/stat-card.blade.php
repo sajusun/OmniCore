@@ -31,7 +31,7 @@
         <h3 class="mb-0 font-weight-bold text-dark">{{ $value }}</h3>
         <p class="text-muted small mb-0 mt-1">{{ $title }}</p>
     </div>
-    <div class="p-3 rounded-3 {{ $colorClass }} d-flex align-items-center justify-content-center">
+    <div class="p-3 {{ $colorClass }} d-flex align-items-center justify-content-center">
         @if($icon)
             {!! $icon !!}
         @else

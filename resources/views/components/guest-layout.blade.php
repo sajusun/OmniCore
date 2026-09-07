@@ -82,7 +82,7 @@
 
             <div class="row justify-content-center">
                 <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
-                    <div class="card shadow border-0 py-4 px-3 px-sm-4 rounded-4 bg-white bg-opacity-75 backdrop-blur-md">
+                    <div class="card shadow border-0 py-4 px-3 px-sm-4 bg-white bg-opacity-75 backdrop-blur-md">
                         <div class="card-body">
                             {{ $slot }}
                         </div>

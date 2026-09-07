@@ -514,7 +514,7 @@
                 Array.from(input.files).forEach(file => {
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        const img = $('<img>').attr('src', e.target.result).addClass('rounded border shadow-sm').css({ width: '60px', height: '60px', objectFit: 'cover' });
+                        const img = $('<img>').attr('src', e.target.result).addClass(' border shadow-sm').css({ width: '60px', height: '60px', objectFit: 'cover' });
                         $('#wizardGalleryPreviewContainer').append(img);
                     }
                     reader.readAsDataURL(file);

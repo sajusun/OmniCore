@@ -5,7 +5,7 @@
 
     @slot('header')
         <div class="d-flex flex-row justify-content-between align-items-center gap-3 w-100">
-            <nav class="small fw-medium text-muted d-none d-sm-flex align-items-center bg-light px-3 py-2 rounded-pill shadow-sm border">
+            <nav class="small fw-medium text-muted d-none d-sm-flex align-items-center bg-light px-3 py-2 shadow-sm border">
                 <ol class="d-flex list-unstyled m-0 gap-2">
                     <li class="d-flex align-items-center">
                         <a href="javascript:void(0);" class="text-decoration-none text-secondary">Settings</a>
@@ -29,7 +29,7 @@
         <div class="container-fluid">
 
             {{-- Danger Warning --}}
-            <div class="alert alert-danger d-flex align-items-start gap-3 px-4 py-3 rounded-3" role="alert">
+            <div class="alert alert-danger d-flex align-items-start gap-3 px-4 py-3" role="alert">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="flex-shrink-0 mt-1">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
@@ -64,7 +64,7 @@
                                 id="env-tab-{{ $tab['key'] }}"
                                 @click="activeTab = '{{ $tab['key'] }}'"
                                 :class="activeTab === '{{ $tab['key'] }}' ? 'active bg-white fw-bold border-bottom-0' : 'text-secondary border-transparent'"
-                                class="nav-link d-flex align-items-center gap-2 px-3 py-2.5 rounded-top border-bottom-0">
+                                class="nav-link d-flex align-items-center gap-2 px-3 py-2.5 border-bottom-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="{{ $tab['icon'] }}" />
                                 </svg>
@@ -518,7 +518,7 @@
             <div class="row g-3 mt-4">
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
-                        <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-circle">
+                        <div class="p-2 bg-primary bg-opacity-10 text-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
@@ -531,7 +531,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
-                        <div class="p-2 bg-warning bg-opacity-10 text-warning rounded-circle">
+                        <div class="p-2 bg-warning bg-opacity-10 text-warning">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
@@ -544,7 +544,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card p-3 d-flex flex-row align-items-center gap-3 border shadow-sm h-100">
-                        <div class="p-2 bg-success bg-opacity-10 text-success rounded-circle">
+                        <div class="p-2 bg-success bg-opacity-10 text-success">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>

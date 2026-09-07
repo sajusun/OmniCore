@@ -4,7 +4,7 @@
         <div class="d-flex">
             <a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-bs-toggle="sidebar" href="#"></a>
             <!-- sidebar-toggle-->
-            <a class="logo-horizontal " href="{{ route('admin.dashboard') }}">
+            <a class="logo-horizontal" href="{{ route('admin.dashboard') }}">
                 <img src="{{ asset(settings('logo') ?? 'default/logo.svg') }}" class="header-brand-img desktop-logo" alt="logo">
                 <img src="{{ asset(settings('logo') ?? 'default/logo.svg') }}" class="header-brand-img light-logo1" alt="logo">
             </a>
@@ -51,7 +51,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
                         <div class="d-flex order-lg-2">
                             <!-- SEARCH -->
-                            <div class="dropdown  d-flex">
+                            <div class="dropdown d-flex">
                                 <a class="nav-link icon theme-layout nav-link-bg layout-setting">
                                     <span class="dark-layout">
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -90,10 +90,10 @@
                                 <a href="#" data-bs-toggle="dropdown"
                                     class="nav-link pe-2 leading-none d-flex animate">
                                     <span>
-                                        <img src="{{asset(Auth::user()->avatar ?? 'default/profile.png')}}" alt="profile-user" class="avatar  profile-user brround cover-image">
+                                        <img src="{{asset(Auth::user()->avatar ?? 'default/profile.png')}}" alt="profile-user" class="avatar profile-user brround cover-image">
                                     </span>
                                     <div class="text-center p-1 d-flex d-lg-none-max">
-                                        <h6 class="mb-0" id="profile-heading">{{ Auth::user()->name ?? 'N/A' }}<i class="user-angle ms-1 fa fa-angle-down "></i></h6>
+                                        <h6 class="mb-0" id="profile-heading">{{ Auth::user()->name ?? 'N/A' }}<i class="user-angle ms-1 fa fa-angle-down"></i></h6>
                             </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
