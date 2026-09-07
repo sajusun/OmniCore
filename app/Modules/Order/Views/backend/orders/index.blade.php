@@ -22,30 +22,19 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
-            <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+    {{-- Status Notification Modal --}}
+    <x-modal.status />
 
-    <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
-        <div class="card-header bg-transparent border-0 pt-3 pb-0 px-3 d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0 fw-bold text-dark">
-                <i class="fa fa-cart-shopping me-2 text-primary"></i> Orders List ({{ \App\Modules\Order\Models\Order::count() }})
-            </h5>
-        </div>
-        <div class="card-body p-3">
-            <x-datatable id="orders-datatable" :url="route('admin.orders.index')" :order="[[0, 'desc']]" :columns="[
-                ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'SL', 'orderable' => false, 'searchable' => false],
-                ['data' => 'order_number_display', 'name' => 'order_number', 'title' => 'Order #'],
-                ['data' => 'customer', 'name' => 'user.name', 'title' => 'Customer Details'],
-                ['data' => 'items_count', 'name' => 'items_count', 'title' => 'Items', 'orderable' => false, 'searchable' => false],
-                ['data' => 'total_amount', 'name' => 'total_amount', 'title' => 'Total Paid'],
-                ['data' => 'status', 'name' => 'status', 'title' => 'Order Status'],
-                ['data' => 'payment_status', 'name' => 'payment_status', 'title' => 'Payment Status'],
-                ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false]
-            ]" />
-        </div>
-    </div>
+    <x-card title="Orders Directory ({{ \App\Modules\Order\Models\Order::count() }})">
+        <x-datatable id="orders-datatable" :url="route('admin.orders.index')" :order="[[0, 'desc']]" :columns="[
+            ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'SL', 'orderable' => false, 'searchable' => false],
+            ['data' => 'order_number_display', 'name' => 'order_number', 'title' => 'Order #'],
+            ['data' => 'customer', 'name' => 'user.name', 'title' => 'Customer Details'],
+            ['data' => 'items_count', 'name' => 'items_count', 'title' => 'Items', 'orderable' => false, 'searchable' => false],
+            ['data' => 'total_amount', 'name' => 'total_amount', 'title' => 'Total Paid'],
+            ['data' => 'status', 'name' => 'status', 'title' => 'Order Status'],
+            ['data' => 'payment_status', 'name' => 'payment_status', 'title' => 'Payment Status'],
+            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false]
+        ]" />
+    </x-card>
 </x-admin-layout>

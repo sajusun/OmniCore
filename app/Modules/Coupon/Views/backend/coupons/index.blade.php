@@ -23,32 +23,21 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
-            <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+    {{-- Status Notification Modal --}}
+    <x-modal.status />
 
-    <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
-        <div class="card-header bg-transparent border-0 pt-3 pb-0 px-3 d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0 fw-bold text-dark">
-                <i class="fa fa-ticket me-2 text-primary"></i> Coupons List ({{ \App\Modules\Coupon\Models\Coupon::count() }})
-            </h5>
-        </div>
-        <div class="card-body p-3">
-            <x-datatable id="coupons-datatable" :url="route('admin.coupons.index')" :order="[[0, 'desc']]" :columns="[
-                ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'SL', 'orderable' => false, 'searchable' => false],
-                ['data' => 'code', 'name' => 'code', 'title' => 'Promo Code'],
-                ['data' => 'discount_display', 'name' => 'value', 'title' => 'Discount Rate'],
-                ['data' => 'min_spend', 'name' => 'min_order_amount', 'title' => 'Min Order'],
-                ['data' => 'usage', 'name' => 'usage_count', 'title' => 'Used / Limit', 'searchable' => false],
-                ['data' => 'validity', 'name' => 'expires_at', 'title' => 'Expiration'],
-                ['data' => 'status', 'name' => 'is_active', 'title' => 'Status'],
-                ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false]
-            ]" />
-        </div>
-    </div>
+    <x-card title="Coupons Directory ({{ \App\Modules\Coupon\Models\Coupon::count() }})">
+        <x-datatable id="coupons-datatable" :url="route('admin.coupons.index')" :order="[[0, 'desc']]" :columns="[
+            ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'SL', 'orderable' => false, 'searchable' => false],
+            ['data' => 'code', 'name' => 'code', 'title' => 'Promo Code'],
+            ['data' => 'discount_display', 'name' => 'value', 'title' => 'Discount Rate'],
+            ['data' => 'min_spend', 'name' => 'min_order_amount', 'title' => 'Min Order'],
+            ['data' => 'usage', 'name' => 'usage_count', 'title' => 'Used / Limit', 'searchable' => false],
+            ['data' => 'validity', 'name' => 'expires_at', 'title' => 'Expiration'],
+            ['data' => 'status', 'name' => 'is_active', 'title' => 'Status'],
+            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false]
+        ]" />
+    </x-card>
 
     {{-- Coupon Modal --}}
     <div class="modal fade" id="couponModal" tabindex="-1" aria-hidden="true">

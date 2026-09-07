@@ -2,111 +2,152 @@
     @slot('title')
         AI Assistant & Knowledge Base
     @endslot
-    @slot('header')
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                AI Assistant & Automated Knowledge Base
-            </h2>
-        </div>
-    @endslot
 
-    <div class="max-w-7xl mx-auto mt-8 space-y-6">
-        <!-- Stats Row -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <p class="text-sm font-medium text-gray-500">Conversations</p>
-                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($totalConversations) }}</h3>
-            </div>
-            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <p class="text-sm font-medium text-gray-500">Messages Handled</p>
-                <h3 class="text-2xl font-bold text-indigo-600 mt-1">{{ number_format($totalMessages) }}</h3>
-            </div>
-            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <p class="text-sm font-medium text-gray-500">Knowledge FAQs</p>
-                <h3 class="text-2xl font-bold text-emerald-600 mt-1">{{ number_format($totalFaqs) }}</h3>
-            </div>
-            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <p class="text-sm font-medium text-gray-500">Tokens Processed</p>
-                <h3 class="text-2xl font-bold text-purple-600 mt-1">{{ number_format($totalTokens) }}</h3>
+    <div class="container-fluid py-4">
+        {{-- Header --}}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold mb-1"><i class="bi bi-robot me-2 text-primary"></i> AI Assistant & Automated Helpdesk Knowledge Base</h4>
+                <p class="text-muted small mb-0">Manage training FAQ datasets, keyword triggers, automated ticket responses, and conversational AI analytics.</p>
             </div>
         </div>
 
-        @if(session('success'))
-            <div class="p-4 text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800">
-                {{ session('success') }}
-            </div>
-        @endif
+        {{-- Status Notification Modal --}}
+        <x-modal.status />
 
-        <!-- Add Knowledge Base Form -->
-        <x-card title="Add New Knowledge Base Entry / FAQ">
-            <form action="{{ route('admin.ai.knowledge-base.store') }}" method="POST" class="space-y-4">
+        {{-- Stats Row --}}
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <x-stat-card 
+                    title="Total AI Conversations" 
+                    value="{{ number_format($totalConversations) }}" 
+                    color="primary" 
+                    icon="<i class='bi bi-chat-dots fs-3'></i>" 
+                />
+            </div>
+            <div class="col-md-3">
+                <x-stat-card 
+                    title="Messages Handled" 
+                    value="{{ number_format($totalMessages) }}" 
+                    color="indigo" 
+                    icon="<i class='bi bi-send-check fs-3'></i>" 
+                />
+            </div>
+            <div class="col-md-3">
+                <x-stat-card 
+                    title="Knowledge FAQs" 
+                    value="{{ number_format($totalFaqs) }}" 
+                    color="emerald" 
+                    icon="<i class='bi bi-book fs-3'></i>" 
+                />
+            </div>
+            <div class="col-md-3">
+                <x-stat-card 
+                    title="Tokens Processed" 
+                    value="{{ number_format($totalTokens) }}" 
+                    color="purple" 
+                    icon="<i class='bi bi-cpu fs-3'></i>" 
+                />
+            </div>
+        </div>
+
+        {{-- Add Knowledge Base Form --}}
+        <x-card title="Add New Knowledge Base Entry / FAQ" class="mb-4">
+            <form action="{{ route('admin.ai.knowledge-base.store') }}" method="POST">
                 @csrf
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
-                        <input type="text" name="category" required placeholder="e.g. Orders, Refunds, Shipping" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Category</label>
+                        <input type="text" name="category" required placeholder="e.g. Orders, Refunds, Shipping" class="form-control">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Keywords (Comma separated)</label>
-                        <input type="text" name="keywords" placeholder="e.g. return, refund, damaged item" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Keywords (Comma separated)</label>
+                        <input type="text" name="keywords" placeholder="e.g. return, refund, damaged item" class="form-control">
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Question / Trigger Prompt</label>
-                    <input type="text" name="question" required placeholder="e.g. How do I request a refund?" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Question / Trigger Prompt</label>
+                    <input type="text" name="question" required placeholder="e.g. How do I request a refund?" class="form-control">
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Resolution / Bot Answer</label>
-                    <textarea name="answer" rows="3" required placeholder="Provide the exact instructions or answer the AI bot will give..." class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Standard AI Answer / Resolution</label>
+                    <textarea name="answer" rows="3" required placeholder="Provide the verified official response..." class="form-control"></textarea>
                 </div>
 
-                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 font-medium text-sm">
-                    Save Knowledge Base Entry
-                </button>
+                <div class="d-flex justify-content-between align-items-center pt-2">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="is_active" value="1" id="kbActive" checked>
+                        <label class="form-check-label fw-semibold" for="kbActive">Active & Searchable</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary px-4 shadow-sm">
+                        <i class="bi bi-plus-circle me-1"></i> Save Knowledge Entry
+                    </button>
+                </div>
             </form>
         </x-card>
 
-        <!-- Knowledge Base List -->
-        <x-card title="Knowledge Base Index">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-50 dark:bg-gray-800">
+        {{-- Knowledge Base Table --}}
+        <x-card title="Knowledge Base Directory">
+            <x-table>
+                <thead>
+                    <tr>
+                        <x-table.th>Category</x-table.th>
+                        <x-table.th>Question / Trigger</x-table.th>
+                        <x-table.th>Keywords</x-table.th>
+                        <x-table.th>Hit Count</x-table.th>
+                        <x-table.th>Status</x-table.th>
+                        <x-table.th class="text-end">Action</x-table.th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($faqs as $faq)
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Question</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Answer</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hits</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                            <x-table.td>
+                                <span class="badge bg-light text-dark border">{{ $faq->category }}</span>
+                            </x-table.td>
+                            <x-table.td>
+                                <div class="fw-bold text-dark">{{ $faq->question }}</div>
+                                <div class="text-muted small text-truncate" style="max-width: 320px;">{{ $faq->answer }}</div>
+                            </x-table.td>
+                            <x-table.td>
+                                @if(!empty($faq->keywords))
+                                    @foreach((array)$faq->keywords as $kw)
+                                        <span class="badge bg-light text-muted border small">{{ $kw }}</span>
+                                    @endforeach
+                                @else
+                                    <span class="text-muted small">-</span>
+                                @endif
+                            </x-table.td>
+                            <x-table.td class="text-muted small">
+                                <span class="fw-bold text-primary">{{ number_format($faq->hit_count ?? 0) }}</span> hits
+                            </x-table.td>
+                            <x-table.td>
+                                @if($faq->is_active)
+                                    <x-badge color="success">Active</x-badge>
+                                @else
+                                    <x-badge color="secondary">Inactive</x-badge>
+                                @endif
+                            </x-table.td>
+                            <x-table.td class="text-end">
+                                <form action="{{ route('admin.ai.knowledge-base.destroy', $faq->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this FAQ entry?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </x-table.td>
                         </tr>
-                    </thead>
-                    <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
-                        @forelse($knowledgeBases as $kb)
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-indigo-600">{{ $kb->category }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100 max-w-xs truncate">{{ $kb->question }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 max-w-sm truncate">{{ $kb->answer }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $kb->hit_count }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                                    <form action="{{ route('admin.ai.knowledge-base.destroy', $kb->id) }}" method="POST" class="inline" onsubmit="return confirm('Delete this entry?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">No knowledge base items yet.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                    @empty
+                        <x-empty-state colspan="6" title="No Knowledge Base Entries" description="Add your first question-answer knowledge pair above." />
+                    @endforelse
+                </tbody>
+            </x-table>
 
-            <div class="mt-4">
-                {{ $knowledgeBases->links() }}
+            <div class="mt-3">
+                {{ $faqs->links() }}
             </div>
         </x-card>
     </div>

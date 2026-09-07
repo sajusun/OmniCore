@@ -17,36 +17,25 @@
             <h4 class="fw-bold text-dark mb-0">Brands Management</h4>
         </div>
         <div>
-            <button type="button" class="btn btn-primary d-inline-flex align-items-center gap-2" onclick="openCreateBrandModal()">
+            <button type="button" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm" onclick="openCreateBrandModal()">
                 <i class="fa fa-plus"></i> Add New Brand
             </button>
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
-            <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+    {{-- Status Notification Modal --}}
+    <x-modal.status />
 
-    <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
-        <div class="card-header bg-transparent border-0 pt-3 pb-0 px-3 d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0 fw-bold text-dark">
-                <i class="fa fa-tag me-2 text-primary"></i> All Brands ({{ \App\Modules\Product\Models\ProductBrand::count() }})
-            </h5>
-        </div>
-        <div class="card-body p-3">
-            <x-datatable id="brands-datatable" :url="route('admin.brands.index')" :order="[[0, 'asc']]" :columns="[
-                ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'SL', 'orderable' => false, 'searchable' => false],
-                ['data' => 'name_display', 'name' => 'name', 'title' => 'Brand Name'],
-                ['data' => 'website_link', 'name' => 'website', 'title' => 'Website'],
-                ['data' => 'products_count', 'name' => 'products_count', 'title' => 'Total Products', 'searchable' => false],
-                ['data' => 'status', 'name' => 'is_active', 'title' => 'Status'],
-                ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false]
-            ]" />
-        </div>
-    </div>
+    <x-card title="All Brands ({{ \App\Modules\Product\Models\ProductBrand::count() }})">
+        <x-datatable id="brands-datatable" :url="route('admin.brands.index')" :order="[[0, 'asc']]" :columns="[
+            ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'SL', 'orderable' => false, 'searchable' => false],
+            ['data' => 'name_display', 'name' => 'name', 'title' => 'Brand Name'],
+            ['data' => 'website_link', 'name' => 'website', 'title' => 'Website'],
+            ['data' => 'products_count', 'name' => 'products_count', 'title' => 'Total Products', 'searchable' => false],
+            ['data' => 'status', 'name' => 'is_active', 'title' => 'Status'],
+            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false]
+        ]" />
+    </x-card>
 
     {{-- Brand Modal --}}
     <div class="modal fade" id="brandModal" tabindex="-1" aria-hidden="true">
@@ -58,33 +47,38 @@
                     <input type="hidden" id="brandId">
 
                     <div class="modal-header border-bottom">
-                        <h5 class="modal-title fw-bold" id="brandModalTitle">Add New Brand</h5>
+                        <h5 class="modal-title fw-bold" id="brandModalTitle">Create Brand</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-4">
                         <div class="mb-3">
                             <label class="form-label fw-bold">Brand Name <span class="text-danger">*</span></label>
-                            <input type="text" name="name" id="brandName" class="form-control" required placeholder="e.g. Sony, Apple, Nike">
+                            <input type="text" name="name" id="brandName" class="form-control" required placeholder="e.g. Apple, Nike, Sony">
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Official Website URL</label>
-                            <input type="url" name="website" id="brandWebsite" class="form-control" placeholder="https://www.brand.com">
+                            <input type="url" name="website" id="brandWebsite" class="form-control" placeholder="https://example.com">
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Description</label>
-                            <textarea name="description" id="brandDescription" rows="2" class="form-control" placeholder="Optional brand biography..."></textarea>
+                            <textarea name="description" id="brandDescription" rows="2" class="form-control" placeholder="Short description..."></textarea>
                         </div>
 
-                        <div class="form-check form-switch mb-2">
-                            <input class="form-check-input" type="checkbox" name="is_featured" id="brandIsFeatured" value="1">
-                            <label class="form-check-label fw-bold" for="brandIsFeatured">Feature this Brand</label>
-                        </div>
-
-                        <div class="form-check form-switch mb-0">
-                            <input class="form-check-input" type="checkbox" name="is_active" id="brandIsActive" value="1" checked>
-                            <label class="form-check-label fw-bold" for="brandIsActive">Brand is Active</label>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" name="is_active" id="brandIsActive" value="1" checked>
+                                    <label class="form-check-label fw-bold" for="brandIsActive">Active Status</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" name="is_featured" id="brandIsFeatured" value="1">
+                                    <label class="form-check-label fw-bold" for="brandIsFeatured">Featured</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer border-top">
@@ -104,10 +98,9 @@
             $('#brandForm')[0].reset();
             $('#brandFormMethod').val('POST');
             $('#brandId').val('');
-            $('#brandModalTitle').text('Add New Brand');
+            $('#brandModalTitle').text('Create Product Brand');
             $('#brandForm').attr('action', "{{ route('admin.brands.store') }}");
             $('#brandIsActive').prop('checked', true);
-            $('#brandIsFeatured').prop('checked', false);
             brandModal.show();
         }
 
@@ -128,6 +121,7 @@
         $('#brandForm').on('submit', function(e) {
             e.preventDefault();
             const form = $(this);
+
             $.ajax({
                 url: form.attr('action'),
                 type: 'POST',
