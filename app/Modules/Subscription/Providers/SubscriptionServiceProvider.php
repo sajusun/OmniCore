@@ -42,8 +42,8 @@ class SubscriptionServiceProvider extends ServiceProvider
         }
 
         // 4. Auto-load Views
-        if (is_dir(__DIR__ . '/../Views')) {
-            $this->loadViewsFrom(__DIR__ . '/../Views', 'subscription');
+        if (is_dir(__DIR__ . '/../Resources/views')) {
+            $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'subscription_module');
         }
     }
 }

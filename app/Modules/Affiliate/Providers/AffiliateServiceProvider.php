@@ -44,8 +44,8 @@ class AffiliateServiceProvider extends ServiceProvider
         }
 
         // 4. Auto-load Views
-        if (is_dir(__DIR__ . '/../Views')) {
-            $this->loadViewsFrom(__DIR__ . '/../Views', 'affiliate');
+        if (is_dir(__DIR__ . '/../Resources/views')) {
+            $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'affiliate_module');
         }
     }
 }
