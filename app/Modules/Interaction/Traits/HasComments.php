@@ -4,6 +4,7 @@ namespace App\Modules\Interaction\Traits;
 
 use App\Models\User;
 use App\Modules\Interaction\Models\Comment;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasComments
@@ -15,7 +16,7 @@ trait HasComments
     {
         return $this->morphMany(Comment::class, 'commentable')
             ->whereNull('parent_id')
-            ->latest();
+            ->latest('id');
     }
 
     /**
@@ -23,13 +24,28 @@ trait HasComments
      */
     public function allComments(): MorphMany
     {
-        return $this->morphMany(Comment::class, 'commentable')->latest();
+        return $this->morphMany(Comment::class, 'commentable')->latest('id');
+    }
+
+    /**
+     * Get paginated comments with user and replies eagerly loaded.
+     */
+    public function getComments(int $perPage = 15): LengthAwarePaginator
+    {
+        return $this->comments()
+            ->with([
+                'user:id,name,avatar,email',
+                'replies' => function ($query) {
+                    $query->with('user:id,name,avatar,email')->latest('id');
+                }
+            ])
+            ->paginate($perPage);
     }
 
     /**
      * Add a comment (or reply) to this model.
      */
-    public function addComment(string $body, User|int $user, ?int $parentId = null): Comment
+    public function addComment(string $body, User|int $user, ?int $parentId = null, string $status = 'approved'): Comment
     {
         $userId = $user instanceof User ? $user->id : $user;
 
@@ -37,7 +53,7 @@ trait HasComments
             'user_id' => $userId,
             'body' => $body,
             'parent_id' => $parentId,
-            'status' => 'approved',
+            'status' => $status,
         ]);
 
         if ($parentId) {
@@ -53,5 +69,13 @@ trait HasComments
     public function commentsCount(): int
     {
         return $this->comments()->count();
+    }
+
+    /**
+     * Get total count of all comments including nested replies.
+     */
+    public function totalCommentsCount(): int
+    {
+        return $this->allComments()->count();
     }
 }

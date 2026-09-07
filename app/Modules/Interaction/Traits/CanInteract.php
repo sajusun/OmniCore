@@ -2,9 +2,12 @@
 
 namespace App\Modules\Interaction\Traits;
 
+use App\Modules\Interaction\Models\Bookmark;
 use App\Modules\Interaction\Models\Comment;
 use App\Modules\Interaction\Models\Like;
 use App\Modules\Interaction\Models\ShareLink;
+use App\Modules\Interaction\Models\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait CanInteract
@@ -38,6 +41,48 @@ trait CanInteract
      */
     public function bookmarks(): HasMany
     {
-        return $this->hasMany(\App\Modules\Interaction\Models\Bookmark::class, 'user_id');
+        return $this->hasMany(Bookmark::class, 'user_id');
+    }
+
+    /**
+     * Get all views recorded by this user.
+     */
+    public function interactionViews(): HasMany
+    {
+        return $this->hasMany(View::class, 'user_id');
+    }
+
+    /**
+     * Check if user has liked a given model.
+     */
+    public function hasLiked(Model $model): bool
+    {
+        return $this->interactionLikes()
+            ->where('likeable_type', $model->getMorphClass())
+            ->where('likeable_id', $model->getKey())
+            ->exists();
+    }
+
+    /**
+     * Check if user has saved/bookmarked a given model.
+     */
+    public function hasBookmarked(Model $model, string $collection = 'default'): bool
+    {
+        return $this->bookmarks()
+            ->where('bookmarkable_type', $model->getMorphClass())
+            ->where('bookmarkable_id', $model->getKey())
+            ->where('collection', $collection)
+            ->exists();
+    }
+
+    /**
+     * Check if user has viewed a given model.
+     */
+    public function hasViewed(Model $model): bool
+    {
+        return $this->interactionViews()
+            ->where('viewable_type', $model->getMorphClass())
+            ->where('viewable_id', $model->getKey())
+            ->exists();
     }
 }

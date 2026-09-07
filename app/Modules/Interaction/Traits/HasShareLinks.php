@@ -19,6 +19,22 @@ trait HasShareLinks
     }
 
     /**
+     * Get total share links count.
+     */
+    public function sharesCount(): int
+    {
+        return $this->shareLinks()->count();
+    }
+
+    /**
+     * Get total clicks across all share links for this model.
+     */
+    public function totalShareClicksCount(): int
+    {
+        return (int) $this->shareLinks()->sum('click_count');
+    }
+
+    /**
      * Get or create a public SEO-friendly share link.
      */
     public function getPublicShareLink(?User $user = null): ShareLink

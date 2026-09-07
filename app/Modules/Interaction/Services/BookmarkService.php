@@ -4,6 +4,7 @@ namespace App\Modules\Interaction\Services;
 
 use App\Models\User;
 use App\Modules\Interaction\Models\Bookmark;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -32,34 +33,13 @@ class BookmarkService
     }
 
     /**
-     * Toggle bookmark/save state for a model in a specified collection.
+     * Explicitly save/bookmark a model.
      */
-    public function toggleBookmark(Model $model, User|int $user, string $collection = 'default'): array
+    public function bookmark(Model $model, User|int $user, string $collection = 'default'): array
     {
         $userId = $user instanceof User ? $user->id : $user;
 
-        $existing = Bookmark::where('bookmarkable_type', $model->getMorphClass())
-            ->where('bookmarkable_id', $model->getKey())
-            ->where('user_id', $userId)
-            ->where('collection', $collection)
-            ->first();
-
-        if ($existing) {
-            $existing->delete();
-
-            $totalBookmarks = Bookmark::where('bookmarkable_type', $model->getMorphClass())
-                ->where('bookmarkable_id', $model->getKey())
-                ->where('collection', $collection)
-                ->count();
-
-            return [
-                'bookmarked' => false,
-                'collection' => $collection,
-                'bookmarks_count' => $totalBookmarks,
-            ];
-        }
-
-        Bookmark::create([
+        Bookmark::firstOrCreate([
             'user_id' => $userId,
             'bookmarkable_type' => $model->getMorphClass(),
             'bookmarkable_id' => $model->getKey(),
@@ -76,6 +56,51 @@ class BookmarkService
             'collection' => $collection,
             'bookmarks_count' => $totalBookmarks,
         ];
+    }
+
+    /**
+     * Explicitly remove bookmark of a model.
+     */
+    public function unbookmark(Model $model, User|int $user, string $collection = 'default'): array
+    {
+        $userId = $user instanceof User ? $user->id : $user;
+
+        Bookmark::where('bookmarkable_type', $model->getMorphClass())
+            ->where('bookmarkable_id', $model->getKey())
+            ->where('user_id', $userId)
+            ->where('collection', $collection)
+            ->delete();
+
+        $totalBookmarks = Bookmark::where('bookmarkable_type', $model->getMorphClass())
+            ->where('bookmarkable_id', $model->getKey())
+            ->where('collection', $collection)
+            ->count();
+
+        return [
+            'bookmarked' => false,
+            'collection' => $collection,
+            'bookmarks_count' => $totalBookmarks,
+        ];
+    }
+
+    /**
+     * Toggle bookmark/save state for a model in a specified collection.
+     */
+    public function toggleBookmark(Model $model, User|int $user, string $collection = 'default'): array
+    {
+        $userId = $user instanceof User ? $user->id : $user;
+
+        $existing = Bookmark::where('bookmarkable_type', $model->getMorphClass())
+            ->where('bookmarkable_id', $model->getKey())
+            ->where('user_id', $userId)
+            ->where('collection', $collection)
+            ->first();
+
+        if ($existing) {
+            return $this->unbookmark($model, $user, $collection);
+        }
+
+        return $this->bookmark($model, $user, $collection);
     }
 
     /**
@@ -108,6 +133,19 @@ class BookmarkService
     }
 
     /**
+     * Get paginated list of users who bookmarked this model.
+     */
+    public function getBookmarkers(Model $model, string $collection = 'default', int $perPage = 20): LengthAwarePaginator
+    {
+        return Bookmark::where('bookmarkable_type', $model->getMorphClass())
+            ->where('bookmarkable_id', $model->getKey())
+            ->where('collection', $collection)
+            ->with('user:id,name,avatar,email')
+            ->latest('id')
+            ->paginate($perPage);
+    }
+
+    /**
      * Check if a model is bookmarked by a user in a specific collection.
      */
     public function isBookmarked(Model $model, User|int|null $user, string $collection = 'default'): bool
@@ -123,5 +161,18 @@ class BookmarkService
             ->where('user_id', $userId)
             ->where('collection', $collection)
             ->exists();
+    }
+
+    /**
+     * Get collection breakdown counts for a model.
+     */
+    public function getCollectionsSummary(Model $model): array
+    {
+        return Bookmark::where('bookmarkable_type', $model->getMorphClass())
+            ->where('bookmarkable_id', $model->getKey())
+            ->selectRaw('collection, count(*) as count')
+            ->groupBy('collection')
+            ->pluck('count', 'collection')
+            ->toArray();
     }
 }

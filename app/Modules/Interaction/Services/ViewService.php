@@ -4,6 +4,8 @@ namespace App\Modules\Interaction\Services;
 
 use App\Models\User;
 use App\Modules\Interaction\Models\View;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use InvalidArgumentException;
@@ -31,77 +33,96 @@ class ViewService
     }
 
     /**
-     * Record a view for a model.
+     * Record a view/impression for a target model with anti-spam cooldown.
      */
     public function recordView(
         Model $model,
-        ?User $user = null,
+        User|int|null $user = null,
         ?string $ip = null,
-        ?string $userAgent = null,
-        int $cooldownMinutes = 60
-    ): array {
-        if (method_exists($model, 'recordView')) {
-            $recorded = $model->recordView($user, $ip, $cooldownMinutes, $userAgent);
-        } else {
-            $userId = $user?->id;
-            $hasRecent = View::where('viewable_type', $model->getMorphClass())
-                ->where('viewable_id', $model->getKey())
-                ->when($userId, fn($q) => $q->where('user_id', $userId))
-                ->when(!$userId && $ip, fn($q) => $q->where('ip_address', $ip))
-                ->where('created_at', '>=', now()->subMinutes($cooldownMinutes))
-                ->exists();
+        int $cooldownMinutes = 60,
+        ?string $userAgent = null
+    ): bool {
+        $userId = $user instanceof User ? $user->id : $user;
+        $cooldownThreshold = Carbon::now()->subMinutes($cooldownMinutes);
 
-            if (!$hasRecent) {
-                View::create([
-                    'viewable_type' => $model->getMorphClass(),
-                    'viewable_id' => $model->getKey(),
-                    'user_id' => $userId,
-                    'ip_address' => $ip,
-                    'user_agent' => $userAgent,
-                ]);
-                $recorded = true;
-            } else {
-                $recorded = false;
-            }
+        $recentViewQuery = View::where('viewable_type', $model->getMorphClass())
+            ->where('viewable_id', $model->getKey())
+            ->where('created_at', '>=', $cooldownThreshold);
+
+        if ($userId) {
+            $hasRecent = $recentViewQuery->where('user_id', $userId)->exists();
+        } elseif ($ip) {
+            $hasRecent = $recentViewQuery->where('ip_address', $ip)->exists();
+        } else {
+            $hasRecent = false;
         }
 
-        $totalViews = method_exists($model, 'viewsCount')
-            ? $model->viewsCount()
-            : View::where('viewable_type', $model->getMorphClass())->where('viewable_id', $model->getKey())->count();
+        if ($hasRecent) {
+            return false;
+        }
 
-        $uniqueViews = method_exists($model, 'uniqueViewsCount')
-            ? $model->uniqueViewsCount()
-            : View::where('viewable_type', $model->getMorphClass())
-                ->where('viewable_id', $model->getKey())
-                ->selectRaw('COUNT(DISTINCT COALESCE(user_id, ip_address)) as total')
-                ->value('total') ?? 0;
+        View::create([
+            'user_id' => $userId,
+            'viewable_type' => $model->getMorphClass(),
+            'viewable_id' => $model->getKey(),
+            'ip_address' => $ip,
+            'user_agent' => $userAgent,
+        ]);
 
-        return [
-            'recorded' => $recorded,
-            'total_views' => $totalViews,
-            'unique_views' => $uniqueViews,
-        ];
+        if (array_key_exists('views_count', $model->getAttributes())) {
+            $model->increment('views_count');
+        }
+
+        return true;
     }
 
     /**
-     * Get view stats for a model.
+     * Get view analytics statistics for a model over the last N days.
      */
-    public function getViewStats(Model $model): array
+    public function getDailyStats(Model $model, int $days = 7): array
     {
-        $totalViews = method_exists($model, 'viewsCount')
-            ? $model->viewsCount()
-            : View::where('viewable_type', $model->getMorphClass())->where('viewable_id', $model->getKey())->count();
+        $startDate = Carbon::now()->subDays($days)->startOfDay();
 
-        $uniqueViews = method_exists($model, 'uniqueViewsCount')
-            ? $model->uniqueViewsCount()
-            : View::where('viewable_type', $model->getMorphClass())
-                ->where('viewable_id', $model->getKey())
-                ->selectRaw('COUNT(DISTINCT COALESCE(user_id, ip_address)) as total')
-                ->value('total') ?? 0;
+        $records = View::where('viewable_type', $model->getMorphClass())
+            ->where('viewable_id', $model->getKey())
+            ->where('created_at', '>=', $startDate)
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as total_views, COUNT(DISTINCT COALESCE(user_id, ip_address)) as unique_views')
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->get()
+            ->keyBy('date');
 
-        return [
-            'total_views' => $totalViews,
-            'unique_views' => $uniqueViews,
-        ];
+        $result = [];
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $dateStr = Carbon::now()->subDays($i)->format('Y-m-d');
+            $row = $records->get($dateStr);
+
+            $result[] = [
+                'date' => $dateStr,
+                'total_views' => $row ? (int) $row->total_views : 0,
+                'unique_views' => $row ? (int) $row->unique_views : 0,
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get IDs and counts of top viewed items for a model type.
+     */
+    public function getTopViewed(string $type, int $limit = 10, int $days = 30): array
+    {
+        $morphMap = Relation::morphMap();
+        $morphType = $morphMap[$type] ?? $type;
+        $startDate = Carbon::now()->subDays($days)->startOfDay();
+
+        return View::where('viewable_type', $morphType)
+            ->where('created_at', '>=', $startDate)
+            ->selectRaw('viewable_id, count(*) as views_count, count(distinct coalesce(user_id, ip_address)) as unique_viewers')
+            ->groupBy('viewable_id')
+            ->orderByDesc('views_count')
+            ->limit($limit)
+            ->get()
+            ->toArray();
     }
 }

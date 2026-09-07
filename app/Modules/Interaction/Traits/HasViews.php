@@ -36,7 +36,6 @@ trait HasViews
 
         // Check recent view cooldown
         $cooldownThreshold = Carbon::now()->subMinutes($cooldownMinutes);
-
         $recentViewQuery = $this->views()->where('created_at', '>=', $cooldownThreshold);
 
         if ($userId) {
@@ -98,6 +97,36 @@ trait HasViews
         $userId = $user instanceof User ? $user->id : $user;
 
         return $this->views()->where('user_id', $userId)->exists();
+    }
+
+    /**
+     * Get daily views breakdown over the last N days (for charts/analytics).
+     */
+    public function viewsStats(int $days = 7): array
+    {
+        $startDate = Carbon::now()->subDays($days)->startOfDay();
+
+        $records = $this->views()
+            ->where('created_at', '>=', $startDate)
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as total_views, COUNT(DISTINCT COALESCE(user_id, ip_address)) as unique_views')
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->get()
+            ->keyBy('date');
+
+        $result = [];
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $dateStr = Carbon::now()->subDays($i)->format('Y-m-d');
+            $row = $records->get($dateStr);
+
+            $result[] = [
+                'date' => $dateStr,
+                'total_views' => $row ? (int) $row->total_views : 0,
+                'unique_views' => $row ? (int) $row->unique_views : 0,
+            ];
+        }
+
+        return $result;
     }
 
     /**

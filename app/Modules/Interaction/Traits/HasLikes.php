@@ -4,6 +4,7 @@ namespace App\Modules\Interaction\Traits;
 
 use App\Models\User;
 use App\Modules\Interaction\Models\Like;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasLikes
@@ -35,22 +36,22 @@ trait HasLikes
     }
 
     /**
-     * Toggle like state for a user.
-     * Returns true if liked, false if unliked.
+     * Explicitly like this model.
      */
-    public function toggleLike(User|int $user, string $type = 'like'): array
+    public function like(User|int $user, string $type = 'like'): array
     {
         $userId = $user instanceof User ? $user->id : $user;
         $existing = $this->likes()->where('user_id', $userId)->first();
 
         if ($existing) {
-            $existing->delete();
-            $this->decrementLikesCount();
+            if ($existing->type !== $type) {
+                $existing->update(['type' => $type]);
+            }
 
             return [
-                'liked' => false,
-                'type' => null,
-                'likes_count' => $this->getLikesCount(),
+                'liked' => true,
+                'type' => $type,
+                'likes_count' => $this->likesCount(),
             ];
         }
 
@@ -63,12 +64,56 @@ trait HasLikes
         return [
             'liked' => true,
             'type' => $type,
-            'likes_count' => $this->getLikesCount(),
+            'likes_count' => $this->likesCount(),
         ];
     }
 
     /**
-     * Get current likes count.
+     * Explicitly unlike this model.
+     */
+    public function unlike(User|int $user): array
+    {
+        $userId = $user instanceof User ? $user->id : $user;
+        $existing = $this->likes()->where('user_id', $userId)->first();
+
+        if ($existing) {
+            $existing->delete();
+            $this->decrementLikesCount();
+        }
+
+        return [
+            'liked' => false,
+            'type' => null,
+            'likes_count' => $this->likesCount(),
+        ];
+    }
+
+    /**
+     * Toggle like state for a user.
+     * Returns array containing liked status, type, and total count.
+     */
+    public function toggleLike(User|int $user, string $type = 'like'): array
+    {
+        $userId = $user instanceof User ? $user->id : $user;
+        $existing = $this->likes()->where('user_id', $userId)->first();
+
+        if ($existing) {
+            return $this->unlike($user);
+        }
+
+        return $this->like($user, $type);
+    }
+
+    /**
+     * Get total likes count.
+     */
+    public function likesCount(): int
+    {
+        return $this->getLikesCount();
+    }
+
+    /**
+     * Get current likes count (checks cached attribute first).
      */
     public function getLikesCount(): int
     {
@@ -77,6 +122,35 @@ trait HasLikes
         }
 
         return $this->likes()->count();
+    }
+
+    /**
+     * Get count of likes by specific reaction type, or array breakdown of all reaction types.
+     */
+    public function likesByType(?string $type = null): int|array
+    {
+        if ($type !== null) {
+            return $this->likes()->where('type', $type)->count();
+        }
+
+        return $this->likes()
+            ->selectRaw('type, count(*) as count')
+            ->groupBy('type')
+            ->pluck('count', 'type')
+            ->toArray();
+    }
+
+    /**
+     * Get recent users who liked this model.
+     */
+    public function likers(int $limit = 20): Collection
+    {
+        $userIds = $this->likes()
+            ->latest('id')
+            ->limit($limit)
+            ->pluck('user_id');
+
+        return User::whereIn('id', $userIds)->get();
     }
 
     /**
