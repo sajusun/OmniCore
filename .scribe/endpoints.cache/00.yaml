@@ -82,7 +82,7 @@ endpoints:
         name: category
         description: ''
         required: true
-        example: club
+        example: billing
         type: string
         enumValues:
           - bug
@@ -154,7 +154,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       subject: b
-      category: club
+      category: billing
       message: 'n'
       device_os: g
       device_model: z
@@ -2572,7 +2572,7 @@ endpoints:
         name: message_type
         description: ''
         required: false
-        example: video
+        example: text
         type: string
         enumValues:
           - text
@@ -2626,7 +2626,7 @@ endpoints:
     cleanBodyParameters:
       chat_room_id: 16
       receiver_id: 16
-      message_type: video
+      message_type: text
       message: 'n'
       reply_to: 16
     fileParameters:
@@ -2942,7 +2942,7 @@ endpoints:
         name: enabled
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -2960,7 +2960,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      enabled: true
+      enabled: false
       mute_until: '2052-09-30'
     fileParameters: []
     responses: []
@@ -3077,7 +3077,7 @@ endpoints:
         name: duration
         description: ''
         required: true
-        example: custom
+        example: forever
         type: string
         enumValues:
           - 1_hour
@@ -3101,7 +3101,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      duration: custom
+      duration: forever
       mute_until: '2052-09-30'
     fileParameters: []
     responses: []
@@ -6649,7 +6649,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":true,"message":"Cart retrieved successfully.","code":200,"data":{"id":1,"guest_token":"e221d450-aa7e-4187-bf21-a5ab640bf20a","items_count":0,"subtotal":0,"discount_amount":0,"coupon_code":null,"grand_total":0,"items":[]}}'
+        content: '{"status":true,"message":"Cart retrieved successfully.","code":200,"data":{"id":3,"guest_token":"33a07e46-aa60-4d35-ba97-85f824152862","items_count":0,"subtotal":0,"discount_amount":0,"coupon_code":null,"grand_total":0,"items":[]}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -7120,7 +7120,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-07T03:48:34'
+        example: '2026-09-07T10:03:43'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -7156,7 +7156,7 @@ endpoints:
       max_discount_amount: 12
       usage_limit: 27
       usage_limit_per_user: 35
-      start_date: '2026-09-07T03:48:34'
+      start_date: '2026-09-07T10:03:43'
       end_date: '2052-09-30'
       is_active: false
     fileParameters: []
@@ -7337,7 +7337,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-07T03:48:34'
+        example: '2026-09-07T10:03:43'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -7348,7 +7348,7 @@ endpoints:
         name: end_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-09-07T03:48:34'
+        example: '2026-09-07T10:03:43'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -7372,8 +7372,8 @@ endpoints:
       max_discount_amount: 84
       usage_limit: 66
       usage_limit_per_user: 27
-      start_date: '2026-09-07T03:48:34'
-      end_date: '2026-09-07T03:48:34'
+      start_date: '2026-09-07T10:03:43'
+      end_date: '2026-09-07T10:03:43'
       is_active: false
     fileParameters: []
     responses: []
@@ -8047,7 +8047,7 @@ endpoints:
         name: payment_method
         description: ''
         required: true
-        example: bkash
+        example: sslcommerz
         type: string
         enumValues:
           - cod
@@ -8079,7 +8079,7 @@ endpoints:
         postal_code: iyvdljnikhwaykcm
         country: 'y'
       shipping_method_id: 16
-      payment_method: bkash
+      payment_method: sslcommerz
       customer_notes: 'n'
     fileParameters: []
     responses: []
@@ -8399,9 +8399,21 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
+      days:
+        custom: []
+        name: days
+        description: 'Must be at least 1. Must not be greater than 90.'
+        required: false
+        example: 22
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
     cleanBodyParameters:
       subject_type: architecto
       subject_id: architecto
+      days: 22
     fileParameters: []
     responses:
       -
@@ -8808,7 +8820,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: single_use
+        example: private
         type: string
         enumValues:
           - public
@@ -8843,7 +8855,7 @@ endpoints:
     cleanBodyParameters:
       subject_type: architecto
       subject_id: architecto
-      type: single_use
+      type: private
       expires_in_minutes: 22
       max_clicks: 67
     fileParameters: []
@@ -9372,7 +9384,7 @@ endpoints:
         name: method
         description: ''
         required: true
-        example: cod
+        example: stripe
         type: string
         enumValues:
           - stripe
@@ -9411,7 +9423,7 @@ endpoints:
       payable_type: architecto
       payable_id: 16
       amount: 39
-      method: cod
+      method: stripe
       currency: gzm
     fileParameters: []
     responses: []
@@ -9539,7 +9551,7 @@ endpoints:
         name: method
         description: ''
         required: true
-        example: manual_bank
+        example: bkash
         type: string
         enumValues:
           - stripe
@@ -9563,7 +9575,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       amount: 1
-      method: manual_bank
+      method: bkash
       currency: ngz
     fileParameters: []
     responses: []
@@ -10020,7 +10032,7 @@ endpoints:
         name: payment_method
         description: ''
         required: false
-        example: wallet
+        example: paypal
         type: string
         enumValues:
           - wallet
@@ -10036,7 +10048,7 @@ endpoints:
         name: auto_renew
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -10044,8 +10056,8 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       plan_id: 16
-      payment_method: wallet
-      auto_renew: false
+      payment_method: paypal
+      auto_renew: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -10571,7 +10583,7 @@ endpoints:
         name: priority
         description: ''
         required: false
-        example: urgent
+        example: low
         type: string
         enumValues:
           - low
@@ -10606,7 +10618,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       subject: b
-      priority: urgent
+      priority: low
       message: architecto
     fileParameters:
       attachments:
@@ -11065,14 +11077,14 @@ endpoints:
         name: is_helpful
         description: ''
         required: true
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      is_helpful: true
+      is_helpful: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -11967,7 +11979,7 @@ endpoints:
         name: persona
         description: ''
         required: false
-        example: support_agent
+        example: shopping_assistant
         type: string
         enumValues:
           - support_agent
@@ -11982,7 +11994,7 @@ endpoints:
         name: provider
         description: ''
         required: false
-        example: gemini
+        example: openai
         type: string
         enumValues:
           - gemini
@@ -11995,8 +12007,8 @@ endpoints:
     cleanBodyParameters:
       message: b
       conversation_id: 16
-      persona: support_agent
-      provider: gemini
+      persona: shopping_assistant
+      provider: openai
     fileParameters: []
     responses: []
     responseFields: []
@@ -12265,7 +12277,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: seo_meta
+        example: product_description
         type: string
         enumValues:
           - product_description
@@ -12298,7 +12310,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: seo_meta
+      type: product_description
       prompt: b
     fileParameters: []
     responses: []
@@ -12834,7 +12846,7 @@ endpoints:
         name: purpose
         description: ''
         required: true
-        example: email_verification
+        example: password_reset
         type: string
         enumValues:
           - email_verification
@@ -12844,7 +12856,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       token: architecto
-      purpose: email_verification
+      purpose: password_reset
     fileParameters: []
     responses:
       -
@@ -13592,7 +13604,7 @@ endpoints:
         name: purpose
         description: ''
         required: true
-        example: password_reset
+        example: email_verification
         type: string
         enumValues:
           - email_verification
@@ -13627,7 +13639,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      purpose: password_reset
+      purpose: email_verification
       type: otp
       channel: email
     fileParameters: []
@@ -13665,7 +13677,7 @@ endpoints:
         name: purpose
         description: ''
         required: true
-        example: email_verification
+        example: password_reset
         type: string
         enumValues:
           - email_verification
@@ -13685,7 +13697,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      purpose: email_verification
+      purpose: password_reset
       code: architecto
     fileParameters: []
     responses: []
@@ -13722,7 +13734,7 @@ endpoints:
         name: purpose
         description: ''
         required: true
-        example: email_verification
+        example: password_reset
         type: string
         enumValues:
           - email_verification
@@ -13735,7 +13747,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: otp
+        example: token
         type: string
         enumValues:
           - otp
@@ -13748,7 +13760,7 @@ endpoints:
         name: channel
         description: ''
         required: false
-        example: sms
+        example: email
         type: string
         enumValues:
           - email
@@ -13757,9 +13769,9 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      purpose: email_verification
-      type: otp
-      channel: sms
+      purpose: password_reset
+      type: token
+      channel: email
     fileParameters: []
     responses: []
     responseFields: []

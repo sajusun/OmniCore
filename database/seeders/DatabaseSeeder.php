@@ -6,6 +6,7 @@ use App\Modules\AI\Database\Seeders\AiSeeder;
 use App\Modules\Affiliate\Database\Seeders\AffiliateSeeder;
 use App\Modules\CMS\Database\Seeders\CMSModuleSeeder;
 use App\Modules\Chat\Database\Seeders\ChatModuleSeeder;
+use App\Modules\Interaction\Database\Seeders\InteractionSeeder;
 use App\Modules\Order\Database\Seeders\OrderModuleSeeder;
 use App\Modules\Payment\Database\Seeders\PaymentGatewaySeeder;
 use App\Modules\Post\Database\Seeders\PostModuleSeeder;
@@ -39,6 +40,7 @@ class DatabaseSeeder extends Seeder
             AffiliateSeeder::class,
             VendorSeeder::class,
             AiSeeder::class,
+            InteractionSeeder::class,
         ]);
     }
 }
