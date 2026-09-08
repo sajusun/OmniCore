@@ -5,11 +5,11 @@
 /public/uploads
 /storage/*.key
 /storage/pail
+/storage/firebase/*.json
+!/storage/firebase/*.example
 /vendor
-.env
 .htaccess
 .env.backup
-.env.production
 .phpactor.json
 .phpunit.result.cache
 Homestead.json
@@ -20,5 +20,5 @@ yarn-error.log
 /.fleet
 /.idea
 /.nova
-/.vscode
 /.zed
+config.bat
