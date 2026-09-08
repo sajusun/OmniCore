@@ -6,9 +6,9 @@ enum SupportCategory: string
 {
     case BUG = 'bug';
     case ACCOUNT = 'account';
-    case EVENT = 'event';
-    case CLUB = 'club';
-    case VEHICLE = 'vehicle';
+    case ORDER = 'order';
+    case PRODUCT = 'product';
+    case VENDOR = 'vendor';
     case BILLING = 'billing';
     case FEEDBACK = 'feedback';
     case OTHER = 'other';
@@ -18,9 +18,9 @@ enum SupportCategory: string
         return match ($this) {
             self::BUG => 'Technical Bug / Crash',
             self::ACCOUNT => 'Account & Login',
-            self::EVENT => 'Events & RSVP',
-            self::CLUB => 'Clubs & Membership',
-            self::VEHICLE => 'Vehicles & Garage',
+            self::ORDER => 'Orders & Delivery',
+            self::PRODUCT => 'Products & Catalog',
+            self::VENDOR => 'Vendor & Stores',
             self::BILLING => 'Billing & Subscription',
             self::FEEDBACK => 'Feedback & Suggestion',
             self::OTHER => 'Other / General Issue',

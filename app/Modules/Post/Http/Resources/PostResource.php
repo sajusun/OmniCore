@@ -2,7 +2,7 @@
 
 namespace App\Modules\Post\Http\Resources;
 
-use App\Http\Resources\FriendResource;
+use App\Modules\Social\Http\Resources\FriendResource;
 use App\Http\Resources\MediaResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

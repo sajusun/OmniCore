@@ -20,36 +20,44 @@ class DashboardController extends Controller
         $metrics = $this->dashboardService->getDashboardMetrics();
 
         // ── Top-4 Stat Cards ────────────────────────────────────────────────
-        $totalUsers          = $metrics['users']['total_users'];
+        $totalUsers           = $metrics['users']['total_users'];
         $totalSubscribedUsers = $metrics['users']['subscribed_users'];
-        $totalEvents         = $metrics['events']['total_events'];
-        $totalPosts          = $metrics['posts']['total_posts'];
+        $totalOrders          = $metrics['ecommerce']['total_orders'];
+        $totalEvents          = $totalOrders; // backward compatibility
+        $totalPosts           = $metrics['posts']['total_posts'];
 
         // ── Secondary User Metrics ───────────────────────────────────────────
-        $newUsers            = $metrics['users']['new_users'];
-        $verifiedUsers       = $metrics['users']['verified_users'];
-        $activeUsers         = $metrics['users']['active_users'];
+        $newUsers             = $metrics['users']['new_users'];
+        $verifiedUsers        = $metrics['users']['verified_users'];
+        $activeUsers          = $metrics['users']['active_users'];
 
-        // ── Secondary Event / Post / Club Metrics ────────────────────────────
-        $upcomingEvents      = $metrics['events']['upcoming_events'];
-        $totalGoing          = $metrics['events']['total_going'];
-        $totalInterested     = $metrics['events']['total_interested'];
-        $publishedPosts      = $metrics['posts']['published_posts'];
-        $newPostsMonth       = $metrics['posts']['new_posts_month'];
-        $totalClubs          = $metrics['clubs']['total_clubs'];
-        $totalClubMembers    = $metrics['clubs']['total_members'];
-        $totalVehicles       = $metrics['vehicles']['total_vehicles'] ?? 0;
+        // ── Secondary Ecommerce & Operations Metrics ─────────────────────────
+        $pendingOrders        = $metrics['ecommerce']['pending_orders'];
+        $upcomingEvents       = $pendingOrders;
+        $totalProducts        = $metrics['ecommerce']['total_products'];
+        $totalVehicles        = $totalProducts;
+        $totalVendors         = $metrics['operations']['total_vendors'];
+        $totalClubs           = $totalVendors;
+        $totalReviews         = $metrics['operations']['total_reviews'];
+        $totalClubMembers     = $totalReviews;
+        $totalTickets         = $metrics['operations']['total_tickets'];
+        $totalGoing           = $totalTickets;
+        $totalInterested      = $metrics['operations']['open_tickets'];
+        $publishedPosts       = $metrics['posts']['published_posts'];
+        $newPostsMonth        = $metrics['posts']['new_posts_month'];
 
         // ── Recent Lists ─────────────────────────────────────────────────────
-        $latestpostUsers     = $metrics['recent_users'];
-        $recentEvents        = $metrics['recent_events'];
-        $recentPosts         = $metrics['recent_posts'];
+        $latestpostUsers      = $metrics['recent_users'];
+        $recentEvents         = $metrics['recent_events'];
+        $recentOrders         = $metrics['recent_orders'];
+        $recentPosts          = $metrics['recent_posts'];
+        $recentTickets        = $metrics['recent_tickets'];
 
         // ── Chart Data ───────────────────────────────────────────────────────
         $signupCategories       = $metrics['monthly_signups']['categories'];
         $signupData             = $metrics['monthly_signups']['users'];
         $subscriptionChartData  = $metrics['monthly_signups']['subscriptions'];
-        $eventChartData         = $metrics['monthly_signups']['events'];
+        $eventChartData         = $metrics['monthly_signups']['orders'] ?? $metrics['monthly_signups']['events'];
         $postChartData          = $metrics['monthly_signups']['posts'];
 
         // ── Pie / Donut Chart Datasets ────────────────────────────────────────
@@ -59,15 +67,23 @@ class DashboardController extends Controller
         $unverifiedUsersCount   = max(0, $totalUsers - $verifiedUsers);
 
         // ── Activity Log ─────────────────────────────────────────────────────
-        $recentActivities    = ActivityLog::latest()->take(5)->get();
+        $recentActivities       = ActivityLog::latest()->take(5)->get();
 
         return view('backend.dashboard', compact(
             // stat cards
             'totalUsers',
             'totalSubscribedUsers',
+            'totalOrders',
             'totalEvents',
             'totalPosts',
+            'totalProducts',
             'totalVehicles',
+            'totalVendors',
+            'totalClubs',
+            'totalReviews',
+            'totalClubMembers',
+            'totalTickets',
+            'pendingOrders',
             // secondary
             'newUsers',
             'verifiedUsers',
@@ -77,14 +93,14 @@ class DashboardController extends Controller
             'totalInterested',
             'publishedPosts',
             'newPostsMonth',
-            'totalClubs',
-            'totalClubMembers',
             'freeUsersCount',
             'unverifiedUsersCount',
             // recent lists
             'latestpostUsers',
             'recentEvents',
+            'recentOrders',
             'recentPosts',
+            'recentTickets',
             // charts
             'metrics',
             'signupCategories',

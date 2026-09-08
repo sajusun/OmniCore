@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    {{-- Resource Action Cards (Posts, Events, Clubs, Vehicles) --}}
+    {{-- Resource Action Cards (Posts, Orders, Tickets, Reviews) --}}
     <h5 class="fw-bold text-dark mb-3"><i class="fa fa-th-large me-2" style="color: #8fbd56;"></i> Related User Content & Activity</h5>
     
     <div class="row g-4 mb-4">

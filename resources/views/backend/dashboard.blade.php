@@ -64,21 +64,21 @@
                 </div>
             </div>
 
-            {{-- Total Events --}}
+            {{-- Total Orders --}}
             <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
                 <div class="card overflow-hidden">
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <h3 class="mb-2 fw-semibold">{{ number_format($totalEvents ?? 0) }}</h3>
-                                <p class="text-muted fs-13 mb-0">Total Events</p>
+                                <h3 class="mb-2 fw-semibold">{{ number_format($totalOrders ?? $totalEvents ?? 0) }}</h3>
+                                <p class="text-muted fs-13 mb-0">Total Orders</p>
                                 <small class="text-warning fw-semibold">
-                                    <i class="fe fe-calendar me-1"></i>{{ $upcomingEvents ?? 0 }} upcoming
+                                    <i class="fe fe-clock me-1"></i>{{ $pendingOrders ?? $upcomingEvents ?? 0 }} pending
                                 </small>
                             </div>
                             <div class="col col-auto top-icn dash">
                                 <div class="counter-icon bg-warning dash ms-auto box-shadow-warning">
-                                    <i class="fe fe-calendar text-white"></i>
+                                    <i class="fe fe-shopping-bag text-white"></i>
                                 </div>
                             </div>
                         </div>
@@ -111,22 +111,22 @@
         </div>
         <!-- ROW-1 END -->
 
-        <!-- ROW-2: Secondary Stat Cards (Clubs, Vehicles, Published Posts, Active Users) -->
+        <!-- ROW-2: Secondary Stat Cards (Vendors, Products, Published Posts, Active Users) -->
         <div class="row">
 
-            {{-- Total Clubs --}}
+            {{-- Total Vendors --}}
             <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
                 <div class="card overflow-hidden">
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <h3 class="mb-2 fw-semibold">{{ number_format($totalClubs ?? 0) }}</h3>
-                                <p class="text-muted fs-13 mb-0">Total Clubs</p>
-                                <small class="text-muted">{{ number_format($totalClubMembers ?? 0) }} members</small>
+                                <h3 class="mb-2 fw-semibold">{{ number_format($totalVendors ?? $totalClubs ?? 0) }}</h3>
+                                <p class="text-muted fs-13 mb-0">Total Vendors</p>
+                                <small class="text-muted">{{ number_format($totalReviews ?? $totalClubMembers ?? 0) }} reviews</small>
                             </div>
                             <div class="col col-auto top-icn dash">
                                 <div class="counter-icon bg-purple dash ms-auto" style="background: #7c3aed!important;">
-                                    <i class="fe fe-shield text-white"></i>
+                                    <i class="fe fe-briefcase text-white"></i>
                                 </div>
                             </div>
                         </div>
@@ -134,19 +134,19 @@
                 </div>
             </div>
 
-            {{-- Total Vehicles --}}
+            {{-- Total Products --}}
             <div class="col-lg-6 col-sm-12 col-md-6 col-xl-3">
                 <div class="card overflow-hidden">
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <h3 class="mb-2 fw-semibold">{{ number_format($totalVehicles ?? 0) }}</h3>
-                                <p class="text-muted fs-13 mb-0">Total Vehicles</p>
-                                <small class="text-muted">Registered in Garages</small>
+                                <h3 class="mb-2 fw-semibold">{{ number_format($totalProducts ?? $totalVehicles ?? 0) }}</h3>
+                                <p class="text-muted fs-13 mb-0">Total Products</p>
+                                <small class="text-muted">In Catalog</small>
                             </div>
                             <div class="col col-auto top-icn dash">
                                 <div class="counter-icon dash ms-auto" style="background: #f59e0b!important;">
-                                    <i class="fe fe-truck text-white"></i>
+                                    <i class="fe fe-box text-white"></i>
                                 </div>
                             </div>
                         </div>
@@ -260,9 +260,9 @@
                             type="bar" 
                             :height="300"
                             chartId="system-resources-chart"
-                            :categories="['Users', 'Posts', 'Events', 'Clubs', 'Vehicles']"
+                            :categories="['Users', 'Posts', 'Orders', 'Vendors', 'Products']"
                             :series="[
-                                ['name' => 'Total Count', 'data' => [(int)$totalUsers, (int)$totalPosts, (int)$totalEvents, (int)$totalClubs, (int)$totalVehicles]]
+                                ['name' => 'Total Count', 'data' => [(int)$totalUsers, (int)$totalPosts, (int)($totalOrders ?? $totalEvents ?? 0), (int)($totalVendors ?? $totalClubs ?? 0), (int)($totalProducts ?? $totalVehicles ?? 0)]]
                             ]" 
                         />
                     </div>

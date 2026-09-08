@@ -39,7 +39,7 @@ class ContactUsController extends Controller
                 ->make(true);
         }
 
-        return view('backend.layouts.contact.index');
+        return view('backend.contact.index');
     }
 
 
@@ -54,7 +54,7 @@ class ContactUsController extends Controller
             $contactUs->save();
         }
 
-        return view('backend.layouts.contact.view', compact('contactUs'));
+        return view('backend.contact.view', compact('contactUs'));
     }
 
     public function reply(Request $request, $id)
