@@ -5,6 +5,8 @@
 /public/uploads
 /storage/*.key
 /storage/pail
+/storage/firebase/*.json
+!/storage/firebase/*.example
 /vendor
 .env
 .htaccess
