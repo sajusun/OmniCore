@@ -1,0 +1,24 @@
+{
+    "name": "omnicore/ai-assistant",
+    "description": "Plug-and-play Local AI Copilot Module powered by Ollama",
+    "authors": [
+        {
+            "name": "OmniCore Architect",
+            "email": "dev@omnicore.local"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\AiAssistant\\Providers\\AiAssistantServiceProvider",
+                "Modules\\AiAssistant\\Providers\\RouteServiceProvider"
+            ],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\AiAssistant\\": ""
+        }
+    }
+}
