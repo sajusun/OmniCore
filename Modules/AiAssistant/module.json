@@ -1,0 +1,12 @@
+{
+    "name": "AiAssistant",
+    "alias": "aiassistant",
+    "description": "Plug-and-play Local AI Copilot Module powered by Ollama",
+    "keywords": ["ai", "copilot", "ollama", "chatgpt", "streaming"],
+    "priority": 0,
+    "providers": [
+        "Modules\\AiAssistant\\Providers\\AiAssistantServiceProvider",
+        "Modules\\AiAssistant\\Providers\\RouteServiceProvider"
+    ],
+    "files": []
+}
