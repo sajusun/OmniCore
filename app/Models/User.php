@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Modules\AdaptiveAuth\Traits\HasAdaptiveAuth;
 use App\Modules\Auth\Traits\HasVerification;
 use App\Traits\HasPost;
 use App\Modules\Notification\Traits\HasNotifications;
@@ -32,6 +33,7 @@ use Illuminate\Support\Str;
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory,
+        HasAdaptiveAuth,
         HasVerification,
         HasSocialRelations,
         HasMedia,

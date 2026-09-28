@@ -26,4 +26,6 @@ return [
     App\Modules\Vendor\Providers\VendorServiceProvider::class,
     App\Modules\AI\Providers\AiServiceProvider::class,
     App\Modules\Auth\Providers\AuthServiceProvider::class,
+    App\Modules\AdaptiveAuth\Providers\AdaptiveAuthServiceProvider::class,
 ];
+

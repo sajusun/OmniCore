@@ -38,6 +38,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ['prefix' => 'api', 'middleware' => ['auth:api']],
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->web(append: [
+            \App\Modules\AdaptiveAuth\Http\Middleware\EnsureDeviceTrusted::class,
+        ]);
+
         $middleware->alias([
             'admin' => AdminMiddleware::class,
             'api-admin' => ApiAdminMiddleware::class,
@@ -45,6 +49,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'api-otp' => ApiOtpVerifiedMiddleware::class,
             'check' => WebAuthCheckMiddleware::class,
             'permission' => RolePermissionMiddleware::class,
+            'adaptive.device' => \App\Modules\AdaptiveAuth\Http\Middleware\EnsureDeviceTrusted::class,
         ]);
         $middleware->validateCsrfTokens(except: [
             'payment/stripe/webhook',

@@ -49,19 +49,38 @@ class LoginApiController extends Controller
                 return $this->error('Email not verified. Please verify your email before logging in.', [], 403);
             }
 
+            // Adaptive Device & Location Verification Check
+            $adaptiveService = app(\App\Modules\AdaptiveAuth\Services\AdaptiveAuthService::class);
+            $assessment = $adaptiveService->evaluateEnvironment($user, $request);
+
+            if ($assessment['status'] === 'challenge_required') {
+                $challenge = $adaptiveService->createChallenge($user, $assessment['metadata']);
+                return $this->success([
+                    'status'          => 'CHALLENGE_REQUIRED',
+                    'challenge_token' => $challenge->challenge_token,
+                    'message'         => 'New device or unrecognized environment detected. Please verify OTP code.',
+                ], '2FA verification required', 200);
+            }
+
             $user->update([
                 'last_activity_at' => now(),
             ]);
 
             $userData = $user->only($this->select);
 
-            return $this->success([
+            $response = $this->success([
                 'token_type' => 'bearer',
                 'token'      => auth('api')->login($user),
                 'expires_in' => auth('api')->factory()->getTTL() * 60,
                 'user'       => $userData,
                 'data'       => $userData,
             ], 'Login successful');
+
+            if (isset($assessment['cookie'])) {
+                $response->withCookie($assessment['cookie']);
+            }
+
+            return $response;
         } catch (Exception $e) {
             return $this->error('An error occurred during login.', ['error' => $e->getMessage()], 500);
         }
