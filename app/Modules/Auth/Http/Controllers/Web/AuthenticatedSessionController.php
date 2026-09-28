@@ -49,6 +49,10 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        if (isset($assessment['device'])) {
+            $request->session()->put('adaptive_device_uuid', $assessment['device']->device_uuid);
+        }
+
         session()->flash('success', 'Welcome back!');
 
         $response = redirect()->intended(route('admin.dashboard', absolute: false));

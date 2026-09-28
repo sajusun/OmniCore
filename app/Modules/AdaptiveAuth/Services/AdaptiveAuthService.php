@@ -27,13 +27,21 @@ class AdaptiveAuthService
     }
 
     /**
+     * Get the device detector service instance.
+     */
+    public function getDetector(): DeviceDetectorService
+    {
+        return $this->detector;
+    }
+
+    /**
      * Evaluate the risk of an authentication attempt.
      *
      * @param Model $user
      * @param Request $request
      * @return array
      */
-    public function evaluateEnvironment(Model $user, Request $request): array
+    public function evaluateEnvironment(Model $user, Request $request, bool $isLoginAttempt = false): array
     {
         if (!config('adaptive_auth.enabled', true)) {
             return [
@@ -45,11 +53,20 @@ class AdaptiveAuthService
 
         $info = $this->detector->inspect($request);
 
-        // 1. Check if device exists and is trusted
+        // 1. Check if device exists
         $device = UserDevice::where('authenticatable_type', $user->getMorphClass())
             ->where('authenticatable_id', $user->getKey())
             ->where('device_uuid', $info['device_uuid'])
             ->first();
+
+        // If device was explicitly revoked by user
+        if ($device && (!$device->is_trusted || $device->revoked_at !== null)) {
+            return [
+                'status'  => 'revoked',
+                'device'  => $device,
+                'message' => 'This device access has been revoked.',
+            ];
+        }
 
         if ($device && $device->isCurrentlyTrusted()) {
             // Check location strictness policy
@@ -66,11 +83,15 @@ class AdaptiveAuthService
                 }
             }
 
-            // All checks passed! Update activity timestamp & IP
-            $device->touchActivity($info['ip'], $info['city'], $info['country']);
+            // All checks passed! Update activity timestamp & IP (throttled)
+            if (!$device->last_active_at || $device->last_active_at->diffInMinutes(now()) >= 5) {
+                $device->touchActivity($info['ip'], $info['city'], $info['country']);
+            }
 
-            // Record trusted login audit log
-            $this->logActivity($user, $device, $info, 'trusted_login');
+            // Record trusted login audit log ONLY if it is an explicit login attempt
+            if ($isLoginAttempt) {
+                $this->logActivity($user, $device, $info, 'trusted_login');
+            }
 
             return [
                 'status' => 'trusted',

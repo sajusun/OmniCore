@@ -85,6 +85,10 @@ class AdaptiveAuthWebController extends Controller
         $request->session()->regenerate();
         $request->session()->forget('adaptive_challenge_token');
 
+        if (isset($result['device'])) {
+            $request->session()->put('adaptive_device_uuid', $result['device']->device_uuid);
+        }
+
         session()->flash('success', 'Device successfully verified! Welcome back.');
 
         // Determine destination redirect

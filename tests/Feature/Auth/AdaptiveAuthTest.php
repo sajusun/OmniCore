@@ -434,7 +434,62 @@ class AdaptiveAuthTest extends TestCase
         ]);
         $this->assertEquals(0, $user->loginLogs()->count());
     }
+
+    public function test_revoked_device_is_immediately_logged_out_on_next_request(): void
+    {
+        $user = $this->createTestUser();
+
+        // 1. Create trusted device record for Browser B
+        $device = $this->adaptiveService->registerTrustedDevice($user, [
+            'device_uuid' => 'browser-b-uuid',
+            'device_name' => 'Browser B on Windows',
+            'ip'          => '127.0.0.1',
+        ]);
+
+        $this->assertTrue($device->isCurrentlyTrusted());
+
+        // 2. User revokes Device B (from Browser A)
+        $user->revokeDevice($device->id);
+        $device->refresh();
+        $this->assertFalse($device->isCurrentlyTrusted());
+
+        // 3. Browser B makes a request (e.g. reload or visit any page)
+        $cookieName = config('adaptive_auth.cookie_name', 'adaptive_device_token');
+
+        $response = $this->actingAs($user)
+            ->withSession(['adaptive_device_uuid' => 'browser-b-uuid'])
+            ->get(route('adaptive.devices.index'));
+
+        // 4. Assert Browser B is immediately kicked out, logged out, and redirected to login with error
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+        $response->assertSessionHasErrors(['email']);
+    }
+
+    public function test_revoked_device_receives_401_json_when_requesting_api(): void
+    {
+        $user = $this->createTestUser();
+
+        $device = $this->adaptiveService->registerTrustedDevice($user, [
+            'device_uuid' => 'browser-c-uuid',
+            'device_name' => 'Browser C',
+            'ip'          => '127.0.0.1',
+        ]);
+
+        $user->revokeDevice($device->id);
+
+        $response = $this->actingAs($user)
+            ->withSession(['adaptive_device_uuid' => 'browser-c-uuid'])
+            ->getJson(route('adaptive.devices.index'));
+
+        $response->assertStatus(401);
+        $response->assertJson([
+            'status' => 'REVOKED',
+        ]);
+        $this->assertGuest();
+    }
 }
+
 
 
 
