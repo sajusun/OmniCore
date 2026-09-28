@@ -61,6 +61,10 @@ class AdaptiveAuthService
 
         // If device was explicitly revoked by user
         if ($device && (!$device->is_trusted || $device->revoked_at !== null)) {
+            if ($isLoginAttempt) {
+                return $this->requireChallenge($user, $info, 'Previously revoked device attempting re-authentication');
+            }
+
             return [
                 'status'  => 'revoked',
                 'device'  => $device,
