@@ -11,6 +11,7 @@ use App\Modules\AdaptiveAuth\Services\AdaptiveAuthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 
 class AdaptiveAuthWebController extends Controller
@@ -88,7 +89,7 @@ class AdaptiveAuthWebController extends Controller
 
         // Determine destination redirect
         $targetRoute = config('adaptive_auth.redirect_route', 'admin.dashboard');
-        $redirectUrl = route_has($targetRoute) ? route($targetRoute) : url('/dashboard');
+        $redirectUrl = Route::has($targetRoute) ? route($targetRoute) : url('/dashboard');
 
         return redirect()->intended($redirectUrl)
             ->withCookie($result['cookie']);
@@ -113,6 +114,71 @@ class AdaptiveAuthWebController extends Controller
     }
 
     /**
+     * Display the Active & Trusted Devices Management Dashboard.
+     */
+    public function devices(Request $request): View
+    {
+        $user = $request->user();
+        $cookieName = config('adaptive_auth.cookie_name', 'adaptive_device_token');
+        $currentUuid = (string) $request->cookie($cookieName);
+
+        $devices = $user->devices()
+            ->orderByDesc('last_active_at')
+            ->get();
+
+        $logs = $user->loginLogs()
+            ->take(15)
+            ->get();
+
+        return view('adaptive_auth::devices', [
+            'devices'     => $devices,
+            'currentUuid' => $currentUuid,
+            'logs'        => $logs,
+            'user'        => $user,
+        ]);
+    }
+
+    /**
+     * Revoke access for a specific device.
+     */
+    public function revoke(Request $request, int $id): RedirectResponse
+    {
+        $user = $request->user();
+        $revoked = $user->revokeDevice($id);
+
+        if (!$revoked) {
+            return back()->with('error', 'Device could not be found or was already revoked.');
+        }
+
+        return back()->with('success', 'Device access has been revoked successfully.');
+    }
+
+    /**
+     * Revoke access for all other devices except the current session.
+     */
+    public function revokeOthers(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        $cookieName = config('adaptive_auth.cookie_name', 'adaptive_device_token');
+        $currentUuid = (string) $request->cookie($cookieName);
+
+        $count = $user->revokeOtherDevices($currentUuid);
+
+        return back()->with('success', "Access revoked from all other devices ({$count} device(s) updated).");
+    }
+
+    /**
+     * Clear all sign-in audit history logs for the authenticated user.
+     */
+    public function clearAuditLogs(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        $deleted = $user->clearLoginLogs();
+
+        return back()->with('success', "Sign-in audit history cleared successfully ({$deleted} log(s) removed).");
+    }
+
+    /**
      * Helper to mask email address for security display.
      */
     protected function maskEmail(string $email): string
@@ -128,3 +194,4 @@ class AdaptiveAuthWebController extends Controller
         return $maskedName . '@' . $domain;
     }
 }
+

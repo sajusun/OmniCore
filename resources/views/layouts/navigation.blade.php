@@ -36,8 +36,8 @@
             <!-- Settings Dropdown -->
             <ul class="navbar-nav ms-auto align-items-sm-center">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#"
-                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         <span>{{ Auth::user()->name }}</span>
                         <svg class="fill-current" style="width:16px;height:16px;" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20">

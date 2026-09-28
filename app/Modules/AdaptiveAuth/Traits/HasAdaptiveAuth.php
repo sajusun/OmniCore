@@ -86,4 +86,13 @@ trait HasAdaptiveAuth
             'revoked_at' => now(),
         ]);
     }
+
+    /**
+     * Clear all login audit logs for this user.
+     */
+    public function clearLoginLogs(): int
+    {
+        return $this->loginLogs()->delete();
+    }
 }
+

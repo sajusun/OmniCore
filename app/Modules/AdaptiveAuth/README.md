@@ -155,12 +155,19 @@ public function login(Request $request): JsonResponse
 * `GET  /adaptive-auth/challenge?token={challenge_token}` &mdash; Beautiful OTP input screen.
 * `POST /adaptive-auth/verify` &mdash; Submits OTP code & authenticates user.
 * `POST /adaptive-auth/resend` &mdash; Resends fresh OTP code with cooldown.
+* `GET  /adaptive-auth/devices` &mdash; **Security Dashboard (Blade view)** listing recognized devices, current session, and login audit logs.
+* `POST /adaptive-auth/devices/{id}/revoke` &mdash; Revokes access for a specific device.
+* `POST /adaptive-auth/devices/revoke-others` &mdash; Revokes access for all other devices.
+* `POST /adaptive-auth/audit-logs/clear` &mdash; Clears all sign-in audit history logs.
 
 ### API Endpoints:
-* `POST /api/adaptive-auth/verify` &mdash; Accepts `{ challenge_token, otp }`, returns Bearer Token.
-* `POST /api/adaptive-auth/resend` &mdash; Accepts `{ challenge_token }`.
-* `GET  /api/adaptive-auth/devices` &mdash; List active & trusted devices.
+* `POST   /api/adaptive-auth/verify` &mdash; Accepts `{ challenge_token, otp }`, returns Bearer Token.
+* `POST   /api/adaptive-auth/resend` &mdash; Accepts `{ challenge_token }`.
+* `GET    /api/adaptive-auth/devices` &mdash; List active & trusted devices.
 * `DELETE /api/adaptive-auth/devices/{id}` &mdash; Revoke a trusted device.
+* `DELETE /api/adaptive-auth/audit-logs` &mdash; Clear all sign-in audit history logs.
+
+
 
 ---
 

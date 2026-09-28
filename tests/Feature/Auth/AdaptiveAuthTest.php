@@ -283,4 +283,158 @@ class AdaptiveAuthTest extends TestCase
             'status' => false,
         ]);
     }
+
+    public function test_web_authenticated_user_can_view_devices_page(): void
+    {
+        $user = $this->createTestUser();
+
+        // Establish a trusted device
+        $this->adaptiveService->registerTrustedDevice($user, [
+            'device_uuid' => 'test-device-uuid-web',
+            'device_name' => 'Chrome on Windows 11',
+            'ip'          => '127.0.0.1',
+        ]);
+
+        $response = $this->actingAs($user)->get(route('adaptive.devices.index'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Recognized Devices');
+        $response->assertSee('Chrome on Windows 11');
+    }
+
+    public function test_web_authenticated_user_can_revoke_device(): void
+    {
+        $user = $this->createTestUser();
+
+        $device = $this->adaptiveService->registerTrustedDevice($user, [
+            'device_uuid' => 'device-to-revoke',
+            'device_name' => 'Firefox on Linux',
+            'ip'          => '127.0.0.1',
+        ]);
+
+        $this->assertTrue($device->isCurrentlyTrusted());
+
+        $response = $this->actingAs($user)->post(route('adaptive.devices.revoke', $device->id));
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        $device->refresh();
+        $this->assertFalse($device->isCurrentlyTrusted());
+    }
+
+    public function test_web_authenticated_user_can_revoke_other_devices(): void
+    {
+        $user = $this->createTestUser();
+
+        $device1 = $this->adaptiveService->registerTrustedDevice($user, [
+            'device_uuid' => 'current-device-uuid',
+            'device_name' => 'Current Chrome Device',
+            'ip'          => '127.0.0.1',
+        ]);
+
+        $device2 = $this->adaptiveService->registerTrustedDevice($user, [
+            'device_uuid' => 'other-device-uuid',
+            'device_name' => 'Old Laptop',
+            'ip'          => '127.0.0.1',
+        ]);
+
+        $cookieName = config('adaptive_auth.cookie_name', 'adaptive_device_token');
+
+        $response = $this->actingAs($user)
+            ->withCookie($cookieName, 'current-device-uuid')
+            ->post(route('adaptive.devices.revoke_others'));
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        $device1->refresh();
+        $device2->refresh();
+
+        $this->assertTrue($device1->isCurrentlyTrusted());
+        $this->assertFalse($device2->isCurrentlyTrusted());
+    }
+
+    public function test_web_verify_challenge_submission_logs_in_user_and_redirects(): void
+    {
+        Mail::fake();
+
+        $user = $this->createTestUser();
+        $meta = [
+            'device_uuid' => 'web-verify-device-uuid',
+            'device_name' => 'Firefox on Windows 11',
+            'ip'          => '127.0.0.1',
+        ];
+
+        $challenge = $this->adaptiveService->createChallenge($user, $meta);
+
+        $sentMail = null;
+        Mail::assertSent(AdaptiveOtpMail::class, function ($mail) use (&$sentMail) {
+            $sentMail = $mail;
+            return true;
+        });
+
+        $this->assertNotNull($sentMail);
+        $otp = $sentMail->otpCode;
+
+        // Submit to Web verify route
+        $response = $this->post(route('adaptive.challenge.verify'), [
+            'challenge_token' => $challenge->challenge_token,
+            'otp'             => $otp,
+        ]);
+
+        $response->assertRedirect();
+        $this->assertAuthenticatedAs($user);
+        $cookieName = config('adaptive_auth.cookie_name', 'adaptive_device_token');
+        $response->assertCookie($cookieName);
+    }
+
+    public function test_web_authenticated_user_can_clear_audit_logs(): void
+    {
+        $user = $this->createTestUser();
+
+        // Create some sample logs for this user
+        $user->loginLogs()->create([
+            'ip_address'     => '127.0.0.1',
+            'status'         => 'trusted_login',
+            'created_at'     => now(),
+        ]);
+        $user->loginLogs()->create([
+            'ip_address'     => '127.0.0.1',
+            'status'         => 'challenge_passed',
+            'created_at'     => now(),
+        ]);
+
+        $this->assertEquals(2, $user->loginLogs()->count());
+
+        $response = $this->actingAs($user)->post(route('adaptive.devices.clear_logs'));
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+        $this->assertEquals(0, $user->loginLogs()->count());
+    }
+
+    public function test_api_authenticated_user_can_clear_audit_logs(): void
+    {
+        $user = $this->createTestUser();
+
+        $user->loginLogs()->create([
+            'ip_address'     => '127.0.0.1',
+            'status'         => 'trusted_login',
+            'created_at'     => now(),
+        ]);
+
+        $this->assertEquals(1, $user->loginLogs()->count());
+
+        $response = $this->actingAs($user, 'api')->deleteJson('/api/adaptive-auth/audit-logs');
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => true,
+        ]);
+        $this->assertEquals(0, $user->loginLogs()->count());
+    }
 }
+
+
+

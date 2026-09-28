@@ -14,5 +14,7 @@ Route::prefix('adaptive-auth')->group(function () {
     Route::middleware(['auth:sanctum,api'])->group(function () {
         Route::get('/devices', [AdaptiveAuthApiController::class, 'listDevices']);
         Route::delete('/devices/{id}', [AdaptiveAuthApiController::class, 'revokeDevice']);
+        Route::delete('/audit-logs', [AdaptiveAuthApiController::class, 'clearAuditLogs']);
     });
 });
+

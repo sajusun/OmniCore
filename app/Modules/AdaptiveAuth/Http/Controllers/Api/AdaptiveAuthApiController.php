@@ -163,4 +163,23 @@ class AdaptiveAuthApiController extends Controller
 
         return $this->success([], 'Device access revoked successfully.');
     }
+
+    /**
+     * Clear all sign-in audit logs for the authenticated user via API.
+     */
+    public function clearAuditLogs(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return $this->error('Unauthenticated', [], 401);
+        }
+
+        $deleted = $user->clearLoginLogs();
+
+        return $this->success([
+            'deleted_count' => $deleted,
+        ], 'Audit logs cleared successfully.');
+    }
 }
+
