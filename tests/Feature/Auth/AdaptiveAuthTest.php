@@ -62,6 +62,7 @@ class AdaptiveAuthTest extends TestCase
 
     public function test_first_login_auto_trusts_device_when_configured(): void
     {
+        config(['adaptive_auth.trust_first_login' => true]);
         $user = $this->createTestUser();
 
         $request = Request::create('/login', 'POST', [], [], [], [
@@ -83,17 +84,31 @@ class AdaptiveAuthTest extends TestCase
         ]);
     }
 
-    public function test_same_trusted_device_with_cookie_is_granted_access(): void
+    public function test_login_requires_challenge_when_no_trusted_devices_exist_and_trust_first_disabled(): void
     {
+        config(['adaptive_auth.trust_first_login' => false]);
         $user = $this->createTestUser();
 
-        $request1 = Request::create('/login', 'POST', [], [], [], [
+        $request = Request::create('/login', 'POST', [], [], [], [
             'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/125.0.0.0 Safari/537.36',
             'REMOTE_ADDR'     => '127.0.0.1',
         ]);
 
-        $result1 = $this->adaptiveService->evaluateEnvironment($user, $request1);
-        $deviceUuid = $result1['device']->device_uuid;
+        $result = $this->adaptiveService->evaluateEnvironment($user, $request, isLoginAttempt: true);
+
+        $this->assertEquals('challenge_required', $result['status']);
+    }
+
+    public function test_same_trusted_device_with_cookie_is_granted_access(): void
+    {
+        $user = $this->createTestUser();
+
+        $device = $this->adaptiveService->registerTrustedDevice($user, [
+            'device_uuid' => 'test-device-uuid-1',
+            'device_name' => 'Chrome on Windows',
+            'ip'          => '127.0.0.1',
+        ]);
+        $deviceUuid = $device->device_uuid;
 
         // Second login with the device cookie set
         $cookieName = config('adaptive_auth.cookie_name', 'adaptive_device_token');
@@ -222,13 +237,11 @@ class AdaptiveAuthTest extends TestCase
     {
         $user = $this->createTestUser();
 
-        $request = Request::create('/login', 'POST', [], [], [], [
-            'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/125.0.0.0 Safari/537.36',
-            'REMOTE_ADDR'     => '127.0.0.1',
+        $device = $this->adaptiveService->registerTrustedDevice($user, [
+            'device_uuid' => 'device-to-revoke-uuid',
+            'device_name' => 'Chrome on Windows',
+            'ip'          => '127.0.0.1',
         ]);
-
-        $result = $this->adaptiveService->evaluateEnvironment($user, $request);
-        $device = $result['device'];
 
         $this->assertTrue($device->isCurrentlyTrusted());
 
@@ -487,6 +500,45 @@ class AdaptiveAuthTest extends TestCase
             'status' => 'REVOKED',
         ]);
         $this->assertGuest();
+    }
+
+    public function test_bootstrap_registration_device_allows_frictionless_first_login_and_challenges_other_devices(): void
+    {
+        $user = $this->createTestUser();
+
+        // 1. Simulate registration device bootstrapping
+        $request = \Illuminate\Http\Request::create('/register', 'POST', [], [], [], [
+            'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0',
+            'REMOTE_ADDR'     => '192.168.1.100',
+        ]);
+
+        $bootstrapped = $this->adaptiveService->bootstrapRegistrationDevice($user, $request);
+        $deviceUuid = $bootstrapped['device']->device_uuid;
+
+        $this->assertTrue($bootstrapped['device']->isCurrentlyTrusted());
+        $this->assertEquals(1, $user->devices()->count());
+
+        // 2. Logging in from the SAME registration device -> Zero 2FA friction (status: trusted)
+        $sameDeviceRequest = \Illuminate\Http\Request::create('/login', 'POST', [], [
+            config('adaptive_auth.cookie_name', 'adaptive_device_token') => $deviceUuid,
+        ], [], [
+            'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0',
+            'REMOTE_ADDR'     => '192.168.1.100',
+        ]);
+
+        $evalSame = $this->adaptiveService->evaluateEnvironment($user, $sameDeviceRequest, isLoginAttempt: true);
+        $this->assertEquals('trusted', $evalSame['status']);
+
+        // 3. Someone else attempting login from an UNRECOGNIZED device -> Challenge required!
+        $otherDeviceRequest = \Illuminate\Http\Request::create('/login', 'POST', [], [
+            config('adaptive_auth.cookie_name', 'adaptive_device_token') => 'attacker-unknown-uuid',
+        ], [], [
+            'HTTP_USER_AGENT' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0) Safari/604.1',
+            'REMOTE_ADDR'     => '203.0.113.55',
+        ]);
+
+        $evalOther = $this->adaptiveService->evaluateEnvironment($user, $otherDeviceRequest, isLoginAttempt: true);
+        $this->assertEquals('challenge_required', $evalOther['status']);
     }
 }
 

@@ -103,7 +103,11 @@ class RegisterApiController extends Controller
                 return $this->error('Invalid OTP code. Please try again.', null, 422);
             }
 
-            return $this->success(
+            // Bootstrap verified registration device as primary trusted device
+            $adaptiveService = app(\App\Modules\AdaptiveAuth\Services\AdaptiveAuthService::class);
+            $bootstrapped = $adaptiveService->bootstrapRegistrationDevice($user, $request);
+
+            $response = $this->success(
                 data: [
                     'token_type'       => 'bearer',
                     'token'            => auth('api')->login($user),
@@ -115,6 +119,12 @@ class RegisterApiController extends Controller
                 ],
                 message: 'Email verified successfully.'
             );
+
+            if (isset($bootstrapped['cookie'])) {
+                $response->withCookie($bootstrapped['cookie']);
+            }
+
+            return $response;
         } catch (RuntimeException $e) {
             Log::error('Email verification failed: ' . $e->getMessage(), ['exception' => $e]);
             return $this->error($e->getMessage(), null, 422);

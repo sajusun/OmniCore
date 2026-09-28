@@ -110,7 +110,7 @@ class AdaptiveAuthService
             ->trusted()
             ->exists();
 
-        if (!$hasAnyTrustedDevice && config('adaptive_auth.trust_first_login', true)) {
+        if (!$hasAnyTrustedDevice && config('adaptive_auth.trust_first_login', false)) {
             $newDevice = $this->registerTrustedDevice($user, $info);
             $this->logActivity($user, $newDevice, $info, 'trusted_login', 'First device bootstrapped as trusted');
 
@@ -123,6 +123,35 @@ class AdaptiveAuthService
 
         // 3. New / Unrecognized environment: Challenge required!
         return $this->requireChallenge($user, $info, 'New device or unrecognized environment');
+    }
+
+    /**
+     * Bootstrap the current registration / verification environment as the user's primary trusted device.
+     */
+    public function bootstrapRegistrationDevice(Model $user, Request $request): array
+    {
+        $info = $this->detector->inspect($request);
+
+        $device = $this->registerTrustedDevice($user, $info);
+
+        $this->logActivity(
+            $user,
+            $device,
+            $info,
+            'trusted_login',
+            'Primary device registered during account registration / verification'
+        );
+
+        $cookie = $this->createDeviceCookie($device->device_uuid);
+
+        if ($request->hasSession()) {
+            $request->session()->put('adaptive_device_uuid', $device->device_uuid);
+        }
+
+        return [
+            'device' => $device,
+            'cookie' => $cookie,
+        ];
     }
 
     /**

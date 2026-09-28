@@ -68,9 +68,17 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        // Bootstrap registration device as trusted
+        $adaptiveService = app(\App\Modules\AdaptiveAuth\Services\AdaptiveAuthService::class);
+        $bootstrapped = $adaptiveService->bootstrapRegistrationDevice($user, $request);
+
         session()->put('success', 'Your account has been created successfully. Please verify your email.');
 
-        return redirect()->intended(route('verify.otp.page'))->with('email', $request->email);
+        $response = redirect()->intended(route('verify.otp.page'))->with('email', $request->email);
+        if (isset($bootstrapped['cookie'])) {
+            $response->withCookie($bootstrapped['cookie']);
+        }
+        return $response;
     }
 
     public function otpPage(){
@@ -106,7 +114,17 @@ class RegisteredUserController extends Controller
             $user->otp_expires_at    = null;
             $user->save();
 
-            return redirect()->intended(route('login'));
+            // Refresh/Bootstrap verified registration device as primary trusted device
+            $adaptiveService = app(\App\Modules\AdaptiveAuth\Services\AdaptiveAuthService::class);
+            $bootstrapped = $adaptiveService->bootstrapRegistrationDevice($user, $request);
+
+            session()->flash('success', 'Email verified successfully. You can now log in.');
+
+            $response = redirect()->intended(route('login'));
+            if (isset($bootstrapped['cookie'])) {
+                $response->withCookie($bootstrapped['cookie']);
+            }
+            return $response;
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage());
         }

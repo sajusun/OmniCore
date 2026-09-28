@@ -61,7 +61,7 @@ return [
     | will have their current device automatically trusted without an initial challenge.
     | If false, even the first device will require email OTP confirmation.
     */
-    'trust_first_login' => env('ADAPTIVE_AUTH_TRUST_FIRST_LOGIN', true),
+    'trust_first_login' => env('ADAPTIVE_AUTH_TRUST_FIRST_LOGIN', false),
 
     /*
     |--------------------------------------------------------------------------

@@ -51,7 +51,7 @@ class LoginApiController extends Controller
 
             // Adaptive Device & Location Verification Check
             $adaptiveService = app(\App\Modules\AdaptiveAuth\Services\AdaptiveAuthService::class);
-            $assessment = $adaptiveService->evaluateEnvironment($user, $request);
+            $assessment = $adaptiveService->evaluateEnvironment($user, $request, isLoginAttempt: true);
 
             if ($assessment['status'] === 'challenge_required') {
                 $challenge = $adaptiveService->createChallenge($user, $assessment['metadata']);
