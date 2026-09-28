@@ -28,19 +28,34 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        $user = Auth::user();
+        if ($user->status != 'active' || !$user->hasAnyRole(['admin', 'super_admin'])) {
+            Auth::logout();
+            return redirect()->route('login')->withErrors([
+                'email' => 'You do not have administrative access or your account is inactive.',
+            ]);
+        }
+
+        // Adaptive Device & IP Verification Check
+        $adaptiveService = app(\App\Modules\AdaptiveAuth\Services\AdaptiveAuthService::class);
+        $assessment = $adaptiveService->evaluateEnvironment($user, $request);
+
+        if ($assessment['status'] === 'challenge_required') {
+            $challenge = $adaptiveService->createChallenge($user, $assessment['metadata']);
+            Auth::logout();
+            $request->session()->put('adaptive_challenge_token', $challenge->challenge_token);
+            return redirect()->route('adaptive.challenge', ['token' => $challenge->challenge_token]);
+        }
+
         $request->session()->regenerate();
 
         session()->flash('success', 'Welcome back!');
 
-        $user = Auth::user();
-        if ($user->status == 'active' && $user->hasAnyRole(['admin', 'super_admin'])) {
-            return redirect()->intended(route('admin.dashboard', absolute: false));
+        $response = redirect()->intended(route('admin.dashboard', absolute: false));
+        if (isset($assessment['cookie'])) {
+            $response->withCookie($assessment['cookie']);
         }
-
-        Auth::logout();
-        return redirect()->route('login')->withErrors([
-            'email' => 'You do not have administrative access or your account is inactive.',
-        ]);
+        return $response;
     }
 
     /**
