@@ -122,14 +122,9 @@
                     </h3>
                     <div class="card-options">
                         @if ($devices->where('is_trusted', true)->count() > 1)
-                        <form method="POST" action="{{ route('adaptive.devices.revoke_others') }}"
-                            onsubmit="return confirm('Are you sure you want to revoke access for all other devices? They will be prompted for OTP on next login.');"
-                            class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-danger btn-sm">
-                                <i class="fe fe-log-out me-1"></i>Revoke Other Devices
-                            </button>
-                        </form>
+                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmRevokeOthers()">
+                            <i class="fe fe-log-out me-1"></i>Revoke Other Devices
+                        </button>
                         @endif
                     </div>
                 </div>
@@ -205,14 +200,10 @@
                                     </td>
                                     <td class="text-center">
                                         @if ($device->isCurrentlyTrusted() && !$isCurrent)
-                                        <form method="POST" action="{{ route('adaptive.devices.revoke', $device->id) }}"
-                                            onsubmit="return confirm('Revoke access for {{ $device->device_name }}?');"
-                                            class="d-inline">
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                <i class="fe fe-slash me-1"></i>Revoke
-                                            </button>
-                                        </form>
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                            onclick="confirmRevokeDevice({{ $device->id }}, '{{ addslashes($device->device_name) }}')">
+                                            <i class="fe fe-slash me-1"></i>Revoke
+                                        </button>
                                         @elseif ($isCurrent)
                                         <span class="badge bg-info-transparent text-info">Active Now</span>
                                         @else
@@ -247,14 +238,9 @@
                         <i class="fe fe-activity me-2 text-info"></i>Recent Sign-In Audit History
                     </h3>
                     <div class="card-options">
-                        <form method="POST" action="{{ route('adaptive.devices.clear_logs') }}"
-                            onsubmit="return confirm('Are you sure you want to clear your entire sign-in audit history?');"
-                            class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-danger btn-sm">
-                                <i class="fe fe-trash-2 me-1"></i>Clear Audit History
-                            </button>
-                        </form>
+                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmClearAuditLogs()">
+                            <i class="fe fe-trash-2 me-1"></i>Clear Audit History
+                        </button>
                     </div>
                 </div>
 
@@ -306,6 +292,75 @@
     @endif
     <!-- ROW-3 END -->
 
+    {{-- Reusable Custom Confirmation Modals from components/modal --}}
+    <x-modal.confirm-delete 
+        name="confirm-device-revoke" 
+        action="" 
+        title="Revoke Device Access" 
+        message="Are you sure you want to revoke access for this device? It will be immediately logged out and will require 2FA verification to sign in again." 
+        method="POST" 
+        buttonText="Revoke Access"
+        buttonIcon="bi-slash-circle" />
+
+    <x-modal.confirm-delete 
+        name="confirm-revoke-others" 
+        action="{{ route('adaptive.devices.revoke_others') }}" 
+        title="Revoke All Other Devices" 
+        message="Are you sure you want to revoke access for all other devices? All other active sessions will be terminated immediately." 
+        method="POST" 
+        buttonText="Revoke Other Devices"
+        buttonIcon="bi-box-arrow-right" />
+
+    <x-modal.confirm-delete 
+        name="confirm-clear-logs" 
+        action="{{ route('adaptive.devices.clear_logs') }}" 
+        title="Clear Sign-In Audit History" 
+        message="Are you sure you want to permanently clear your entire sign-in audit history? This action cannot be undone." 
+        method="POST" 
+        buttonText="Clear History"
+        buttonIcon="bi-trash" />
+
+    {{-- Reusable Status Modal --}}
+    <x-modal.status />
+
 </div>
 <!-- CONTAINER END -->
 @endsection
+
+@push('scripts')
+<script>
+    function confirmRevokeDevice(id, deviceName) {
+        let url = "{{ route('adaptive.devices.revoke', ':id') }}";
+        url = url.replace(':id', id);
+        const form = document.getElementById('confirm-delete-form-confirm-device-revoke');
+        if (form) {
+            form.action = url;
+        }
+        const label = document.getElementById('modal_confirm-device-revoke_label');
+        if (label && deviceName) {
+            label.textContent = 'Revoke Access: ' + deviceName;
+        }
+        const modalElement = document.getElementById('modal_confirm-device-revoke');
+        if (modalElement) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+    }
+
+    function confirmRevokeOthers() {
+        const modalElement = document.getElementById('modal_confirm-revoke-others');
+        if (modalElement) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+    }
+
+    function confirmClearAuditLogs() {
+        const modalElement = document.getElementById('modal_confirm-clear-logs');
+        if (modalElement) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+    }
+</script>
+@endpush

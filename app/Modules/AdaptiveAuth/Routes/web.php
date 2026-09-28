@@ -14,9 +14,9 @@ Route::middleware(['web'])->prefix('adaptive-auth')->name('adaptive.')->group(fu
     // Authenticated Device Management Flow
     Route::middleware(['auth'])->group(function () {
         Route::get('/devices', [AdaptiveAuthWebController::class, 'devices'])->name('devices.index');
-        Route::post('/devices/{id}/revoke', [AdaptiveAuthWebController::class, 'revoke'])->name('devices.revoke');
-        Route::post('/devices/revoke-others', [AdaptiveAuthWebController::class, 'revokeOthers'])->name('devices.revoke_others');
-        Route::post('/audit-logs/clear', [AdaptiveAuthWebController::class, 'clearAuditLogs'])->name('devices.clear_logs');
+        Route::match(['post', 'delete'], '/devices/{id}/revoke', [AdaptiveAuthWebController::class, 'revoke'])->name('devices.revoke');
+        Route::match(['post', 'delete'], '/devices/revoke-others', [AdaptiveAuthWebController::class, 'revokeOthers'])->name('devices.revoke_others');
+        Route::match(['post', 'delete'], '/audit-logs/clear', [AdaptiveAuthWebController::class, 'clearAuditLogs'])->name('devices.clear_logs');
     });
 });
 

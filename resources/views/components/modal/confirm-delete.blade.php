@@ -4,6 +4,8 @@
 'title' => 'Delete Confirmation',
 'message' => 'Are you sure you want to delete this item? This action cannot be undone.',
 'method' => 'DELETE',
+'buttonText' => 'Delete',
+'buttonIcon' => 'bi-trash',
 ])
 
 {{-- Bootstrap Modal Component without any  properties --}}
@@ -31,7 +33,7 @@
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal" style="border-radius: 0;">Cancel</button>
                     <button type="submit" class="btn btn-danger px-4" style="border-radius: 0;">
-                        <i class="bi bi-trash me-1"></i> Delete
+                        <i class="bi {{ $buttonIcon }} me-1"></i> {{ $buttonText }}
                     </button>
                 </div>
             </form>

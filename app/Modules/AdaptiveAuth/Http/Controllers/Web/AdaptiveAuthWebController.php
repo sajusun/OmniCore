@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Modules\AdaptiveAuth\Models\DeviceLoginChallenge;
 use App\Modules\AdaptiveAuth\Services\AdaptiveAuthService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -145,13 +146,26 @@ class AdaptiveAuthWebController extends Controller
     /**
      * Revoke access for a specific device.
      */
-    public function revoke(Request $request, int $id): RedirectResponse
+    public function revoke(Request $request, int $id): RedirectResponse|JsonResponse
     {
         $user = $request->user();
         $revoked = $user->revokeDevice($id);
 
         if (!$revoked) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Device could not be found or was already revoked.',
+                ], 404);
+            }
             return back()->with('error', 'Device could not be found or was already revoked.');
+        }
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status'  => true,
+                'message' => 'Device access has been revoked successfully.',
+            ]);
         }
 
         return back()->with('success', 'Device access has been revoked successfully.');
@@ -160,7 +174,7 @@ class AdaptiveAuthWebController extends Controller
     /**
      * Revoke access for all other devices except the current session.
      */
-    public function revokeOthers(Request $request): RedirectResponse
+    public function revokeOthers(Request $request): RedirectResponse|JsonResponse
     {
         $user = $request->user();
         $cookieName = config('adaptive_auth.cookie_name', 'adaptive_device_token');
@@ -168,16 +182,30 @@ class AdaptiveAuthWebController extends Controller
 
         $count = $user->revokeOtherDevices($currentUuid);
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status'  => true,
+                'message' => "Access revoked from all other devices ({$count} device(s) updated).",
+            ]);
+        }
+
         return back()->with('success', "Access revoked from all other devices ({$count} device(s) updated).");
     }
 
     /**
      * Clear all sign-in audit history logs for the authenticated user.
      */
-    public function clearAuditLogs(Request $request): RedirectResponse
+    public function clearAuditLogs(Request $request): RedirectResponse|JsonResponse
     {
         $user = $request->user();
         $deleted = $user->clearLoginLogs();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status'  => true,
+                'message' => "Sign-in audit history cleared successfully ({$deleted} log(s) removed).",
+            ]);
+        }
 
         return back()->with('success', "Sign-in audit history cleared successfully ({$deleted} log(s) removed).");
     }
