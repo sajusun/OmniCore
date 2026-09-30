@@ -28,6 +28,7 @@
         "mll-lab/laravel-graphiql": "^4.0",
         "nuwave/lighthouse": "^6.61",
         "nwidart/laravel-modules": "^12.0",
+        "pragmarx/google2fa-laravel": "^3.0",
         "predis/predis": "^3.2",
         "pusher/pusher-php-server": "^7.2",
         "simplesoftwareio/simple-qrcode": "^4.2",

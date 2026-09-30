@@ -10,11 +10,15 @@ Route::prefix('adaptive-auth')->group(function () {
     Route::post('/verify', [AdaptiveAuthApiController::class, 'verify']);
     Route::post('/resend', [AdaptiveAuthApiController::class, 'resend']);
 
-    // Authenticated device management endpoints
+    // Authenticated device & MFA management endpoints
     Route::middleware(['auth:sanctum,api'])->group(function () {
         Route::get('/devices', [AdaptiveAuthApiController::class, 'listDevices']);
         Route::delete('/devices/{id}', [AdaptiveAuthApiController::class, 'revokeDevice']);
         Route::delete('/audit-logs', [AdaptiveAuthApiController::class, 'clearAuditLogs']);
+
+        // TOTP MFA Endpoints
+        Route::post('/totp/setup', [AdaptiveAuthApiController::class, 'totpSetup']);
+        Route::post('/totp/enable', [AdaptiveAuthApiController::class, 'totpEnable']);
+        Route::post('/totp/disable', [AdaptiveAuthApiController::class, 'totpDisable']);
     });
 });
-

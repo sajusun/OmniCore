@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Modules\AdaptiveAuth\Providers;
 
 use App\Modules\AdaptiveAuth\Http\Middleware\EnsureDeviceTrusted;
+use App\Modules\AdaptiveAuth\Http\Middleware\EnsureStepUpVerified;
 use App\Modules\AdaptiveAuth\Services\AdaptiveAuthService;
 use App\Modules\AdaptiveAuth\Services\DeviceDetectorService;
+use App\Modules\AdaptiveAuth\Services\TotpService;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -26,8 +28,15 @@ class AdaptiveAuthServiceProvider extends ServiceProvider
             return new DeviceDetectorService();
         });
 
+        $this->app->singleton(TotpService::class, function ($app) {
+            return new TotpService();
+        });
+
         $this->app->singleton(AdaptiveAuthService::class, function ($app) {
-            return new AdaptiveAuthService($app->make(DeviceDetectorService::class));
+            return new AdaptiveAuthService(
+                $app->make(DeviceDetectorService::class),
+                $app->make(TotpService::class)
+            );
         });
     }
 
@@ -42,10 +51,11 @@ class AdaptiveAuthServiceProvider extends ServiceProvider
         // 2. Load module blade views (accessible as 'adaptive_auth::challenge' etc.)
         $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'adaptive_auth');
 
-        // 3. Register middleware alias
+        // 3. Register middleware aliases
         /** @var Router $router */
         $router = $this->app->make(Router::class);
         $router->aliasMiddleware('adaptive.device', EnsureDeviceTrusted::class);
+        $router->aliasMiddleware('adaptive.step_up', EnsureStepUpVerified::class);
 
         // 4. Register Web Routes
         if (file_exists(__DIR__ . '/../Routes/web.php')) {

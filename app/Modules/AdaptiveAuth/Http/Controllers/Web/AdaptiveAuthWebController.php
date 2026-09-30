@@ -8,17 +8,20 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Modules\AdaptiveAuth\Models\DeviceLoginChallenge;
 use App\Modules\AdaptiveAuth\Services\AdaptiveAuthService;
+use App\Modules\AdaptiveAuth\Services\TotpService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 
 class AdaptiveAuthWebController extends Controller
 {
     public function __construct(
-        protected AdaptiveAuthService $adaptiveAuth
+        protected AdaptiveAuthService $adaptiveAuth,
+        protected TotpService $totp
     ) {
     }
 
@@ -81,7 +84,7 @@ class AdaptiveAuthWebController extends Controller
 
         $user = $result['user'];
 
-        // Automatically authenticate user into web session
+        // Automatically authenticate user into database web session
         Auth::login($user, remember: true);
         $request->session()->regenerate();
         $request->session()->forget('adaptive_challenge_token');
@@ -119,6 +122,93 @@ class AdaptiveAuthWebController extends Controller
     }
 
     /**
+     * Display TOTP MFA Setup (QR Code + Manual Secret).
+     */
+    public function showTotpSetup(Request $request): View
+    {
+        $user = $request->user();
+        $secretKey = $this->totp->generateSecretKey();
+        $qrCodeSvg = $this->totp->getQrCodeSvg($user, $secretKey);
+
+        // Store temporary secret in session
+        $request->session()->put('totp_setup_secret', $secretKey);
+
+        return view('adaptive_auth::totp_setup', [
+            'user'       => $user,
+            'secretKey'  => $secretKey,
+            'qrCodeSvg'  => $qrCodeSvg,
+            'hasTotp'    => $this->totp->hasTotpEnabled($user),
+        ]);
+    }
+
+    /**
+     * Enable TOTP Authenticator after 6-digit confirmation.
+     */
+    public function enableTotp(Request $request): RedirectResponse|JsonResponse
+    {
+        $request->validate([
+            'code'       => ['required', 'string', 'size:6'],
+            'secret_key' => ['nullable', 'string'],
+        ]);
+
+        $user = $request->user();
+        $secretKey = $request->input('secret_key') ?: (string) $request->session()->get('totp_setup_secret');
+
+        if (!$secretKey) {
+            return back()->withErrors(['code' => 'Session expired. Please restart MFA setup.']);
+        }
+
+        $result = $this->totp->enableTotp($user, $secretKey, $request->input('code'));
+
+        if (!$result['success']) {
+            return back()->withErrors(['code' => $result['message']]);
+        }
+
+        $request->session()->forget('totp_setup_secret');
+
+        if ($request->wantsJson()) {
+            return response()->json($result);
+        }
+
+        return redirect()->route('adaptive.devices.index')
+            ->with('success', 'Authenticator App MFA enabled successfully! Save your recovery codes.')
+            ->with('recovery_codes', $result['recovery_codes']);
+    }
+
+    /**
+     * Disable TOTP Authenticator.
+     */
+    public function disableTotp(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        $this->totp->disableTotp($user);
+
+        return back()->with('success', 'Two-Factor Authenticator has been disabled.');
+    }
+
+    /**
+     * Step-Up Re-Authentication for Sensitive Actions.
+     */
+    public function confirmStepUp(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'password' => ['required', 'string'],
+        ]);
+
+        $user = $request->user();
+
+        if (!Hash::check($request->password, $user->password)) {
+            return back()->withErrors(['password' => 'The provided password was incorrect.']);
+        }
+
+        // Mark sensitive action window as confirmed in session
+        $request->session()->put('auth.step_up_confirmed_at', now()->timestamp);
+
+        $intended = $request->session()->pull('url.intended', url()->previous());
+        return redirect()->to($intended);
+    }
+
+    /**
      * Display the Active & Trusted Devices Management Dashboard.
      */
     public function devices(Request $request): View
@@ -140,6 +230,7 @@ class AdaptiveAuthWebController extends Controller
             'currentUuid' => $currentUuid,
             'logs'        => $logs,
             'user'        => $user,
+            'hasTotp'     => $this->totp->hasTotpEnabled($user),
         ]);
     }
 
@@ -226,4 +317,3 @@ class AdaptiveAuthWebController extends Controller
         return $maskedName . '@' . $domain;
     }
 }
-

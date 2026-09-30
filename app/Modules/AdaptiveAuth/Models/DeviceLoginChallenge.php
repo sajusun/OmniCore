@@ -57,9 +57,19 @@ class DeviceLoginChallenge extends Model
         return $this->verified_at !== null;
     }
 
-    public function hasExceededAttempts(): bool
+    public function isLocked(): bool
     {
         return $this->attempts >= $this->max_attempts;
+    }
+
+    public function hasExceededAttempts(): bool
+    {
+        return $this->isLocked();
+    }
+
+    public function getRemainingAttempts(): int
+    {
+        return max(0, $this->max_attempts - $this->attempts);
     }
 
     public function canResend(): bool
@@ -75,6 +85,15 @@ class DeviceLoginChallenge extends Model
         return $this->resend_available_at->isPast();
     }
 
+    public function getCooldownRemainingSeconds(): int
+    {
+        if (!$this->resend_available_at || $this->resend_available_at->isPast()) {
+            return 0;
+        }
+
+        return (int) now()->diffInSeconds($this->resend_available_at, false);
+    }
+
     public function verifyOtp(string $otp): bool
     {
         return Hash::check($otp, $this->otp_code_hash);
@@ -85,10 +104,15 @@ class DeviceLoginChallenge extends Model
         $this->increment('attempts');
     }
 
-    public function markVerified(): void
+    public function markAsVerified(): void
     {
         $this->update([
             'verified_at' => now(),
         ]);
+    }
+
+    public function markVerified(): void
+    {
+        $this->markAsVerified();
     }
 }

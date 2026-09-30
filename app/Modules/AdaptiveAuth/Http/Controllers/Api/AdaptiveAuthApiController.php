@@ -7,6 +7,7 @@ namespace App\Modules\AdaptiveAuth\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Modules\AdaptiveAuth\Models\DeviceLoginChallenge;
 use App\Modules\AdaptiveAuth\Services\AdaptiveAuthService;
+use App\Modules\AdaptiveAuth\Services\TotpService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,7 +16,8 @@ use Illuminate\Support\Facades\Validator;
 class AdaptiveAuthApiController extends Controller
 {
     public function __construct(
-        protected AdaptiveAuthService $adaptiveAuth
+        protected AdaptiveAuthService $adaptiveAuth,
+        protected TotpService $totp
     ) {
         parent::__construct();
     }
@@ -100,86 +102,147 @@ class AdaptiveAuthApiController extends Controller
             $result = $this->adaptiveAuth->resendOtp($request->input('challenge_token'));
 
             if (!$result['success']) {
-                return $this->error($result['message'], $result, 429);
+                return $this->error($result['message'], $result, 400);
             }
 
-            return $this->success([], $result['message']);
+            return $this->success($result, $result['message']);
         } catch (Exception $e) {
-            return $this->error('Failed to resend verification code.', ['error' => $e->getMessage()], 500);
+            return $this->error('Failed to resend code.', ['error' => $e->getMessage()], 500);
         }
     }
 
     /**
-     * List user's registered devices (Security Dashboard).
+     * Initialize TOTP setup (generates secret key and QR code data).
+     */
+    public function totpSetup(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $secretKey = $this->totp->generateSecretKey();
+            $otpUrl = $this->totp->getOtpAuthUrl($user, $secretKey);
+
+            return $this->success([
+                'secret_key'  => $secretKey,
+                'otp_auth_url'=> $otpUrl,
+                'is_enabled'  => $this->totp->hasTotpEnabled($user),
+            ], 'TOTP secret generated successfully.');
+        } catch (Exception $e) {
+            return $this->error('Failed to initialize TOTP setup.', ['error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Enable TOTP with 6-digit confirmation code.
+     */
+    public function totpEnable(Request $request): JsonResponse
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'secret_key' => 'required|string',
+                'code'       => 'required|string|size:6',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->error($validator->errors()->first(), $validator->errors(), 422);
+            }
+
+            $user = $request->user();
+            $result = $this->totp->enableTotp($user, $request->input('secret_key'), $request->input('code'));
+
+            if (!$result['success']) {
+                return $this->error($result['message'], [], 400);
+            }
+
+            return $this->success($result, 'Two-factor authentication enabled successfully.');
+        } catch (Exception $e) {
+            return $this->error('Failed to enable TOTP.', ['error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Disable TOTP authentication.
+     */
+    public function totpDisable(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $this->totp->disableTotp($user);
+
+            return $this->success(null, 'Two-factor authentication disabled.');
+        } catch (Exception $e) {
+            return $this->error('Failed to disable TOTP.', ['error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * List registered devices.
      */
     public function listDevices(Request $request): JsonResponse
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
+            $cookieName = config('adaptive_auth.cookie_name', 'adaptive_device_token');
+            $currentUuid = (string) $request->cookie($cookieName);
 
-        if (!$user) {
-            return $this->error('Unauthenticated', [], 401);
+            $devices = $user->devices()
+                ->orderByDesc('last_active_at')
+                ->get()
+                ->map(function ($d) use ($currentUuid) {
+                    return [
+                        'id'             => $d->id,
+                        'device_name'    => $d->device_name,
+                        'platform'       => $d->platform,
+                        'browser'        => $d->browser,
+                        'device_type'    => $d->device_type,
+                        'ip'             => $d->last_ip,
+                        'location'       => trim(($d->city ?? '') . ', ' . ($d->country ?? ''), ', '),
+                        'is_current'     => $d->device_uuid === $currentUuid,
+                        'is_trusted'     => (bool) $d->is_trusted,
+                        'trusted_at'     => $d->trusted_at?->toIso8601String(),
+                        'last_active_at' => $d->last_active_at?->toIso8601String(),
+                    ];
+                });
+
+            return $this->success([
+                'devices'     => $devices,
+                'has_totp'    => $this->totp->hasTotpEnabled($user),
+            ], 'Registered devices retrieved successfully.');
+        } catch (Exception $e) {
+            return $this->error('Failed to retrieve devices.', ['error' => $e->getMessage()], 500);
         }
-
-        $devices = $user->devices()
-            ->orderByDesc('last_active_at')
-            ->get([
-                'id',
-                'device_name',
-                'platform',
-                'browser',
-                'device_type',
-                'last_ip',
-                'city',
-                'country',
-                'is_trusted',
-                'trusted_until',
-                'last_active_at',
-                'revoked_at',
-            ]);
-
-        return $this->success([
-            'devices' => $devices,
-        ], 'Devices retrieved successfully.');
     }
 
     /**
      * Revoke access for a specific device.
      */
-    public function revokeDevice(Request $request, int $deviceId): JsonResponse
+    public function revokeDevice(Request $request, int $id): JsonResponse
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
+            $revoked = $user->revokeDevice($id);
 
-        if (!$user) {
-            return $this->error('Unauthenticated', [], 401);
+            if (!$revoked) {
+                return $this->error('Device not found or already revoked.', [], 404);
+            }
+
+            return $this->success(null, 'Device access revoked successfully.');
+        } catch (Exception $e) {
+            return $this->error('Failed to revoke device.', ['error' => $e->getMessage()], 500);
         }
-
-        $device = $user->devices()->find($deviceId);
-
-        if (!$device) {
-            return $this->error('Device not found.', [], 404);
-        }
-
-        $device->revoke();
-
-        return $this->success([], 'Device access revoked successfully.');
     }
 
     /**
-     * Clear all sign-in audit logs for the authenticated user via API.
+     * Clear all sign-in audit history logs.
      */
     public function clearAuditLogs(Request $request): JsonResponse
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
+            $count = $user->clearLoginLogs();
 
-        if (!$user) {
-            return $this->error('Unauthenticated', [], 401);
+            return $this->success(['deleted_count' => $count], 'Audit logs cleared.');
+        } catch (Exception $e) {
+            return $this->error('Failed to clear audit logs.', ['error' => $e->getMessage()], 500);
         }
-
-        $deleted = $user->clearLoginLogs();
-
-        return $this->success([
-            'deleted_count' => $deleted,
-        ], 'Audit logs cleared successfully.');
     }
 }
-

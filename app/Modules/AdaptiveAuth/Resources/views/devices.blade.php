@@ -90,18 +90,24 @@
             </div>
         </div>
 
-        {{-- Protection Status --}}
+        {{-- Protection & TOTP Status --}}
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
             <div class="card overflow-hidden">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h3 class="mb-2 fw-semibold text-primary">Smart 2FA Active</h3>
-                            <p class="text-muted fs-13 mb-0">Adaptive Protection</p>
-                            <small class="text-muted">Unrecognized logins require email OTP</small>
+                            <h3 class="mb-1 fw-semibold {{ ($hasTotp ?? false) ? 'text-success' : 'text-primary' }}">
+                                {{ ($hasTotp ?? false) ? 'TOTP MFA Enabled' : 'Adaptive 2FA Active' }}
+                            </h3>
+                            <p class="text-muted fs-13 mb-1">
+                                {{ ($hasTotp ?? false) ? 'Protected by Authenticator App' : 'Email OTP on unknown devices' }}
+                            </p>
+                            <a href="{{ route('adaptive.totp.setup') }}" class="btn btn-sm btn-outline-primary mt-1">
+                                <i class="fe fe-shield me-1"></i>{{ ($hasTotp ?? false) ? 'Manage MFA' : 'Setup Authenticator' }}
+                            </a>
                         </div>
                         <div class="col col-auto top-icn dash">
-                            <div class="counter-icon bg-info dash ms-auto box-shadow-info">
+                            <div class="counter-icon {{ ($hasTotp ?? false) ? 'bg-success' : 'bg-info' }} dash ms-auto box-shadow-info">
                                 <i class="fe fe-shield text-white"></i>
                             </div>
                         </div>
