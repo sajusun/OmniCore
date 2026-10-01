@@ -223,11 +223,16 @@ class AdaptiveAuthWebController extends Controller
     public function showTotpSetup(Request $request): View
     {
         $user = $request->user();
-        $secretKey = $this->totp->generateSecretKey();
-        $qrCodeSvg = $this->totp->getQrCodeSvg($user, $secretKey);
 
-        // Store temporary secret in session
-        $request->session()->put('totp_setup_secret', $secretKey);
+        // Persist secret in session during setup so entering a wrong code does NOT regenerate a new QR code!
+        if ($request->query('refresh') === '1' || !$request->session()->has('totp_setup_secret')) {
+            $secretKey = $this->totp->generateSecretKey();
+            $request->session()->put('totp_setup_secret', $secretKey);
+        } else {
+            $secretKey = (string) $request->session()->get('totp_setup_secret');
+        }
+
+        $qrCodeSvg = $this->totp->getQrCodeSvg($user, $secretKey);
 
         return view('adaptive_auth::totp_setup', [
             'user'       => $user,
@@ -272,14 +277,25 @@ class AdaptiveAuthWebController extends Controller
     }
 
     /**
-     * Disable TOTP Authenticator.
+     * Disable TOTP Authenticator after confirming current account password.
      */
     public function disableTotp(Request $request): RedirectResponse
     {
+        $request->validate([
+            'password' => ['required', 'string'],
+        ]);
+
         $user = $request->user();
+
+        if (!Hash::check($request->input('password'), $user->password)) {
+            return back()->withErrors(['password' => 'The password you entered is incorrect.'])
+                ->with('error', 'Incorrect password. Two-Factor Authentication was not disabled.');
+        }
+
         $this->totp->disableTotp($user);
 
-        return back()->with('success', 'Two-Factor Authenticator has been disabled.');
+        return redirect()->route('adaptive.devices.index')
+            ->with('success', 'Two-Factor Authenticator has been disabled successfully.');
     }
 
     /**

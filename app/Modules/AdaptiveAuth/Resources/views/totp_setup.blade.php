@@ -72,13 +72,37 @@
                 </svg>
             </div>
             <h3 class="text-lg font-semibold text-white mb-1">MFA is Active</h3>
-            <p class="text-xs text-slate-400 mb-6">Your account is currently protected with Authenticator App TOTP.</p>
-            <form action="{{ route('adaptive.totp.disable') }}" method="POST">
-                @csrf
-                <button type="submit" onclick="return confirm('Are you sure you want to disable Two-Factor Authentication?')" class="px-5 py-2.5 rounded-xl bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 text-xs font-semibold transition">
-                    Disable Authenticator MFA
-                </button>
-            </form>
+            <p class="text-xs text-slate-400 mb-4">Your account is currently protected with Authenticator App TOTP.</p>
+
+            @if(session('error'))
+                <div class="p-3 mb-3 bg-rose-950/60 border border-rose-500/40 rounded-xl text-rose-300 text-xs">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <div class="mt-4 pt-4 border-t border-slate-700/50 text-left">
+                <form action="{{ route('adaptive.totp.disable') }}" method="POST" class="space-y-3">
+                    @csrf
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+                            Enter Account Password to Disable 2FA
+                        </label>
+                        <input type="password" name="password" required placeholder="Enter current password"
+                            class="w-full text-sm py-2.5 px-3 rounded-xl bg-slate-950 border @error('password') border-rose-500 @else border-slate-700 @enderror focus:border-rose-500 focus:ring-1 focus:ring-rose-500 text-white placeholder-slate-500 transition">
+                        @error('password')
+                            <p class="text-xs text-rose-400 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-rose-600/30 hover:bg-rose-600/50 text-rose-200 border border-rose-500/40 text-xs font-semibold transition">
+                        Confirm & Disable Authenticator MFA
+                    </button>
+                </form>
+            </div>
+            <div class="mt-3">
+                <a href="{{ route('adaptive.devices.index') }}" class="text-xs text-slate-400 hover:text-slate-200 underline">
+                    &larr; Back to Recognized Devices
+                </a>
+            </div>
         </div>
     @else
         <!-- Setup Steps -->
@@ -94,6 +118,11 @@
                     <code class="block mt-1 font-mono text-indigo-300 bg-slate-900 border border-slate-800 py-1.5 px-3 rounded-lg select-all text-xs tracking-wider">
                         {{ $secretKey }}
                     </code>
+                </div>
+                <div class="mt-3">
+                    <a href="{{ route('adaptive.totp.setup', ['refresh' => 1]) }}" class="text-xs text-slate-400 hover:text-indigo-400 transition" onclick="return confirm('Regenerate a new QR code? You will need to scan the new code with your authenticator app.')">
+                        &#x21bb; Regenerate a new QR code
+                    </a>
                 </div>
             </div>
 

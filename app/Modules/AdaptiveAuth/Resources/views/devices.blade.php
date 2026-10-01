@@ -117,6 +117,9 @@
                                 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="confirmRegenerateRecoveryCodes()">
                                     <i class="fe fe-refresh-cw me-1"></i>Regenerate Codes
                                 </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="openDisableTotpModal()">
+                                    <i class="fe fe-shield-off me-1"></i>Disable 2FA
+                                </button>
                                 @endif
                             </div>
                         </div>
@@ -434,6 +437,50 @@
     </div>
     @endif
 
+    {{-- Disable 2FA Password Confirmation Modal --}}
+    @if ($hasTotp ?? false)
+    <div class="modal fade" id="disableTotpModal" tabindex="-1" aria-labelledby="disableTotpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg border-danger">
+                <div class="modal-header bg-danger-transparent py-3">
+                    <h5 class="modal-title text-danger fw-semibold d-flex align-items-center gap-2" id="disableTotpModalLabel">
+                        <i class="fe fe-shield-off fs-18"></i> Disable Two-Factor Authentication
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('adaptive.totp.disable') }}" method="POST">
+                    @csrf
+                    <div class="modal-body py-4">
+                        <div class="alert alert-warning mb-3">
+                            <i class="fe fe-alert-triangle me-1"></i>
+                            <strong>Warning:</strong> Disabling Two-Factor Authentication (TOTP) will lower your account security. Unknown or untrusted devices will only be protected by basic email verification.
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="current_password_totp" class="form-label fw-semibold text-dark">
+                                Enter Current Password <span class="text-danger">*</span>
+                            </label>
+                            <input type="password" name="password" id="current_password_totp" class="form-control @error('password') is-invalid @enderror" required placeholder="Enter your account password to confirm" autocomplete="current-password">
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <div class="form-text text-muted fs-12">
+                                For security reasons, please re-enter your current password to authorize disabling 2FA.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light py-2">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="fe fe-shield-off me-1"></i> Confirm & Disable 2FA
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endif
+
     {{-- Hidden form for regenerating recovery codes --}}
     <form id="regenerateRecoveryCodesForm" method="POST" action="{{ route('adaptive.totp.regenerate_recovery_codes') }}" style="display: none;">
         @csrf
@@ -454,6 +501,20 @@
         }
     });
     @endif
+
+    @if ($errors->has('password'))
+    document.addEventListener('DOMContentLoaded', function () {
+        openDisableTotpModal();
+    });
+    @endif
+
+    function openDisableTotpModal() {
+        const modalElement = document.getElementById('disableTotpModal');
+        if (modalElement) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+    }
 
     const rawRecoveryCodes = @json(session('recovery_codes') ?? []);
 

@@ -179,4 +179,55 @@ class AdaptiveAuthTest extends TestCase
         $credential->delete();
         $user->delete();
     }
+
+    /**
+     * Test disabling TOTP requires valid current account password.
+     */
+    public function test_disable_totp_requires_correct_password(): void
+    {
+        $totpService = app(TotpService::class);
+        $user = User::forceCreate([
+            'name'     => 'Disable 2FA Tester',
+            'email'    => 'disable-totp-' . uniqid() . '@test-security.com',
+            'password' => Hash::make('MySecurePassword123!'),
+            'status'   => 'active',
+        ]);
+
+        $credential = UserTotpCredential::create([
+            'authenticatable_type'    => $user->getMorphClass(),
+            'authenticatable_id'      => $user->getKey(),
+            'secret_key'              => $totpService->generateSecretKey(),
+            'recovery_codes'          => [],
+            'is_enabled'              => true,
+            'always_require_on_login' => false,
+            'confirmed_at'            => now(),
+        ]);
+
+        $this->assertTrue($totpService->hasTotpEnabled($user));
+
+        // 1. Attempt disable without password -> validation error
+        $response1 = $this->actingAs($user)->post(route('adaptive.totp.disable'), []);
+        $response1->assertSessionHasErrors(['password']);
+        $this->assertTrue($totpService->hasTotpEnabled($user));
+
+        // 2. Attempt disable with wrong password -> error and remains enabled
+        $response2 = $this->actingAs($user)->post(route('adaptive.totp.disable'), [
+            'password' => 'WrongPassword123!',
+        ]);
+        $response2->assertSessionHasErrors(['password']);
+        $this->assertTrue($totpService->hasTotpEnabled($user));
+
+        // 3. Attempt disable with correct password -> successfully disabled
+        $response3 = $this->actingAs($user)->post(route('adaptive.totp.disable'), [
+            'password' => 'MySecurePassword123!',
+        ]);
+        $response3->assertRedirect(route('adaptive.devices.index'));
+        $response3->assertSessionHas('success');
+        $this->assertFalse($totpService->hasTotpEnabled($user));
+
+        // Cleanup
+        $credential->delete();
+        $user->delete();
+    }
 }
+
