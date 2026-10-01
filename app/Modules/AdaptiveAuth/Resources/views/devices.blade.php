@@ -111,16 +111,8 @@
                             </p>
                             <div class="d-flex flex-wrap gap-2 mt-1">
                                 <a href="{{ route('adaptive.totp.setup') }}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fe fe-shield me-1"></i>{{ ($hasTotp ?? false) ? 'Manage MFA' : 'Setup Authenticator' }}
+                                    <i class="fe fe-shield me-1"></i>{{ ($hasTotp ?? false) ? 'Manage MFA Settings' : 'Setup Authenticator' }}
                                 </a>
-                                @if ($hasTotp ?? false)
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="confirmRegenerateRecoveryCodes()">
-                                    <i class="fe fe-refresh-cw me-1"></i>Regenerate Codes
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="openDisableTotpModal()">
-                                    <i class="fe fe-shield-off me-1"></i>Disable 2FA
-                                </button>
-                                @endif
                             </div>
                         </div>
                         <div class="col col-auto top-icn dash">
@@ -134,38 +126,6 @@
         </div>
     </div>
     <!-- ROW-1 END -->
-
-    @if ($hasTotp ?? false)
-    <!-- ROW: TOTP Login Preference Setting -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card border-primary-subtle shadow-sm mb-4">
-                <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-3">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="avatar avatar-md br-7 bg-primary-transparent text-primary">
-                            <i class="fe fe-lock fs-18"></i>
-                        </div>
-                        <div>
-                            <h5 class="fw-semibold mb-1 text-dark">Always Require Authenticator (TOTP) on Every Login</h5>
-                            <p class="text-muted fs-13 mb-0">
-                                <strong>Enabled:</strong> You will be prompted for your 6-digit TOTP code on <em>every</em> sign-in attempt, even on recognized/trusted devices.<br>
-                                <strong>Disabled:</strong> Recognized/trusted devices will remember you and bypass the TOTP prompt for 60 days.
-                            </p>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="form-check form-switch form-switch-md mb-0">
-                            <input class="form-check-input" type="checkbox" id="alwaysRequireTotpSwitch" {{ ($alwaysRequireTotp ?? false) ? 'checked' : '' }} onchange="toggleAlwaysTotp(this)" style="cursor: pointer; width: 44px; height: 22px;">
-                            <label class="form-check-label fw-semibold text-dark ms-2" for="alwaysRequireTotpSwitch" id="alwaysRequireStatusLabel">
-                                {{ ($alwaysRequireTotp ?? false) ? 'Always Enforce' : 'Adaptive Only' }}
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    @endif
 
     <!-- ROW-2: Devices Table Card -->
     <div class="row">
@@ -378,209 +338,12 @@
     {{-- Reusable Status Modal --}}
     <x-modal.status />
 
-    @if (session('recovery_codes'))
-    <!-- RECOVERY CODES POPUP MODAL -->
-    <div class="modal fade" id="recoveryCodesModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="recoveryCodesModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content shadow-lg border-0">
-                <div class="modal-header bg-success text-white py-3">
-                    <h5 class="modal-title fw-bold text-white d-flex align-items-center" id="recoveryCodesModalLabel">
-                        <i class="fe fe-shield me-2"></i>Emergency Backup Recovery Codes
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <div class="alert alert-warning d-flex align-items-start gap-2 mb-3">
-                        <i class="fe fe-alert-triangle fs-18 mt-1 text-warning"></i>
-                        <div class="small">
-                            <strong>CRITICAL: Save or download these codes right now!</strong><br>
-                            If you ever lose access to your phone or authenticator app, these emergency backup codes are the <strong>only way</strong> to access your account.
-                            Each code can only be used <strong>once</strong>. They will <strong>NOT</strong> be displayed again!
-                        </div>
-                    </div>
-
-                    @php
-                        $plainCodes = session('recovery_codes');
-                    @endphp
-
-                    <div class="p-3 bg-light rounded-3 border mb-3">
-                        <div class="row g-2 text-center" id="recoveryCodesContainer">
-                            @foreach ($plainCodes as $code)
-                            <div class="col-6 col-sm-3">
-                                <div class="bg-white p-2 rounded border font-monospace fw-bold fs-14 text-dark shadow-sm user-select-all">
-                                    {{ $code }}
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-2 border-top">
-                        <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="copyRecoveryCodes()">
-                                <i class="fe fe-copy me-1"></i><span id="copyBtnText">Copy All Codes</span>
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="downloadRecoveryCodes()">
-                                <i class="fe fe-download me-1"></i>Download as .txt
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="printRecoveryCodes()">
-                                <i class="fe fe-printer me-1"></i>Print
-                            </button>
-                        </div>
-                        <button type="button" class="btn btn-success btn-sm px-4 fw-semibold" data-bs-dismiss="modal">
-                            <i class="fe fe-check me-1"></i>I Have Saved My Codes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    @endif
-
-    {{-- Disable 2FA Password Confirmation Modal --}}
-    @if ($hasTotp ?? false)
-    <div class="modal fade" id="disableTotpModal" tabindex="-1" aria-labelledby="disableTotpModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content shadow-lg border-danger">
-                <div class="modal-header bg-danger-transparent py-3">
-                    <h5 class="modal-title text-danger fw-semibold d-flex align-items-center gap-2" id="disableTotpModalLabel">
-                        <i class="fe fe-shield-off fs-18"></i> Disable Two-Factor Authentication
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('adaptive.totp.disable') }}" method="POST">
-                    @csrf
-                    <div class="modal-body py-4">
-                        <div class="alert alert-warning mb-3">
-                            <i class="fe fe-alert-triangle me-1"></i>
-                            <strong>Warning:</strong> Disabling Two-Factor Authentication (TOTP) will lower your account security. Unknown or untrusted devices will only be protected by basic email verification.
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="current_password_totp" class="form-label fw-semibold text-dark">
-                                Enter Current Password <span class="text-danger">*</span>
-                            </label>
-                            <input type="password" name="password" id="current_password_totp" class="form-control @error('password') is-invalid @enderror" required placeholder="Enter your account password to confirm" autocomplete="current-password">
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                            <div class="form-text text-muted fs-12">
-                                For security reasons, please re-enter your current password to authorize disabling 2FA.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer bg-light py-2">
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger btn-sm">
-                            <i class="fe fe-shield-off me-1"></i> Confirm & Disable 2FA
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    @endif
-
-    {{-- Hidden form for regenerating recovery codes --}}
-    <form id="regenerateRecoveryCodesForm" method="POST" action="{{ route('adaptive.totp.regenerate_recovery_codes') }}" style="display: none;">
-        @csrf
-    </form>
-
 </div>
 <!-- CONTAINER END -->
 @endsection
 
 @push('scripts')
 <script>
-    @if (session('recovery_codes'))
-    document.addEventListener('DOMContentLoaded', function () {
-        const modalEl = document.getElementById('recoveryCodesModal');
-        if (modalEl) {
-            const modal = new bootstrap.Modal(modalEl);
-            modal.show();
-        }
-    });
-    @endif
-
-    @if ($errors->has('password'))
-    document.addEventListener('DOMContentLoaded', function () {
-        openDisableTotpModal();
-    });
-    @endif
-
-    function openDisableTotpModal() {
-        const modalElement = document.getElementById('disableTotpModal');
-        if (modalElement) {
-            const modal = new bootstrap.Modal(modalElement);
-            modal.show();
-        }
-    }
-
-    const rawRecoveryCodes = @json(session('recovery_codes') ?? []);
-
-    function copyRecoveryCodes() {
-        if (!rawRecoveryCodes || rawRecoveryCodes.length === 0) return;
-        const text = "=== OMNICORE 2FA RECOVERY CODES ===\n" +
-                     "Keep these emergency backup recovery codes safe.\n" +
-                     "Account: {{ auth()->user()?->email }}\n" +
-                     "Generated: " + new Date().toLocaleString() + "\n\n" +
-                     rawRecoveryCodes.join("\n") + "\n\n" +
-                     "Note: Each code can only be used once.";
-        navigator.clipboard.writeText(text).then(() => {
-            const btnText = document.getElementById('copyBtnText');
-            if (btnText) {
-                btnText.textContent = 'Copied!';
-                setTimeout(() => btnText.textContent = 'Copy All Codes', 2000);
-            }
-        });
-    }
-
-    function downloadRecoveryCodes() {
-        if (!rawRecoveryCodes || rawRecoveryCodes.length === 0) return;
-        const text = "=== OMNICORE 2FA RECOVERY CODES ===\n" +
-                     "Keep these emergency backup recovery codes safe.\n" +
-                     "Account: {{ auth()->user()?->email }}\n" +
-                     "Generated: " + new Date().toLocaleString() + "\n\n" +
-                     rawRecoveryCodes.join("\n") + "\n\n" +
-                     "Note: Each code can only be used once.";
-        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'omnicore-2fa-recovery-codes.txt';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
-
-    function printRecoveryCodes() {
-        window.print();
-    }
-
-    function confirmRegenerateRecoveryCodes() {
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                title: 'Regenerate Recovery Codes?',
-                text: 'Any existing unused backup recovery codes will be permanently invalidated and replaced with 8 fresh codes.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#2563eb',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Yes, generate new codes',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('regenerateRecoveryCodesForm').submit();
-                }
-            });
-        } else {
-            if (confirm('Regenerate Recovery Codes? Any existing unused codes will be invalidated.')) {
-                document.getElementById('regenerateRecoveryCodesForm').submit();
-            }
-        }
-    }
-
     function confirmRevokeDevice(id, deviceName) {
         let url = "{{ route('adaptive.devices.revoke', ':id') }}";
         url = url.replace(':id', id);
@@ -613,53 +376,6 @@
             const modal = new bootstrap.Modal(modalElement);
             modal.show();
         }
-    }
-
-    function toggleAlwaysTotp(switchEl) {
-        const isChecked = switchEl.checked;
-        const label = document.getElementById('alwaysRequireStatusLabel');
-        if (label) {
-            label.textContent = isChecked ? 'Always Enforce' : 'Adaptive Only';
-        }
-
-        fetch("{{ route('adaptive.totp.preference') }}", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({
-                always_require_on_login: isChecked ? 1 : 0
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status) {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Preference Updated',
-                        text: data.message,
-                        timer: 2500,
-                        showConfirmButton: false,
-                    });
-                }
-            }
-        })
-        .catch(err => {
-            switchEl.checked = !isChecked;
-            if (label) {
-                label.textContent = !isChecked ? 'Always Enforce' : 'Adaptive Only';
-            }
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to update login security preference.',
-                });
-            }
-        });
     }
 </script>
 @endpush

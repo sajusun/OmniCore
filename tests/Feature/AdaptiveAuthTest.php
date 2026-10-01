@@ -221,7 +221,7 @@ class AdaptiveAuthTest extends TestCase
         $response3 = $this->actingAs($user)->post(route('adaptive.totp.disable'), [
             'password' => 'MySecurePassword123!',
         ]);
-        $response3->assertRedirect(route('adaptive.devices.index'));
+        $response3->assertRedirect(route('adaptive.totp.setup'));
         $response3->assertSessionHas('success');
         $this->assertFalse($totpService->hasTotpEnabled($user));
 
@@ -229,5 +229,115 @@ class AdaptiveAuthTest extends TestCase
         $credential->delete();
         $user->delete();
     }
+
+    /**
+     * Test updating TOTP preference requires valid 6-digit TOTP code.
+     */
+    public function test_update_totp_preference_requires_valid_code(): void
+    {
+        $totpService = app(TotpService::class);
+        $user = User::forceCreate([
+            'name'     => 'Policy Tester',
+            'email'    => 'policy-test-' . uniqid() . '@test-security.com',
+            'password' => Hash::make('MySecurePassword123!'),
+            'status'   => 'active',
+        ]);
+
+        $secretKey = $totpService->generateSecretKey();
+        $credential = UserTotpCredential::create([
+            'authenticatable_type'    => $user->getMorphClass(),
+            'authenticatable_id'      => $user->getKey(),
+            'secret_key'              => $secretKey,
+            'recovery_codes'          => [],
+            'is_enabled'              => true,
+            'always_require_on_login' => true,
+            'confirmed_at'            => now(),
+        ]);
+
+        // 1. Without code -> validation fails
+        $response1 = $this->actingAs($user)->postJson(route('adaptive.totp.preference'), [
+            'always_require_on_login' => 0,
+        ]);
+        $response1->assertStatus(422);
+
+        // 2. With invalid code -> 422 error
+        $response2 = $this->actingAs($user)->postJson(route('adaptive.totp.preference'), [
+            'always_require_on_login' => 0,
+            'code'                    => '000000',
+        ]);
+        $response2->assertStatus(422);
+        $this->assertTrue($totpService->alwaysRequiresTotpOnLogin($user));
+
+        // Cleanup
+        $credential->delete();
+        $user->delete();
+    }
+
+    /**
+     * Test Mobile & Frontend REST API endpoints for TOTP and Device Management.
+     */
+    public function test_mobile_api_totp_flow_and_endpoints(): void
+    {
+        $totpService = app(TotpService::class);
+        $adaptiveService = app(AdaptiveAuthService::class);
+
+        $user = User::forceCreate([
+            'name'     => 'API Tester',
+            'email'    => 'api-test-' . uniqid() . '@test-security.com',
+            'password' => Hash::make('ApiPassword123!'),
+            'status'   => 'active',
+        ]);
+
+        // 1. Setup API: POST /api/adaptive-auth/totp/setup
+        $setupRes = $this->actingAs($user, 'api')->postJson(route('api.adaptive.totp.setup'));
+        $setupRes->assertStatus(200);
+        $setupData = $setupRes->json('data');
+        $this->assertArrayHasKey('secret_key', $setupData);
+        $this->assertArrayHasKey('otp_auth_url', $setupData);
+        $secretKey = $setupData['secret_key'];
+
+        // 2. Enable API: POST /api/adaptive-auth/totp/enable (Invalid code fails)
+        $enableFail = $this->actingAs($user, 'api')->postJson(route('api.adaptive.totp.enable'), [
+            'secret_key' => $secretKey,
+            'code'       => '000000',
+        ]);
+        $enableFail->assertStatus(400);
+
+        // 3. Disable API requires password: POST /api/adaptive-auth/totp/disable
+        // First directly enable credential
+        $credential = UserTotpCredential::create([
+            'authenticatable_type'    => $user->getMorphClass(),
+            'authenticatable_id'      => $user->getKey(),
+            'secret_key'              => $secretKey,
+            'recovery_codes'          => ['dummy_hash'],
+            'is_enabled'              => true,
+            'always_require_on_login' => true,
+            'confirmed_at'            => now(),
+        ]);
+
+        // Wrong password fails
+        $disableFail = $this->actingAs($user, 'api')->postJson(route('api.adaptive.totp.disable'), [
+            'password' => 'WrongPassword',
+        ]);
+        $disableFail->assertStatus(422);
+        $this->assertTrue($totpService->hasTotpEnabled($user));
+
+        // Correct password disables
+        $disableSuccess = $this->actingAs($user, 'api')->postJson(route('api.adaptive.totp.disable'), [
+            'password' => 'ApiPassword123!',
+        ]);
+        $disableSuccess->assertStatus(200);
+        $this->assertFalse($totpService->hasTotpEnabled($user));
+
+        // 4. List Devices API
+        $devicesRes = $this->actingAs($user, 'api')->getJson(route('api.adaptive.devices'));
+        $devicesRes->assertStatus(200);
+        $devicesRes->assertJsonStructure(['data' => ['devices', 'has_totp', 'always_require_on_login']]);
+
+        // Cleanup
+        $credential->delete();
+        $user->delete();
+    }
 }
+
 

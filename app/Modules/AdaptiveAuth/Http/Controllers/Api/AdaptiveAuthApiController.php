@@ -11,6 +11,7 @@ use App\Modules\AdaptiveAuth\Services\TotpService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AdaptiveAuthApiController extends Controller
@@ -23,7 +24,7 @@ class AdaptiveAuthApiController extends Controller
     }
 
     /**
-     * Complete adaptive 2FA challenge via API.
+     * Complete email OTP adaptive challenge via API.
      */
     public function verify(Request $request): JsonResponse
     {
@@ -56,9 +57,7 @@ class AdaptiveAuthApiController extends Controller
             if (auth('api')->check() || method_exists(auth('api'), 'login')) {
                 try {
                     $token = auth('api')->login($user);
-                } catch (\Throwable $e) {
-                    // Fallback to Sanctum if JWT fails
-                }
+                } catch (\Throwable $e) {}
             }
 
             if (!$token && method_exists($user, 'createToken')) {
@@ -82,6 +81,85 @@ class AdaptiveAuthApiController extends Controller
             return $response->withCookie($result['cookie']);
         } catch (Exception $e) {
             return $this->error('Failed to process verification challenge.', ['error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Complete TOTP 2FA challenge via API during login.
+     */
+    public function verifyTotp(Request $request): JsonResponse
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'challenge_token' => 'required|string',
+                'code'            => 'required|string',
+                'remember_device' => 'nullable|boolean',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->error($validator->errors()->first(), $validator->errors(), 422);
+            }
+
+            $challenge = DeviceLoginChallenge::where('challenge_token', $request->input('challenge_token'))->first();
+
+            if (!$challenge || $challenge->isExpired() || $challenge->isVerified()) {
+                return $this->error('Verification session expired or invalid. Please sign in again.', [], 404);
+            }
+
+            $user = $challenge->authenticatable;
+            $code = (string) $request->input('code');
+
+            if (!$this->totp->verifyUserTotpOrRecovery($user, $code)) {
+                return $this->error('Invalid Authenticator code. Please check your authenticator app and try again.', [], 422);
+            }
+
+            // Mark challenge verified
+            $challenge->update(['verified_at' => now()]);
+
+            $deviceMeta = $challenge->device_metadata ?? [];
+            $cookie = null;
+            $device = null;
+
+            if ($request->boolean('remember_device', true)) {
+                $device = $this->adaptiveAuth->registerTrustedDevice($user, $deviceMeta);
+                $cookie = $this->adaptiveAuth->createDeviceCookie($device->device_uuid);
+                $this->adaptiveAuth->logActivity($user, $device, $deviceMeta, 'trusted_login', 'API device verified via TOTP');
+            } else {
+                $this->adaptiveAuth->logActivity($user, null, $deviceMeta, 'trusted_login', 'Temporary API login via TOTP (Not remembered)');
+            }
+
+            // Generate Token
+            $token = null;
+            $tokenType = 'bearer';
+
+            if (auth('api')->check() || method_exists(auth('api'), 'login')) {
+                try {
+                    $token = auth('api')->login($user);
+                } catch (\Throwable $e) {}
+            }
+
+            if (!$token && method_exists($user, 'createToken')) {
+                $token = $user->createToken('AdaptiveAuthDevice')->plainTextToken;
+            }
+
+            $response = $this->success([
+                'token_type'   => $tokenType,
+                'token'        => $token,
+                'user'         => $user->only(['id', 'name', 'email', 'avatar']),
+                'device'       => $device ? [
+                    'device_name' => $device->device_name,
+                    'is_trusted'  => $device->is_trusted,
+                    'ip'          => $device->last_ip,
+                ] : null,
+            ], 'Two-Factor Authentication successful. Login granted.');
+
+            if ($cookie) {
+                $response->withCookie($cookie);
+            }
+
+            return $response;
+        } catch (Exception $e) {
+            return $this->error('Failed to verify TOTP code.', ['error' => $e->getMessage()], 500);
         }
     }
 
@@ -122,9 +200,11 @@ class AdaptiveAuthApiController extends Controller
             $otpUrl = $this->totp->getOtpAuthUrl($user, $secretKey);
 
             return $this->success([
-                'secret_key'  => $secretKey,
-                'otp_auth_url'=> $otpUrl,
-                'is_enabled'  => $this->totp->hasTotpEnabled($user),
+                'secret_key'              => $secretKey,
+                'otp_auth_url'            => $otpUrl,
+                'is_enabled'              => $this->totp->hasTotpEnabled($user),
+                'always_require_on_login' => $this->totp->alwaysRequiresTotpOnLogin($user),
+                'recovery_codes_count'    => $this->totp->getRemainingRecoveryCodesCount($user),
             ], 'TOTP secret generated successfully.');
         } catch (Exception $e) {
             return $this->error('Failed to initialize TOTP setup.', ['error' => $e->getMessage()], 500);
@@ -160,17 +240,84 @@ class AdaptiveAuthApiController extends Controller
     }
 
     /**
-     * Disable TOTP authentication.
+     * Disable TOTP authentication (requires current account password).
      */
     public function totpDisable(Request $request): JsonResponse
     {
         try {
+            $validator = Validator::make($request->all(), [
+                'password' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->error($validator->errors()->first(), $validator->errors(), 422);
+            }
+
             $user = $request->user();
+
+            if (!Hash::check($request->input('password'), $user->password)) {
+                return $this->error('Incorrect password. Two-Factor Authentication was not disabled.', [], 422);
+            }
+
             $this->totp->disableTotp($user);
 
-            return $this->success(null, 'Two-factor authentication disabled.');
+            return $this->success(null, 'Two-Factor Authentication disabled successfully.');
         } catch (Exception $e) {
             return $this->error('Failed to disable TOTP.', ['error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Update user's TOTP login preference (requires 6-digit TOTP code).
+     */
+    public function updateTotpPreference(Request $request): JsonResponse
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'always_require_on_login' => 'required|boolean',
+                'code'                    => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->error($validator->errors()->first(), $validator->errors(), 422);
+            }
+
+            $user = $request->user();
+
+            if (!$this->totp->verifyUserTotpOrRecovery($user, (string) $request->input('code'))) {
+                return $this->error('Invalid Authenticator code. Preference was not updated.', [], 422);
+            }
+
+            $alwaysRequire = $request->boolean('always_require_on_login');
+            $this->totp->updateLoginPreference($user, $alwaysRequire);
+
+            return $this->success([
+                'always_require_on_login' => $alwaysRequire,
+            ], 'Login security preference updated successfully.');
+        } catch (Exception $e) {
+            return $this->error('Failed to update preference.', ['error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Regenerate new backup recovery codes via API.
+     */
+    public function regenerateRecoveryCodes(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+
+            if (!$this->totp->hasTotpEnabled($user)) {
+                return $this->error('Two-Factor Authentication is not enabled on this account.', [], 400);
+            }
+
+            $newCodes = $this->totp->regenerateRecoveryCodes($user);
+
+            return $this->success([
+                'recovery_codes' => $newCodes,
+            ], 'New emergency backup recovery codes generated successfully.');
+        } catch (Exception $e) {
+            return $this->error('Failed to regenerate recovery codes.', ['error' => $e->getMessage()], 500);
         }
     }
 
@@ -204,8 +351,10 @@ class AdaptiveAuthApiController extends Controller
                 });
 
             return $this->success([
-                'devices'     => $devices,
-                'has_totp'    => $this->totp->hasTotpEnabled($user),
+                'devices'                 => $devices,
+                'has_totp'                => $this->totp->hasTotpEnabled($user),
+                'always_require_on_login' => $this->totp->alwaysRequiresTotpOnLogin($user),
+                'recovery_codes_count'    => $this->totp->getRemainingRecoveryCodesCount($user),
             ], 'Registered devices retrieved successfully.');
         } catch (Exception $e) {
             return $this->error('Failed to retrieve devices.', ['error' => $e->getMessage()], 500);
@@ -228,6 +377,26 @@ class AdaptiveAuthApiController extends Controller
             return $this->success(null, 'Device access revoked successfully.');
         } catch (Exception $e) {
             return $this->error('Failed to revoke device.', ['error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Revoke access for all devices except current one.
+     */
+    public function revokeOtherDevices(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $cookieName = config('adaptive_auth.cookie_name', 'adaptive_device_token');
+            $currentUuid = (string) $request->cookie($cookieName);
+
+            $revokedCount = $user->revokeOtherDevices($currentUuid);
+
+            return $this->success([
+                'revoked_count' => $revokedCount,
+            ], 'All other devices have been revoked.');
+        } catch (Exception $e) {
+            return $this->error('Failed to revoke other devices.', ['error' => $e->getMessage()], 500);
         }
     }
 

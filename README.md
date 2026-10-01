@@ -63,6 +63,7 @@ flowchart TB
             VendorModule[Multi-Vendor Marketplace & Payouts]
             MediaModule[Polymorphic Cloud Media Pipeline]
             AIModule[AI Customer Service & Ticket Triage]
+            AdaptiveAuthModule[Adaptive 2FA, TOTP MFA & Device Intelligence]
         end
     end
 
@@ -104,6 +105,59 @@ flowchart TB
 * **Reusable Headless Package**: Can be dropped into any Model (Posts, Products, Courses, Comments) via Trait `HasInteractions`.
 * **Features**: Multi-Reaction Likes, Nested Comments & Replies with admin moderation, Multi-Collection Bookmarks/Wishlists, Anti-Spam Cooldown Views Analytics, and SEO/Expiring Private Share Links.
 * **Reusable Blade UI Components**: Embeddable metric cards and moderation tables (`<x-interaction::stats-card />`, `<x-interaction::comments-table />`).
+
+### 🛡️ 5. Enterprise Adaptive Authentication & Two-Factor (TOTP) Security (`app/Modules/AdaptiveAuth`)
+A bank-grade security module providing **Risk-Based Adaptive Device Intelligence**, **Time-Based One-Time Password (TOTP) MFA**, and **Session/Device Management**. Engineered following NIST SP 800-63B and OWASP guidelines.
+
+#### 🔑 Key Capabilities:
+* **Polymorphic Architecture (`authenticatable_type`, `authenticatable_id`)**: Seamlessly binds to `User`, `Admin`, `Staff`, `HotelOwner`, or `Vendor` models via the `HasAdaptiveAuth` trait.
+* **Risk-Based Device Intelligence**: Computes hardware & browser fingerprint hashes, detects IP geolocation changes, and tracks trusted devices. Recognized devices enjoy frictionless access; unrecognized devices or locations trigger an instant step-up challenge.
+* **RFC 6238 Time-Based OTP (TOTP)**: Compatible with Google Authenticator, Microsoft Authenticator, 1Password, and Authy. Onboarding features persistent session secrets (preventing QR code desync on typos) with real-time SVG QR rendering.
+* **Single-Use Emergency Recovery Codes**: Generates 8 cryptographically hashed backup codes with instant copy, `.txt` file export, and printable emergency cards.
+* **Login Enforcement Policy (`Always Require TOTP on Every Login`)**:
+  - **Strict Mode (Default `true`)**: Prompts for 6-digit TOTP on *every* login attempt regardless of device trust (essential for high-privilege administrators).
+  - **Adaptive Mode**: Trusted devices remember the user for 60 days, prompting only on new or untrusted devices.
+  - **Step-Up Verification (Sudo Mode)**: Toggling this policy strictly requires entering the current 6-digit TOTP code before changes are authorized.
+* **High-Security 2FA Deactivation**: Disabling 2FA strictly requires re-authenticating with the user's **current account password**.
+* **Unified Admin Panel UI**: Built directly into the dashboard theme (`layouts.admin` / Bootstrap 5 / Feather Icons) with dedicated `Recognized Devices` and `Two-Factor Authentication (MFA) Settings Hub` pages.
+
+#### 🌐 Web Interface Routes:
+| Route Name | URI | Description |
+|---|---|---|
+| `adaptive.devices.index` | `/adaptive-auth/devices` | Recognized devices dashboard & session audit log |
+| `adaptive.devices.revoke` | `DELETE /adaptive-auth/devices/{id}/revoke` | Revoke a single active device session |
+| `adaptive.devices.revoke_others` | `POST /adaptive-auth/devices/revoke-others` | Instant logout of all other recognized devices |
+| `adaptive.totp.setup` | `/adaptive-auth/totp/setup` | Dedicated Two-Factor Authentication (MFA) Settings Hub |
+| `adaptive.totp.enable` | `POST /adaptive-auth/totp/enable` | Confirm 6-digit code to activate TOTP |
+| `adaptive.totp.disable` | `POST /adaptive-auth/totp/disable` | Disable 2FA (Requires current password verification) |
+| `adaptive.totp.preference` | `POST /adaptive-auth/totp/preference` | Toggle Always Require TOTP policy (Requires TOTP code) |
+| `adaptive.totp.regenerate_recovery_codes` | `POST /adaptive-auth/totp/regenerate-recovery-codes` | Invalidate and regenerate 8 fresh recovery codes |
+
+#### 📱 Mobile App & SPA REST API Reference:
+Designed for direct integration with **Flutter, React Native, iOS, Android, Next.js, and Vue**:
+
+```text
+POST /api/login
+ ├── 200 OK ──────────────> { status: "SUCCESS", data: { token, user } }
+ ├── 200 TOTP_REQUIRED ───> { status: "TOTP_REQUIRED", challenge_token: "...", message: "..." }
+ └── 200 OTP_REQUIRED ────> { status: "CHALLENGE_REQUIRED", challenge_token: "...", message: "..." }
+```
+
+| Method | Endpoint | Auth | Purpose & Payload |
+|---|---|---|---|
+| `POST` | `/api/login` | Public | Standard login; returns `TOTP_REQUIRED` or `CHALLENGE_REQUIRED` if step-up is needed |
+| `POST` | `/api/adaptive-auth/verify-totp` | Public | Verify 6-digit TOTP or backup recovery code: `{ challenge_token, code, remember_device }` |
+| `POST` | `/api/adaptive-auth/verify` | Public | Verify email OTP for untrusted devices: `{ challenge_token, otp }` |
+| `POST` | `/api/adaptive-auth/resend` | Public | Resend email OTP: `{ challenge_token }` |
+| `GET` | `/api/adaptive-auth/devices` | Bearer Token | List all user registered devices, trust status, and MFA settings |
+| `DELETE` | `/api/adaptive-auth/devices/{id}` | Bearer Token | Revoke specific device access |
+| `DELETE` | `/api/adaptive-auth/devices/others` | Bearer Token | Revoke all other registered devices |
+| `DELETE` | `/api/adaptive-auth/audit-logs` | Bearer Token | Clear user's login history logs |
+| `POST` | `/api/adaptive-auth/totp/setup` | Bearer Token | Initialize TOTP setup: returns `{ secret_key, otp_auth_url }` |
+| `POST` | `/api/adaptive-auth/totp/enable` | Bearer Token | Activate TOTP: `{ secret_key, code }` -> returns `{ recovery_codes }` |
+| `POST` | `/api/adaptive-auth/totp/disable` | Bearer Token | Disable TOTP: `{ password: "current_password" }` |
+| `POST` | `/api/adaptive-auth/totp/preference` | Bearer Token | Update strict login policy: `{ always_require_on_login: true, code: "123456" }` |
+| `POST` | `/api/adaptive-auth/totp/regenerate-recovery-codes` | Bearer Token | Regenerate fresh recovery codes: returns 8 new plain recovery codes |
 
 ---
 

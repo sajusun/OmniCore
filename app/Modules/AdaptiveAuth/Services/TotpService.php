@@ -116,11 +116,12 @@ class TotpService
                 'authenticatable_id'   => $user->getKey(),
             ],
             [
-                'secret_key'     => $secretKey,
-                'recovery_codes' => $recoveryCodes['hashed'],
-                'is_enabled'     => true,
-                'confirmed_at'   => now(),
-                'last_used_at'   => now(),
+                'secret_key'              => $secretKey,
+                'recovery_codes'          => $recoveryCodes['hashed'],
+                'is_enabled'              => true,
+                'always_require_on_login' => true,
+                'confirmed_at'            => now(),
+                'last_used_at'            => now(),
             ]
         );
 

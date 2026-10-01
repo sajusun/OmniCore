@@ -218,11 +218,12 @@ class AdaptiveAuthWebController extends Controller
     }
 
     /**
-     * Display TOTP MFA Setup (QR Code + Manual Secret).
+     * Display TOTP MFA Setup & Management Dashboard.
      */
     public function showTotpSetup(Request $request): View
     {
         $user = $request->user();
+        $hasTotp = $this->totp->hasTotpEnabled($user);
 
         // Persist secret in session during setup so entering a wrong code does NOT regenerate a new QR code!
         if ($request->query('refresh') === '1' || !$request->session()->has('totp_setup_secret')) {
@@ -235,10 +236,12 @@ class AdaptiveAuthWebController extends Controller
         $qrCodeSvg = $this->totp->getQrCodeSvg($user, $secretKey);
 
         return view('adaptive_auth::totp_setup', [
-            'user'       => $user,
-            'secretKey'  => $secretKey,
-            'qrCodeSvg'  => $qrCodeSvg,
-            'hasTotp'    => $this->totp->hasTotpEnabled($user),
+            'user'               => $user,
+            'secretKey'          => $secretKey,
+            'qrCodeSvg'          => $qrCodeSvg,
+            'hasTotp'            => $hasTotp,
+            'alwaysRequireTotp'  => $this->totp->alwaysRequiresTotpOnLogin($user),
+            'recoveryCodesCount' => $this->totp->getRemainingRecoveryCodesCount($user),
         ]);
     }
 
@@ -271,7 +274,7 @@ class AdaptiveAuthWebController extends Controller
             return response()->json($result);
         }
 
-        return redirect()->route('adaptive.devices.index')
+        return redirect()->route('adaptive.totp.setup')
             ->with('success', 'Authenticator App MFA enabled successfully! Save your recovery codes.')
             ->with('recovery_codes', $result['recovery_codes']);
     }
@@ -294,7 +297,7 @@ class AdaptiveAuthWebController extends Controller
 
         $this->totp->disableTotp($user);
 
-        return redirect()->route('adaptive.devices.index')
+        return redirect()->route('adaptive.totp.setup')
             ->with('success', 'Two-Factor Authenticator has been disabled successfully.');
     }
 
@@ -310,7 +313,7 @@ class AdaptiveAuthWebController extends Controller
 
         $newCodes = $this->totp->regenerateRecoveryCodes($user);
 
-        return redirect()->route('adaptive.devices.index')
+        return redirect()->route('adaptive.totp.setup')
             ->with('success', 'New emergency backup recovery codes have been generated. Please save or download them immediately!')
             ->with('recovery_codes', $newCodes);
     }
@@ -366,17 +369,29 @@ class AdaptiveAuthWebController extends Controller
     }
 
     /**
-     * Update user's TOTP login preference (Always require TOTP on trusted devices).
+     * Update user's TOTP login preference (Always require TOTP on trusted devices) with Step-Up verification.
      */
     public function updateTotpPreference(Request $request): RedirectResponse|JsonResponse
     {
         $request->validate([
             'always_require_on_login' => ['required', 'boolean'],
+            'code'                    => ['required', 'string'],
         ]);
 
         $user = $request->user();
-        $alwaysRequire = $request->boolean('always_require_on_login');
 
+        // Step-Up Authentication: Verify 6-digit TOTP code before allowing security policy change
+        if (!$this->totp->verifyUserTotpOrRecovery($user, (string) $request->input('code'))) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Invalid Authenticator code. Security preference was not changed.',
+                ], 422);
+            }
+            return back()->withErrors(['code' => 'Invalid Authenticator code.']);
+        }
+
+        $alwaysRequire = $request->boolean('always_require_on_login');
         $this->totp->updateLoginPreference($user, $alwaysRequire);
 
         $message = $alwaysRequire

@@ -53,12 +53,21 @@ class LoginApiController extends Controller
             $adaptiveService = app(\App\Modules\AdaptiveAuth\Services\AdaptiveAuthService::class);
             $assessment = $adaptiveService->evaluateEnvironment($user, $request, isLoginAttempt: true);
 
+            if ($assessment['status'] === 'totp_required') {
+                $challenge = $adaptiveService->createChallenge($user, $assessment['metadata']);
+                return $this->success([
+                    'status'          => 'TOTP_REQUIRED',
+                    'challenge_token' => $challenge->challenge_token,
+                    'message'         => 'Two-Factor Authenticator code required. Please enter 6-digit TOTP code or backup recovery code.',
+                ], '2FA verification required', 200);
+            }
+
             if ($assessment['status'] === 'challenge_required') {
                 $challenge = $adaptiveService->createChallenge($user, $assessment['metadata']);
                 return $this->success([
                     'status'          => 'CHALLENGE_REQUIRED',
                     'challenge_token' => $challenge->challenge_token,
-                    'message'         => 'New device or unrecognized environment detected. Please verify OTP code.',
+                    'message'         => 'New device or unrecognized environment detected. Please verify OTP code sent to your email.',
                 ], '2FA verification required', 200);
             }
 
