@@ -42,12 +42,24 @@
             </p>
             <div class="grid grid-cols-2 gap-2 bg-slate-950/80 p-4 rounded-xl border border-slate-800 font-mono text-sm text-slate-200">
                 @foreach(session('recovery_codes') as $code)
-                    <div class="select-all">{{ $code }}</div>
+                    <div class="select-all p-1 bg-slate-900 rounded border border-slate-800 text-center font-bold">{{ $code }}</div>
                 @endforeach
             </div>
+
+            <div class="flex items-center space-x-2 mt-4">
+                <button type="button" onclick="copySetupCodes()" class="w-1/2 py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs text-center border border-slate-700 transition flex items-center justify-center space-x-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    <span id="setupCopyBtnText">Copy All Codes</span>
+                </button>
+                <button type="button" onclick="downloadSetupCodes()" class="w-1/2 py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs text-center border border-slate-700 transition flex items-center justify-center space-x-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    <span>Download (.txt)</span>
+                </button>
+            </div>
+
             <div class="mt-4">
                 <a href="{{ route('adaptive.devices.index') }}" class="inline-flex items-center justify-center w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-sm transition">
-                    I Have Saved My Recovery Codes
+                    I Have Saved My Recovery Codes &rarr;
                 </a>
             </div>
         </div>
@@ -112,5 +124,42 @@
     @endif
 </div>
 
+<script>
+    const setupRecoveryCodes = @json(session('recovery_codes') ?? []);
+
+    function copySetupCodes() {
+        if (!setupRecoveryCodes || setupRecoveryCodes.length === 0) return;
+        const text = "=== OMNICORE 2FA RECOVERY CODES ===\n" +
+                     "Account: {{ auth()->user()?->email }}\n" +
+                     "Generated: " + new Date().toLocaleString() + "\n\n" +
+                     setupRecoveryCodes.join("\n") + "\n\n" +
+                     "Note: Each code can only be used once.";
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.getElementById('setupCopyBtnText');
+            if (btn) {
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy All Codes', 2000);
+            }
+        });
+    }
+
+    function downloadSetupCodes() {
+        if (!setupRecoveryCodes || setupRecoveryCodes.length === 0) return;
+        const text = "=== OMNICORE 2FA RECOVERY CODES ===\n" +
+                     "Account: {{ auth()->user()?->email }}\n" +
+                     "Generated: " + new Date().toLocaleString() + "\n\n" +
+                     setupRecoveryCodes.join("\n") + "\n\n" +
+                     "Note: Each code can only be used once.";
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'omnicore-2fa-recovery-codes.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+</script>
 </body>
 </html>

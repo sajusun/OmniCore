@@ -149,6 +149,37 @@ class TotpService
     }
 
     /**
+     * Regenerate new recovery codes for user with active TOTP.
+     */
+    public function regenerateRecoveryCodes(Model $user, int $count = 8): ?array
+    {
+        $credential = $this->getUserCredential($user);
+        if (!$credential) {
+            return null;
+        }
+
+        $recovery = $this->generateRecoveryCodes($count);
+        $credential->update([
+            'recovery_codes' => $recovery['hashed'],
+        ]);
+
+        return $recovery['plain'];
+    }
+
+    /**
+     * Get the count of remaining unused recovery codes.
+     */
+    public function getRemainingRecoveryCodesCount(Model $user): int
+    {
+        $credential = $this->getUserCredential($user);
+        if (!$credential || !is_array($credential->recovery_codes)) {
+            return 0;
+        }
+
+        return count($credential->recovery_codes);
+    }
+
+    /**
      * Check if a user has active TOTP MFA enabled.
      */
     public function hasTotpEnabled(Model $user): bool

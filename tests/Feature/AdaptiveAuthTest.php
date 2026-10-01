@@ -55,6 +55,12 @@ class AdaptiveAuthTest extends TestCase
 
         // Remaining codes count must be 7
         $this->assertCount(7, $totpCredential->recovery_codes);
+
+        $totpCredential->save();
+        $newCodes = $totpService->regenerateRecoveryCodes($user, 8);
+        $this->assertCount(8, $newCodes);
+        $this->assertEquals(8, $totpService->getRemainingRecoveryCodesCount($user));
+        $totpCredential->delete();
     }
 
     /**

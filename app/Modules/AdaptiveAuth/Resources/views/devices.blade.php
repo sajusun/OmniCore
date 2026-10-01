@@ -96,15 +96,29 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h3 class="mb-1 fw-semibold {{ ($hasTotp ?? false) ? 'text-success' : 'text-primary' }}">
-                                {{ ($hasTotp ?? false) ? 'TOTP MFA Enabled' : 'Adaptive 2FA Active' }}
-                            </h3>
-                            <p class="text-muted fs-13 mb-1">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <h3 class="mb-0 fw-semibold {{ ($hasTotp ?? false) ? 'text-success' : 'text-primary' }}">
+                                    {{ ($hasTotp ?? false) ? 'TOTP MFA Enabled' : 'Adaptive 2FA Active' }}
+                                </h3>
+                                @if ($hasTotp ?? false)
+                                <span class="badge bg-success-transparent text-success fs-11">
+                                    {{ $recoveryCodesCount ?? 8 }} recovery codes left
+                                </span>
+                                @endif
+                            </div>
+                            <p class="text-muted fs-13 mb-2">
                                 {{ ($hasTotp ?? false) ? 'Protected by Authenticator App' : 'Email OTP on unknown devices' }}
                             </p>
-                            <a href="{{ route('adaptive.totp.setup') }}" class="btn btn-sm btn-outline-primary mt-1">
-                                <i class="fe fe-shield me-1"></i>{{ ($hasTotp ?? false) ? 'Manage MFA' : 'Setup Authenticator' }}
-                            </a>
+                            <div class="d-flex flex-wrap gap-2 mt-1">
+                                <a href="{{ route('adaptive.totp.setup') }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fe fe-shield me-1"></i>{{ ($hasTotp ?? false) ? 'Manage MFA' : 'Setup Authenticator' }}
+                                </a>
+                                @if ($hasTotp ?? false)
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="confirmRegenerateRecoveryCodes()">
+                                    <i class="fe fe-refresh-cw me-1"></i>Regenerate Codes
+                                </button>
+                                @endif
+                            </div>
                         </div>
                         <div class="col col-auto top-icn dash">
                             <div class="counter-icon {{ ($hasTotp ?? false) ? 'bg-success' : 'bg-info' }} dash ms-auto box-shadow-info">
@@ -361,12 +375,151 @@
     {{-- Reusable Status Modal --}}
     <x-modal.status />
 
+    @if (session('recovery_codes'))
+    <!-- RECOVERY CODES POPUP MODAL -->
+    <div class="modal fade" id="recoveryCodesModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="recoveryCodesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content shadow-lg border-0">
+                <div class="modal-header bg-success text-white py-3">
+                    <h5 class="modal-title fw-bold text-white d-flex align-items-center" id="recoveryCodesModalLabel">
+                        <i class="fe fe-shield me-2"></i>Emergency Backup Recovery Codes
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="alert alert-warning d-flex align-items-start gap-2 mb-3">
+                        <i class="fe fe-alert-triangle fs-18 mt-1 text-warning"></i>
+                        <div class="small">
+                            <strong>CRITICAL: Save or download these codes right now!</strong><br>
+                            If you ever lose access to your phone or authenticator app, these emergency backup codes are the <strong>only way</strong> to access your account.
+                            Each code can only be used <strong>once</strong>. They will <strong>NOT</strong> be displayed again!
+                        </div>
+                    </div>
+
+                    @php
+                        $plainCodes = session('recovery_codes');
+                    @endphp
+
+                    <div class="p-3 bg-light rounded-3 border mb-3">
+                        <div class="row g-2 text-center" id="recoveryCodesContainer">
+                            @foreach ($plainCodes as $code)
+                            <div class="col-6 col-sm-3">
+                                <div class="bg-white p-2 rounded border font-monospace fw-bold fs-14 text-dark shadow-sm user-select-all">
+                                    {{ $code }}
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-2 border-top">
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="copyRecoveryCodes()">
+                                <i class="fe fe-copy me-1"></i><span id="copyBtnText">Copy All Codes</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="downloadRecoveryCodes()">
+                                <i class="fe fe-download me-1"></i>Download as .txt
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="printRecoveryCodes()">
+                                <i class="fe fe-printer me-1"></i>Print
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-success btn-sm px-4 fw-semibold" data-bs-dismiss="modal">
+                            <i class="fe fe-check me-1"></i>I Have Saved My Codes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    {{-- Hidden form for regenerating recovery codes --}}
+    <form id="regenerateRecoveryCodesForm" method="POST" action="{{ route('adaptive.totp.regenerate_recovery_codes') }}" style="display: none;">
+        @csrf
+    </form>
+
 </div>
 <!-- CONTAINER END -->
 @endsection
 
 @push('scripts')
 <script>
+    @if (session('recovery_codes'))
+    document.addEventListener('DOMContentLoaded', function () {
+        const modalEl = document.getElementById('recoveryCodesModal');
+        if (modalEl) {
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        }
+    });
+    @endif
+
+    const rawRecoveryCodes = @json(session('recovery_codes') ?? []);
+
+    function copyRecoveryCodes() {
+        if (!rawRecoveryCodes || rawRecoveryCodes.length === 0) return;
+        const text = "=== OMNICORE 2FA RECOVERY CODES ===\n" +
+                     "Keep these emergency backup recovery codes safe.\n" +
+                     "Account: {{ auth()->user()?->email }}\n" +
+                     "Generated: " + new Date().toLocaleString() + "\n\n" +
+                     rawRecoveryCodes.join("\n") + "\n\n" +
+                     "Note: Each code can only be used once.";
+        navigator.clipboard.writeText(text).then(() => {
+            const btnText = document.getElementById('copyBtnText');
+            if (btnText) {
+                btnText.textContent = 'Copied!';
+                setTimeout(() => btnText.textContent = 'Copy All Codes', 2000);
+            }
+        });
+    }
+
+    function downloadRecoveryCodes() {
+        if (!rawRecoveryCodes || rawRecoveryCodes.length === 0) return;
+        const text = "=== OMNICORE 2FA RECOVERY CODES ===\n" +
+                     "Keep these emergency backup recovery codes safe.\n" +
+                     "Account: {{ auth()->user()?->email }}\n" +
+                     "Generated: " + new Date().toLocaleString() + "\n\n" +
+                     rawRecoveryCodes.join("\n") + "\n\n" +
+                     "Note: Each code can only be used once.";
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'omnicore-2fa-recovery-codes.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    function printRecoveryCodes() {
+        window.print();
+    }
+
+    function confirmRegenerateRecoveryCodes() {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Regenerate Recovery Codes?',
+                text: 'Any existing unused backup recovery codes will be permanently invalidated and replaced with 8 fresh codes.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, generate new codes',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('regenerateRecoveryCodesForm').submit();
+                }
+            });
+        } else {
+            if (confirm('Regenerate Recovery Codes? Any existing unused codes will be invalidated.')) {
+                document.getElementById('regenerateRecoveryCodesForm').submit();
+            }
+        }
+    }
+
     function confirmRevokeDevice(id, deviceName) {
         let url = "{{ route('adaptive.devices.revoke', ':id') }}";
         url = url.replace(':id', id);

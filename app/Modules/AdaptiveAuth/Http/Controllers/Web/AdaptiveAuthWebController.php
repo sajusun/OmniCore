@@ -283,6 +283,23 @@ class AdaptiveAuthWebController extends Controller
     }
 
     /**
+     * Regenerate new backup recovery codes.
+     */
+    public function regenerateRecoveryCodes(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        if (!$this->totp->hasTotpEnabled($user)) {
+            return back()->with('error', 'Two-Factor Authenticator is not enabled on your account.');
+        }
+
+        $newCodes = $this->totp->regenerateRecoveryCodes($user);
+
+        return redirect()->route('adaptive.devices.index')
+            ->with('success', 'New emergency backup recovery codes have been generated. Please save or download them immediately!')
+            ->with('recovery_codes', $newCodes);
+    }
+
+    /**
      * Step-Up Re-Authentication for Sensitive Actions.
      */
     public function confirmStepUp(Request $request): RedirectResponse
@@ -322,12 +339,13 @@ class AdaptiveAuthWebController extends Controller
             ->get();
 
         return view('adaptive_auth::devices', [
-            'devices'           => $devices,
-            'currentUuid'       => $currentUuid,
-            'logs'              => $logs,
-            'user'              => $user,
-            'hasTotp'           => $this->totp->hasTotpEnabled($user),
-            'alwaysRequireTotp' => $this->totp->alwaysRequiresTotpOnLogin($user),
+            'devices'            => $devices,
+            'currentUuid'        => $currentUuid,
+            'logs'               => $logs,
+            'user'               => $user,
+            'hasTotp'            => $this->totp->hasTotpEnabled($user),
+            'alwaysRequireTotp'  => $this->totp->alwaysRequiresTotpOnLogin($user),
+            'recoveryCodesCount' => $this->totp->getRemainingRecoveryCodesCount($user),
         ]);
     }
 

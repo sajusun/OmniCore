@@ -27,6 +27,7 @@ Route::middleware(['web'])->prefix('adaptive-auth')->name('adaptive.')->group(fu
         Route::post('/totp/enable', [AdaptiveAuthWebController::class, 'enableTotp'])->name('totp.enable');
         Route::post('/totp/disable', [AdaptiveAuthWebController::class, 'disableTotp'])->name('totp.disable');
         Route::post('/totp/preference', [AdaptiveAuthWebController::class, 'updateTotpPreference'])->name('totp.preference');
+        Route::post('/totp/regenerate-recovery-codes', [AdaptiveAuthWebController::class, 'regenerateRecoveryCodes'])->name('totp.regenerate_recovery_codes');
 
         // Step-Up Re-Authentication for Sensitive Actions
         Route::post('/step-up/confirm', [AdaptiveAuthWebController::class, 'confirmStepUp'])->name('step_up.confirm');
