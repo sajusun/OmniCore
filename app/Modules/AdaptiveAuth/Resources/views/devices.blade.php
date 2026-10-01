@@ -118,6 +118,38 @@
     </div>
     <!-- ROW-1 END -->
 
+    @if ($hasTotp ?? false)
+    <!-- ROW: TOTP Login Preference Setting -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-primary-subtle shadow-sm mb-4">
+                <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="avatar avatar-md br-7 bg-primary-transparent text-primary">
+                            <i class="fe fe-lock fs-18"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-semibold mb-1 text-dark">Always Require Authenticator (TOTP) on Every Login</h5>
+                            <p class="text-muted fs-13 mb-0">
+                                <strong>Enabled:</strong> You will be prompted for your 6-digit TOTP code on <em>every</em> sign-in attempt, even on recognized/trusted devices.<br>
+                                <strong>Disabled:</strong> Recognized/trusted devices will remember you and bypass the TOTP prompt for 60 days.
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-check form-switch form-switch-md mb-0">
+                            <input class="form-check-input" type="checkbox" id="alwaysRequireTotpSwitch" {{ ($alwaysRequireTotp ?? false) ? 'checked' : '' }} onchange="toggleAlwaysTotp(this)" style="cursor: pointer; width: 44px; height: 22px;">
+                            <label class="form-check-label fw-semibold text-dark ms-2" for="alwaysRequireTotpSwitch" id="alwaysRequireStatusLabel">
+                                {{ ($alwaysRequireTotp ?? false) ? 'Always Enforce' : 'Adaptive Only' }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- ROW-2: Devices Table Card -->
     <div class="row">
         <div class="col-12">
@@ -367,6 +399,53 @@
             const modal = new bootstrap.Modal(modalElement);
             modal.show();
         }
+    }
+
+    function toggleAlwaysTotp(switchEl) {
+        const isChecked = switchEl.checked;
+        const label = document.getElementById('alwaysRequireStatusLabel');
+        if (label) {
+            label.textContent = isChecked ? 'Always Enforce' : 'Adaptive Only';
+        }
+
+        fetch("{{ route('adaptive.totp.preference') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                always_require_on_login: isChecked ? 1 : 0
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Preference Updated',
+                        text: data.message,
+                        timer: 2500,
+                        showConfirmButton: false,
+                    });
+                }
+            }
+        })
+        .catch(err => {
+            switchEl.checked = !isChecked;
+            if (label) {
+                label.textContent = !isChecked ? 'Always Enforce' : 'Adaptive Only';
+            }
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to update login security preference.',
+                });
+            }
+        });
     }
 </script>
 @endpush

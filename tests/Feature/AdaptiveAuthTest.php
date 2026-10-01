@@ -111,4 +111,66 @@ class AdaptiveAuthTest extends TestCase
             $user->delete();
         }
     }
+
+    /**
+     * Test TOTP enforcement on untrusted vs trusted devices and preference toggle.
+     */
+    public function test_totp_enforcement_and_login_flow(): void
+    {
+        $adaptiveService = app(AdaptiveAuthService::class);
+        $totpService = app(TotpService::class);
+
+        $email = 'totp-admin-' . uniqid() . '@test-security.com';
+        $user = User::forceCreate([
+            'name'     => 'TOTP Admin',
+            'email'    => $email,
+            'password' => Hash::make('Secret123!'),
+            'status'   => 'active',
+        ]);
+
+        $secretKey = $totpService->generateSecretKey();
+        $credential = UserTotpCredential::create([
+            'authenticatable_type'    => $user->getMorphClass(),
+            'authenticatable_id'      => $user->getKey(),
+            'secret_key'              => $secretKey,
+            'recovery_codes'          => [],
+            'is_enabled'              => true,
+            'always_require_on_login' => false,
+            'confirmed_at'            => now(),
+        ]);
+
+        $request = Request::create('/test-login', 'POST', [], [], [], [
+            'REMOTE_ADDR' => '192.168.1.50',
+            'HTTP_USER_AGENT' => 'Mozilla/5.0 Test Chrome Untrusted',
+        ]);
+
+        // 1. Untrusted device with TOTP enabled -> must return totp_required
+        $assessment = $adaptiveService->evaluateEnvironment($user, $request, isLoginAttempt: true);
+        $this->assertEquals('totp_required', $assessment['status']);
+        $this->assertTrue($assessment['totp_required']);
+
+        // 2. Register device as trusted
+        $device = $adaptiveService->registerTrustedDevice($user, $assessment['metadata']);
+        $this->assertTrue($device->is_trusted);
+
+        // Attach trusted cookie to subsequent request
+        $cookieName = config('adaptive_auth.cookie_name', 'adaptive_device_token');
+        $request->cookies->set($cookieName, $device->device_uuid);
+
+        // 3. Trusted device with always_require = false -> returns trusted
+        $assessment2 = $adaptiveService->evaluateEnvironment($user, $request, isLoginAttempt: true);
+        $this->assertEquals('trusted', $assessment2['status']);
+
+        // 4. Toggle always_require_on_login = true -> returns totp_required even on trusted device!
+        $totpService->updateLoginPreference($user, true);
+        $this->assertTrue($totpService->alwaysRequiresTotpOnLogin($user));
+
+        $assessment3 = $adaptiveService->evaluateEnvironment($user, $request, isLoginAttempt: true);
+        $this->assertEquals('totp_required', $assessment3['status']);
+
+        // 5. Clean up
+        $device->delete();
+        $credential->delete();
+        $user->delete();
+    }
 }

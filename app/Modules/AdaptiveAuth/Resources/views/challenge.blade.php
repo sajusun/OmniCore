@@ -224,11 +224,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 updateFinalOtp();
 
                 if (chars.length === 6) {
-                    form.submit();
+                    triggerSubmit();
                 }
             }
         });
     });
+
+    let isSubmitting = false;
+
+    function triggerSubmit() {
+        if (isSubmitting) return;
+        updateFinalOtp();
+        if (finalOtpInput.value.length === 6) {
+            isSubmitting = true;
+            const btn = document.getElementById('submitBtn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Verifying...';
+            }
+            form.submit();
+        }
+    }
 
     function updateFinalOtp() {
         let code = '';
@@ -241,6 +257,17 @@ document.addEventListener('DOMContentLoaded', function () {
         if (finalOtpInput.value.length < 6) {
             e.preventDefault();
             alert('Please enter all 6 digits of your verification code.');
+            return;
+        }
+        if (isSubmitting) {
+            e.preventDefault();
+            return;
+        }
+        isSubmitting = true;
+        const btn = document.getElementById('submitBtn');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Verifying...';
         }
     });
 

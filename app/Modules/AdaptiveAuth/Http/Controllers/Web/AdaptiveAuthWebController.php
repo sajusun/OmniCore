@@ -62,6 +62,102 @@ class AdaptiveAuthWebController extends Controller
     }
 
     /**
+     * Display the TOTP Authenticator Challenge screen during login.
+     */
+    public function showTotpChallenge(Request $request): View|RedirectResponse
+    {
+        $userId = $request->session()->get('adaptive_totp_pending_user_id');
+
+        if (!$userId) {
+            return redirect()->route('login')->withErrors(['email' => 'No pending authentication session found. Please sign in again.']);
+        }
+
+        $userModel = config('auth.providers.users.model', \App\Models\User::class);
+        $user = $userModel::find($userId);
+
+        if (!$user) {
+            $request->session()->forget(['adaptive_totp_pending_user_id', 'adaptive_totp_remember', 'adaptive_totp_metadata']);
+            return redirect()->route('login')->withErrors(['email' => 'User account could not be found.']);
+        }
+
+        $deviceMeta = $request->session()->get('adaptive_totp_metadata', []);
+        $settings = class_exists(Setting::class) ? Setting::first() : null;
+
+        return view('adaptive_auth::totp_challenge', [
+            'user'       => $user,
+            'deviceMeta' => $deviceMeta,
+            'settings'   => $settings,
+        ]);
+    }
+
+    /**
+     * Verify the submitted 6-digit TOTP code or backup recovery code during login.
+     */
+    public function verifyTotpChallenge(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'code'            => ['required', 'string'],
+            'remember_device' => ['nullable'],
+        ]);
+
+        $userId = $request->session()->get('adaptive_totp_pending_user_id');
+
+        if (!$userId) {
+            return redirect()->route('login')->withErrors(['email' => 'Authentication session expired. Please sign in again.']);
+        }
+
+        $userModel = config('auth.providers.users.model', \App\Models\User::class);
+        $user = $userModel::find($userId);
+
+        if (!$user) {
+            return redirect()->route('login')->withErrors(['email' => 'User not found.']);
+        }
+
+        $code = (string) $request->input('code');
+        $valid = $this->totp->verifyUserTotpOrRecovery($user, $code);
+
+        if (!$valid) {
+            return back()->withErrors([
+                'code' => 'Invalid verification code. Please check your authenticator app or backup recovery code and try again.',
+            ])->withInput();
+        }
+
+        $remember = (bool) $request->session()->pull('adaptive_totp_remember', false);
+        $deviceMeta = $request->session()->pull('adaptive_totp_metadata', []);
+        if (empty($deviceMeta)) {
+            $deviceMeta = $this->adaptiveAuth->getDetector()->inspect($request);
+        }
+
+        $request->session()->forget('adaptive_totp_pending_user_id');
+
+        // Automatically authenticate user into database web session
+        Auth::login($user, remember: $remember);
+        $request->session()->regenerate();
+
+        $cookie = null;
+        if ($request->boolean('remember_device', true)) {
+            $device = $this->adaptiveAuth->registerTrustedDevice($user, $deviceMeta);
+            $cookie = $this->adaptiveAuth->createDeviceCookie($device->device_uuid);
+            $request->session()->put('adaptive_device_uuid', $device->device_uuid);
+            $this->adaptiveAuth->logActivity($user, $device, $deviceMeta, 'trusted_login', 'Device verified via TOTP');
+        } else {
+            $this->adaptiveAuth->logActivity($user, null, $deviceMeta, 'trusted_login', 'Temporary login via TOTP (Not remembered)');
+        }
+
+        session()->flash('success', 'Two-Factor Authentication successful! Welcome back.');
+
+        $targetRoute = config('adaptive_auth.redirect_route', 'admin.dashboard');
+        $redirectUrl = Route::has($targetRoute) ? route($targetRoute) : url('/dashboard');
+
+        $response = redirect()->intended($redirectUrl);
+        if ($cookie) {
+            $response->withCookie($cookie);
+        }
+
+        return $response;
+    }
+
+    /**
      * Submit and verify the OTP code.
      */
     public function verify(Request $request): RedirectResponse
@@ -226,12 +322,42 @@ class AdaptiveAuthWebController extends Controller
             ->get();
 
         return view('adaptive_auth::devices', [
-            'devices'     => $devices,
-            'currentUuid' => $currentUuid,
-            'logs'        => $logs,
-            'user'        => $user,
-            'hasTotp'     => $this->totp->hasTotpEnabled($user),
+            'devices'           => $devices,
+            'currentUuid'       => $currentUuid,
+            'logs'              => $logs,
+            'user'              => $user,
+            'hasTotp'           => $this->totp->hasTotpEnabled($user),
+            'alwaysRequireTotp' => $this->totp->alwaysRequiresTotpOnLogin($user),
         ]);
+    }
+
+    /**
+     * Update user's TOTP login preference (Always require TOTP on trusted devices).
+     */
+    public function updateTotpPreference(Request $request): RedirectResponse|JsonResponse
+    {
+        $request->validate([
+            'always_require_on_login' => ['required', 'boolean'],
+        ]);
+
+        $user = $request->user();
+        $alwaysRequire = $request->boolean('always_require_on_login');
+
+        $this->totp->updateLoginPreference($user, $alwaysRequire);
+
+        $message = $alwaysRequire
+            ? 'Two-Factor Authenticator code is now required on EVERY login, even from recognized devices.'
+            : 'Two-Factor Authenticator code will only be asked on new or unrecognized devices.';
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status'                  => true,
+                'message'                 => $message,
+                'always_require_on_login' => $alwaysRequire,
+            ]);
+        }
+
+        return back()->with('success', $message);
     }
 
     /**

@@ -22,15 +22,17 @@ class UserTotpCredential extends Model
         'secret_key',
         'recovery_codes',
         'is_enabled',
+        'always_require_on_login',
         'confirmed_at',
         'last_used_at',
     ];
 
     protected $casts = [
-        'is_enabled'    => 'boolean',
-        'confirmed_at'  => 'datetime',
-        'last_used_at'  => 'datetime',
-        'recovery_codes'=> 'array',
+        'is_enabled'              => 'boolean',
+        'always_require_on_login' => 'boolean',
+        'confirmed_at'            => 'datetime',
+        'last_used_at'            => 'datetime',
+        'recovery_codes'          => 'array',
     ];
 
     /**

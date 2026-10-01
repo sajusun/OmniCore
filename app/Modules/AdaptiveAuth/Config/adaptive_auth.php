@@ -56,6 +56,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Always Require TOTP on Login (Default Preference)
+    |--------------------------------------------------------------------------
+    | If true, users with active TOTP are always prompted on every login,
+    | even on recognized/trusted devices. Can also be toggled per user.
+    */
+    'always_require_totp_on_login' => (bool) env('ADAPTIVE_AUTH_ALWAYS_REQUIRE_TOTP', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | OTP Settings
     |--------------------------------------------------------------------------
     */

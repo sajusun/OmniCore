@@ -82,18 +82,21 @@ class AdaptiveAuthService
             ];
         }
 
-        // Check if user requires TOTP MFA first
-        if ($this->isTotpRequiredForUser($user)) {
+        $info = $this->detector->inspect($request);
+        $hasTotp = $this->totp->hasTotpEnabled($user);
+        $alwaysTotp = $hasTotp && $this->totp->alwaysRequiresTotpOnLogin($user);
+
+        // 1. If user enabled TOTP and explicitly wants TOTP on EVERY login attempt:
+        if ($isLoginAttempt && $alwaysTotp) {
             return [
                 'status'        => 'totp_required',
                 'totp_required' => true,
-                'message'       => 'Authenticator TOTP code required.',
+                'metadata'      => $info,
+                'message'       => 'Authenticator TOTP code required on every login.',
             ];
         }
 
-        $info = $this->detector->inspect($request);
-
-        // 1. Check if device exists
+        // 2. Check if device exists
         $device = UserDevice::where('authenticatable_type', $user->getMorphClass())
             ->where('authenticatable_id', $user->getKey())
             ->where('device_uuid', $info['device_uuid'])
@@ -102,6 +105,14 @@ class AdaptiveAuthService
         // If device was explicitly revoked by user
         if ($device && (!$device->is_trusted || $device->revoked_at !== null)) {
             if ($isLoginAttempt) {
+                if ($hasTotp) {
+                    return [
+                        'status'        => 'totp_required',
+                        'totp_required' => true,
+                        'metadata'      => $info,
+                        'message'       => 'Previously revoked device attempting re-authentication. TOTP required.',
+                    ];
+                }
                 return $this->requireChallenge($user, $info, 'Previously revoked device attempting re-authentication');
             }
 
@@ -117,12 +128,28 @@ class AdaptiveAuthService
             $geoPolicy = config('adaptive_auth.geo_check_level', 'country');
 
             if ($geoPolicy === 'strict_ip' && $device->last_ip !== $info['ip']) {
+                if ($hasTotp) {
+                    return [
+                        'status'        => 'totp_required',
+                        'totp_required' => true,
+                        'metadata'      => $info,
+                        'message'       => 'IP address changed under strict IP policy. TOTP required.',
+                    ];
+                }
                 return $this->requireChallenge($user, $info, 'IP address changed under strict IP policy');
             }
 
             if (in_array($geoPolicy, ['city', 'country'], true)) {
                 // If country changed significantly (impossible travel or unexpected relocation)
                 if ($device->country && $info['country'] && strcasecmp($device->country, $info['country']) !== 0) {
+                    if ($hasTotp) {
+                        return [
+                            'status'        => 'totp_required',
+                            'totp_required' => true,
+                            'metadata'      => $info,
+                            'message'       => "Country anomaly detected: {$info['country']} vs {$device->country}. TOTP required.",
+                        ];
+                    }
                     return $this->requireChallenge($user, $info, "Country anomaly detected: {$info['country']} vs {$device->country}");
                 }
             }
@@ -144,7 +171,19 @@ class AdaptiveAuthService
             ];
         }
 
-        // 2. Check if this is the user's first login and auto-trust is enabled
+        // 3. New / Unrecognized environment (Untrusted device):
+        // If user has TOTP enabled -> require TOTP!
+        if ($hasTotp) {
+            return [
+                'status'        => 'totp_required',
+                'totp_required' => true,
+                'metadata'      => $info,
+                'message'       => 'Unrecognized device detected. Authenticator TOTP code required.',
+            ];
+        }
+
+        // 4. Untrusted device, no TOTP enabled:
+        // Check if this is the user's first login and auto-trust is enabled
         $hasAnyTrustedDevice = UserDevice::where('authenticatable_type', $user->getMorphClass())
             ->where('authenticatable_id', $user->getKey())
             ->trusted()
@@ -161,7 +200,7 @@ class AdaptiveAuthService
             ];
         }
 
-        // 3. New / Unrecognized environment: Challenge required!
+        // Challenge required via Email OTP!
         return $this->requireChallenge($user, $info, 'New device or unrecognized environment');
     }
 
@@ -493,7 +532,7 @@ class AdaptiveAuthService
     /**
      * Log device activity.
      */
-    protected function logActivity(
+    public function logActivity(
         Model $user,
         ?UserDevice $device,
         array $meta,

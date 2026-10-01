@@ -189,4 +189,41 @@ class TotpService
         // Case B: Backup recovery code
         return $credential->useRecoveryCode($cleanInput);
     }
+
+    /**
+     * Get user's active TOTP credential.
+     */
+    public function getUserCredential(Model $user): ?UserTotpCredential
+    {
+        return UserTotpCredential::where('authenticatable_type', $user->getMorphClass())
+            ->where('authenticatable_id', $user->getKey())
+            ->where('is_enabled', true)
+            ->first();
+    }
+
+    /**
+     * Update user's TOTP login enforcement preference.
+     */
+    public function updateLoginPreference(Model $user, bool $alwaysRequire): bool
+    {
+        $credential = $this->getUserCredential($user);
+        if ($credential) {
+            return (bool) $credential->update(['always_require_on_login' => $alwaysRequire]);
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if user requires TOTP on every login even from recognized devices.
+     */
+    public function alwaysRequiresTotpOnLogin(Model $user): bool
+    {
+        $credential = $this->getUserCredential($user);
+        if ($credential && $credential->always_require_on_login !== null) {
+            return (bool) $credential->always_require_on_login;
+        }
+
+        return (bool) config('adaptive_auth.always_require_totp_on_login', false);
+    }
 }
