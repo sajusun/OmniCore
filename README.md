@@ -1,4 +1,4 @@
-# ⚡ OmniCore — Enterprise Modular Backend & E-Commerce Platform
+# ⚡ OmniCore — Enterprise Modular Backend & Multi-Theme Platform
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="320" alt="Laravel Logo">
@@ -10,6 +10,7 @@
   <img src="https://img.shields.io/badge/Static%20Analysis-PHPStan%200%20Errors-brightgreen?style=for-the-badge&logo=php&logoColor=white" alt="PHPStan">
   <img src="https://img.shields.io/badge/Code%20Style-Laravel%20Pint-F05032?style=for-the-badge" alt="Pint">
   <img src="https://img.shields.io/badge/Architecture-Modular%20Monolith-4E73DF?style=for-the-badge" alt="Modular Monolith">
+  <img src="https://img.shields.io/badge/Themes-5%20Enterprise%20Themes-6366F1?style=for-the-badge" alt="5 Enterprise Themes">
   <img src="https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI/CD">
   <img src="https://img.shields.io/badge/API%20Docs-Scribe%20%2F%20OpenAPI%203.0-569A31?style=for-the-badge&logo=swagger&logoColor=white" alt="API Docs">
   <img src="https://img.shields.io/badge/RealTime-Laravel%20Reverb-FF6C37?style=for-the-badge&logo=socketdotio&logoColor=white" alt="RealTime Reverb">
@@ -19,9 +20,9 @@
 
 ## 📖 Executive Summary
 
-**OmniCore** is a production-grade, enterprise backend and application ecosystem built on **Laravel 12** and **PHP 8.4** utilizing a **Modular Monolith Architecture**. Engineered for high-scale applications requiring concurrency-safe e-commerce, real-time messaging, WebRTC calling, universal polymorphic interactions, automated audit trails, and multi-gateway payment integrations.
+**OmniCore** is a production-grade, enterprise backend and application ecosystem built on **Laravel 12** and **PHP 8.4** utilizing a **Modular Monolith Architecture**. Engineered for high-scale applications requiring concurrency-safe e-commerce, real-time messaging, WebRTC calling, universal polymorphic interactions, automated audit trails, multi-gateway payment integrations, an enterprise **Multi-Theme Design Engine**, and a bank-grade **Adaptive Authentication (2FA/TOTP)** framework.
 
-Designed following strict Clean Architecture, Domain-Driven Design (DDD) principles, and SOLID design patterns.
+Designed following strict **Clean Architecture**, **Domain-Driven Design (DDD)** principles, thin web controllers, and SOLID patterns.
 
 ---
 
@@ -30,15 +31,23 @@ Designed following strict Clean Architecture, Domain-Driven Design (DDD) princip
 ```mermaid
 flowchart TB
     subgraph ClientLayer["Client & Integration Layer"]
-        Web[Web Browser / Dashboard]
+        Web[Admin Dashboard & Web UI]
         Mobile[Mobile Apps / Flutter / React Native]
         ThirdParty[Webhooks & Third-Party Integrations]
     end
 
     subgraph GatewayLayer["API & Middleware Layer"]
         AuthGuard[Multi-Guard Auth / JWT & Sanctum]
+        AdaptiveGuard[Risk-Based Adaptive Device Guard]
         RateLimit[Throttle & Cooldown Protection]
         ResponseEnvelope[Standardized ApiResponse Envelope]
+    end
+
+    subgraph ThemeAndUI["Theme & Presentation System"]
+        ThemeEngine[Developer Theme Engine / config/theme.php]
+        DesignTokens[5 Complete Themes / CSS Custom Properties]
+        NightMode[Zero-FOUC Night Mode & Storage Sync]
+        FullscreenEngine[Smart Dual-Mode Fullscreen]
     end
 
     subgraph DomainModules["Decoupled Domain Modules (app/Modules/)"]
@@ -75,53 +84,157 @@ flowchart TB
     end
 
     ClientLayer --> GatewayLayer
+    ClientLayer --> ThemeAndUI
     GatewayLayer --> DomainModules
     DomainModules --> InfrastructureLayer
 ```
 
 ---
 
-## 🌟 Key Enterprise Engineering Highlights
+## 📂 Repository Directory Structure
 
-### 🛍️ 1. Shopify-Grade E-Commerce & Atomic Checkout
-* **Cartesian Variant Matrix Generator**: Computes attribute combinations (e.g. `[Color] × [Size] × [Storage]` ➔ variants generated with custom SKU algorithms, individual barcodes, and stock levels).
-* **Concurrency-Safe Atomic Checkout**: Uses **Database Transactions** and **Row-Level Pessimistic Locking (`lockForUpdate()`)** to prevent race-condition overselling under high concurrency.
-* **Order Lifecycle State Machine**: Strict enum-backed transitions (`Pending -> Confirmed -> Processing -> Shipped -> Delivered`) with automatic stock rollback if an order is cancelled or refunded.
-* **Smart Cart Engine**: Unauthenticated guest token carts seamlessly merge into user database carts upon login.
+```text
+OmniCore/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Api/                     # REST API Controllers (Sanctum / JWT)
+│   │   │   └── Web/Backend/             # Thin, clean Admin Controllers (Users, Roles, Dashboard, etc.)
+│   │   ├── Middleware/                  # HTTP Gateways, Trusted Proxies, Localization
+│   │   └── Requests/                    # Strict FormRequest Validations
+│   ├── Models/                          # Core Eloquent Models & Relations
+│   ├── Modules/                         # Self-Contained Domain Modules (Modular Monolith)
+│   │   ├── AdaptiveAuth/                # Device Fingerprinting, Risk Challenges & TOTP MFA
+│   │   ├── Interaction/                 # Polymorphic Likes, Comments, Bookmarks & Views
+│   │   └── ...                          # Commerce, Chat, Order, and Media Modules
+│   ├── Services/                        # Business Logic & Single-Responsibility Services
+│   └── Support/                         # Helper Classes, Enums & Value Objects
+├── config/
+│   ├── theme.php                        # Multi-Theme Registry & Active Theme Configuration
+│   ├── adaptive_auth.php                # Adaptive Auth, TOTP & Device Risk Policies
+│   └── ...
+├── public/
+│   └── backend/
+│       ├── css/
+│       │   ├── themes.css               # 5-Theme Design Tokens, Dark Mode & UI Engine
+│       │   ├── style.css                # Base Bootstrap 5 UI Styles
+│       │   └── skin-modes.css           # Template Layout Utilities
+│       └── js/                          # Plugins (Sidemenu, PerfectScrollbar, Datatables, etc.)
+├── resources/
+│   ├── views/
+│   │   ├── backend/                     # Admin Dashboard Views & Clean Layouts
+│   │   │   ├── partials/
+│   │   │   │   ├── _header.blade.php    # Navbar with Night Mode & Fullscreen Controls
+│   │   │   │   ├── _sidebar.blade.php   # Dynamic Sidebar Menu
+│   │   │   │   ├── _notification.blade.php # Notification Dropdown Hub
+│   │   │   │   ├── _styles.blade.php    # CSS Includes & Zero-FOUC Dark Mode Initializer
+│   │   │   │   ├── _scripts.blade.php   # Core Scripts & Plugin Loaders
+│   │   │   │   └── _custom-script.blade.php # Night Mode & Smart Fullscreen Controllers
+│   │   │   ├── access/                  # User & Role Management Views
+│   │   │   └── dashboard.blade.php      # Main KPI Analytics Dashboard
+│   │   └── layouts/                     # Master Blade Layout Templates
+│   └── js/                              # Vite Frontend Bundle Entrypoint
+├── routes/
+│   ├── web.php                          # Web Authentication & Route Definitions
+│   ├── api.php                          # Public & Protected REST API Routes
+│   ├── admin.php                        # Protected Backend Admin Panel Routes
+│   └── channels.php                     # Laravel Reverb Broadcast Channels
+└── tests/
+    ├── Feature/                         # Feature & HTTP Integration Tests
+    └── Unit/                            # Isolated Service & Model Unit Tests
+```
 
-### 💳 2. Payment Gateway Strategy Pattern
-* Decoupled driver architecture implementing `PaymentGatewayInterface`:
-  - **Stripe** (Payment Intents & Webhooks)
-  - **PayPal** (v2 Orders API)
-  - **bKash** (Tokenized Checkout)
-  - **SSLCommerz** (Hosted Gateway)
-  - **In-App User Wallet** & **Manual Bank Transfer**
+---
 
-### 💬 3. Telegram-Grade Real-Time Chat & WebRTC Calling
-* **Laravel Reverb & WebSockets**: Instant message delivery, typing indicators, read receipts, and online status broadcasting.
-* **WebRTC Calling Engine**: Peer-to-peer signaling for audio/video calling and screen sharing with automated call duration logs.
+## 🎨 1. Enterprise Multi-Theme Design System
 
-### 🌟 4. Universal Polymorphic Interaction Engine (`app/Modules/Interaction`)
-* **Reusable Headless Package**: Can be dropped into any Model (Posts, Products, Courses, Comments) via Trait `HasInteractions`.
-* **Features**: Multi-Reaction Likes, Nested Comments & Replies with admin moderation, Multi-Collection Bookmarks/Wishlists, Anti-Spam Cooldown Views Analytics, and SEO/Expiring Private Share Links.
-* **Reusable Blade UI Components**: Embeddable metric cards and moderation tables (`<x-interaction::stats-card />`, `<x-interaction::comments-table />`).
+OmniCore features an industrial-grade **5-Theme Design Token Architecture** built directly into [`config/theme.php`](file:///config/theme.php) and [`public/backend/css/themes.css`](file:///public/backend/css/themes.css).
 
-### 🛡️ 5. Enterprise Adaptive Authentication & Two-Factor (TOTP) Security (`app/Modules/AdaptiveAuth`)
-A bank-grade security module providing **Risk-Based Adaptive Device Intelligence**, **Time-Based One-Time Password (TOTP) MFA**, and **Session/Device Management**. Engineered following NIST SP 800-63B and OWASP guidelines.
+### 🛠️ Developer-First Theme Configuration
+The active theme is strictly controlled by the developer via `.env` or the Artisan CLI (UI users/admins cannot manipulate the design):
 
-#### 🔑 Key Capabilities:
-* **Polymorphic Architecture (`authenticatable_type`, `authenticatable_id`)**: Seamlessly binds to `User`, `Admin`, `Staff`, `HotelOwner`, or `Vendor` models via the `HasAdaptiveAuth` trait.
-* **Risk-Based Device Intelligence**: Computes hardware & browser fingerprint hashes, detects IP geolocation changes, and tracks trusted devices. Recognized devices enjoy frictionless access; unrecognized devices or locations trigger an instant step-up challenge.
-* **RFC 6238 Time-Based OTP (TOTP)**: Compatible with Google Authenticator, Microsoft Authenticator, 1Password, and Authy. Onboarding features persistent session secrets (preventing QR code desync on typos) with real-time SVG QR rendering.
-* **Single-Use Emergency Recovery Codes**: Generates 8 cryptographically hashed backup codes with instant copy, `.txt` file export, and printable emergency cards.
-* **Login Enforcement Policy (`Always Require TOTP on Every Login`)**:
-  - **Strict Mode (Default `true`)**: Prompts for 6-digit TOTP on *every* login attempt regardless of device trust (essential for high-privilege administrators).
-  - **Adaptive Mode**: Trusted devices remember the user for 60 days, prompting only on new or untrusted devices.
-  - **Step-Up Verification (Sudo Mode)**: Toggling this policy strictly requires entering the current 6-digit TOTP code before changes are authorized.
-* **High-Security 2FA Deactivation**: Disabling 2FA strictly requires re-authenticating with the user's **current account password**.
-* **Unified Admin Panel UI**: Built directly into the dashboard theme (`layouts.admin` / Bootstrap 5 / Feather Icons) with dedicated `Recognized Devices` and `Two-Factor Authentication (MFA) Settings Hub` pages.
+```env
+# Set the active theme in .env (Default: modern_indigo)
+APP_THEME=modern_indigo
+```
 
-#### 🌐 Web Interface Routes:
+CLI Theme Management:
+```bash
+# List all registered themes with their status and color palettes
+php artisan theme:list
+
+# Switch the application theme instantly
+php artisan theme:set dark_luxury
+php artisan theme:set glassmorphism
+php artisan theme:set minimalist_clean
+php artisan theme:set corporate_blue
+php artisan theme:set modern_indigo
+```
+
+### 🎭 5 Registered Themes Overview
+
+| Theme Key | Name | Category | Primary Accent | Aesthetic Character |
+|---|---|---|---|---|
+| `modern_indigo` | **Modern Indigo** *(Default)* | Modern SaaS | `#6366f1` (Indigo) | High-converting SaaS aesthetic with smooth shadows, indigo brand gradients, and balanced typography. |
+| `glassmorphism` | **Glassmorphism Frosted** | Futuristic Glass | `#a855f7` (Purple) | Translucent frosted cards (`backdrop-filter: blur(12px)`), luminous neon glows, and glass border accents. |
+| `dark_luxury` | **Dark Luxury OLED** | Luxury OLED Dark | `#38bdf8` (Cyan) | Deep obsidian slate backgrounds (`#0a0f1d`), neon cyan indicators, and warm gold financial highlights. |
+| `minimalist_clean` | **Minimalist Clean** | Minimalist Monochrome | `#0f172a` (Slate 900) | Notion & Japanese-inspired ultra-clean monochrome, hairline borders (`1px solid #e2e8f0`), zero visual noise. |
+| `corporate_blue` | **Corporate Blue & Slate** | Enterprise Fintech | `#1d4ed8` (Royal Blue) | Institutional fintech trust aesthetic featuring executive navy sidebars and royal blue primary buttons. |
+
+Every theme dynamically controls:
+* CSS Tokens (`--primary-bg-color`, `--secondary-bg-color`, `--theme-body-bg`, etc.)
+* Sidebar active/inactive text contrast and hover states
+* Card borders, border radiuses, and shadow elevations
+* Badges, counter icon gradients, and metric boxes
+* Tables, hover stripes, and form inputs
+
+---
+
+## 🌙 2. Night Mode (Dark Mode) Engine
+
+OmniCore includes a built-in **Night Mode Toggle** in the top navigation bar with persistent client synchronization:
+
+* **Persistent State**: User preference is stored in `localStorage ('omnicore_dark_mode')` and persists across browser tabs, sessions, and page reloads.
+* **Zero-FOUC (Flash of Unstyled Content)**: An inline script in the `<head>` tag checks and applies `dark-mode` to `<html>` and `<body>` prior to rendering.
+* **Dynamic Sun / Moon Icons**: The navbar icon instantly alternates between Moon (in light mode) and golden Sun (in dark mode) with smooth micro-animations.
+* **Universal Color Re-mapping**: Deep dark obsidian background (`#0b0f19`), dark slate cards (`#111827`), accessible text contrast (`#f8fafc` / `#cbd5e1`), and customized dark tables/inputs.
+
+---
+
+## 🖥️ 3. Smart Dual-Mode Fullscreen System
+
+The navbar fullscreen button (`#fullscreen-toggle`) is powered by an intelligent dual-mode controller:
+
+1. **Native HTML5 Fullscreen**: Leverages `requestFullscreen()` with complete cross-browser vendor fallbacks (`webkit`, `moz`, `ms`) for true OS-level fullscreen (hiding browser chrome, address bar, and OS taskbar).
+2. **Instant Full-Window Fallback**: If the browser environment, iframe, or webview restricts native OS window resizing (e.g., inside an IDE web preview or secure iframe), the controller automatically activates **Full-Window Presentation Mode (`body.fullscreen-window-fallback`)**, expanding the entire dashboard to `100vw × 100vh` without throwing errors.
+3. **Interactive Icon Transitions**: SVG corners expand in normal mode and contract in fullscreen mode.
+4. **Keyboard & Event Sync**: Listening to `fullscreenchange` and keyboard `ESC` key events guarantees the UI state remains synchronized at all times.
+
+---
+
+## 🔔 4. Notification Hub & Management
+
+* **Full-Width Flyout Menu**: Expanded dropdown width for clear reading of multi-line system alerts and audit logs.
+* **Quick Actions**: Individual inline mark-as-read (check icon) and delete (trash icon) buttons for immediate triage.
+* **Cursor Pagination Style**: Built for infinite or smooth cursor-based pagination through past notifications.
+
+---
+
+## 🛡️ 5. Enterprise Adaptive Authentication & TOTP MFA (`app/Modules/AdaptiveAuth`)
+
+A bank-grade security module providing **Risk-Based Adaptive Device Intelligence**, **Time-Based One-Time Password (TOTP) MFA**, and **Session/Device Management** following NIST SP 800-63B guidelines.
+
+### 🔑 Key Capabilities:
+* **Polymorphic Binding**: Seamlessly attaches to any authenticatable model (`User`, `Admin`, `Staff`, `Vendor`) via `HasAdaptiveAuth`.
+* **Risk-Based Device Intelligence**: Fingerprints hardware, browser, and IP geolocation. Recognized devices enjoy frictionless entry; new devices or risky locations require step-up verification.
+* **RFC 6238 TOTP**: Works with Google Authenticator, Microsoft Authenticator, 1Password, and Authy. Features persistent setup secrets and real-time SVG QR codes.
+* **Single-Use Backup Codes**: Generates 8 cryptographically hashed emergency recovery codes with copy, `.txt` download, and printable cards.
+* **Strict Policy Enforcement (`Always Require TOTP on Login`)**:
+  - **Strict Mode (Default `true`)**: Mandates 6-digit TOTP on *every* login attempt for administrators.
+  - **Adaptive Mode**: Trusted devices remember users for 60 days before requiring re-verification.
+  - **Step-Up Verification (Sudo Mode)**: Modifying sensitive MFA policies requires verifying the current TOTP code.
+
+### 🌐 Adaptive Auth Routes:
 | Route Name | URI | Description |
 |---|---|---|
 | `adaptive.devices.index` | `/adaptive-auth/devices` | Recognized devices dashboard & session audit log |
@@ -130,34 +243,19 @@ A bank-grade security module providing **Risk-Based Adaptive Device Intelligence
 | `adaptive.totp.setup` | `/adaptive-auth/totp/setup` | Dedicated Two-Factor Authentication (MFA) Settings Hub |
 | `adaptive.totp.enable` | `POST /adaptive-auth/totp/enable` | Confirm 6-digit code to activate TOTP |
 | `adaptive.totp.disable` | `POST /adaptive-auth/totp/disable` | Disable 2FA (Requires current password verification) |
-| `adaptive.totp.preference` | `POST /adaptive-auth/totp/preference` | Toggle Always Require TOTP policy (Requires TOTP code) |
+| `adaptive.totp.preference` | `POST /adaptive-auth/totp/preference` | Toggle strict login policy (Requires TOTP code) |
 | `adaptive.totp.regenerate_recovery_codes` | `POST /adaptive-auth/totp/regenerate-recovery-codes` | Invalidate and regenerate 8 fresh recovery codes |
 
-#### 📱 Mobile App & SPA REST API Reference:
-Designed for direct integration with **Flutter, React Native, iOS, Android, Next.js, and Vue**:
+---
 
-```text
-POST /api/login
- ├── 200 OK ──────────────> { status: "SUCCESS", data: { token, user } }
- ├── 200 TOTP_REQUIRED ───> { status: "TOTP_REQUIRED", challenge_token: "...", message: "..." }
- └── 200 OTP_REQUIRED ────> { status: "CHALLENGE_REQUIRED", challenge_token: "...", message: "..." }
-```
+## 🌟 6. Universal Polymorphic Interaction Engine (`app/Modules/Interaction`)
 
-| Method | Endpoint | Auth | Purpose & Payload |
-|---|---|---|---|
-| `POST` | `/api/login` | Public | Standard login; returns `TOTP_REQUIRED` or `CHALLENGE_REQUIRED` if step-up is needed |
-| `POST` | `/api/adaptive-auth/verify-totp` | Public | Verify 6-digit TOTP or backup recovery code: `{ challenge_token, code, remember_device }` |
-| `POST` | `/api/adaptive-auth/verify` | Public | Verify email OTP for untrusted devices: `{ challenge_token, otp }` |
-| `POST` | `/api/adaptive-auth/resend` | Public | Resend email OTP: `{ challenge_token }` |
-| `GET` | `/api/adaptive-auth/devices` | Bearer Token | List all user registered devices, trust status, and MFA settings |
-| `DELETE` | `/api/adaptive-auth/devices/{id}` | Bearer Token | Revoke specific device access |
-| `DELETE` | `/api/adaptive-auth/devices/others` | Bearer Token | Revoke all other registered devices |
-| `DELETE` | `/api/adaptive-auth/audit-logs` | Bearer Token | Clear user's login history logs |
-| `POST` | `/api/adaptive-auth/totp/setup` | Bearer Token | Initialize TOTP setup: returns `{ secret_key, otp_auth_url }` |
-| `POST` | `/api/adaptive-auth/totp/enable` | Bearer Token | Activate TOTP: `{ secret_key, code }` -> returns `{ recovery_codes }` |
-| `POST` | `/api/adaptive-auth/totp/disable` | Bearer Token | Disable TOTP: `{ password: "current_password" }` |
-| `POST` | `/api/adaptive-auth/totp/preference` | Bearer Token | Update strict login policy: `{ always_require_on_login: true, code: "123456" }` |
-| `POST` | `/api/adaptive-auth/totp/regenerate-recovery-codes` | Bearer Token | Regenerate fresh recovery codes: returns 8 new plain recovery codes |
+Drop-in interaction package that connects to any model (Posts, Products, Courses, Tickets) via the `HasInteractions` trait:
+* **Multi-Reaction Likes**: Thumbs up, Heart, Clap, Laugh, Insightful.
+* **Nested Comments**: Multi-level replies with admin moderation and spam filters.
+* **Bookmarks & Wishlists**: Custom collections and private boards.
+* **Anti-Spam Analytics**: Unique visitor tracking with IP cooldown protection.
+* **Reusable Blade Components**: Embeddable metric cards and moderation tables (`<x-interaction::stats-card />`, `<x-interaction::comments-table />`).
 
 ---
 
@@ -168,11 +266,11 @@ POST /api/login
 | **Framework** | Laravel 12.x / PHP 8.4+ | Core application runtime & IOC container |
 | **Static Analysis** | **PHPStan (Level 5 / 0 Errors)** | Strict type checking & zero runtime bugs |
 | **Code Style** | **Laravel Pint** | PSR-12 strict formatting across all modules |
+| **UI Design System** | **Bootstrap 5 + Custom CSS Tokens** | 5 Enterprise Themes + Night Mode + Fullscreen |
 | **CI / CD** | **GitHub Actions** | Automated linting, static analysis, & PHPUnit suite |
 | **API Documentation** | **Scribe & OpenAPI 3.0** | Interactive API Playground & Postman Collections |
 | **Real-time Engine** | **Laravel Reverb / WebSockets** | High-concurrency event broadcasting |
 | **Database & Cache** | MySQL 8.0+ / Redis 7 | Relational storage & sub-millisecond cache/queue |
-| **Containerization** | Docker & Docker Compose | 1-command reproducible production environment |
 
 ---
 
@@ -193,11 +291,11 @@ php artisan scribe:generate --force
 
 ## ⚡ Quick Start & Installation
 
-### Option A: Local Setup (PHP 8.4 + Composer)
+### Local Setup (PHP 8.4 + Composer + Herd / Valet)
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/your-username/OmniCore.git
+git clone https://github.com/sajusun/OmniCore.git
 cd OmniCore
 
 # 2. Install dependencies
@@ -209,33 +307,32 @@ cp .env.example .env
 php artisan key:generate
 php artisan jwt:secret
 
-# 4. Migrate & Load Rich Demo Data
+# 4. Configure database and theme in .env
+# DB_DATABASE=one_dashboard
+# APP_THEME=modern_indigo
+
+# 5. Run Migrations & Load Rich Demo Data
 php artisan migrate --seed
 
-# 5. Start Development Server & WebSocket Server
+# 6. Start Development & WebSocket Servers
 php artisan serve
 php artisan reverb:start
-```
-
-### Option B: Docker Compose
-
-```bash
-# Start all services (PHP 8.4, Nginx, MySQL, Redis, Reverb, Mailpit)
-docker compose up -d
-
-# Run migrations & seed demo dataset
-docker compose exec app php artisan migrate --seed
 ```
 
 ---
 
 ## 🧪 Testing & Code Quality Verification
 
+All features are tested against an automated test suite:
+
 ```bash
-# Run PHPUnit Automated Test Suite
+# Run PHPUnit Automated Test Suite (143+ tests, 830+ assertions)
 php artisan test
 
-# Run PHPStan Static Analysis (0 Errors)
+# Test Theme Engine specifically
+php artisan test --filter=ThemeEngineTest
+
+# Run PHPStan Static Analysis (0 Errors across all modules)
 vendor/bin/phpstan analyse --memory-limit=1G
 
 # Verify Code Style (Laravel Pint)
