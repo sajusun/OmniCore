@@ -663,3 +663,267 @@ body[class*="theme-"] .page-link:hover {
     background-color: var(--theme-sidebar-hover-bg) !important;
     color: var(--theme-sidebar-hover-text) !important;
 }
+
+/* ============================================================================
+ * 12. NIGHT MODE (DARK MODE) DESIGN SYSTEM & NAVBAR TOGGLE
+ * ============================================================================ */
+.layout-setting {
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative;
+    user-select: none;
+}
+.layout-setting svg,
+.layout-setting .header-icon-svg {
+    width: 22px !important;
+    height: 22px !important;
+    fill: currentColor !important;
+    transition: transform 0.25s ease, fill 0.25s ease !important;
+}
+.layout-setting:hover svg,
+.layout-setting:hover .header-icon-svg {
+    transform: rotate(15deg) scale(1.1);
+}
+
+/* Light mode state: show moon, hide sun */
+body:not(.dark-mode) .layout-setting .dark-layout {
+    display: inline-flex !important;
+}
+body:not(.dark-mode) .layout-setting .light-layout {
+    display: none !important;
+}
+
+/* Dark mode state: show sun, hide moon */
+body.dark-mode .layout-setting .dark-layout {
+    display: none !important;
+}
+body.dark-mode .layout-setting .light-layout {
+    display: inline-flex !important;
+    color: #fbbf24 !important;
+}
+body.dark-mode .layout-setting .light-layout svg {
+    fill: #fbbf24 !important;
+}
+
+/* Universal Dark Mode CSS Variables Override */
+body.dark-mode {
+    --theme-body-bg: #0b0f19 !important;
+    --theme-heading-color: #f8fafc !important;
+    --theme-body-color: #cbd5e1 !important;
+    --theme-muted-color: #94a3b8 !important;
+    --theme-card-bg: #111827 !important;
+    --theme-card-border: #1f2937 !important;
+    --theme-card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.6) !important;
+    --theme-sidebar-bg: #0f172a !important;
+    --theme-sidebar-text: #94a3b8 !important;
+    --theme-sidebar-border: #1e293b !important;
+    --theme-sidebar-hover-bg: rgba(255, 255, 255, 0.05) !important;
+    --theme-sidebar-hover-text: #f8fafc !important;
+    --theme-header-bg: #0f172a !important;
+    --theme-header-border: #1e293b !important;
+    --theme-header-text: #f8fafc !important;
+    --theme-table-header-bg: #1e293b !important;
+    --theme-table-header-text: #94a3b8 !important;
+    --theme-table-border: #1f2937 !important;
+    --theme-table-row-hover: rgba(255, 255, 255, 0.03) !important;
+    --theme-input-bg: #1e293b !important;
+    --theme-input-border: #334155 !important;
+    --theme-input-text: #f8fafc !important;
+    --theme-badge-primary-bg: rgba(99, 102, 241, 0.2) !important;
+    --theme-badge-primary-text: #818cf8 !important;
+    --theme-badge-primary-border: rgba(99, 102, 241, 0.4) !important;
+    background-color: #0b0f19 !important;
+    color: #cbd5e1 !important;
+}
+
+/* Base structural dark mode styling */
+body.dark-mode .app-header {
+    background: #0f172a !important;
+    border-bottom: 1px solid #1e293b !important;
+}
+body.dark-mode .app-sidebar {
+    background: #0f172a !important;
+    border-right: 1px solid #1e293b !important;
+}
+body.dark-mode .side-header {
+    background: #0f172a !important;
+    border-bottom: 1px solid #1e293b !important;
+}
+body.dark-mode .main-sidemenu {
+    background: transparent !important;
+}
+body.dark-mode .side-menu__item:not(.active) {
+    color: #94a3b8 !important;
+}
+body.dark-mode .side-menu__item:not(.active):hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: #ffffff !important;
+}
+body.dark-mode .side-item-category {
+    color: #64748b !important;
+}
+body.dark-mode .card {
+    background-color: #111827 !important;
+    border-color: #1f2937 !important;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5) !important;
+}
+body.dark-mode .card-header,
+body.dark-mode .card-footer {
+    background-color: transparent !important;
+    border-color: #1f2937 !important;
+}
+body.dark-mode .dropdown-menu {
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+}
+body.dark-mode .dropdown-item {
+    color: #cbd5e1 !important;
+}
+body.dark-mode .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    color: #ffffff !important;
+}
+body.dark-mode .dropdown-divider {
+    border-color: #334155 !important;
+}
+body.dark-mode .footer {
+    background-color: #0f172a !important;
+    border-top: 1px solid #1e293b !important;
+    color: #64748b !important;
+}
+body.dark-mode .nav-link.icon {
+    color: #94a3b8 !important;
+}
+body.dark-mode .nav-link.icon:hover {
+    color: #ffffff !important;
+}
+body.dark-mode .text-dark {
+    color: #f1f5f9 !important;
+}
+body.dark-mode .text-muted {
+    color: #94a3b8 !important;
+}
+body.dark-mode .bg-light {
+    background-color: #1e293b !important;
+    color: #cbd5e1 !important;
+}
+body.dark-mode .breadcrumb-item.active {
+    color: #94a3b8 !important;
+}
+body.dark-mode .border,
+body.dark-mode .border-top,
+body.dark-mode .border-bottom,
+body.dark-mode .border-start,
+body.dark-mode .border-end {
+    border-color: #1f2937 !important;
+}
+body.dark-mode .modal-content {
+    background-color: #111827 !important;
+    border-color: #1f2937 !important;
+    color: #cbd5e1 !important;
+}
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+    border-color: #1f2937 !important;
+}
+body.dark-mode .list-group-item {
+    background-color: #111827 !important;
+    border-color: #1f2937 !important;
+    color: #cbd5e1 !important;
+}
+body.dark-mode .table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.02);
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.04);
+    color: #cbd5e1 !important;
+    border-color: #1f2937 !important;
+}
+body.dark-mode .table th {
+    background-color: #1e293b !important;
+    color: #94a3b8 !important;
+    border-color: #1f2937 !important;
+}
+body.dark-mode .table td {
+    background-color: transparent !important;
+    color: #cbd5e1 !important;
+    border-color: #1f2937 !important;
+}
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus {
+    background-color: #1e293b !important;
+    border-color: var(--primary-bg-color) !important;
+    color: #ffffff !important;
+}
+body.dark-mode .input-group-text {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #94a3b8 !important;
+}
+body.dark-mode .header-search .form-control {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+/* ============================================================================
+ * 13. FULLSCREEN NAVBAR TOGGLE & PRESENTATION MODE
+ * ============================================================================ */
+.full-screen-link {
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative;
+    user-select: none;
+}
+.full-screen-link svg,
+.full-screen-link .header-icon-svg {
+    width: 22px !important;
+    height: 22px !important;
+    fill: currentColor !important;
+    transition: transform 0.2s ease, fill 0.2s ease !important;
+}
+.full-screen-link:hover svg,
+.full-screen-link:hover .header-icon-svg {
+    transform: scale(1.15);
+}
+.full-screen-link .fullscreen-open {
+    display: inline-flex !important;
+}
+.full-screen-link .fullscreen-close {
+    display: none !important;
+}
+
+body.fullscreen-mode .full-screen-link .fullscreen-open,
+body.fullscreen-window-fallback .full-screen-link .fullscreen-open {
+    display: none !important;
+}
+body.fullscreen-mode .full-screen-link .fullscreen-close,
+body.fullscreen-window-fallback .full-screen-link .fullscreen-close {
+    display: inline-flex !important;
+    color: var(--primary-bg-color) !important;
+}
+body.fullscreen-mode .full-screen-link .fullscreen-close svg,
+body.fullscreen-window-fallback .full-screen-link .fullscreen-close svg {
+    fill: var(--primary-bg-color) !important;
+}
+
+/* Fallback full-window presentation mode if browser environment or iframe denies native OS window resizing */
+body.fullscreen-window-fallback {
+    overflow-x: hidden !important;
+}
+body.fullscreen-window-fallback .page {
+    width: 100vw !important;
+    min-height: 100vh !important;
+}
+
+

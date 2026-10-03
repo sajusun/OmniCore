@@ -71,3 +71,17 @@
 
 <!-- Dynamic Enterprise Multi-Theme Engine (5 Themes via APP_THEME) -->
 <link href="{{ asset('backend/css/themes.css') }}" rel="stylesheet" />
+
+<script>
+    (function () {
+        try {
+            var mode = localStorage.getItem('omnicore_dark_mode');
+            if (mode === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+            } else if (mode === 'light') {
+                document.documentElement.classList.remove('dark-mode');
+            }
+            localStorage.removeItem('omnicore_preview_theme');
+        } catch (e) {}
+    })();
+</script>
