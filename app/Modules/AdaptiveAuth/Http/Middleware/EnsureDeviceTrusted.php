@@ -36,7 +36,7 @@ class EnsureDeviceTrusted
         }
 
         // Avoid intercepting challenge, login, or logout routes
-        if ($request->routeIs('adaptive.challenge*') || $request->routeIs('login') || $request->routeIs('logout')) {
+        if ($request->routeIs('adaptive.challenge*') || $request->routeIs('adaptive.totp*') || $request->routeIs('login') || $request->routeIs('logout')) {
             return $next($request);
         }
 

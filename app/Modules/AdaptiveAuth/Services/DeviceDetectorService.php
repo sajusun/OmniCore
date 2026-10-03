@@ -25,7 +25,7 @@ class DeviceDetectorService
         $browser    = $this->detectBrowser($userAgent);
         $deviceType = $this->detectDeviceType($userAgent);
         $deviceName = "{$browser['name']} on {$platform}";
-        $location   = $this->resolveLocation($ip);
+        $location   = $this->resolveLocation($ip, $request);
 
         // Secondary digital fingerprint (User-Agent + Languages)
         $entropy = $userAgent . '|' . (string) $request->header('Accept-Language', '');
@@ -61,7 +61,7 @@ class DeviceDetectorService
     }
 
     /**
-     * Extract accurate client IP respecting trusted proxy/Cloudflare headers.
+     * Extract accurate client IP respecting AWS ALB / Cloudflare / Reverse Proxy headers.
      */
     public function resolveClientIp(Request $request): string
     {
@@ -86,10 +86,25 @@ class DeviceDetectorService
     }
 
     /**
-     * Resolve City and Country from IP with caching and fast timeout.
+     * Resolve City and Country from IP with AWS CloudFront/ALB header fallback & Cache.
      */
-    public function resolveLocation(string $ip): array
+    public function resolveLocation(string $ip, ?Request $request = null): array
     {
+        // 1. Fast Edge Header Detection (CloudFront / Cloudflare)
+        if ($request) {
+            $edgeCountry = $request->server('HTTP_CLOUDFRONT_VIEWER_COUNTRY')
+                ?? $request->server('HTTP_CF_IPCOUNTRY');
+
+            if (!empty($edgeCountry) && strlen($edgeCountry) === 2) {
+                return [
+                    'city'         => $request->server('HTTP_CLOUDFRONT_VIEWER_CITY') ?? null,
+                    'region'       => null,
+                    'country'      => strtoupper($edgeCountry),
+                    'country_code' => strtoupper($edgeCountry),
+                ];
+            }
+        }
+
         if ($this->isPrivateIp($ip)) {
             return [
                 'city'         => 'Localhost',
@@ -99,7 +114,7 @@ class DeviceDetectorService
             ];
         }
 
-        // Check cache for 24 hours to prevent repeated external calls
+        // 2. Check cache for 24 hours (Database / Redis cache backend)
         $cacheKey = "geo_ip_" . md5($ip);
         return Cache::remember($cacheKey, 86400, function () use ($ip) {
             try {
@@ -117,7 +132,7 @@ class DeviceDetectorService
                         ];
                     }
                 }
-            } catch (\Throwable $e) {
+            } catch (\Throwable) {
                 // Fail-safe: Location lookup failure should never interrupt login flow
             }
 

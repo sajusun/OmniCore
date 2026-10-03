@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Modules\Review\Services;
 
 use App\Models\User;
-use App\Modules\Notification\Services\NotificationService;
 use App\Modules\Order\Models\Order;
 use App\Modules\Review\Enums\ReviewStatus;
+use App\Modules\Review\Events\ReviewRepliedEvent;
+use App\Modules\Review\Events\ReviewSubmittedEvent;
 use App\Modules\Review\Models\Review;
 use App\Modules\Review\Models\ReviewMedia;
 use App\Modules\Review\Models\ReviewVote;
@@ -18,9 +19,7 @@ use Illuminate\Support\Str;
 
 class ReviewService
 {
-    public function __construct(
-        protected NotificationService $notificationService
-    ) {}
+    public function __construct() {}
 
     /**
      * Submit or update a review on a reviewable entity.
@@ -57,19 +56,8 @@ class ReviewService
                 }
             }
 
-            // Notify owner or admins
-            $admins = User::whereHas('roles', fn($q) => $q->whereIn('name', ['super_admin', 'admin', 'Super Admin', 'Admin']))->get();
-            if ($admins->isNotEmpty()) {
-                $this->notificationService->sendMany(
-                    $admins,
-                    title: "New Review ({$review->rating}★)",
-                    body: "{$user->name} reviewed a " . class_basename($reviewable) . ": " . Str::limit($review->comment, 60),
-                    type: 'review',
-                    referenceType: 'review',
-                    referenceId: $review->id,
-                    meta: ['review_id' => $review->id, 'rating' => $review->rating]
-                );
-            }
+            // Dispatch domain event (Notification listener handles delivery decoupled)
+            event(new ReviewSubmittedEvent($review));
 
             return $review->fresh(['media', 'user']);
         });
@@ -114,16 +102,8 @@ class ReviewService
             'vendor_replied_at' => now(),
         ]);
 
-        // Notify reviewer
-        $this->notificationService->send(
-            $review->user,
-            title: "Response to your review",
-            body: "The vendor replied: " . Str::limit($replyMessage, 80),
-            type: 'review_reply',
-            referenceType: 'review',
-            referenceId: $review->id,
-            meta: ['review_id' => $review->id]
-        );
+        // Dispatch domain event (Notification listener handles delivery decoupled)
+        event(new ReviewRepliedEvent($review, $replyMessage));
 
         return $review->fresh();
     }

@@ -22,7 +22,8 @@ use Symfony\Component\HttpFoundation\Cookie as HttpCookie;
 class AdaptiveAuthService
 {
     public function __construct(
-        protected DeviceDetectorService $detector
+        protected DeviceDetectorService $detector,
+        protected TotpService $totp
     ) {
     }
 
@@ -35,10 +36,40 @@ class AdaptiveAuthService
     }
 
     /**
+     * Get the TOTP service instance.
+     */
+    public function getTotp(): TotpService
+    {
+        return $this->totp;
+    }
+
+    /**
+     * Determine if mandatory TOTP is required for the user based on role policy or user setup.
+     */
+    public function isTotpRequiredForUser(Model $user): bool
+    {
+        // Check if user explicitly enabled TOTP
+        if ($this->totp->hasTotpEnabled($user)) {
+            return true;
+        }
+
+        // Check role-based mandatory policy
+        $role = strtolower((string) ($user->role ?? $user->type ?? 'customer'));
+        $policies = config('adaptive_auth.role_policies', []);
+
+        if (isset($policies[$role]) && ($policies[$role]['mode'] ?? '') === 'totp_mandatory') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Evaluate the risk of an authentication attempt.
      *
      * @param Model $user
      * @param Request $request
+     * @param bool $isLoginAttempt
      * @return array
      */
     public function evaluateEnvironment(Model $user, Request $request, bool $isLoginAttempt = false): array
@@ -52,8 +83,20 @@ class AdaptiveAuthService
         }
 
         $info = $this->detector->inspect($request);
+        $hasTotp = $this->totp->hasTotpEnabled($user);
+        $alwaysTotp = $hasTotp && $this->totp->alwaysRequiresTotpOnLogin($user);
 
-        // 1. Check if device exists
+        // 1. If user enabled TOTP and explicitly wants TOTP on EVERY login attempt:
+        if ($isLoginAttempt && $alwaysTotp) {
+            return [
+                'status'        => 'totp_required',
+                'totp_required' => true,
+                'metadata'      => $info,
+                'message'       => 'Authenticator TOTP code required on every login.',
+            ];
+        }
+
+        // 2. Check if device exists
         $device = UserDevice::where('authenticatable_type', $user->getMorphClass())
             ->where('authenticatable_id', $user->getKey())
             ->where('device_uuid', $info['device_uuid'])
@@ -62,6 +105,14 @@ class AdaptiveAuthService
         // If device was explicitly revoked by user
         if ($device && (!$device->is_trusted || $device->revoked_at !== null)) {
             if ($isLoginAttempt) {
+                if ($hasTotp) {
+                    return [
+                        'status'        => 'totp_required',
+                        'totp_required' => true,
+                        'metadata'      => $info,
+                        'message'       => 'Previously revoked device attempting re-authentication. TOTP required.',
+                    ];
+                }
                 return $this->requireChallenge($user, $info, 'Previously revoked device attempting re-authentication');
             }
 
@@ -74,15 +125,31 @@ class AdaptiveAuthService
 
         if ($device && $device->isCurrentlyTrusted()) {
             // Check location strictness policy
-            $geoPolicy = config('adaptive_auth.geo_check_level', 'city');
+            $geoPolicy = config('adaptive_auth.geo_check_level', 'country');
 
             if ($geoPolicy === 'strict_ip' && $device->last_ip !== $info['ip']) {
+                if ($hasTotp) {
+                    return [
+                        'status'        => 'totp_required',
+                        'totp_required' => true,
+                        'metadata'      => $info,
+                        'message'       => 'IP address changed under strict IP policy. TOTP required.',
+                    ];
+                }
                 return $this->requireChallenge($user, $info, 'IP address changed under strict IP policy');
             }
 
             if (in_array($geoPolicy, ['city', 'country'], true)) {
                 // If country changed significantly (impossible travel or unexpected relocation)
                 if ($device->country && $info['country'] && strcasecmp($device->country, $info['country']) !== 0) {
+                    if ($hasTotp) {
+                        return [
+                            'status'        => 'totp_required',
+                            'totp_required' => true,
+                            'metadata'      => $info,
+                            'message'       => "Country anomaly detected: {$info['country']} vs {$device->country}. TOTP required.",
+                        ];
+                    }
                     return $this->requireChallenge($user, $info, "Country anomaly detected: {$info['country']} vs {$device->country}");
                 }
             }
@@ -104,7 +171,19 @@ class AdaptiveAuthService
             ];
         }
 
-        // 2. Check if this is the user's first login and auto-trust is enabled
+        // 3. New / Unrecognized environment (Untrusted device):
+        // If user has TOTP enabled -> require TOTP!
+        if ($hasTotp) {
+            return [
+                'status'        => 'totp_required',
+                'totp_required' => true,
+                'metadata'      => $info,
+                'message'       => 'Unrecognized device detected. Authenticator TOTP code required.',
+            ];
+        }
+
+        // 4. Untrusted device, no TOTP enabled:
+        // Check if this is the user's first login and auto-trust is enabled
         $hasAnyTrustedDevice = UserDevice::where('authenticatable_type', $user->getMorphClass())
             ->where('authenticatable_id', $user->getKey())
             ->trusted()
@@ -121,7 +200,7 @@ class AdaptiveAuthService
             ];
         }
 
-        // 3. New / Unrecognized environment: Challenge required!
+        // Challenge required via Email OTP!
         return $this->requireChallenge($user, $info, 'New device or unrecognized environment');
     }
 
@@ -156,11 +235,6 @@ class AdaptiveAuthService
 
     /**
      * Create and dispatch a new login challenge with email OTP.
-     *
-     * @param Model $user
-     * @param array $deviceMetadata
-     * @param bool $rememberDevice
-     * @return DeviceLoginChallenge
      */
     public function createChallenge(Model $user, array $deviceMetadata, bool $rememberDevice = true): DeviceLoginChallenge
     {
@@ -198,137 +272,157 @@ class AdaptiveAuthService
 
         // Dispatch Email with OTP
         try {
-            Mail::to($user->email)->send(
-                new AdaptiveOtpMail($otpCode, $deviceMetadata, $expiryMins)
-            );
+            if (!empty($user->email)) {
+                Mail::to($user->email)->send(
+                    new AdaptiveOtpMail(
+                        otpCode: $otpCode,
+                        deviceInfo: $deviceMetadata,
+                        expiresInMinutes: $expiryMins
+                    )
+                );
+            }
         } catch (\Throwable $e) {
-            Log::error('Failed to send Adaptive OTP Email: ' . $e->getMessage());
+            Log::error('AdaptiveAuth: Failed to dispatch OTP email: ' . $e->getMessage());
         }
 
         return $challenge;
     }
 
     /**
-     * Verify submitted OTP against challenge token.
-     *
-     * @param string $challengeToken
-     * @param string $otp
-     * @return array
+     * Verify an OTP challenge submission.
      */
-    public function verifyChallenge(string $challengeToken, string $otp): array
+    public function verifyChallenge(string $challengeToken, string $submittedOtp): array
     {
+        /** @var DeviceLoginChallenge|null $challenge */
         $challenge = DeviceLoginChallenge::where('challenge_token', $challengeToken)->first();
 
         if (!$challenge) {
             return [
                 'success' => false,
-                'code'    => 'INVALID_CHALLENGE',
-                'message' => 'The verification session could not be found or has expired.',
+                'status'  => 'invalid_token',
+                'message' => 'The verification session is invalid or has expired. Please sign in again.',
             ];
         }
 
-        if ($challenge->isVerified()) {
+        $user = $challenge->authenticatable;
+        $meta = $challenge->device_metadata ?? [];
+
+        if (!$user) {
+            $challenge->delete();
             return [
                 'success' => false,
-                'code'    => 'ALREADY_VERIFIED',
-                'message' => 'This verification code was already consumed.',
+                'status'  => 'user_not_found',
+                'message' => 'User associated with this challenge could not be found.',
             ];
         }
 
         if ($challenge->isExpired()) {
+            $this->logActivity($user, null, $meta, 'challenge_failed', 'OTP expired');
+            $challenge->delete();
+
             return [
                 'success' => false,
-                'code'    => 'EXPIRED',
-                'message' => 'This verification code has expired. Please request a new one.',
+                'status'  => 'expired',
+                'message' => 'This verification code has expired. Please request a new code.',
             ];
         }
 
-        if ($challenge->hasExceededAttempts()) {
+        if ($challenge->isLocked()) {
+            $this->logActivity($user, null, $meta, 'challenge_failed', 'Max attempts exceeded');
+            $challenge->delete();
+
             return [
                 'success' => false,
-                'code'    => 'MAX_ATTEMPTS_EXCEEDED',
-                'message' => 'Maximum verification attempts exceeded. Please request a fresh code.',
+                'status'  => 'locked',
+                'message' => 'Too many failed verification attempts. Please sign in again to receive a fresh code.',
             ];
         }
 
-        // Verify OTP Hash
-        if (!$challenge->verifyOtp(trim($otp))) {
+        // Clean user input
+        $cleanSubmittedOtp = preg_replace('/\s+/', '', $submittedOtp);
+
+        if (!Hash::check($cleanSubmittedOtp, $challenge->otp_code_hash)) {
             $challenge->incrementAttempts();
-            $attemptsRemaining = max(0, $challenge->max_attempts - $challenge->attempts);
+            $remaining = $challenge->getRemainingAttempts();
 
-            $this->logActivity(
-                $challenge->authenticatable,
-                null,
-                $challenge->device_metadata ?? [],
-                'challenge_failed',
-                "Wrong OTP code entered. Attempts remaining: {$attemptsRemaining}"
-            );
+            $this->logActivity($user, null, $meta, 'challenge_failed', "Invalid OTP entered ({$remaining} attempts left)");
 
             return [
                 'success'            => false,
+                'status'             => 'invalid_otp',
                 'code'               => 'INVALID_OTP',
-                'attempts_remaining' => $attemptsRemaining,
-                'message'            => $attemptsRemaining > 0
-                    ? "Invalid code. You have {$attemptsRemaining} attempt(s) remaining."
-                    : 'Maximum attempts exceeded. Please request a new verification code.',
+                'remaining_attempts' => $remaining,
+                'attempts_remaining' => $remaining,
+                'message'            => $remaining > 0
+                    ? "Incorrect verification code. You have {$remaining} attempt(s) remaining."
+                    : 'Incorrect code. Maximum attempts exceeded. Please sign in again.',
             ];
         }
 
-        // Valid OTP confirmed!
-        $challenge->markVerified();
-        $user = $challenge->authenticatable;
-        $meta = $challenge->device_metadata ?? [];
+        // OTP Verified Successfully!
+        $challenge->markAsVerified();
 
-        // Register or mark device as trusted
+        // Register or trust the device
         $device = $this->registerTrustedDevice($user, $meta);
 
-        $this->logActivity($user, $device, $meta, 'challenge_passed');
+        // Clean up completed challenge record
+        $challenge->delete();
 
-        // Send New Device Login Security Alert Email if enabled
-        if (config('adaptive_auth.notify_on_new_device', true)) {
+        $this->logActivity($user, $device, $meta, 'trusted_login', 'New device verified via OTP');
+
+        // Send alert email about newly verified device
+        if (config('adaptive_auth.notify_on_new_device', true) && !empty($user->email)) {
             try {
                 Mail::to($user->email)->send(
-                    new NewDeviceAlertMail($device, $user->name ?? 'User')
+                    new NewDeviceAlertMail(
+                        device: $device,
+                        userName: $user->name ?? 'User'
+                    )
                 );
             } catch (\Throwable $e) {
-                Log::warning('Failed to dispatch New Device Alert email: ' . $e->getMessage());
+                Log::warning('AdaptiveAuth: Failed to send new device alert email: ' . $e->getMessage());
             }
         }
 
+        $cookie = $this->createDeviceCookie($device->device_uuid);
+
         return [
             'success' => true,
+            'status'  => 'verified',
             'user'    => $user,
             'device'  => $device,
-            'cookie'  => $this->createDeviceCookie($device->device_uuid),
+            'cookie'  => $cookie,
             'message' => 'Device verified successfully.',
         ];
     }
 
     /**
-     * Resend a fresh OTP for an active challenge session.
-     *
-     * @param string $challengeToken
-     * @return array
+     * Resend a fresh OTP code for an active challenge.
      */
     public function resendOtp(string $challengeToken): array
     {
+        /** @var DeviceLoginChallenge|null $challenge */
         $challenge = DeviceLoginChallenge::where('challenge_token', $challengeToken)->first();
 
         if (!$challenge) {
             return [
                 'success' => false,
-                'message' => 'Verification session not found.',
+                'status'  => 'invalid_token',
+                'message' => 'The verification session has expired. Please sign in again.',
             ];
         }
 
         if (!$challenge->canResend()) {
-            $secondsRemaining = now()->diffInSeconds($challenge->resend_available_at, false);
             return [
-                'success'           => false,
-                'seconds_remaining' => max(1, (int) $secondsRemaining),
-                'message'           => "Please wait {$secondsRemaining} seconds before requesting another code.",
+                'success'          => false,
+                'status'           => 'cooldown_active',
+                'cooldown_seconds' => $challenge->getCooldownRemainingSeconds(),
+                'message'          => "Please wait {$challenge->getCooldownRemainingSeconds()} seconds before requesting another code.",
             ];
         }
+
+        $user = $challenge->authenticatable;
+        $meta = $challenge->device_metadata ?? [];
 
         $otpLength   = (int) config('adaptive_auth.otp.length', 6);
         $expiryMins  = (int) config('adaptive_auth.otp.expires_minutes', 10);
@@ -336,47 +430,52 @@ class AdaptiveAuthService
 
         $min = (int) pow(10, $otpLength - 1);
         $max = (int) pow(10, $otpLength) - 1;
-        $newOtp = (string) random_int($min, $max);
+        $newOtpCode = (string) random_int($min, $max);
 
         $challenge->update([
-            'otp_code_hash'       => Hash::make($newOtp),
+            'otp_code_hash'       => Hash::make($newOtpCode),
             'attempts'            => 0,
             'resend_available_at' => now()->addSeconds($cooldownSec),
             'expires_at'          => now()->addMinutes($expiryMins),
         ]);
 
-        $user = $challenge->authenticatable;
-        $meta = $challenge->device_metadata ?? [];
-
         try {
-            Mail::to($user->email)->send(
-                new AdaptiveOtpMail($newOtp, $meta, $expiryMins)
-            );
+            if ($user && !empty($user->email)) {
+                Mail::to($user->email)->send(
+                    new AdaptiveOtpMail(
+                        otpCode: $newOtpCode,
+                        deviceInfo: $meta,
+                        expiresInMinutes: $expiryMins
+                    )
+                );
+            }
         } catch (\Throwable $e) {
-            Log::error('Failed to resend Adaptive OTP: ' . $e->getMessage());
+            Log::error('AdaptiveAuth: Failed to resend OTP email: ' . $e->getMessage());
         }
 
         return [
-            'success' => true,
-            'message' => 'A new 6-digit verification code has been sent to your email.',
+            'success'          => true,
+            'status'           => 'resent',
+            'cooldown_seconds' => $cooldownSec,
+            'message'          => 'A fresh verification code has been sent to your email address.',
         ];
     }
 
     /**
-     * Helper to return challenge requirement.
+     * Require a challenge for an unrecognized or risky session.
      */
-    protected function requireChallenge(Model $user, array $deviceMetadata, string $reason): array
+    protected function requireChallenge(Model $user, array $meta, string $reason): array
     {
         return [
             'status'   => 'challenge_required',
-            'user'     => $user,
-            'metadata' => $deviceMetadata,
             'reason'   => $reason,
+            'metadata' => $meta,
+            'message'  => 'Additional verification required for this device.',
         ];
     }
 
     /**
-     * Register or update a device record and mark it as trusted.
+     * Register or update a trusted device for a user.
      */
     public function registerTrustedDevice(Model $user, array $meta): UserDevice
     {
@@ -433,7 +532,7 @@ class AdaptiveAuthService
     /**
      * Log device activity.
      */
-    protected function logActivity(
+    public function logActivity(
         Model $user,
         ?UserDevice $device,
         array $meta,

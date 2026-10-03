@@ -7,7 +7,9 @@ namespace App\Modules\AdaptiveAuth\Traits;
 use App\Modules\AdaptiveAuth\Models\DeviceLoginChallenge;
 use App\Modules\AdaptiveAuth\Models\DeviceLoginLog;
 use App\Modules\AdaptiveAuth\Models\UserDevice;
+use App\Modules\AdaptiveAuth\Models\UserTotpCredential;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 trait HasAdaptiveAuth
 {
@@ -31,6 +33,25 @@ trait HasAdaptiveAuth
                 $q->whereNull('trusted_until')
                   ->orWhere('trusted_until', '>', now());
             });
+    }
+
+    /**
+     * Get the user's TOTP Authenticator credential.
+     */
+    public function totpCredential(): MorphOne
+    {
+        return $this->morphOne(UserTotpCredential::class, 'authenticatable');
+    }
+
+    /**
+     * Check if the user has active TOTP MFA enabled.
+     */
+    public function hasTotpEnabled(): bool
+    {
+        return $this->totpCredential()
+            ->where('is_enabled', true)
+            ->whereNotNull('confirmed_at')
+            ->exists();
     }
 
     /**
@@ -95,4 +116,3 @@ trait HasAdaptiveAuth
         return $this->loginLogs()->delete();
     }
 }
-

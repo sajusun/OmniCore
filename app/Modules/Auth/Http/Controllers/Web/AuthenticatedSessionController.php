@@ -40,6 +40,15 @@ class AuthenticatedSessionController extends Controller
         $adaptiveService = app(\App\Modules\AdaptiveAuth\Services\AdaptiveAuthService::class);
         $assessment = $adaptiveService->evaluateEnvironment($user, $request, isLoginAttempt: true);
 
+        if ($assessment['status'] === 'totp_required') {
+            Auth::logout();
+            $request->session()->put('adaptive_totp_pending_user_id', $user->getKey());
+            $request->session()->put('adaptive_totp_remember', $request->boolean('remember'));
+            $request->session()->put('adaptive_totp_metadata', $assessment['metadata'] ?? []);
+
+            return redirect()->route('adaptive.totp.challenge');
+        }
+
         if ($assessment['status'] === 'challenge_required') {
             $challenge = $adaptiveService->createChallenge($user, $assessment['metadata']);
             Auth::logout();

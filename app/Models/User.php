@@ -19,6 +19,8 @@ use App\Modules\Review\Traits\CanReview;
 use App\Modules\Affiliate\Traits\HasAffiliate;
 use App\Modules\Vendor\Traits\HasVendorStore;
 use App\Modules\AI\Traits\HasAiConversations;
+use App\Modules\Chat\Models\ChatRoom;
+use App\Modules\Chat\Models\Message;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -82,6 +84,7 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+        'otp',
     ];
 
     protected $appends = [
@@ -207,10 +210,5 @@ class User extends Authenticatable implements JWTSubject
     public function messages(): HasMany
     {
         return $this->hasMany(Message::class, 'sender_id');
-    }
-
-    public function eventBookmarks(): HasMany
-    {
-        return $this->hasMany(EventBookmark::class);
     }
 }

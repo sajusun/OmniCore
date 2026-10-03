@@ -90,18 +90,33 @@
             </div>
         </div>
 
-        {{-- Protection Status --}}
+        {{-- Protection & TOTP Status --}}
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
             <div class="card overflow-hidden">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h3 class="mb-2 fw-semibold text-primary">Smart 2FA Active</h3>
-                            <p class="text-muted fs-13 mb-0">Adaptive Protection</p>
-                            <small class="text-muted">Unrecognized logins require email OTP</small>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <h3 class="mb-0 fw-semibold {{ ($hasTotp ?? false) ? 'text-success' : 'text-primary' }}">
+                                    {{ ($hasTotp ?? false) ? 'TOTP MFA Enabled' : 'Adaptive 2FA Active' }}
+                                </h3>
+                                @if ($hasTotp ?? false)
+                                <span class="badge bg-success-transparent text-success fs-11">
+                                    {{ $recoveryCodesCount ?? 8 }} recovery codes left
+                                </span>
+                                @endif
+                            </div>
+                            <p class="text-muted fs-13 mb-2">
+                                {{ ($hasTotp ?? false) ? 'Protected by Authenticator App' : 'Email OTP on unknown devices' }}
+                            </p>
+                            <div class="d-flex flex-wrap gap-2 mt-1">
+                                <a href="{{ route('adaptive.totp.setup') }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fe fe-shield me-1"></i>{{ ($hasTotp ?? false) ? 'Manage MFA Settings' : 'Setup Authenticator' }}
+                                </a>
+                            </div>
                         </div>
                         <div class="col col-auto top-icn dash">
-                            <div class="counter-icon bg-info dash ms-auto box-shadow-info">
+                            <div class="counter-icon {{ ($hasTotp ?? false) ? 'bg-success' : 'bg-info' }} dash ms-auto box-shadow-info">
                                 <i class="fe fe-shield text-white"></i>
                             </div>
                         </div>

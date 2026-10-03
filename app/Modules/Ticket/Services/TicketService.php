@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Modules\Ticket\Services;
 
 use App\Models\User;
-use App\Modules\Notification\Services\NotificationService;
 use App\Modules\Ticket\Enums\TicketPriority;
 use App\Modules\Ticket\Enums\TicketStatus;
+use App\Modules\Ticket\Events\TicketAssignedEvent;
+use App\Modules\Ticket\Events\TicketCreatedEvent;
+use App\Modules\Ticket\Events\TicketRepliedEvent;
+use App\Modules\Ticket\Events\TicketStatusUpdatedEvent;
 use App\Modules\Ticket\Models\Ticket;
 use App\Modules\Ticket\Models\TicketAttachment;
 use App\Modules\Ticket\Models\TicketReply;
@@ -18,9 +21,7 @@ use Illuminate\Support\Str;
 
 class TicketService
 {
-    public function __construct(
-        protected NotificationService $notificationService
-    ) {}
+    public function __construct() {}
 
     /**
      * Create a new ticket.
@@ -48,19 +49,8 @@ class TicketService
                 }
             }
 
-            // Notify admins
-            $admins = User::whereHas('roles', fn($q) => $q->whereIn('name', ['super_admin', 'admin', 'Super Admin', 'Admin']))->get();
-            if ($admins->isNotEmpty()) {
-                $this->notificationService->sendMany(
-                    $admins,
-                    title: "New Support Ticket #{$ticket->ticket_number}",
-                    body: "{$user->name}: {$ticket->subject}",
-                    type: 'ticket',
-                    referenceType: 'ticket',
-                    referenceId: $ticket->id,
-                    meta: ['ticket_id' => $ticket->id, 'ticket_number' => $ticket->ticket_number, 'type' => 'ticket_created']
-                );
-            }
+            // Dispatch domain event (Notification listener handles delivery decoupled)
+            event(new TicketCreatedEvent($ticket));
 
             return $ticket->fresh(['category', 'attachments', 'user']);
         });
@@ -98,39 +88,15 @@ class TicketService
                 $isStaff = $user->id !== $ticket->user_id;
 
                 if ($isStaff) {
-                    // Staff replied -> wait for user response
                     $ticket->update(['status' => TicketStatus::WAITING_ON_USER->value]);
-
-                    // Send notification to customer
-                    $this->notificationService->send(
-                        $ticket->user,
-                        title: "Update on Ticket #{$ticket->ticket_number}",
-                        body: "Support staff replied: " . Str::limit($message, 80),
-                        type: 'ticket',
-                        referenceType: 'ticket',
-                        referenceId: $ticket->id,
-                        meta: ['ticket_id' => $ticket->id, 'ticket_number' => $ticket->ticket_number, 'type' => 'ticket_reply']
-                    );
                 } else {
-                    // Customer replied -> reopen/mark open
                     if (in_array($ticket->status, [TicketStatus::WAITING_ON_USER, TicketStatus::RESOLVED], true)) {
                         $ticket->update(['status' => TicketStatus::OPEN->value]);
                     }
-
-                    // Notify assigned staff or super admins
-                    $recipient = $ticket->assignee ?? User::whereHas('roles', fn($q) => $q->whereIn('name', ['super_admin', 'admin', 'Super Admin', 'Admin']))->first();
-                    if ($recipient) {
-                        $this->notificationService->send(
-                            $recipient,
-                            title: "New reply on Ticket #{$ticket->ticket_number}",
-                            body: "{$user->name}: " . Str::limit($message, 80),
-                            type: 'ticket',
-                            referenceType: 'ticket',
-                            referenceId: $ticket->id,
-                            meta: ['ticket_id' => $ticket->id, 'ticket_number' => $ticket->ticket_number, 'type' => 'ticket_user_reply']
-                        );
-                    }
                 }
+
+                // Dispatch domain event for reply notifications
+                event(new TicketRepliedEvent($ticket, $reply, $isStaff));
             }
 
             return $reply->fresh(['user', 'attachments']);
@@ -148,15 +114,8 @@ class TicketService
         ]);
 
         if ($staff) {
-            $this->notificationService->send(
-                $staff,
-                title: "Ticket Assigned: #{$ticket->ticket_number}",
-                body: "You have been assigned ticket: {$ticket->subject}",
-                type: 'ticket',
-                referenceType: 'ticket',
-                referenceId: $ticket->id,
-                meta: ['ticket_id' => $ticket->id, 'ticket_number' => $ticket->ticket_number, 'type' => 'ticket_assigned']
-            );
+            // Dispatch domain event for assignment notification
+            event(new TicketAssignedEvent($ticket, $staff));
         }
 
         return $ticket->fresh(['assignee']);
@@ -178,16 +137,8 @@ class TicketService
 
         $ticket->update($updates);
 
-        // Notify ticket owner
-        $this->notificationService->send(
-            $ticket->user,
-            title: "Ticket #{$ticket->ticket_number} status updated",
-            body: "Your ticket status is now: " . ucfirst(str_replace('_', ' ', $statusValue)),
-            type: 'ticket',
-            referenceType: 'ticket',
-            referenceId: $ticket->id,
-            meta: ['ticket_id' => $ticket->id, 'ticket_number' => $ticket->ticket_number, 'status' => $statusValue, 'type' => 'ticket_status_change']
-        );
+        // Dispatch domain event for status updates
+        event(new TicketStatusUpdatedEvent($ticket, $statusValue));
 
         return $ticket->fresh();
     }

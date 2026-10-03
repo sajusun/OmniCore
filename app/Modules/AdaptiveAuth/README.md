@@ -1,18 +1,22 @@
-# Adaptive Device & Location-Based Authentication (Smart 2FA)
+# Adaptive Device & Multi-Factor Authentication (Smart 2FA & TOTP)
 
-A standalone, plug-and-play Laravel module providing **Risk-Based / Contextual Multi-Factor Authentication**. It verifies unknown devices and suspicious IP locations via email OTP while providing seamless, frictionless single-factor access for trusted environments.
+A standalone, plug-and-play Laravel module providing **Risk-Based / Contextual Authentication, TOTP Authenticator Apps (Google/Microsoft Authenticator), and Step-Up Protection for Sensitive Operations**.
+
+Designed for high-availability distributed systems (multi-node EC2 instances behind AWS ALB with `SESSION_DRIVER=database` or `redis`).
 
 ---
 
 ## 🚀 Key Features
 
-* **Intelligent Device Fingerprinting**: Combines secure HTTP-only signed tokens, device characteristics (Platform, Browser, Form Factor), and digital entropy hashes.
-* **Smart Geolocation Recognition**: Detects country/city shifts (impossible travel) without penalizing mobile users on dynamic local IPs.
-* **Frictionless Experience for Trusted Devices**: Once verified, users enjoy direct login without repetitive OTP prompts for up to 60 days (configurable).
-* **Automated Security Notifications**: Dispatches instant email alerts to account owners whenever a new device is successfully verified.
-* **Rate-Limited OTP Engine**: Protected against brute force (default: 3 attempts, 10 min expiration, 60s resend cooldown).
-* **Multi-Platform Support**: Works out of the box for standard **Laravel Web (Blade/Livewire)** and **REST APIs (JWT / Sanctum / Mobile Apps)**.
-* **Zero External Paid Dependencies**: Works natively with Laravel without requiring commercial fingerprinting APIs.
+* **Stateless Multi-Node EC2 & ALB Ready**: Compatible with `SESSION_DRIVER=database` and shared cache.
+* **TOTP Authenticator MFA (RFC 6238)**: Built using `pragmarx/google2fa-laravel` with QR codes, encrypted secrets, and 8 emergency single-use backup recovery codes.
+* **Role-Based Policy Enforcement**:
+  * **Admin / Support**: Mandatory TOTP MFA.
+  * **Hotel Owner & Customer**: Adaptive Signed Device Token + Email OTP challenge on new/unrecognized device, with optional TOTP toggle.
+* **Signed Device Token Cookies**: Uses `HttpOnly`, `Secure`, `SameSite=Lax` cookies rather than volatile IP-only tracking.
+* **Sensitive Action Step-Up Middleware (`adaptive.step_up`)**: Requires recent password/MFA re-confirmation (15-minute sliding window) before changing bank details, payouts, or security settings.
+* **AWS ALB & Edge Header Resolution**: Supports `CloudFront-Viewer-Country`, `CF-IPCountry`, and `X-Forwarded-For` with zero network latency.
+* **Security & Device Dashboard**: View recognized devices, active sessions, remote revocation, and login audit logs.
 
 ---
 
@@ -43,14 +47,14 @@ return [
     App\Modules\AdaptiveAuth\Providers\AdaptiveAuthServiceProvider::class,
 ];
 ```
-*(Or in Laravel 10 and below, add it to `config/app.php` under `'providers'`)*.
 
 ### 3. Run Migrations
 ```bash
 php artisan migrate
 ```
 This creates:
-* `user_devices` (stores trusted device tokens, browser metadata, and activity)
+* `user_devices` (trusted device tokens, browser metadata, and activity)
+* `user_totp_credentials` (encrypted TOTP secret keys and hashed recovery codes)
 * `device_login_challenges` (tracks pending OTP verification sessions)
 * `device_login_logs` (audit history of all login attempts and outcomes)
 
@@ -67,107 +71,16 @@ class User extends Authenticatable
 
 ---
 
-## 🛠️ Integration with Login Flows
+## 🛠️ Protecting Sensitive Actions (Step-Up Auth)
 
-### Option A: Standard Web Login Controller
-In your `AuthenticatedSessionController` or `LoginController`:
-
-```php
-use App\Modules\AdaptiveAuth\Services\AdaptiveAuthService;
-
-public function store(LoginRequest $request): RedirectResponse
-{
-    $request->authenticate(); // Validates password
-    $user = Auth::user();
-
-    // 1. Evaluate risk & device trust
-    $adaptive = app(AdaptiveAuthService::class);
-    $assessment = $adaptive->evaluateEnvironment($user, $request);
-
-    if ($assessment['status'] === 'challenge_required') {
-        $challenge = $adaptive->createChallenge($user, $assessment['metadata']);
-        Auth::logout();
-        $request->session()->put('adaptive_challenge_token', $challenge->challenge_token);
-
-        return redirect()->route('adaptive.challenge', ['token' => $challenge->challenge_token]);
-    }
-
-    // 2. If trusted, attach secure cookie to response
-    $request->session()->regenerate();
-    $response = redirect()->intended('/dashboard');
-
-    if (isset($assessment['cookie'])) {
-        $response->withCookie($assessment['cookie']);
-    }
-
-    return $response;
-}
-```
-
-### Option B: REST API Login Controller (Sanctum / JWT / Mobile)
-In your `LoginApiController`:
+Protect high-risk routes (e.g. Bank/Payout updates, Password/Email changes) using the `adaptive.step_up` middleware:
 
 ```php
-use App\Modules\AdaptiveAuth\Services\AdaptiveAuthService;
-
-public function login(Request $request): JsonResponse
-{
-    // Credentials validation...
-    if (!Hash::check($request->password, $user->password)) {
-        return response()->json(['error' => 'Invalid credentials'], 401);
-    }
-
-    // 1. Evaluate risk & device trust
-    $adaptive = app(AdaptiveAuthService::class);
-    $assessment = $adaptive->evaluateEnvironment($user, $request);
-
-    if ($assessment['status'] === 'challenge_required') {
-        $challenge = $adaptive->createChallenge($user, $assessment['metadata']);
-
-        return response()->json([
-            'status'          => 'CHALLENGE_REQUIRED',
-            'challenge_token' => $challenge->challenge_token,
-            'message'         => 'New device detected. Please verify with the 6-digit OTP code sent to your email.',
-        ], 200);
-    }
-
-    // 2. Direct login for trusted device
-    $token = $user->createToken('auth')->plainTextToken; // or JWT auth('api')->login($user)
-    
-    $response = response()->json([
-        'token' => $token,
-        'user'  => $user,
-    ]);
-
-    if (isset($assessment['cookie'])) {
-        $response->withCookie($assessment['cookie']);
-    }
-
-    return $response;
-}
+Route::middleware(['auth', 'adaptive.step_up'])->group(function () {
+    Route::get('/hotel-owner/payout-settings', [PayoutController::class, 'index']);
+    Route::post('/hotel-owner/bank-details', [PayoutController::class, 'updateBankDetails']);
+});
 ```
-
----
-
-## 🌐 Routes & Endpoints
-
-### Web Routes:
-* `GET  /adaptive-auth/challenge?token={challenge_token}` &mdash; Beautiful OTP input screen.
-* `POST /adaptive-auth/verify` &mdash; Submits OTP code & authenticates user.
-* `POST /adaptive-auth/resend` &mdash; Resends fresh OTP code with cooldown.
-* `GET  /adaptive-auth/devices` &mdash; **Security Dashboard (Blade view)** listing recognized devices, current session, and login audit logs.
-* `POST /adaptive-auth/devices/{id}/revoke` &mdash; Revokes access for a specific device.
-* `POST /adaptive-auth/devices/revoke-others` &mdash; Revokes access for all other devices.
-* `POST /adaptive-auth/audit-logs/clear` &mdash; Clears all sign-in audit history logs.
-
-### API Endpoints:
-* `POST   /api/adaptive-auth/verify` &mdash; Accepts `{ challenge_token, otp }`, returns Bearer Token.
-* `POST   /api/adaptive-auth/resend` &mdash; Accepts `{ challenge_token }`.
-* `GET    /api/adaptive-auth/devices` &mdash; List active & trusted devices.
-* `DELETE /api/adaptive-auth/devices/{id}` &mdash; Revoke a trusted device.
-* `DELETE /api/adaptive-auth/audit-logs` &mdash; Clear all sign-in audit history logs.
-
-
 
 ---
 
@@ -175,26 +88,20 @@ public function login(Request $request): JsonResponse
 
 ```php
 return [
-    'enabled'             => env('ADAPTIVE_AUTH_ENABLED', true),
-    'cookie_name'         => env('ADAPTIVE_AUTH_COOKIE_NAME', 'adaptive_device_token'),
-    'trust_duration_days' => env('ADAPTIVE_AUTH_TRUST_DAYS', 60),
+    'enabled' => env('ADAPTIVE_AUTH_ENABLED', true),
+    'cookie_name' => env('ADAPTIVE_AUTH_COOKIE_NAME', 'adaptive_device_token'),
+    'trust_duration_days' => 60,
 
-    'otp' => [
-        'length'                  => 6,
-        'expires_minutes'         => 10,
-        'max_attempts'            => 3,
-        'resend_cooldown_seconds' => 60,
+    'role_policies' => [
+        'admin'       => ['mode' => 'totp_mandatory', 'totp_required' => true],
+        'support'     => ['mode' => 'totp_mandatory', 'totp_required' => true],
+        'hotel_owner' => ['mode' => 'adaptive_otp', 'totp_optional' => true],
+        'customer'    => ['mode' => 'adaptive_otp', 'totp_optional' => true],
     ],
 
-    // 'none', 'country', 'city', or 'strict_ip'
-    'geo_check_level'     => env('ADAPTIVE_AUTH_GEO_LEVEL', 'city'),
-
-    // Auto-trust device on user's first login
-    'trust_first_login'   => env('ADAPTIVE_AUTH_TRUST_FIRST_LOGIN', true),
-
-    // Send email alert on new device verification
-    'notify_on_new_device'=> env('ADAPTIVE_AUTH_NOTIFY_NEW_DEVICE', true),
-
-    'redirect_route'      => 'admin.dashboard',
+    'step_up' => [
+        'timeout_minutes' => 15,
+        'confirm_route'   => 'password.confirm',
+    ],
 ];
 ```

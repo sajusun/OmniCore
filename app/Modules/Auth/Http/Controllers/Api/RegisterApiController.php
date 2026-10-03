@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rules\Password;
 use RuntimeException;
 
 class RegisterApiController extends Controller
@@ -31,7 +32,7 @@ class RegisterApiController extends Controller
         $request->validate([
             'name'     => ['required', 'string', 'max:100'],
             'email'    => ['required', 'string', 'email', 'max:150', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'password' => ['required', 'string', 'confirmed', Password::defaults()],
             'agree'    => ['required', 'in:true,1'],
         ]);
 
@@ -57,11 +58,15 @@ class RegisterApiController extends Controller
 
             DB::commit();
 
+            $data = [
+                'user' => User::select($this->select)->find($user->id),
+            ];
+            if (app()->runningUnitTests()) {
+                $data['otp'] = $verification->code;
+            }
+
             return $this->success(
-                data: [
-                    'user' => User::select($this->select)->find($user->id),
-                    'otp'  => $verification->code,
-                ],
+                data: $data,
                 message: 'Registration successful. Please check your email for the OTP.',
                 status: 201
             );
@@ -155,12 +160,16 @@ class RegisterApiController extends Controller
                 purpose: Verification::PURPOSE_EMAIL_VERIFICATION
             );
 
+            $data = [
+                'expires_at'    => $verification->expires_at?->toDateTimeString(),
+                'request_count' => $verification->request_count,
+            ];
+            if (app()->runningUnitTests()) {
+                $data['otp'] = $verification->code;
+            }
+
             return $this->success(
-                data: [
-                    'expires_at'    => $verification->expires_at?->toDateTimeString(),
-                    'request_count' => $verification->request_count,
-                    'otp'           => $verification->code,
-                ],
+                data: $data,
                 message: 'A new OTP has been sent to your email.'
             );
         } catch (RuntimeException $e) {

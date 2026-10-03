@@ -7,12 +7,12 @@ use App\Modules\AI\Models\AiConversation;
 use App\Modules\AI\Models\AiKnowledgeBase;
 use App\Modules\Ticket\Models\Ticket;
 use App\Modules\Ticket\Models\TicketCategory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class AiTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     protected User $user;
     protected string $token;

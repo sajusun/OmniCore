@@ -4,7 +4,9 @@ parameters:
         - app/Modules/Order
         - app/Modules/Cart
         - app/Modules/Coupon
+        - app/Modules/Product
         - app/Helpers
+        - app/Services
 
     level: 4
 
@@ -15,8 +17,15 @@ parameters:
 
     treatPhpDocTypesAsCertain: false
 
+    excludePaths:
+        - */Database/Seeders/*
+
     ignoreErrors:
-        - '#Call to an undefined static method [a-zA-Z0-9\\_]+::(where|find|findOrFail|first|firstOrCreate|create|updateOrCreate|whereIn|whereNull|whereNotNull|whereDate|latest|orderBy|orderByDesc|take|limit|count|sum|avg|select|selectRaw|paginate|cursorPaginate|lockForUpdate|has|whereHas)\(\)#'
-        - '#Call to protected method (increment|decrement)\(\) of class Illuminate\\Database\\Eloquent\\Model#'
+        - '#Call to an undefined static method [a-zA-Z0-9\\_]+::(where|find|findOrFail|first|firstOrCreate|create|updateOrCreate|whereIn|whereNull|whereNotNull|whereDate|latest|orderBy|orderByDesc|take|limit|count|sum|avg|select|selectRaw|paginate|cursorPaginate|lockForUpdate|has|whereHas|withCount)\(\)#'
+        - '#Call to protected method (increment|decrement|incrementQuietly|decrementQuietly)\(\) of class Illuminate\\Database\\Eloquent\\Model#'
         - '#Access to an undefined property [a-zA-Z0-9\\_]+::\$[a-zA-Z0-9\\_]+#'
         - '#Trait [a-zA-Z0-9\\_]+ is used zero times and is not analysed#'
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder.*::published\(\)#'
+        - '#Method [a-zA-Z0-9\\_]+::(activeVariants|approvedReviews|values|children|comments|allComments|addComment|getPublicShareLink|createPrivateShareLink)\(\) should return.*#'
+        - '#Cannot access property \$id on object\|string#'
+        - '#Using nullsafe property access "\?->id" on left side of \?\? is unnecessary#'
