@@ -14,12 +14,12 @@ use App\Modules\Interaction\Services\ShareService;
 use App\Modules\Post\Models\Post;
 use App\Modules\Product\Models\Product;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class InteractionModuleTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     protected User $user;
     protected Product $product;

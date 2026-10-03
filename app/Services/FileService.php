@@ -139,8 +139,9 @@ class FileService
         $disk ??= config('filesystems.default', 'public');
         $cleanPath = ltrim(preg_replace('#^(storage/|public/|/storage/|/public/)#', '', $path), '/\\');
 
-        if (Storage::disk($disk)->exists($cleanPath)) {
-            return Storage::disk($disk)->url($cleanPath);
+        $storageDisk = Storage::disk($disk);
+        if ($storageDisk->exists($cleanPath)) {
+            return method_exists($storageDisk, 'url') ? $storageDisk->url($cleanPath) : Storage::url($cleanPath);
         }
 
         return asset($path);

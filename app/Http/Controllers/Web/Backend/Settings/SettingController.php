@@ -115,7 +115,7 @@ class SettingController extends Controller
             'backend_url'  => 'nullable|string|max:255',
         ]);
 
-        foreach ([
+        $this->writeEnvKeys([
             'APP_NAME'     => $request->input('app_name'),
             'APP_ENV'      => $request->input('app_env'),
             'APP_URL'      => $request->input('app_url'),
@@ -124,9 +124,7 @@ class SettingController extends Controller
             'SUPPORT_MAIL' => $request->input('support_mail'),
             'FRONTEND_URL' => $request->input('frontend_url'),
             'BACKEND_URL'  => $request->input('backend_url'),
-        ] as $key => $value) {
-            $this->writeEnvKey($key, $value);
-        }
+        ]);
 
         if ($request->has('_env_tab')) {
             session()->flash('_env_tab', $request->input('_env_tab'));
@@ -150,7 +148,7 @@ class SettingController extends Controller
             'jwt_leeway'                => 'nullable|integer|min:0',
         ]);
 
-        foreach ([
+        $this->writeEnvKeys([
             'JWT_SECRET'                 => $request->input('jwt_secret'),
             'JWT_TTL'                    => $request->input('jwt_ttl'),
             'JWT_REFRESH_TTL'            => $request->input('jwt_refresh_ttl'),
@@ -158,9 +156,7 @@ class SettingController extends Controller
             'JWT_BLACKLIST_ENABLED'      => $request->input('jwt_blacklist_enabled'),
             'JWT_BLACKLIST_GRACE_PERIOD' => $request->input('jwt_blacklist_grace_period'),
             'JWT_LEEWAY'                 => $request->input('jwt_leeway'),
-        ] as $key => $value) {
-            $this->writeEnvKey($key, $value);
-        }
+        ]);
 
         if ($request->has('_env_tab')) {
             session()->flash('_env_tab', $request->input('_env_tab'));
@@ -181,14 +177,12 @@ class SettingController extends Controller
             'firebase_storage_default_bucket' => 'nullable|string|max:255',
         ]);
 
-        foreach ([
+        $this->writeEnvKeys([
             'FIREBASE_PROJECT'                => $request->input('firebase_project'),
             'FIREBASE_CREDENTIALS'            => $request->input('firebase_credentials'),
             'FIREBASE_DATABASE_URL'           => $request->input('firebase_database_url'),
             'FIREBASE_STORAGE_DEFAULT_BUCKET' => $request->input('firebase_storage_default_bucket'),
-        ] as $key => $value) {
-            $this->writeEnvKey($key, $value);
-        }
+        ]);
 
         if ($request->has('_env_tab')) {
             session()->flash('_env_tab', $request->input('_env_tab'));
@@ -217,7 +211,7 @@ class SettingController extends Controller
             'verification_failed_redirect_url'   => 'nullable|string|max:255',
         ]);
 
-        foreach ([
+        $this->writeEnvKeys([
             'VERIFICATION_DEFAULT_TYPE'           => $request->input('verification_default_type'),
             'VERIFICATION_OTP_DIGITS'             => $request->input('verification_otp_digits'),
             'VERIFICATION_OTP_EXPIRY_MINUTES'     => $request->input('verification_otp_expiry_minutes'),
@@ -229,9 +223,7 @@ class SettingController extends Controller
             'VERIFICATION_BLOCK_HOURS'            => $request->input('verification_block_hours'),
             'VERIFICATION_SUCCESS_REDIRECT_URL'   => $request->input('verification_success_redirect_url'),
             'VERIFICATION_FAILED_REDIRECT_URL'    => $request->input('verification_failed_redirect_url'),
-        ] as $key => $value) {
-            $this->writeEnvKey($key, $value);
-        }
+        ]);
 
         if ($request->has('_env_tab')) {
             session()->flash('_env_tab', $request->input('_env_tab'));
@@ -260,7 +252,7 @@ class SettingController extends Controller
             'google_maps_api_key'     => 'nullable|string|max:255',
         ]);
 
-        foreach ([
+        $this->writeEnvKeys([
             'ENABLE_ROLE_MANAGEMENT'  => $request->input('enable_role_management'),
             'IN_APP_NOTIFICATIONS'    => $request->input('in_app_notifications'),
             'NOTIFICATION_DATABASE'   => $request->input('notification_database'),
@@ -273,9 +265,7 @@ class SettingController extends Controller
             'RECAPTCHA_ENABLE'        => $request->input('recaptcha_enable'),
             'PAGINATION'              => $request->input('pagination'),
             'GOOGLE_MAPS_API_KEY'     => $request->input('google_maps_api_key'),
-        ] as $key => $value) {
-            $this->writeEnvKey($key, $value);
-        }
+        ]);
 
         if ($request->has('_env_tab')) {
             session()->flash('_env_tab', $request->input('_env_tab'));
@@ -311,7 +301,7 @@ class SettingController extends Controller
             'mail_from_name'    => 'nullable|string|max:255',
         ]);
 
-        foreach ([
+        $this->writeEnvKeys([
             'MAIL_MAILER'       => $request->input('mail_mailer'),
             'MAIL_HOST'         => $request->input('mail_host'),
             'MAIL_PORT'         => $request->input('mail_port'),
@@ -320,9 +310,7 @@ class SettingController extends Controller
             'MAIL_SCHEME'       => $request->input('mail_scheme'),
             'MAIL_FROM_ADDRESS' => $request->input('mail_from_address'),
             'MAIL_FROM_NAME'    => $request->input('mail_from_name'),
-        ] as $key => $value) {
-            $this->writeEnvKey($key, $value);
-        }
+        ]);
 
         return redirect()->back()->with('success', 'Mail settings updated successfully.');
     }
@@ -387,9 +375,9 @@ class SettingController extends Controller
     }
 
     /**
-     * Write (or update) a single key=value pair in the .env file.
+     * Atomically and safely batch write/update key=value pairs in the .env file.
      */
-    private function writeEnvKey(string $key, ?string $value): void
+    private function writeEnvKeys(array $pairs): void
     {
         $path = base_path('.env');
 
@@ -397,21 +385,58 @@ class SettingController extends Controller
             return;
         }
 
-        // Wrap value in quotes if it contains spaces
-        $escaped = (str_contains((string) $value, ' '))
-            ? '"' . $value . '"'
-            : (string) $value;
-
-        $content = file_get_contents($path);
-
-        if (preg_match("/^{$key}=.*/m", $content)) {
-            // Key exists — replace it
-            $content = preg_replace("/^{$key}=.*/m", "{$key}={$escaped}", $content);
-        } else {
-            // Key does not exist — append it
-            $content .= PHP_EOL . "{$key}={$escaped}";
+        $lines = file($path, FILE_IGNORE_NEW_LINES);
+        if ($lines === false) {
+            return;
         }
 
-        file_put_contents($path, $content);
+        $keysUpdated = [];
+
+        foreach ($lines as $i => $line) {
+            $trimmed = trim($line);
+            if (empty($trimmed) || str_starts_with($trimmed, '#') || !str_contains($trimmed, '=')) {
+                continue;
+            }
+
+            [$key] = explode('=', $trimmed, 2);
+            $key = trim($key);
+
+            if (array_key_exists($key, $pairs)) {
+                $val = $pairs[$key];
+                $escaped = (str_contains((string) $val, ' ') || str_contains((string) $val, '#'))
+                    ? '"' . str_replace(['"', '$'], ['\"', '\$'], (string) $val) . '"'
+                    : (string) $val;
+
+                $lines[$i] = "{$key}={$escaped}";
+                $keysUpdated[$key] = true;
+            }
+        }
+
+        // Append any new keys that did not exist in .env
+        foreach ($pairs as $key => $val) {
+            if (!isset($keysUpdated[$key])) {
+                $escaped = (str_contains((string) $val, ' ') || str_contains((string) $val, '#'))
+                    ? '"' . str_replace(['"', '$'], ['\"', '\$'], (string) $val) . '"'
+                    : (string) $val;
+
+                $lines[] = "{$key}={$escaped}";
+            }
+        }
+
+        file_put_contents($path, implode(PHP_EOL, $lines) . PHP_EOL, LOCK_EX);
+
+        try {
+            \Illuminate\Support\Facades\Artisan::call('config:clear');
+        } catch (\Throwable) {
+            // Ignore if artisan call is restricted
+        }
+    }
+
+    /**
+     * Write (or update) a single key=value pair in the .env file.
+     */
+    private function writeEnvKey(string $key, ?string $value): void
+    {
+        $this->writeEnvKeys([$key => $value]);
     }
 }

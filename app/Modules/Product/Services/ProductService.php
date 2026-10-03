@@ -122,7 +122,17 @@ class ProductService
             ->first();
 
         if ($product) {
-            $product->increment('views_count');
+            // Anti-spam session cooldown & non-blocking quiet increment
+            try {
+                $sessionKey = 'viewed_product_' . $product->id;
+                if (!session()->has($sessionKey)) {
+                    session()->put($sessionKey, true);
+                    $product->incrementQuietly('views_count');
+                }
+            } catch (\Throwable) {
+                // Graceful fallback if session is not started
+                $product->incrementQuietly('views_count');
+            }
         }
 
         return $product;

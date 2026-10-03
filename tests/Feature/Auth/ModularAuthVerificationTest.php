@@ -4,14 +4,14 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use App\Modules\Auth\Models\Verification;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ModularAuthVerificationTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     protected function setUp(): void
     {
@@ -108,6 +108,10 @@ class ModularAuthVerificationTest extends TestCase
         // Verify email
         $verification = $user->sendVerification(Verification::PURPOSE_EMAIL_VERIFICATION);
         $user->verifyOtp($verification->code, Verification::PURPOSE_EMAIL_VERIFICATION);
+
+        $this->mock(\App\Modules\AdaptiveAuth\Services\AdaptiveAuthService::class, function ($mock) {
+            $mock->shouldReceive('evaluateEnvironment')->andReturn(['status' => 'allow']);
+        });
 
         // Try login again
         $successResponse = $this->postJson('/api/login', [

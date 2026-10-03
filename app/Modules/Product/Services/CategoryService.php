@@ -14,8 +14,9 @@ class CategoryService
 
     /**
      * Get nested category tree
+     * @return \Illuminate\Support\Collection|Collection
      */
-    public function getTree(bool $onlyActive = true): Collection
+    public function getTree(bool $onlyActive = true): mixed
     {
         $query = ProductCategory::with(['children.children', 'media'])
             ->whereNull('parent_id')

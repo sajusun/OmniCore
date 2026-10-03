@@ -11,12 +11,12 @@ use App\Modules\Order\Services\OrderService;
 use App\Modules\Product\Models\Product;
 use App\Modules\Product\Models\ProductVariant;
 use Exception;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class OrderCheckoutConcurrencyTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     public function test_atomic_checkout_decrements_stock_and_clears_cart(): void
     {

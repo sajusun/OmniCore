@@ -22,7 +22,10 @@ class ProfileService
             return $profile->refresh();
         }
 
-        return $user->profile()->create($data);
+        /** @var Profile $createdProfile */
+        $createdProfile = $user->profile()->create($data);
+
+        return $createdProfile;
     }
 
     public function update(User $user, array $data): Profile
