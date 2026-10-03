@@ -7,6 +7,8 @@ namespace App\Modules\Review\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Modules\Post\Models\Post;
 use App\Modules\Product\Models\Product;
+use App\Modules\Review\Http\Requests\StoreReviewRequest;
+use App\Modules\Review\Http\Requests\VoteReviewRequest;
 use App\Modules\Review\Models\Review;
 use App\Modules\Review\Resources\ReviewResource;
 use App\Modules\Review\Resources\ReviewSummaryResource;
@@ -108,18 +110,9 @@ class ReviewApiController extends Controller
     /**
      * Create or update a review.
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreReviewRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'reviewable_type'  => 'required|string',
-            'reviewable_id'    => 'required|integer',
-            'rating'           => 'required|integer|min:1|max:5',
-            'title'            => 'nullable|string|max:255',
-            'comment'          => 'required|string|min:5',
-            'criteria_ratings' => 'nullable|array',
-            'media'            => 'nullable|array',
-            'media.*'          => 'file|max:10240|mimes:jpeg,png,jpg,gif,mp4,mov,avi,webp',
-        ]);
+        $validated = $request->validated();
 
         $modelClass = $this->resolveModelClass($validated['reviewable_type']);
         if (!$modelClass) {
@@ -147,11 +140,9 @@ class ReviewApiController extends Controller
     /**
      * Vote on review helpfulness.
      */
-    public function vote(Request $request, Review $review): JsonResponse
+    public function vote(VoteReviewRequest $request, Review $review): JsonResponse
     {
-        $validated = $request->validate([
-            'is_helpful' => 'required|boolean',
-        ]);
+        $validated = $request->validated();
 
         $this->reviewService->voteReview(
             $review,

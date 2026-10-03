@@ -130,28 +130,31 @@ class DashboardService
         }
 
         $startDate = Carbon::now()->subMonths(5)->startOfMonth();
+        $dateExpr = \Illuminate\Support\Facades\DB::connection()->getDriverName() === 'sqlite'
+            ? "strftime('%Y-%m', created_at)"
+            : "DATE_FORMAT(created_at, '%Y-%m')";
 
         // 4 single indexed aggregate queries with GROUP BY instead of 24 slow queries
         $userDataMap = User::where('created_at', '>=', $startDate)
-            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym, COUNT(*) as count")
+            ->selectRaw("{$dateExpr} as ym, COUNT(*) as count")
             ->groupBy('ym')
             ->pluck('count', 'ym')
             ->toArray();
 
         $subDataMap = Subscription::where('created_at', '>=', $startDate)
-            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym, COUNT(*) as count")
+            ->selectRaw("{$dateExpr} as ym, COUNT(*) as count")
             ->groupBy('ym')
             ->pluck('count', 'ym')
             ->toArray();
 
         $orderDataMap = Order::where('created_at', '>=', $startDate)
-            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym, COUNT(*) as count")
+            ->selectRaw("{$dateExpr} as ym, COUNT(*) as count")
             ->groupBy('ym')
             ->pluck('count', 'ym')
             ->toArray();
 
         $postDataMap = Post::where('created_at', '>=', $startDate)
-            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym, COUNT(*) as count")
+            ->selectRaw("{$dateExpr} as ym, COUNT(*) as count")
             ->groupBy('ym')
             ->pluck('count', 'ym')
             ->toArray();

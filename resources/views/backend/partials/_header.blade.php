@@ -82,6 +82,9 @@
                             </div>
                             <!-- FULL-SCREEN -->
 
+                            <!-- THEME SWITCHER -->
+                            @include('backend.partials._theme_switcher')
+
                             <!-- NOTIFICATIONS-->
                             @include('backend.partials._notification')
 

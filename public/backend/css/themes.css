@@ -1,0 +1,664 @@
+/**
+ * ============================================================================
+ * ONE-DASHBOARD ENTERPRISE MULTI-THEME ENGINE (5 DISTINCT THEMES)
+ * Controlled dynamically via APP_THEME in .env / config('theme.active')
+ *
+ * Themes:
+ * 1. modern_indigo   - Vibrant SaaS Indigo & Violet with smooth shadows (Default)
+ * 2. glassmorphism   - Translucent frosted glass, backdrop blur & luminous glow
+ * 3. dark_luxury     - Deep OLED obsidian & slate with neon cyan & gold accents
+ * 4. minimalist_clean- Japanese / Notion monochrome with crisp hairline borders
+ * 5. corporate_blue  - Enterprise fintech royal blue with navy executive sidebar
+ * ============================================================================
+ */
+
+/* ----------------------------------------------------------------------------
+ * 1. THEME: MODERN INDIGO (Default)
+ * ---------------------------------------------------------------------------- */
+[data-theme="modern_indigo"],
+body.theme-modern_indigo {
+    --primary-bg-color: #6366f1;
+    --primary-bg-hover: #4f46e5;
+    --theme-body-bg: #f8fafc;
+    --theme-card-bg: #ffffff;
+    --theme-card-border: #eef2f6;
+    --theme-text-primary: #1e293b;
+    --theme-text-muted: #64748b;
+}
+
+body.theme-modern_indigo {
+    background-color: #f8fafc !important;
+}
+
+body.theme-modern_indigo .app-content,
+body.theme-modern_indigo .main-content,
+body.theme-modern_indigo .page,
+body.theme-modern_indigo .page-main {
+    background-color: #f8fafc !important;
+}
+
+body.theme-modern_indigo .app-header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #eef2f6 !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02) !important;
+}
+
+body.theme-modern_indigo .app-sidebar {
+    background: #ffffff !important;
+    border-right: 1px solid #eef2f6 !important;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.02) !important;
+}
+
+body.theme-modern_indigo .side-header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #eef2f6 !important;
+}
+
+body.theme-modern_indigo .card {
+    background: #ffffff !important;
+    border: 1px solid #eef2f6 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.07), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
+    transition: all 0.25s ease-in-out !important;
+}
+
+body.theme-modern_indigo .card:hover {
+    box-shadow: 0 10px 25px -3px rgba(99, 102, 241, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.theme-modern_indigo .side-menu__item {
+    border-radius: 10px !important;
+    margin: 3px 12px !important;
+    padding: 10px 14px !important;
+    color: #475569 !important;
+    font-weight: 500;
+    transition: all 0.2s ease !important;
+}
+
+body.theme-modern_indigo .side-menu__item:hover {
+    background-color: rgba(99, 102, 241, 0.08) !important;
+    color: #6366f1 !important;
+}
+
+body.theme-modern_indigo .side-menu__item.active,
+body.theme-modern_indigo .side-menu__item.has-link.active {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35) !important;
+    font-weight: 600;
+}
+
+body.theme-modern_indigo .side-menu__item.active .side-menu__icon,
+body.theme-modern_indigo .side-menu__item.active i {
+    color: #ffffff !important;
+}
+
+body.theme-modern_indigo .btn-primary {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25) !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+body.theme-modern_indigo .btn-primary:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%) !important;
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.38) !important;
+    transform: translateY(-1px);
+}
+
+body.theme-modern_indigo .counter-icon.bg-primary {
+    background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%) !important;
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3) !important;
+    border-radius: 12px;
+}
+
+body.theme-modern_indigo .page-title {
+    color: #1e293b !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * 2. THEME: GLASSMORPHISM (Frosted Glass & Ambient Mesh Glow)
+ * ---------------------------------------------------------------------------- */
+[data-theme="glassmorphism"],
+body.theme-glassmorphism {
+    --primary-bg-color: #8b5cf6;
+    --primary-bg-hover: #7c3aed;
+    --theme-body-bg: #edf2f9;
+}
+
+body.theme-glassmorphism {
+    background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.16) 0%, transparent 45%),
+                radial-gradient(circle at 90% 15%, rgba(236, 72, 153, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 50% 85%, rgba(56, 189, 248, 0.14) 0%, transparent 55%),
+                #edf2f9 !important;
+    background-attachment: fixed !important;
+}
+
+body.theme-glassmorphism .app-content,
+body.theme-glassmorphism .main-content,
+body.theme-glassmorphism .page,
+body.theme-glassmorphism .page-main {
+    background: transparent !important;
+}
+
+body.theme-glassmorphism .app-header {
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(20px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05) !important;
+}
+
+body.theme-glassmorphism .app-sidebar {
+    background: rgba(255, 255, 255, 0.78) !important;
+    backdrop-filter: blur(20px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 4px 0 32px rgba(31, 38, 135, 0.05) !important;
+}
+
+body.theme-glassmorphism .side-header {
+    background: rgba(255, 255, 255, 0.7) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+body.theme-glassmorphism .card {
+    background: rgba(255, 255, 255, 0.72) !important;
+    backdrop-filter: blur(16px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.65) !important;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07) !important;
+    border-radius: 16px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+body.theme-glassmorphism .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.12) !important;
+    border-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.theme-glassmorphism .side-menu__item {
+    border-radius: 12px !important;
+    margin: 4px 12px !important;
+    padding: 10px 14px !important;
+    color: #334155 !important;
+    backdrop-filter: blur(8px) !important;
+    transition: all 0.25s ease !important;
+}
+
+body.theme-glassmorphism .side-menu__item:hover {
+    background: rgba(255, 255, 255, 0.6) !important;
+    color: #8b5cf6 !important;
+}
+
+body.theme-glassmorphism .side-menu__item.active,
+body.theme-glassmorphism .side-menu__item.has-link.active {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.9) 0%, rgba(236, 72, 153, 0.9) 100%) !important;
+    backdrop-filter: blur(12px) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4) !important;
+    font-weight: 600;
+}
+
+body.theme-glassmorphism .side-menu__item.active i,
+body.theme-glassmorphism .side-menu__item.active .side-menu__icon {
+    color: #ffffff !important;
+}
+
+body.theme-glassmorphism .btn-primary {
+    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35) !important;
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+body.theme-glassmorphism .btn-primary:hover {
+    box-shadow: 0 8px 24px rgba(236, 72, 153, 0.45) !important;
+    transform: translateY(-1px);
+}
+
+body.theme-glassmorphism .counter-icon.bg-primary {
+    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%) !important;
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35) !important;
+    border-radius: 14px;
+}
+
+body.theme-glassmorphism .form-control,
+body.theme-glassmorphism .form-select {
+    background: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.7) !important;
+    border-radius: 10px !important;
+}
+
+body.theme-glassmorphism .dropdown-menu {
+    background: rgba(255, 255, 255, 0.88) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.7) !important;
+    box-shadow: 0 10px 40px rgba(31, 38, 135, 0.12) !important;
+    border-radius: 14px !important;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * 3. THEME: DARK LUXURY (OLED Obsidian Slate + Neon Cyan & Gold)
+ * ---------------------------------------------------------------------------- */
+[data-theme="dark_luxury"],
+body.theme-dark_luxury {
+    --primary-bg-color: #0284c7;
+    --primary-bg-hover: #0369a1;
+    --theme-body-bg: #090d16;
+}
+
+body.theme-dark_luxury {
+    background-color: #090d16 !important;
+    color: #cbd5e1 !important;
+}
+
+body.theme-dark_luxury .app-content,
+body.theme-dark_luxury .main-content,
+body.theme-dark_luxury .page,
+body.theme-dark_luxury .page-main {
+    background-color: #090d16 !important;
+    color: #cbd5e1 !important;
+}
+
+body.theme-dark_luxury .app-header {
+    background: #0f172a !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.theme-dark_luxury .app-header .nav-link,
+body.theme-dark_luxury .app-header i,
+body.theme-dark_luxury .app-sidebar__toggle {
+    color: #cbd5e1 !important;
+}
+
+body.theme-dark_luxury .app-sidebar {
+    background: #0f172a !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.theme-dark_luxury .side-header {
+    background: #0f172a !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+body.theme-dark_luxury .card {
+    background: #111827 !important;
+    border: 1px solid rgba(255, 255, 255, 0.07) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45) !important;
+    border-radius: 14px !important;
+    color: #e2e8f0 !important;
+}
+
+body.theme-dark_luxury .card:hover {
+    border-color: rgba(56, 189, 248, 0.25) !important;
+    box-shadow: 0 12px 35px rgba(56, 189, 248, 0.08) !important;
+}
+
+body.theme-dark_luxury .side-menu h3 {
+    color: #64748b !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+}
+
+body.theme-dark_luxury .side-menu__item {
+    border-radius: 8px !important;
+    margin: 3px 12px !important;
+    padding: 10px 14px !important;
+    color: #94a3b8 !important;
+}
+
+body.theme-dark_luxury .side-menu__item:hover {
+    background: rgba(255, 255, 255, 0.04) !important;
+    color: #38bdf8 !important;
+}
+
+body.theme-dark_luxury .side-menu__item.active,
+body.theme-dark_luxury .side-menu__item.has-link.active {
+    background: linear-gradient(90deg, rgba(56, 189, 248, 0.16) 0%, rgba(56, 189, 248, 0.03) 100%) !important;
+    color: #38bdf8 !important;
+    border-left: 3px solid #38bdf8 !important;
+    font-weight: 600;
+}
+
+body.theme-dark_luxury .side-menu__item.active i,
+body.theme-dark_luxury .side-menu__item.active .side-menu__icon {
+    color: #38bdf8 !important;
+}
+
+body.theme-dark_luxury .btn-primary {
+    background: #0284c7 !important;
+    border: 1px solid #38bdf8 !important;
+    box-shadow: 0 0 18px rgba(56, 189, 248, 0.35) !important;
+    color: #ffffff !important;
+    border-radius: 10px !important;
+    font-weight: 600;
+}
+
+body.theme-dark_luxury .btn-primary:hover {
+    background: #0369a1 !important;
+    box-shadow: 0 0 24px rgba(56, 189, 248, 0.5) !important;
+}
+
+body.theme-dark_luxury .page-title,
+body.theme-dark_luxury h1,
+body.theme-dark_luxury h2,
+body.theme-dark_luxury h3,
+body.theme-dark_luxury h4,
+body.theme-dark_luxury h5 {
+    color: #f8fafc !important;
+}
+
+body.theme-dark_luxury .text-muted {
+    color: #94a3b8 !important;
+}
+
+body.theme-dark_luxury .counter-icon.bg-primary {
+    background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%) !important;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.4) !important;
+    border-radius: 12px;
+}
+
+body.theme-dark_luxury .form-control,
+body.theme-dark_luxury .form-select {
+    background: #1e293b !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #f8fafc !important;
+    border-radius: 10px !important;
+}
+
+body.theme-dark_luxury .form-control:focus {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2) !important;
+}
+
+body.theme-dark_luxury .dropdown-menu {
+    background: #111827 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
+    color: #cbd5e1 !important;
+}
+
+body.theme-dark_luxury .dropdown-item {
+    color: #cbd5e1 !important;
+}
+
+body.theme-dark_luxury .dropdown-item:hover {
+    background: #1e293b !important;
+    color: #38bdf8 !important;
+}
+
+body.theme-dark_luxury .table {
+    color: #cbd5e1 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.theme-dark_luxury .table thead th {
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * 4. THEME: MINIMALIST CLEAN (Japanese / Notion Pure Monochrome)
+ * ---------------------------------------------------------------------------- */
+[data-theme="minimalist_clean"],
+body.theme-minimalist_clean {
+    --primary-bg-color: #0f172a;
+    --primary-bg-hover: #1e293b;
+    --theme-body-bg: #ffffff;
+}
+
+body.theme-minimalist_clean {
+    background-color: #ffffff !important;
+}
+
+body.theme-minimalist_clean .app-content,
+body.theme-minimalist_clean .main-content,
+body.theme-minimalist_clean .page,
+body.theme-minimalist_clean .page-main {
+    background-color: #ffffff !important;
+}
+
+body.theme-minimalist_clean .app-header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+}
+
+body.theme-minimalist_clean .app-sidebar {
+    background: #ffffff !important;
+    border-right: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+}
+
+body.theme-minimalist_clean .side-header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+body.theme-minimalist_clean .card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+}
+
+body.theme-minimalist_clean .card:hover {
+    border-color: #cbd5e1 !important;
+}
+
+body.theme-minimalist_clean .side-menu__item {
+    border-radius: 6px !important;
+    margin: 2px 10px !important;
+    padding: 8px 12px !important;
+    color: #334155 !important;
+    font-weight: 500;
+}
+
+body.theme-minimalist_clean .side-menu__item:hover {
+    background: #f8fafc !important;
+    color: #0f172a !important;
+}
+
+body.theme-minimalist_clean .side-menu__item.active,
+body.theme-minimalist_clean .side-menu__item.has-link.active {
+    background: #0f172a !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    box-shadow: none !important;
+}
+
+body.theme-minimalist_clean .side-menu__item.active i,
+body.theme-minimalist_clean .side-menu__item.active .side-menu__icon {
+    color: #ffffff !important;
+}
+
+body.theme-minimalist_clean .btn-primary {
+    background: #0f172a !important;
+    border: 1px solid #0f172a !important;
+    border-radius: 6px !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    font-weight: 500;
+}
+
+body.theme-minimalist_clean .btn-primary:hover {
+    background: #1e293b !important;
+    border-color: #1e293b !important;
+    transform: none;
+}
+
+body.theme-minimalist_clean .counter-icon.bg-primary {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+    border-radius: 8px;
+}
+
+body.theme-minimalist_clean .counter-icon.bg-primary i {
+    color: #0f172a !important;
+}
+
+body.theme-minimalist_clean .page-title {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.03em;
+}
+
+body.theme-minimalist_clean .form-control,
+body.theme-minimalist_clean .form-select {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * 5. THEME: CORPORATE BLUE (Enterprise Navy & Royal Blue Fintech)
+ * ---------------------------------------------------------------------------- */
+[data-theme="corporate_blue"],
+body.theme-corporate_blue {
+    --primary-bg-color: #0284c7;
+    --primary-bg-hover: #0369a1;
+    --theme-body-bg: #f1f5f9;
+}
+
+body.theme-corporate_blue {
+    background-color: #f1f5f9 !important;
+}
+
+body.theme-corporate_blue .app-content,
+body.theme-corporate_blue .main-content,
+body.theme-corporate_blue .page,
+body.theme-corporate_blue .page-main {
+    background-color: #f1f5f9 !important;
+}
+
+body.theme-corporate_blue .app-header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #cbd5e1 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.theme-corporate_blue .app-sidebar {
+    background: #0f172a !important;
+    border-right: 1px solid #1e293b !important;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.theme-corporate_blue .side-header {
+    background: #0f172a !important;
+    border-bottom: 1px solid #1e293b !important;
+}
+
+body.theme-corporate_blue .side-menu h3 {
+    color: #64748b !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em;
+}
+
+body.theme-corporate_blue .side-menu__item {
+    border-radius: 6px !important;
+    margin: 3px 12px !important;
+    padding: 9px 13px !important;
+    color: #94a3b8 !important;
+    font-weight: 500;
+}
+
+body.theme-corporate_blue .side-menu__item:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #ffffff !important;
+}
+
+body.theme-corporate_blue .side-menu__item.active,
+body.theme-corporate_blue .side-menu__item.has-link.active {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3) !important;
+    font-weight: 600;
+}
+
+body.theme-corporate_blue .side-menu__item.active i,
+body.theme-corporate_blue .side-menu__item.active .side-menu__icon {
+    color: #ffffff !important;
+}
+
+body.theme-corporate_blue .card {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.theme-corporate_blue .btn-primary {
+    background: #0284c7 !important;
+    border: 1px solid #0284c7 !important;
+    border-radius: 6px !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25) !important;
+}
+
+body.theme-corporate_blue .btn-primary:hover {
+    background: #0369a1 !important;
+    border-color: #0369a1 !important;
+}
+
+body.theme-corporate_blue .counter-icon.bg-primary {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25) !important;
+    border-radius: 8px;
+}
+
+body.theme-corporate_blue .page-title {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * THEME BADGE INDICATOR & QUICK SWITCHER IN HEADER
+ * ---------------------------------------------------------------------------- */
+.theme-indicator-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: capitalize;
+    letter-spacing: 0.02em;
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    transition: all 0.2s ease;
+}
+
+.theme-indicator-badge .theme-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: currentColor;
+    box-shadow: 0 0 6px currentColor;
+}

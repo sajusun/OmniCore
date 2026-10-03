@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-theme="{{ config('theme.active', env('APP_THEME', 'modern_indigo')) }}">
 
 <head>
     <!-- META DATA -->
@@ -28,7 +28,7 @@
 
 </head>
 
-<body class="ltr app sidebar-mini">
+<body class="ltr app sidebar-mini theme-{{ config('theme.active', env('APP_THEME', 'modern_indigo')) }}" data-theme="{{ config('theme.active', env('APP_THEME', 'modern_indigo')) }}">
     {{-- @include('backend.partials._switcher') --}}
 
 

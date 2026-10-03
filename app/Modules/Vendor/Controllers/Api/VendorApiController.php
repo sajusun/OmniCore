@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Modules\Vendor\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Vendor\Http\Requests\RegisterVendorStoreRequest;
+use App\Modules\Vendor\Http\Requests\RequestVendorPayoutRequest;
+use App\Modules\Vendor\Http\Requests\UpdateVendorStoreRequest;
 use App\Modules\Vendor\Models\VendorStore;
 use App\Modules\Vendor\Resources\VendorPayoutResource;
 use App\Modules\Vendor\Resources\VendorStoreResource;
@@ -82,26 +85,15 @@ class VendorApiController extends Controller
     /**
      * Register a new vendor store.
      */
-    public function register(Request $request): JsonResponse
+    public function register(RegisterVendorStoreRequest $request): JsonResponse
     {
         if ($request->user()->vendorStore) {
             return $this->error('You already have a vendor store registered.', 422);
         }
 
-        $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'slug'        => 'nullable|string|max:255|unique:vendor_stores,slug',
-            'description' => 'nullable|string',
-            'phone'       => 'nullable|string|max:30',
-            'email'       => 'nullable|email|max:255',
-            'address'     => 'nullable|string|max:255',
-            'logo'        => 'nullable|image|max:5120',
-            'banner'      => 'nullable|image|max:10240',
-        ]);
-
         $store = $this->vendorService->registerStore(
             $request->user(),
-            $validated,
+            $request->validated(),
             $request->file('logo'),
             $request->file('banner')
         );
@@ -115,7 +107,7 @@ class VendorApiController extends Controller
     /**
      * Update current user's vendor store.
      */
-    public function update(Request $request): JsonResponse
+    public function update(UpdateVendorStoreRequest $request): JsonResponse
     {
         $store = $request->user()->vendorStore;
 
@@ -123,20 +115,9 @@ class VendorApiController extends Controller
             return $this->notFound('Vendor store not found.');
         }
 
-        $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'slug'        => 'nullable|string|max:255|unique:vendor_stores,slug,' . $store->id,
-            'description' => 'nullable|string',
-            'phone'       => 'nullable|string|max:30',
-            'email'       => 'nullable|email|max:255',
-            'address'     => 'nullable|string|max:255',
-            'logo'        => 'nullable|image|max:5120',
-            'banner'      => 'nullable|image|max:10240',
-        ]);
-
         $store = $this->vendorService->updateStore(
             $store,
-            $validated,
+            $request->validated(),
             $request->file('logo'),
             $request->file('banner')
         );
@@ -176,7 +157,7 @@ class VendorApiController extends Controller
             return $this->notFound('Vendor store not found.');
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'amount' => 'required|numeric|min:1',
             'method' => 'nullable|string|in:wallet,bank_transfer',
         ]);
@@ -185,13 +166,13 @@ class VendorApiController extends Controller
             $payout = $this->vendorService->requestPayout(
                 $store,
                 $request->user(),
-                (float) $request->amount,
-                $request->get('method', 'wallet')
+                (float) $validated['amount'],
+                $validated['method'] ?? 'wallet'
             );
 
             return $this->success(
                 new VendorPayoutResource($payout),
-                'Payout request of $' . number_format((float) $request->amount, 2) . ' processed successfully.'
+                'Payout request of $' . number_format((float) $validated['amount'], 2) . ' processed successfully.'
             );
         } catch (InvalidArgumentException $e) {
             return $this->error($e->getMessage(), 422);

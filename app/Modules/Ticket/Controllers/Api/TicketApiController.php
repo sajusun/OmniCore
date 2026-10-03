@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Modules\Ticket\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Ticket\Enums\TicketPriority;
+use App\Modules\Ticket\Http\Requests\ReplyTicketRequest;
+use App\Modules\Ticket\Http\Requests\StoreTicketRequest;
 use App\Modules\Ticket\Models\Ticket;
 use App\Modules\Ticket\Models\TicketCategory;
 use App\Modules\Ticket\Resources\TicketCategoryResource;
@@ -16,7 +17,6 @@ use App\Modules\Ticket\Services\TicketService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class TicketApiController extends Controller
 {
@@ -69,20 +69,11 @@ class TicketApiController extends Controller
     /**
      * Create a new ticket.
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreTicketRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'subject'       => 'required|string|max:255',
-            'category_id'   => 'nullable|exists:ticket_categories,id',
-            'priority'      => ['nullable', Rule::enum(TicketPriority::class)],
-            'message'       => 'required|string',
-            'attachments'   => 'nullable|array',
-            'attachments.*' => 'file|max:10240|mimes:jpeg,png,jpg,gif,pdf,doc,docx,zip,txt',
-        ]);
-
         $ticket = $this->ticketService->createTicket(
             $request->user(),
-            $validated,
+            $request->validated(),
             $request->file('attachments', [])
         );
 
@@ -112,17 +103,13 @@ class TicketApiController extends Controller
     /**
      * Reply to a ticket.
      */
-    public function reply(Request $request, Ticket $ticket): JsonResponse
+    public function reply(ReplyTicketRequest $request, Ticket $ticket): JsonResponse
     {
         if ($ticket->user_id !== $request->user()->id && !$request->user()->hasAnyRole(['super_admin', 'admin', 'staff', 'Super Admin', 'Admin', 'Staff'])) {
             return $this->forbidden('Unauthorized to reply to this ticket.');
         }
 
-        $validated = $request->validate([
-            'message'       => 'required|string',
-            'attachments'   => 'nullable|array',
-            'attachments.*' => 'file|max:10240|mimes:jpeg,png,jpg,gif,pdf,doc,docx,zip,txt',
-        ]);
+        $validated = $request->validated();
 
         $reply = $this->ticketService->replyToTicket(
             $ticket,

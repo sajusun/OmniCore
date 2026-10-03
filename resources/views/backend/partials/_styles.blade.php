@@ -68,3 +68,6 @@
 </style>
 
 @include('backend.partials._custom-style')
+
+<!-- Dynamic Enterprise Multi-Theme Engine (5 Themes via APP_THEME) -->
+<link href="{{ asset('backend/css/themes.css') }}" rel="stylesheet" />
