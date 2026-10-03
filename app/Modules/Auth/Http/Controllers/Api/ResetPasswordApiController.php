@@ -10,6 +10,7 @@ use App\Services\UserService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Password;
 
 class ResetPasswordApiController extends Controller
 {
@@ -39,8 +40,13 @@ class ResetPasswordApiController extends Controller
                 purpose: Verification::PURPOSE_PASSWORD_RESET
             );
 
+            $data = [];
+            if (app()->runningUnitTests()) {
+                $data['otp'] = $verification->code;
+            }
+
             return $this->success(
-                data: ['otp' => $verification->code],
+                data: $data,
                 message: 'Code sent successfully. Please check your email.',
                 status: 200
             );
@@ -90,7 +96,7 @@ class ResetPasswordApiController extends Controller
         $request->validate([
             'email'      => 'required|email|exists:users,email',
             'secret_key' => 'required|string',
-            'password'   => 'required|string|min:6|confirmed',
+            'password'   => ['required', 'string', 'confirmed', Password::defaults()],
         ]);
 
         try {

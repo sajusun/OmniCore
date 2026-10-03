@@ -169,4 +169,28 @@ class ModularAuthVerificationTest extends TestCase
 
         $this->assertTrue(Hash::check('NewSecurePass123!', $user->fresh()->password));
     }
+
+    public function test_api_registration_rejects_weak_passwords(): void
+    {
+        $weakPasswords = [
+            'short1!',         // too short (< 8)
+            'alllowercase1!',  // missing uppercase
+            'ALLUPPERCASE1!',  // missing lowercase
+            'NoNumberHere!',   // missing number
+            'NoSymbol12345',   // missing symbol
+        ];
+
+        foreach ($weakPasswords as $weakPassword) {
+            $response = $this->postJson('/api/register', [
+                'name'                  => 'Weak Tester',
+                'email'                 => 'weak.' . uniqid() . '@example.com',
+                'password'              => $weakPassword,
+                'password_confirmation' => $weakPassword,
+                'agree'                 => true,
+            ]);
+
+            $response->assertStatus(422)
+                ->assertJsonValidationErrors(['password']);
+        }
+    }
 }

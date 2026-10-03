@@ -86,7 +86,7 @@ class VerificationService
         $this->assertNotExpired($verification);
         $this->assertNotBlocked($verification);
 
-        if ($verification->code !== (string) $code) {
+        if (!hash_equals((string) $verification->code, (string) $code)) {
             $this->incrementAttempts($verification);
             return false;
         }
@@ -117,12 +117,12 @@ class VerificationService
             $verification->isBlocked() ||
             !Hash::check($plainToken, $verification->code)
         ) {
-            return config('verification.redirects.failed', '/verification/failed');
+            return (string) (config('verification.failed_redirect_url') ?? config('verification.redirects.failed') ?? '/verification/failed');
         }
 
         $this->markVerified($verification);
 
-        return config('verification.redirects.success', '/verification/success');
+        return (string) (config('verification.success_redirect_url') ?? config('verification.redirects.success') ?? '/verification/success');
     }
 
     /**
@@ -206,14 +206,14 @@ class VerificationService
         $now = Carbon::now();
 
         if ($type === Verification::TYPE_OTP) {
-            $length    = (int) config('verification.otp.length', 4);
+            $length    = (int) (config('verification.otp_digits') ?? config('verification.otp.length') ?? 6);
             $rawCode   = (string) random_int((int) ('1' . str_repeat('0', $length - 1)), (int) str_repeat('9', $length));
             $savedCode = $rawCode;
-            $expiresAt = $now->copy()->addMinutes((int) config('verification.otp.expires_in', 10));
+            $expiresAt = $now->copy()->addMinutes((int) (config('verification.otp_expiry_minutes') ?? config('verification.otp.expires_in') ?? 10));
         } else {
-            $plainToken = Str::random((int) config('verification.token.length', 64));
+            $plainToken = Str::random((int) (config('verification.token_length') ?? config('verification.token.length') ?? 64));
             $savedCode  = Hash::make($plainToken);
-            $expiresAt  = $now->copy()->addMinutes((int) config('verification.token.expires_in', 60));
+            $expiresAt  = $now->copy()->addMinutes((int) (config('verification.token_expiry_minutes') ?? config('verification.token.expires_in') ?? 60));
         }
 
         $userId = ($verifiable instanceof \App\Models\User || isset($verifiable->email)) ? $verifiable->getKey() : null;
@@ -277,14 +277,15 @@ class VerificationService
 
     protected function incrementAttempts(Verification $verification): void
     {
-        $maxAttempts = (int) config('verification.otp.max_attempts', 5);
+        $maxAttempts = (int) (config('verification.max_attempts') ?? config('verification.otp.max_attempts') ?? 5);
         $attempts    = $verification->attempts + 1;
 
         if ($attempts >= $maxAttempts) {
+            $blockDuration = (int) (config('verification.block_hours') ? config('verification.block_hours') * 60 : config('verification.rate_limiting.block_duration', 30));
             $verification->update([
                 'attempts'      => $attempts,
                 'status'        => Verification::STATUS_EXPIRED,
-                'blocked_until' => Carbon::now()->addMinutes((int) config('verification.rate_limiting.block_duration', 30)),
+                'blocked_until' => Carbon::now()->addMinutes($blockDuration),
             ]);
 
             throw new RuntimeException('Too many invalid attempts. Your verification has been blocked temporarily.');
@@ -311,7 +312,7 @@ class VerificationService
 
     protected function assertCooldownPassed(Verification $verification): void
     {
-        $cooldown = (int) config('verification.rate_limiting.cooldown_seconds', 60);
+        $cooldown = (int) (config('verification.resend_cooldown_seconds') ?? config('verification.rate_limiting.cooldown_seconds') ?? 60);
         if ($verification->last_requested_at !== null) {
             $secondsSince = Carbon::now()->diffInSeconds($verification->last_requested_at);
             if ($secondsSince < $cooldown) {
@@ -323,10 +324,11 @@ class VerificationService
 
     protected function assertRequestLimitNotReached(Verification $verification): void
     {
-        $maxRequests = (int) config('verification.rate_limiting.max_requests', 5);
+        $maxRequests = (int) (config('verification.max_resend_requests') ?? config('verification.rate_limiting.max_requests') ?? 5);
         if ($verification->request_count >= $maxRequests) {
+            $blockDuration = (int) (config('verification.block_hours') ? config('verification.block_hours') * 60 : config('verification.rate_limiting.block_duration', 30));
             $verification->update([
-                'blocked_until' => Carbon::now()->addMinutes((int) config('verification.rate_limiting.block_duration', 30)),
+                'blocked_until' => Carbon::now()->addMinutes($blockDuration),
             ]);
 
             throw new RuntimeException('Maximum resend limit reached. You have been blocked temporarily.');
