@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Modules\Vendor\Services;
 
 use App\Models\User;
-use App\Modules\Notification\Services\NotificationService;
 use App\Modules\Payment\Services\WalletService;
 use App\Modules\Vendor\Enums\PayoutStatus;
 use App\Modules\Vendor\Enums\VendorStatus;
+use App\Modules\Vendor\Events\VendorPayoutRequestedEvent;
+use App\Modules\Vendor\Events\VendorSaleRecordedEvent;
+use App\Modules\Vendor\Events\VendorStatusUpdatedEvent;
+use App\Modules\Vendor\Events\VendorStoreRegisteredEvent;
 use App\Modules\Vendor\Models\VendorMember;
 use App\Modules\Vendor\Models\VendorPayout;
 use App\Modules\Vendor\Models\VendorStore;
@@ -20,7 +23,6 @@ use InvalidArgumentException;
 class VendorService
 {
     public function __construct(
-        protected NotificationService $notificationService,
         protected WalletService $walletService
     ) {}
 
@@ -63,19 +65,8 @@ class VendorService
                 'permissions' => ['all'],
             ]);
 
-            // Notify admins
-            $admins = User::whereHas('roles', fn($q) => $q->whereIn('name', ['super_admin', 'admin', 'Super Admin', 'Admin']))->get();
-            if ($admins->isNotEmpty()) {
-                $this->notificationService->sendMany(
-                    $admins,
-                    title: "New Vendor Store Registered: {$store->name}",
-                    body: "User {$user->name} created store {$store->name}.",
-                    type: 'vendor',
-                    referenceType: 'vendor',
-                    referenceId: $store->id,
-                    meta: ['store_id' => $store->id]
-                );
-            }
+            // Dispatch event for notifications / listeners
+            event(new VendorStoreRegisteredEvent($store, $user));
 
             return $store->fresh(['owner', 'members']);
         });
@@ -134,16 +125,8 @@ class VendorService
                 'balance'        => (float) $store->balance + $vendorShare,
             ]);
 
-            // Notify store owner
-            $this->notificationService->send(
-                $store->owner,
-                title: "Sale recorded for {$store->name}",
-                body: "Order of $" . number_format($orderTotal, 2) . " processed. Your share of $" . number_format($vendorShare, 2) . " has been credited to store balance.",
-                type: 'vendor_sale',
-                referenceType: 'vendor',
-                referenceId: $store->id,
-                meta: ['store_id' => $store->id, 'vendor_share' => $vendorShare]
-            );
+            // Dispatch event for notifications / listeners
+            event(new VendorSaleRecordedEvent($store, $orderTotal, $vendorShare));
         });
     }
 
@@ -191,16 +174,8 @@ class VendorService
                 );
             }
 
-            // Send notification
-            $this->notificationService->send(
-                $store->owner,
-                title: "Vendor Payout: $" . number_format($amount, 2),
-                body: $isWallet ? "Payout successfully deposited directly into your Wallet." : "Payout request submitted for admin review.",
-                type: 'vendor_payout',
-                referenceType: 'vendor_payout',
-                referenceId: $payout->id,
-                meta: ['payout_id' => $payout->id, 'amount' => $amount]
-            );
+            // Dispatch event for notifications / listeners
+            event(new VendorPayoutRequestedEvent($store, $payout, $isWallet));
 
             return $payout;
         });
@@ -214,15 +189,8 @@ class VendorService
         $statusVal = $status instanceof VendorStatus ? $status->value : $status;
         $store->update(['status' => $statusVal]);
 
-        $this->notificationService->send(
-            $store->owner,
-            title: "Store status updated: {$store->name}",
-            body: "Your store status is now: " . ucfirst($statusVal),
-            type: 'vendor_status',
-            referenceType: 'vendor',
-            referenceId: $store->id,
-            meta: ['store_id' => $store->id, 'status' => $statusVal]
-        );
+        // Dispatch event for notifications / listeners
+        event(new VendorStatusUpdatedEvent($store, $statusVal));
 
         return $store->fresh();
     }
