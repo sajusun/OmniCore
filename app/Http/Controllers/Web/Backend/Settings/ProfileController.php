@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Services\FileService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
@@ -69,7 +70,7 @@ class ProfileController extends Controller
     {
         $request->validate([
             'old_password' => 'required',
-            'password' => 'required|min:8|confirmed',
+            'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
         $user = auth()->user();
