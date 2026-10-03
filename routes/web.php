@@ -19,7 +19,8 @@ Route::get('social-login/{provider}/callback', [SocialLoginApiController::class,
 Route::controller(NotificationController::class)->prefix('notification')->name('notification.')->group(function () {
     Route::get('/', 'index')->name('index');
     Route::post('read/single/{id}', 'readSingle')->name('read.single');
-    Route::POST('read/all', 'readAll')->name('read.all');
+    Route::post('read/all', 'readAll')->name('read.all');
+    Route::delete('{id}', 'destroy')->name('destroy');
 })->middleware('auth');
 
 

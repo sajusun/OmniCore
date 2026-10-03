@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
             $user = auth()->user();
@@ -19,11 +19,26 @@ class NotificationController extends Controller
                 ], 401);
             }
 
-            $notifications = $user->appNotifications()->latest()->paginate(10);
+            $perPage = (int) $request->input('per_page', 10);
+            $notifications = $user->appNotifications()
+                ->latest()
+                ->cursorPaginate($perPage);
+
+            $items = $notifications->items();
+
             return response()->json([
-                'status' => 'success',
-                'message' => 'Your action was successful!',
-                'data' => $notifications
+                'status'       => 'success',
+                'message'      => 'Notifications retrieved successfully.',
+                'data'         => [
+                    'data'        => $items,
+                    'next_cursor' => $notifications->nextCursor()?->encode(),
+                    'prev_cursor' => $notifications->previousCursor()?->encode(),
+                    'has_more'    => $notifications->hasMorePages(),
+                ],
+                'next_cursor'  => $notifications->nextCursor()?->encode(),
+                'prev_cursor'  => $notifications->previousCursor()?->encode(),
+                'has_more'     => $notifications->hasMorePages(),
+                'unread_count' => $user->unreadAppNotifications()->count(),
             ]);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -47,16 +62,60 @@ class NotificationController extends Controller
                 return response()->json([
                     'code' => 404,
                     'status' => 'error',
-                    'message' => 'Item not found.',
+                    'message' => 'Notification not found.',
                 ], 404);
             }
 
-            $notification->markAsRead();
+            if (method_exists($notification, 'markAsRead')) {
+                $notification->markAsRead();
+            } else {
+                $notification->update(['read_at' => now()]);
+            }
+
             return response()->json([
                 'code' => 200,
                 'status' => 'success',
-                'message' => 'Your action was successful!',
+                'message' => 'Notification marked as read.',
+                'unread_count' => $user->unreadAppNotifications()->count(),
                 'data' => $notification
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $user = auth()->user();
+            if (!$user) {
+                return response()->json([
+                    'code' => 401,
+                    'status' => 'error',
+                    'message' => 'Unauthenticated.',
+                ], 401);
+            }
+
+            $notification = $user->appNotifications()->find($id);
+            if (!$notification) {
+                return response()->json([
+                    'code' => 404,
+                    'status' => 'error',
+                    'message' => 'Notification not found.',
+                ], 404);
+            }
+
+            $notification->delete();
+
+            return response()->json([
+                'code' => 200,
+                'status' => 'success',
+                'message' => 'Notification deleted successfully.',
+                'unread_count' => $user->unreadAppNotifications()->count(),
             ], 200);
         } catch (Exception $e) {
             return response()->json([
