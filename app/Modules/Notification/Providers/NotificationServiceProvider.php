@@ -2,11 +2,13 @@
 
 namespace App\Modules\Notification\Providers;
 
+use App\Modules\Notification\Listeners\ModuleNotificationSubscriber;
 use App\Modules\Notification\Repositories\Contracts\NotificationRepositoryInterface;
 use App\Modules\Notification\Repositories\NotificationRepository;
 use App\Modules\Notification\Services\BroadcastService;
 use App\Modules\Notification\Services\FirebaseService;
 use App\Modules\Notification\Services\NotificationService;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -65,5 +67,8 @@ class NotificationServiceProvider extends ServiceProvider
             $this->loadViewsFrom(__DIR__ . '/../Views', 'notification');
             $this->loadViewsFrom(__DIR__ . '/../Views', 'bulk_notification');
         }
+
+        // 5. Register Decoupled Module Notification Event Subscriber
+        Event::subscribe(ModuleNotificationSubscriber::class);
     }
 }

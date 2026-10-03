@@ -8,10 +8,11 @@ use App\Models\User;
 use App\Modules\Affiliate\Enums\AffiliateStatus;
 use App\Modules\Affiliate\Enums\CommissionType;
 use App\Modules\Affiliate\Enums\ReferralStatus;
+use App\Modules\Affiliate\Events\AffiliateCommissionEarnedEvent;
+use App\Modules\Affiliate\Events\AffiliatePayoutProcessedEvent;
 use App\Modules\Affiliate\Models\AffiliateAccount;
 use App\Modules\Affiliate\Models\AffiliateCommission;
 use App\Modules\Affiliate\Models\AffiliateReferral;
-use App\Modules\Notification\Services\NotificationService;
 use App\Modules\Payment\Services\WalletService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,6 @@ use InvalidArgumentException;
 class AffiliateService
 {
     public function __construct(
-        protected NotificationService $notificationService,
         protected WalletService $walletService
     ) {}
 
@@ -156,16 +156,8 @@ class AffiliateService
                 'current_balance' => (float) $account->current_balance + $commissionAmount,
             ]);
 
-            // Send notification to affiliate user
-            $this->notificationService->send(
-                $account->user,
-                title: "Affiliate Commission Earned! ($" . number_format($commissionAmount, 2) . ")",
-                body: "A referred user completed an order of $" . number_format($orderAmount, 2) . ". Your commission has been credited.",
-                type: 'affiliate_commission',
-                referenceType: 'commission',
-                referenceId: $commission->id,
-                meta: ['commission_id' => $commission->id, 'amount' => $commissionAmount]
-            );
+            // Dispatch event for notifications / listeners
+            event(new AffiliateCommissionEarnedEvent($account, $commission, $orderAmount, $commissionAmount));
 
             return $commission;
         });
@@ -207,16 +199,8 @@ class AffiliateService
                     'paid_at' => now(),
                 ]);
 
-            // Notify user
-            $this->notificationService->send(
-                $account->user,
-                title: "Affiliate Payout Processed",
-                body: "$" . number_format($amount, 2) . " has been deposited directly into your Wallet balance.",
-                type: 'affiliate_payout',
-                referenceType: 'affiliate',
-                referenceId: $account->id,
-                meta: ['payout_amount' => $amount]
-            );
+            // Dispatch event for notifications / listeners
+            event(new AffiliatePayoutProcessedEvent($account, $amount));
 
             return true;
         });
