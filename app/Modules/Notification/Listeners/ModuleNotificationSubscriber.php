@@ -6,13 +6,22 @@ namespace App\Modules\Notification\Listeners;
 
 use App\Models\User;
 use App\Modules\Notification\Services\NotificationService;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Throwable;
 
-class ModuleNotificationSubscriber
+class ModuleNotificationSubscriber implements ShouldQueue
 {
+    use InteractsWithQueue;
+
+    /**
+     * The name of the connection the job should be sent to.
+     */
+    public ?string $queue = 'default';
+
     public function __construct(
         protected NotificationService $notificationService
     ) {}

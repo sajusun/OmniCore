@@ -31,7 +31,10 @@ class TicketApiController extends Controller
      */
     public function categories(): JsonResponse
     {
-        $categories = TicketCategory::active()->get();
+        $categories = \Illuminate\Support\Facades\Cache::remember('ticket_categories_active', 3600, function () {
+            return TicketCategory::active()->get();
+        });
+
         return $this->success(
             TicketCategoryResource::collection($categories),
             'Ticket categories fetched successfully.'

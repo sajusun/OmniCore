@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [ main, master, develop, eventdriven ]
   pull_request:
-    branches: [ main, master, develop ]
+    branches: [ main, master, develop, eventdriven ]
 
 jobs:
   code-quality:
@@ -97,15 +97,14 @@ jobs:
           DB_PASSWORD: root
         run: php artisan migrate --force
 
+      - name: Verify Modular Architecture
+        run: php artisan module:list
+
       - name: Execute Automated Test Suite
         env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: one_dashboard_test
-          DB_USERNAME: root
-          DB_PASSWORD: root
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ':memory:'
           CACHE_DRIVER: array
           SESSION_DRIVER: array
           QUEUE_CONNECTION: sync
-        run: php artisan test tests/Feature/InteractionModuleTest.php tests/Feature/OrderCheckoutConcurrencyTest.php
+        run: php artisan test

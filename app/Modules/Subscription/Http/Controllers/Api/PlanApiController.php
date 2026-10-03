@@ -19,7 +19,10 @@ class PlanApiController extends Controller
      */
     public function index(): JsonResponse
     {
-        $plans = Plan::with('features')->active()->get();
+        $plans = \Illuminate\Support\Facades\Cache::remember('subscription_plans_active', 3600, function () {
+            return Plan::with('features')->active()->get();
+        });
+
         return $this->success(PlanResource::collection($plans), 'Subscription plans retrieved successfully');
     }
 

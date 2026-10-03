@@ -51,6 +51,14 @@ class Plan extends Model
                 $plan->slug = Str::slug($plan->name);
             }
         });
+
+        static::saved(function () {
+            \Illuminate\Support\Facades\Cache::forget('subscription_plans_active');
+        });
+
+        static::deleted(function () {
+            \Illuminate\Support\Facades\Cache::forget('subscription_plans_active');
+        });
     }
 
     public function features(): HasMany

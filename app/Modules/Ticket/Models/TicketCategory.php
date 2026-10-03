@@ -37,6 +37,12 @@ class TicketCategory extends Model
                 $category->slug = Str::slug($category->name);
             }
         });
+        static::saved(function () {
+            \Illuminate\Support\Facades\Cache::forget('ticket_categories_active');
+        });
+        static::deleted(function () {
+            \Illuminate\Support\Facades\Cache::forget('ticket_categories_active');
+        });
     }
 
     public function tickets(): HasMany

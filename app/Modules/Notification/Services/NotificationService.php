@@ -3,6 +3,7 @@
 namespace App\Modules\Notification\Services;
 
 use App\Models\User;
+use App\Modules\Notification\Jobs\SendPushNotificationJob;
 use App\Modules\Notification\Models\Notification;
 use App\Modules\Notification\Repositories\Contracts\NotificationRepositoryInterface;
 
@@ -42,14 +43,9 @@ class NotificationService
             'meta'           => $meta,
         ]);
 
-        // Firebase Push
-        if (config('notifications.channels.firebase')) {
-            $this->firebaseService->send($notification);
-        }
-
-        // Broadcast
-        if (config('notifications.channels.broadcast')) {
-            $this->broadcastService->send($notification);
+        // Asynchronously process external push and real-time broadcasts via queue
+        if (config('notifications.channels.firebase', true) || config('notifications.channels.broadcast', true)) {
+            SendPushNotificationJob::dispatch($notification);
         }
 
         return $notification;
