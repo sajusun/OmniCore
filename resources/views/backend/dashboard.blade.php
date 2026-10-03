@@ -125,7 +125,7 @@
                                 <small class="text-muted">{{ number_format($totalReviews ?? $totalClubMembers ?? 0) }} reviews</small>
                             </div>
                             <div class="col col-auto top-icn dash">
-                                <div class="counter-icon bg-purple dash ms-auto" style="background: #7c3aed!important;">
+                                <div class="counter-icon bg-secondary dash ms-auto box-shadow-secondary">
                                     <i class="fe fe-briefcase text-white"></i>
                                 </div>
                             </div>
@@ -145,7 +145,7 @@
                                 <small class="text-muted">In Catalog</small>
                             </div>
                             <div class="col col-auto top-icn dash">
-                                <div class="counter-icon dash ms-auto" style="background: #f59e0b!important;">
+                                <div class="counter-icon bg-warning dash ms-auto box-shadow-warning">
                                     <i class="fe fe-box text-white"></i>
                                 </div>
                             </div>
@@ -201,10 +201,10 @@
         <div class="row">
             <!-- Monthly Growth & Subscriptions Overview (Area Chart) -->
             <div class="col-lg-12 col-xl-8">
-                <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
+                <div class="card mb-4">
                     <div class="card-header border-bottom bg-transparent py-3">
                         <h5 class="card-title fw-bold mb-0 text-dark">
-                            <i class="fe fe-trending-up me-2" style="color: #8fbd56;"></i> Monthly Activity & Subscription Growth
+                            <i class="fe fe-trending-up me-2 text-primary"></i> Monthly Activity & Subscription Growth
                         </h5>
                     </div>
                     <div class="card-body">
@@ -226,10 +226,10 @@
 
             <!-- Subscription Ratio (Donut Chart) -->
             <div class="col-lg-12 col-xl-4">
-                <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
+                <div class="card mb-4">
                     <div class="card-header border-bottom bg-transparent py-3">
                         <h5 class="card-title fw-bold mb-0 text-dark">
-                            <i class="fe fe-pie-chart me-2" style="color: #10b981;"></i> Subscription Plan Ratio
+                            <i class="fe fe-pie-chart me-2 text-secondary"></i> Subscription Plan Ratio
                         </h5>
                     </div>
                     <div class="card-body">
@@ -249,10 +249,10 @@
         <div class="row">
             <!-- System Resources Breakdown (Bar Chart) -->
             <div class="col-lg-12 col-xl-6">
-                <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
+                <div class="card mb-4">
                     <div class="card-header border-bottom bg-transparent py-3">
                         <h5 class="card-title fw-bold mb-0 text-dark">
-                            <i class="fe fe-bar-chart-2 me-2" style="color: #4f46e5;"></i> System Resources Distribution
+                            <i class="fe fe-bar-chart-2 me-2 text-primary"></i> System Resources Distribution
                         </h5>
                     </div>
                     <div class="card-body">
@@ -271,10 +271,10 @@
 
             <!-- User Verification Status Overview (Donut Chart) -->
             <div class="col-lg-12 col-xl-6">
-                <div class="card border-0 shadow-sm mb-4" style="border-radius: 0;">
+                <div class="card mb-4">
                     <div class="card-header border-bottom bg-transparent py-3">
                         <h5 class="card-title fw-bold mb-0 text-dark">
-                            <i class="fe fe-check-circle me-2" style="color: #10b981;"></i> User Account Verification Status
+                            <i class="fe fe-check-circle me-2 text-success"></i> User Account Verification Status
                         </h5>
                     </div>
                     <div class="card-body">
@@ -296,7 +296,7 @@
 
             {{-- Recent Registered Users --}}
             <div class="col-sm-12 col-md-12 col-xl-6">
-                <div class="card overflow-hidden border-0 shadow-sm mb-4" style="border-radius: 0;">
+                <div class="card overflow-hidden mb-4">
                     <div class="card-header border-bottom d-flex align-items-center justify-content-between">
                         <h4 class="card-title fw-semibold mb-0">Recent Registered Users</h4>
                         <span class="badge bg-primary-transparent text-primary fs-12">Last 5</span>
@@ -334,7 +334,7 @@
 
             {{-- Recent Events --}}
             <div class="col-sm-12 col-md-12 col-xl-6">
-                <div class="card overflow-hidden border-0 shadow-sm mb-4" style="border-radius: 0;">
+                <div class="card overflow-hidden mb-4">
                     <div class="card-header border-bottom d-flex align-items-center justify-content-between">
                         <h4 class="card-title fw-semibold mb-0">Recent Events</h4>
                         <span class="badge bg-warning-transparent text-warning fs-12">Last 5</span>
@@ -387,7 +387,7 @@
         <div class="row">
             {{-- Recent Posts --}}
             <div class="col-sm-12 col-md-12 col-xl-12">
-                <div class="card overflow-hidden border-0 shadow-sm mb-4" style="border-radius: 0;">
+                <div class="card overflow-hidden mb-4">
                     <div class="card-header border-bottom d-flex align-items-center justify-content-between">
                         <h4 class="card-title fw-semibold mb-0">Recent Posts</h4>
                         <span class="badge bg-info-transparent text-info fs-12">Last 5</span>

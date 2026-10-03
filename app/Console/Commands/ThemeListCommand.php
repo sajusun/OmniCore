@@ -28,7 +28,7 @@ class ThemeListCommand extends Command
     public function handle(): int
     {
         $activeTheme = (string) config('theme.active', env('APP_THEME', 'modern_indigo'));
-        /** @var array<string, array{name: string, category: string, accent: string, mode: string, description: string}> $themes */
+        /** @var array<string, array{name: string, category: string, accent: string, secondary?: string, mode: string, description: string}> $themes */
         $themes = (array) config('theme.themes', []);
 
         $rows = [];
@@ -39,13 +39,14 @@ class ThemeListCommand extends Command
                 $theme['name'] ?? '',
                 $theme['category'] ?? '',
                 $theme['accent'] ?? '',
+                $theme['secondary'] ?? '',
                 $theme['mode'] ?? '',
                 $isActive ? '<info>ACTIVE</info>' : 'Available',
             ];
         }
 
-        $this->info("🎨 OmniCore Multi-Theme Engine");
-        $this->table(['Key', 'Theme Name', 'Category', 'Accent', 'Mode', 'Status'], $rows);
+        $this->info("🎨 OmniCore Enterprise Multi-Theme Engine");
+        $this->table(['Key', 'Theme Name', 'Category', 'Primary', 'Secondary', 'Mode', 'Status'], $rows);
         $this->line("Active theme in .env: <comment>{$activeTheme}</comment>");
         $this->line("To switch theme, run: <comment>php artisan theme:set {theme_key}</comment>\n");
 

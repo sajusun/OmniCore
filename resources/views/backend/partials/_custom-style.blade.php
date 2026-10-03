@@ -25,31 +25,31 @@
         }
     }
 
-    /* Global Button Hover & Contrast Fixes using Client's Primary Color (#8fbd56) */
+    /* Global Button Hover & Contrast using Theme Dynamic Variables */
     .btn-primary, button.btn-primary, a.btn-primary {
-        background-color: var(--primary-bg-color, #8fbd56) !important;
-        border-color: var(--primary-bg-color, #8fbd56) !important;
-        color: #ffffff !important;
+        background-color: var(--primary-bg-color, #6366f1) !important;
+        border-color: var(--primary-bg-color, #6366f1) !important;
+        color: var(--primary-text-color, #ffffff) !important;
     }
     .btn-primary:hover, .btn-primary:focus, .btn-primary:active,
     button.btn-primary:hover, button.btn-primary:focus, button.btn-primary:active,
     a.btn-primary:hover, a.btn-primary:focus, a.btn-primary:active {
-        background-color: var(--primary-bg-hover, #7cb342) !important;
-        border-color: var(--primary-bg-hover, #7cb342) !important;
-        color: #ffffff !important;
+        background-color: var(--primary-bg-hover, #4f46e5) !important;
+        border-color: var(--primary-bg-hover, #4f46e5) !important;
+        color: var(--primary-text-color, #ffffff) !important;
     }
 
     .btn-secondary, button.btn-secondary, a.btn-secondary {
-        background-color: #6b7280 !important;
-        border-color: #6b7280 !important;
-        color: #ffffff !important;
+        background-color: var(--secondary-bg-color, #64748b) !important;
+        border-color: var(--secondary-bg-color, #64748b) !important;
+        color: var(--secondary-text-color, #ffffff) !important;
     }
     .btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active,
     button.btn-secondary:hover, button.btn-secondary:focus, button.btn-secondary:active,
     a.btn-secondary:hover, a.btn-secondary:focus, a.btn-secondary:active {
-        background-color: #4b5563 !important;
-        border-color: #4b5563 !important;
-        color: #ffffff !important;
+        background-color: var(--secondary-bg-hover, #475569) !important;
+        border-color: var(--secondary-bg-hover, #475569) !important;
+        color: var(--secondary-text-color, #ffffff) !important;
     }
 
     .btn-success, button.btn-success, a.btn-success {

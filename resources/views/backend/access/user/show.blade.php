@@ -70,7 +70,7 @@
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div>
                             <span class="text-muted small text-uppercase fw-bold">User Posts</span>
-                            <h2 class="fw-bold text-dark mb-0 mt-1">{{ $postsCount }}</h2>
+                            <h2 class="fw-bold text-dark mb-0 mt-1">{{ $user->posts_count ?? $postsCount ?? 0 }}</h2>
                         </div>
                         <div class="p-3 bg-indigo-light text-indigo">
                             <i class="fa fa-newspaper fs-3" style="color: #4f46e5;"></i>

@@ -42,16 +42,25 @@
                    data-theme-key="{{ $themeKey }}"
                    data-theme-name="{{ $theme['name'] }}"
                    data-theme-accent="{{ $theme['accent'] }}"
+                   data-theme-secondary="{{ $theme['secondary'] ?? '#64748b' }}"
                    data-theme-icon="{{ $theme['icon'] }}"
-                   onclick="applyThemePreview('{{ $themeKey }}', '{{ $theme['name'] }}', '{{ $theme['accent'] }}', '{{ $theme['icon'] }}')">
+                   onclick="applyThemePreview('{{ $themeKey }}', '{{ $theme['name'] }}', '{{ $theme['accent'] }}', '{{ $theme['secondary'] ?? '#64748b' }}', '{{ $theme['icon'] }}')">
                     <div class="d-flex align-items-center">
-                        <span class="d-inline-flex align-items-center justify-content-center me-2"
-                              style="width: 26px; height: 26px; border-radius: 6px; background-color: {{ $theme['accent'] }}20; color: {{ $theme['accent'] }};">
-                            <i class="{{ $theme['icon'] }} fs-13"></i>
+                        <span class="d-inline-flex align-items-center justify-content-center me-2 position-relative"
+                              style="width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg, {{ $theme['accent'] }} 0%, {{ $theme['secondary'] ?? $theme['accent'] }} 100%); color: #ffffff; box-shadow: 0 2px 6px {{ $theme['accent'] }}40;">
+                            <i class="{{ $theme['icon'] }} fs-14"></i>
                         </span>
                         <div>
-                            <div class="fw-semibold fs-12 text-dark">{{ $theme['name'] }}</div>
-                            <div class="text-muted fs-11">{{ $theme['category'] }}</div>
+                            <div class="fw-semibold fs-12 text-dark d-flex align-items-center gap-1">
+                                {{ $theme['name'] }}
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="text-muted fs-11">{{ $theme['category'] }}</span>
+                                <span class="d-inline-flex gap-1 align-items-center">
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ $theme['accent'] }}; display: inline-block;" title="Primary: {{ $theme['accent'] }}"></span>
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ $theme['secondary'] ?? '#64748b' }}; display: inline-block;" title="Secondary: {{ $theme['secondary'] ?? '#64748b' }}"></span>
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -74,8 +83,8 @@
 </div>
 
 <script>
-    function applyThemePreview(themeKey, themeName, themeAccent, themeIcon) {
-        // Set data-theme and body class dynamically
+    function applyThemePreview(themeKey, themeName, themeAccent, themeSecondary, themeIcon) {
+        // Set data-theme on html and body class dynamically
         document.documentElement.setAttribute('data-theme', themeKey);
 
         const body = document.body;
@@ -123,6 +132,7 @@
                     storedTheme,
                     btn.dataset.themeName,
                     btn.dataset.themeAccent,
+                    btn.dataset.themeSecondary,
                     btn.dataset.themeIcon
                 );
             }

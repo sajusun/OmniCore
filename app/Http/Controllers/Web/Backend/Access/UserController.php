@@ -95,8 +95,9 @@ class UserController extends Controller
     {
         $user = User::withCount(['posts', 'tickets', 'reviews'])->findOrFail($id);
         $ordersCount = \App\Modules\Order\Models\Order::where('user_id', $user->id)->count();
+        $postsCount = $user->posts_count ?? 0;
 
-        return view('backend.access.user.show', compact('user', 'ordersCount'));
+        return view('backend.access.user.show', compact('user', 'ordersCount', 'postsCount'));
     }
 
     /**
