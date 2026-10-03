@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,17 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+
+        // ─── Enterprise Password Policy (8+ chars, mixed-case, numbers, symbols) ──
+        Password::defaults(function () {
+            $rule = Password::min(8)
+                ->letters()
+                ->mixedCase()
+                ->numbers()
+                ->symbols();
+
+            return app()->isProduction() ? $rule->uncompromised() : $rule;
+        });
 
         // ─── Configurable Rate Limiters ─────────────────────────────────────────
         RateLimiter::for('api', function (Request $request) {

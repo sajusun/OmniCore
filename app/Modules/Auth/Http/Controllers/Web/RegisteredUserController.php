@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use App\Mail\OtpMail;
+use App\Modules\Auth\Models\Verification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Exception;
+use RuntimeException;
 
 class RegisteredUserController extends Controller
 {
@@ -36,7 +38,7 @@ class RegisteredUserController extends Controller
     {
 
         $request->validate([
-            'role' => ['required', 'exists:roles,id'],
+            'role' => ['nullable', 'exists:roles,id'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()]
@@ -49,22 +51,22 @@ class RegisteredUserController extends Controller
         }
 
         $user = User::create([
-            'name'           => $request->name,
-            'slug'           => User::generateUniqueSlug($request->name),
-            'email'          => $request->email,
-            'password'       => Hash::make($request->password),
-            'otp'            => rand(1000, 9999),
-            'otp_expires_at' => Carbon::now()->addMinutes(60),
+            'name'     => $request->name,
+            'slug'     => User::generateUniqueSlug($request->name),
+            'email'    => $request->email,
+            'password' => Hash::make($request->password),
         ]);
+
+        $roleId = $request->role ?? \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web'])->id;
 
         DB::table('model_has_roles')->insert([
-            'role_id' => $request->role,
+            'role_id'    => $roleId,
             'model_type' => 'App\Models\User',
-            'model_id' => $user->id
+            'model_id'   => $user->id,
         ]);
 
-        //* Send the new OTP to the user's email
-        // Mail::to($user->email)->send(new OtpMail($user->otp, $user, 'Verify Your Email Address'));
+        // Send OTP verification through standard VerificationService channel
+        $user->sendVerification(Verification::PURPOSE_EMAIL_VERIFICATION);
 
         event(new Registered($user));
 
@@ -81,38 +83,31 @@ class RegisteredUserController extends Controller
         return $response;
     }
 
-    public function otpPage(){
+    public function otpPage()
+    {
         return view('auth.verify-otp');
     }
 
     public function otpVerify(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|exists:users,email',
-            'otp'   => 'required|digits:4',
+            'email' => ['required', 'email', 'exists:users,email'],
+            'otp'   => ['required', 'string', 'min:4', 'max:10'],
         ]);
+
         try {
             $user = User::where('email', $request->input('email'))->first();
 
-            //! Check if email has already been verified
-            if (!empty($user->otp_verified_at)) {
+            if ($user->isEmailVerified()) {
                 return back()->with('error', 'Email already verified.');
             }
 
-            if ((string)$user->otp !== (string)$request->input('otp')) {
-                return back()->with('error', 'Invalid OTP.');
-            }
+            // Verify via VerificationService (handles max attempts, lockout, timing-safe compare)
+            $verified = $user->verifyOtp((string) $request->input('otp'), Verification::PURPOSE_EMAIL_VERIFICATION);
 
-            //* Check if OTP has expired
-            if (Carbon::parse($user->otp_expires_at)->isPast()) {
-                return back()->with('error', 'OTP has expired.');
+            if (!$verified) {
+                return back()->with('error', 'Invalid OTP code. Please try again.');
             }
-
-            //* Verify the email
-            $user->otp_verified_at   = now();
-            $user->otp               = null;
-            $user->otp_expires_at    = null;
-            $user->save();
 
             // Refresh/Bootstrap verified registration device as primary trusted device
             $adaptiveService = app(\App\Modules\AdaptiveAuth\Services\AdaptiveAuthService::class);
@@ -120,24 +115,27 @@ class RegisteredUserController extends Controller
 
             session()->flash('success', 'Email verified successfully. You can now log in.');
 
-            $response = redirect()->intended(route('login'));
+            $response = redirect()->route('login');
             if (isset($bootstrapped['cookie'])) {
                 $response->withCookie($bootstrapped['cookie']);
             }
             return $response;
-        } catch (Exception $e) {
+        } catch (RuntimeException $e) {
             return back()->with('error', $e->getMessage());
+        } catch (Exception $e) {
+            return back()->with('error', 'Verification failed. Please try again.');
         }
     }
 
-    public function otpResendPage(){
+    public function otpResendPage()
+    {
         return view('auth.resend-otp');
     }
 
     public function otpResend(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|exists:users,email',
+            'email' => ['required', 'email', 'exists:users,email'],
         ]);
 
         try {
@@ -147,23 +145,20 @@ class RegisteredUserController extends Controller
                 return back()->with('error', 'User not found.');
             }
 
-            if ($user->otp_verified_at) {
+            if ($user->isEmailVerified()) {
                 return back()->with('error', 'Email already verified.');
             }
 
-            $newOtp               = rand(1000, 9999);
-            $otpExpiresAt         = Carbon::now()->addMinutes(60);
-            $user->otp            = $newOtp;
-            $user->otp_expires_at = $otpExpiresAt;
-            $user->save();
+            // Resend via VerificationService (respects cooldown, max resend count, block duration)
+            $user->resendVerification(Verification::PURPOSE_EMAIL_VERIFICATION);
 
-            //* Send the new OTP to the user's email
-            Mail::to($user->email)->send(new OtpMail($newOtp, $user, 'Verify Your Email Address'));
-
+            session()->flash('success', 'A new verification OTP has been sent to your email.');
             return redirect()->intended(route('verify.otp.page'))->with('email', $request->email);
 
-        } catch (Exception $e) {
+        } catch (RuntimeException $e) {
             return back()->with('error', $e->getMessage());
+        } catch (Exception $e) {
+            return back()->with('error', 'Failed to resend OTP. Please try again later.');
         }
     }
 }
