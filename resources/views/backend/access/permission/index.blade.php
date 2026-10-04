@@ -1,53 +1,38 @@
-@extends('layouts.admin', ['title' => 'Permission Management'])
+<x-admin-layout>
+<x-slot name="title">Permission Management</x-slot>
 
-@section('content')
+<div class="container-fluid py-4">
+    <x-page-header title="Permission Management" subtitle="Manage individual permissions that can be mapped to roles."
+        :breadcrumbs="['Access Control' => null, 'Permissions' => null]">
+        <x-slot:actions>
+            <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3 shadow-sm">
+                <i class="fas fa-plus"></i><span>Add New Permission</span>
+            </a>
+        </x-slot:actions>
+    </x-page-header>
 
-{{-- Page Header --}}
-<div class="d-flex align-items-center justify-content-between mb-4">
-    <div>
-        <nav aria-label="breadcrumb" class="mb-1">
-            <ol class="breadcrumb mb-0" style="font-size: 0.875rem;">
-                <li class="breadcrumb-item text-muted">
-                    <i class="fas fa-shield-alt me-1 text-secondary"></i> Access Control
-                </li>
-                <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Permissions</li>
-            </ol>
-        </nav>
-        <h1 class="h3 mb-1 fw-bold text-dark">Permission Management</h1>
-        <p class="small text-muted mb-0">Manage individual permissions that can be mapped to roles.</p>
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 border-0 shadow-sm mb-4" role="alert">
+            <i class="fas fa-check-circle"></i><span>{{ session('success') }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <div class="permission-table-wrapper">
+        <x-datatable id="permission-datatable" url="{{ route('admin.permissions.index') }}" :columns="[
+                ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => '#', 'orderable' => false, 'searchable' => false],
+                ['data' => 'name', 'name' => 'name', 'title' => 'Permission Key'],
+                ['data' => 'display_name', 'name' => 'display_name', 'title' => 'Display Name'],
+                ['data' => 'guard_name', 'name' => 'guard_name', 'title' => 'Guard'],
+                ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false],
+            ]" />
     </div>
-    <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3 py-2 shadow-sm" style="border-radius: 0.5rem;">
-        <i class="fas fa-plus"></i>
-        <span>Add New Permission</span>
-    </a>
-</div>
-
-{{-- Alerts --}}
-@if(session('success'))
-<div class="alert alert-success d-flex align-items-center gap-2 border-0 shadow-sm mb-4" role="alert" style="border-radius: 0.5rem;">
-    <i class="fas fa-check-circle fs-5 flex-shrink-0 text-success"></i>
-    <div>
-        {{ session('success') }}
-    </div>
-</div>
-@endif
-
-{{-- Table --}}
-<div class="permission-table-wrapper mb-4">
-    <x-datatable id="permission-datatable" url="{{ route('admin.permissions.index') }}" :columns="[
-            ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => '#', 'orderable' => false, 'searchable' => false],
-            ['data' => 'name', 'name' => 'name', 'title' => 'Permission Name'],
-            ['data' => 'guard_name', 'name' => 'guard_name', 'title' => 'Guard Name'],
-            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false],
-        ]" />
 </div>
 
 <x-modal.confirm-delete name="confirm-user-delete" action="#"
     message="Are you sure you want to delete this permission? All associated records will be permanently removed." />
 
 <x-modal.status />
-
-@endsection
 
 @push('styles')
 <style>
@@ -66,9 +51,9 @@
         font-weight: 600 !important;
         letter-spacing: 0.05em !important;
         text-transform: uppercase !important;
-        background-color: #f8fafc !important;
-        border-bottom: 1px solid #edf2f7 !important;
-        color: #475569 !important;
+        background-color: var(--theme-table-header-bg, #f8fafc) !important;
+        border-bottom: 1px solid var(--theme-card-border, #edf2f7) !important;
+        color: var(--theme-muted-color, #475569) !important;
     }
     #permission-datatable tbody td {
         padding: 0.45rem 1rem !important;
@@ -108,3 +93,4 @@ function deletePermission(id) {
 }
 </script>
 @endpush
+</x-admin-layout>
