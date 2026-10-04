@@ -7,12 +7,8 @@
     <div>
         <nav aria-label="breadcrumb" class="mb-1">
             <ol class="breadcrumb mb-0" style="font-size: 0.875rem;">
-                <li class="breadcrumb-item text-muted flex-row align-items-center d-inline-flex gap-1">
-                    <svg class="text-secondary" style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                    Access Control
+                <li class="breadcrumb-item text-muted">
+                    <i class="fas fa-shield-alt me-1 text-secondary"></i> Access Control
                 </li>
                 <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Permissions</li>
             </ol>
@@ -21,19 +17,15 @@
         <p class="small text-muted mb-0">Manage individual permissions that can be mapped to roles.</p>
     </div>
     <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3 py-2 shadow-sm" style="border-radius: 0.5rem;">
-        <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-        Add New Permission
+        <i class="fas fa-plus"></i>
+        <span>Add New Permission</span>
     </a>
 </div>
 
 {{-- Alerts --}}
 @if(session('success'))
 <div class="alert alert-success d-flex align-items-center gap-2 border-0 shadow-sm mb-4" role="alert" style="border-radius: 0.5rem;">
-    <svg class="flex-shrink-0" style="width: 1.25rem; height: 1.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
+    <i class="fas fa-check-circle fs-5 flex-shrink-0 text-success"></i>
     <div>
         {{ session('success') }}
     </div>
@@ -41,42 +33,13 @@
 @endif
 
 {{-- Table --}}
-<div class="card border-0 shadow-sm mb-4" style="border-radius: 0.5rem;">
-    <div class="card-body p-3">
-        <x-datatable id="permission-datatable" url="{{ route('admin.permissions.index') }}" :columns="[
-                ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => '#', 'orderable' => false, 'searchable' => false],
-                ['data' => 'name', 'name' => 'name', 'title' => 'Permission Name'],
-                ['data' => 'guard_name', 'name' => 'guard_name', 'title' => 'Guard Name'],
-                ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false],
-            ]" />
-    </div>
-</div>
-
-{{-- Delete Confirmation Modal (Bootstrap 5 Static Native Structure) --}}
-<div class="modal fade" id="deletePermissionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deletePermissionModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 450px;">
-        <div class="modal-content border-0 shadow" style="border-radius: 1rem;">
-            <div class="modal-body p-4">
-                <div class="d-flex align-items-start gap-3">
-                    <div class="flex-shrink-0 d-flex align-items-center justify-content-center bg-danger-subtle text-danger" style="width: 3rem; height: 3rem;">
-                        <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold text-dark mb-1" id="deletePermissionModalLabel">Delete Permission?</h5>
-                        <p class="text-muted small mb-0">
-                            This will permanently delete this permission. Users/roles will lose access mapping under this key. This action cannot be undone.
-                        </p>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-end gap-2 mt-4">
-                    <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal" style="border-radius: 0.375rem;">Cancel</button>
-                    <button type="button" id="confirm-delete-btn" class="btn btn-danger px-4" style="border-radius: 0.375rem;">Yes, Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="permission-table-wrapper mb-4">
+    <x-datatable id="permission-datatable" url="{{ route('admin.permissions.index') }}" :columns="[
+            ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => '#', 'orderable' => false, 'searchable' => false],
+            ['data' => 'name', 'name' => 'name', 'title' => 'Permission Name'],
+            ['data' => 'guard_name', 'name' => 'guard_name', 'title' => 'Guard Name'],
+            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false],
+        ]" />
 </div>
 
 <x-modal.confirm-delete name="confirm-user-delete" action="#"
@@ -86,9 +49,55 @@
 
 @endsection
 
+@push('styles')
+<style>
+    .permission-table-wrapper .card {
+        border-radius: 0.5rem;
+    }
+    .permission-table-wrapper .table-responsive {
+        padding: 0 !important;
+    }
+    #permission-datatable {
+        margin-bottom: 0 !important;
+    }
+    #permission-datatable thead th {
+        padding: 0.65rem 1rem !important;
+        font-size: 0.75rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.05em !important;
+        text-transform: uppercase !important;
+        background-color: #f8fafc !important;
+        border-bottom: 1px solid #edf2f7 !important;
+        color: #475569 !important;
+    }
+    #permission-datatable tbody td {
+        padding: 0.45rem 1rem !important;
+        vertical-align: middle !important;
+        font-size: 0.875rem !important;
+    }
+    #permission-datatable thead th:first-child,
+    #permission-datatable tbody td:first-child {
+        padding-left: 1.25rem !important;
+        width: 50px !important;
+        color: #64748b;
+    }
+    #permission-datatable thead th:last-child,
+    #permission-datatable tbody td:last-child {
+        padding-right: 1.25rem !important;
+        width: 100px !important;
+    }
+    #permission-datatable tbody tr {
+        transition: background-color 0.15s ease;
+    }
+    #permission-datatable tbody tr:hover {
+        background-color: rgba(99, 102, 241, 0.03) !important;
+    }
+</style>
+@endpush
+
 @push('scripts')
 <script>
-    function deletePermission(id) {
+function deletePermission(id) {
     let url = "{{ route('admin.permissions.destroy', ':id') }}";
     url = url.replace(':id', id);
     const form = document.getElementById('confirm-delete-form-confirm-user-delete');
