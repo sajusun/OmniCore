@@ -24,9 +24,8 @@
     @include('backend.partials._styles')
 </head>
 
-<body class="ltr app sidebar-mini theme-{{ config('theme.active', env('APP_THEME', 'modern_indigo')) }}" data-theme="{{ config('theme.active', env('APP_THEME', 'modern_indigo')) }}">
-    {{-- @include('backend.partials._switcher') --}}
-
+<body class="ltr app sidebar-mini theme-{{ config('theme.active', env('APP_THEME', 'modern_indigo')) }}"
+    data-theme="{{ config('theme.active', env('APP_THEME', 'modern_indigo')) }}">
 
     <div class="app-content main-content mt-0">
         <div class="side-app d-flex flex-column min-vh-100">

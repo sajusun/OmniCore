@@ -1,6 +1,5 @@
 <x-admin-layout>
     <x-slot name="title">Create User</x-slot>
-    <x-slot name="header">Create User</x-slot>
 
     <div class="py-8">
         <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">

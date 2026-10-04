@@ -3,12 +3,10 @@
         Profile Settings
     @endslot
 
-    @slot('header')
-        <x-page-header title="Profile Settings" :breadcrumbs="['Settings' => 'javascript:void(0);', 'Profile' => null]" class="mb-0 w-100" />
-    @endslot
-
     <div class="py-4">
         <div class="container-fluid">
+            <x-page-header title="Profile Settings" :breadcrumbs="['Settings' => 'javascript:void(0);', 'Profile' => null]" class="mb-4" />
+
             <!-- Main Profile Header Card -->
             <div class="card shadow-sm border overflow-hidden mb-4"
                  style="background-color: var(--theme-card-bg, #ffffff); border-color: var(--theme-card-border, #e2e8f0); border-radius: var(--theme-card-radius, 12px);">
@@ -259,29 +257,27 @@
                     };
                     reader.readAsDataURL(file);
 
-                    // AJAX upload
+                    // Modern Axios upload
                     var formData = new FormData();
                     formData.append('profile_picture', file);
                     formData.append('_token', '{{ csrf_token() }}');
 
-                    $.ajax({
-                        url: "{{ route('admin.setting.profile.avatar.update') }}",
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function (response) {
-                            if (response.success) {
-                                $('.profile-img-main img').attr('src', response.image_url);
-                                $('.profile-img-change').attr('src', response.image_url);
-                                toastr.success('Profile picture updated successfully.');
-                            } else {
-                                toastr.error(response.message);
-                            }
-                        },
-                        error: function () {
-                            toastr.error('An error occurred while updating the profile picture.');
+                    window.axios.post("{{ route('admin.setting.profile.avatar.update') }}", formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                    })
+                    .then(function (res) {
+                        var response = res.data;
+                        if (response.success) {
+                            $('.profile-img-main img').attr('src', response.image_url);
+                            $('.profile-img-change').attr('src', response.image_url);
+                            toastr.success('Profile picture updated successfully.');
+                        } else {
+                            toastr.error(response.message || 'Update failed');
                         }
+                    })
+                    .catch(function (error) {
+                        var msg = error.response?.data?.message || 'An error occurred while updating the profile picture.';
+                        toastr.error(msg);
                     });
                 });
             });

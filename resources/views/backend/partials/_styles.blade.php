@@ -70,7 +70,9 @@
 <!-- Dynamic Enterprise Multi-Theme Engine (5 Themes via APP_THEME) -->
 <link href="{{ asset('backend/css/themes.css') }}?v={{ file_exists(public_path('backend/css/themes.css')) ? filemtime(public_path('backend/css/themes.css')) : time() }}" rel="stylesheet" />
 
-@include('backend.partials._custom-style')
+<!-- Custom Clean Utilities & Overrides -->
+<link href="{{ asset('backend/css/custom.css') }}?v={{ file_exists(public_path('backend/css/custom.css')) ? filemtime(public_path('backend/css/custom.css')) : time() }}" rel="stylesheet" />
+
 
 
 <script>

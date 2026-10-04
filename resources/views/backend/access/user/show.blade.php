@@ -1,9 +1,6 @@
 <x-admin-layout>
     <x-slot name="title">User Details - {{ $user->name }}</x-slot>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">User Details</h2>
-    </x-slot>
 
     {{-- Breadcrumb & Navigation --}}
     <div class="d-flex align-items-center justify-content-between mb-4">

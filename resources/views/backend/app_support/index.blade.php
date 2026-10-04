@@ -1,9 +1,6 @@
 <x-admin-layout>
     <x-slot name="title">App Support & Feedback</x-slot>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">App Support & Feedback</h2>
-    </x-slot>
 
     <!-- Page Header / Breadcrumb -->
     <div class="d-flex align-items-center justify-content-between mb-4">

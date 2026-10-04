@@ -1,9 +1,6 @@
 <x-admin-layout>
     <x-slot name="title">Mail & Notification</x-slot>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Mail & Notification</h2>
-    </x-slot>
 
     @push('styles')
     <style>

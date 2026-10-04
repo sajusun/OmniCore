@@ -1,6 +1,5 @@
 <x-admin-layout>
     <x-slot name="title">Edit User</x-slot>
-    <x-slot name="header">Edit User</x-slot>
 
     <div class="container-fluid py-4 px-0">
         <div class="mx-auto" style="max-width: 1280px;">

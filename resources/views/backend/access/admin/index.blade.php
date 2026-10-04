@@ -1,25 +1,19 @@
 <x-admin-layout>
-    <x-slot name="title">Users Table</x-slot>
+    <x-slot name="title">Staff Management</x-slot>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Users Table</h2>
-    </x-slot>
-
-    <div class="mb-6 flex justify-between items-center">
-        <div class="text-sm text-gray-500">
-            <a href="{{ route('admin.dashboard') }}" class="hover:text-gray-900 transition-colors">Dashboard</a>
-            <span class="mx-2">/</span>
-            <span class="text-gray-900 font-medium">Users Table</span>
-        </div>
-        <a href="{{ route('admin.stuff.create') }}"
-            class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
-                </path>
-            </svg>
-            Add New User
-        </a>
-    </div>
+    <div class="container-fluid py-4">
+        <x-page-header title="Staff Management" subtitle="Manage system administrators, staff members and their roles." :breadcrumbs="['Dashboard' => route('admin.dashboard'), 'Staff' => null]">
+            <x-slot:actions>
+                <a href="{{ route('admin.stuff.create') }}"
+                   class="btn btn-primary d-inline-flex align-items-center gap-2 px-3.5 py-2 shadow-sm fw-semibold"
+                   style="font-size: 0.8125rem; border-radius: 8px;">
+                    <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    <span>Add New Staff</span>
+                </a>
+            </x-slot:actions>
+        </x-page-header>
 
     <x-card title="Users List" class="mb-6">
         <!-- Using the Reusable x-datatable Component -->
@@ -32,6 +26,8 @@
             ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'orderable' => false, 'searchable' => false]
         ]" />
     </x-card>
+
+    </div>
 
     {{-- Reusable Delete Confirmation Modal --}}
     <x-modal.confirm-delete name="confirm-user-delete" action=""

@@ -7,32 +7,12 @@
         @endisset
     </x-slot>
 
-    <x-slot name="header">
-        @isset($user)
-        Activity Logs for {{ $user->name }}
-        @else
-        System Activity Logs
-        @endisset
-    </x-slot>
-
-    <!-- Breadcrumbs & Nav -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item">
-                    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
-                </li>
-                @isset($user)
-                <li class="breadcrumb-item">
-                    <a href="{{ route('admin.users.index') }}">Users</a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">Activity Logs</li>
-                @else
-                <li class="breadcrumb-item active" aria-current="page">Activity Logs</li>
-                @endisset
-            </ol>
-        </nav>
-    </div>
+    <div class="container-fluid py-4">
+        <x-page-header
+            :title="isset($user) ? 'Activity Logs for ' . $user->name : 'System Activity Logs'"
+            subtitle="Track and audit administrative actions and authentication records."
+            :breadcrumbs="isset($user) ? ['Dashboard' => route('admin.dashboard'), 'Users' => route('admin.users.index'), 'Activity Logs' => null] : ['Dashboard' => route('admin.dashboard'), 'Activity Logs' => null]"
+        />
 
     <!-- Search & Filter Card -->
     <x-card class="mb-4">
@@ -164,4 +144,5 @@
         </div>
         @endif
     </x-card>
+    </div>
 </x-admin-layout>

@@ -1,9 +1,6 @@
 <x-admin-layout>
     <x-slot name="title">Support #{{ $report->ticket_no }} — {{ $report->subject }}</x-slot>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Support Report Details</h2>
-    </x-slot>
 
     <!-- Page Header / Breadcrumb -->
     <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">

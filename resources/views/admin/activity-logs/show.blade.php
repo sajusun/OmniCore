@@ -3,10 +3,18 @@
         Activity Log Information
     </x-slot>
 
-    <x-slot name="header">
-        Activity Log Information
-    </x-slot>
-
+    <div class="container-fluid py-4">
+        <x-page-header
+            title="Activity Log Details"
+            subtitle="Detailed event log and properties breakdown for audit record #{{ $activityLog->id }}."
+            :breadcrumbs="['Dashboard' => route('admin.dashboard'), 'Activity Logs' => route('admin.activity-logs.index'), '#' . $activityLog->id => null]">
+            <x-slot:actions>
+                <a href="{{ route('admin.activity-logs.index') }}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1.5 px-3 py-2" style="font-size: 0.8125rem; border-radius: 8px;">
+                    <i class="fa fa-arrow-left"></i>
+                    <span>Back to Logs</span>
+                </a>
+            </x-slot:actions>
+        </x-page-header>
     <div class="row g-4 mb-4">
 
         <!-- General Info Card -->
@@ -231,5 +239,5 @@
             </x-card>
         </div>
     </div>
-
+    </div>
 </x-admin-layout>

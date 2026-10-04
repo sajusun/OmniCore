@@ -3,12 +3,10 @@
         Site Information Settings
     @endslot
 
-    @slot('header')
-        <x-page-header title="Site Information Settings" :breadcrumbs="['Settings' => 'javascript:void(0);', 'Site Settings' => null]" class="mb-0 w-100" />
-    @endslot
-
     <div class="py-4">
         <div class="container-fluid">
+            <x-page-header title="Site Information Settings" :breadcrumbs="['Settings' => 'javascript:void(0);', 'Site Settings' => null]" class="mb-4" />
+
             <!-- Enhanced card using unified modern component -->
             <x-card title="Configure general settings" badge="required fields *" badge-class="badge bg-primary">
                 <x-slot:icon>
