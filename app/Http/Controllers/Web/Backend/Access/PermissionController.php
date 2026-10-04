@@ -17,9 +17,11 @@ class PermissionController extends Controller
             $data = Permission::where('guard_name', 'web')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('display_name', fn ($row) => $row->display_name ?? '—')
+                ->addColumn('display_name', fn ($row) => $row->display_name
+                    ? '<span class="text-body">' . e($row->display_name) . '</span>'
+                    : '<span class="text-muted">—</span>')
                 ->editColumn('name', function ($row) {
-                    return '<span class="fw-semibold text-dark" style="font-size: 0.875rem;">' . e($row->name) . '</span>';
+                    return '<code class="fw-semibold" style="font-size: 0.8125rem;">' . e($row->name) . '</code>';
                 })
                 ->editColumn('guard_name', function ($row) {
                     return '<span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle fw-medium px-2 py-0.5" style="font-size: 0.725rem;">' . e($row->guard_name) . '</span>';
@@ -32,7 +34,7 @@ class PermissionController extends Controller
                         </div>
                     ';
                 })
-                ->rawColumns(['name', 'guard_name', 'action'])
+                ->rawColumns(['name', 'display_name', 'guard_name', 'action'])
                 ->make(true);
         }
 

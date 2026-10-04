@@ -137,17 +137,14 @@ $medias = $model->media ?? collect();
                 });
             });
 
-            // Delete Media
+            // Delete Media (requires <x-modal.confirm-delete name="confirm-media-delete" /> on the page)
             component.querySelectorAll('.media-delete').forEach(btn => {
                 btn.addEventListener('click', function () {
-                    const id = this.dataset.id;
-                    const form = document.getElementById('confirm-delete-form');
-                    if (form) {
-                        form.action = "{{ route('media.delete', ':id') }}".replace(':id', id);
-                        window.dispatchEvent(new CustomEvent('open-modal', {
-                            detail: 'confirm-user-delete'
-                        }));
-                    }
+                    const form = document.getElementById('confirm-delete-form-confirm-media-delete');
+                    const modalEl = document.getElementById('modal_confirm-media-delete');
+                    if (!form || !modalEl) return;
+                    form.action = "{{ route('media.delete', ':id') }}".replace(':id', this.dataset.id);
+                    bootstrap.Modal.getOrCreateInstance(modalEl).show();
                 });
             });
 

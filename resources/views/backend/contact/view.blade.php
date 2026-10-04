@@ -1,250 +1,105 @@
-<x-admin-layout title="Contact Message Details">
-    <div class="container py-4">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">📩 Contact Message Details</h5>
-            </div>
+<x-admin-layout>
+    <x-slot name="title">Contact Message Details</x-slot>
 
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <strong>Name:</strong>
-                        <p class="mb-0">{{ $contactUs->name }}</p>
-                    </div>
-
-                    <div class="col-md-6">
-                        <strong>Email:</strong>
-                        <p class="mb-0">{{ $contactUs->email }}</p>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <strong>Phone:</strong>
-                        <p class="mb-0">{{ $contactUs->phone ?? 'N/A' }}</p>
-                    </div>
-
-                    <div class="col-md-6">
-                        <strong>Subject:</strong>
-                        <p class="mb-0">{{ $contactUs->subject }}</p>
-                    </div>
-                </div>
-
-                <hr>
-
-                <div class="mb-3">
-                    <strong>Message:</strong>
-                    <div class="border p-3 bg-light">
-                        {!! nl2br(e($contactUs->message)) !!}
-                    </div>
-                </div>
-
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <strong>Sent At:</strong>
-                        <p class="mb-0">
-                            {{ $contactUs->created_at?->format('d M, Y h:i A') ?? 'N/A' }}
-                        </p>
-                    </div>
-
-                    <div class="col-md-6">
-                        <strong>Read At:</strong>
-                        <p class="mb-0">
-                            {{ $contactUs->read_at?->format('d M, Y h:i A') ?? 'Not read yet' }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-footer text-end">
-                <a href="{{ route('contact.me') }}" class="btn btn-secondary">
-                    ⬅ Back to List
+    <div class="container-fluid py-4">
+        <x-page-header title="Message Details" subtitle="{{ $contactUs->subject }}"
+            :breadcrumbs="['Dashboard' => route('admin.dashboard'), 'Contact Messages' => route('contact.me'), 'Details' => null]">
+            <x-slot:actions>
+                <a href="{{ route('contact.me') }}" class="btn btn-light border d-inline-flex align-items-center gap-2 px-3">
+                    <i class="fas fa-arrow-left"></i><span>Back</span>
                 </a>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#replyModal">
-                    ✉️ Reply via Email
+                <button type="button" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3" data-bs-toggle="modal" data-bs-target="#replyModal">
+                    <i class="fas fa-reply"></i><span>Reply via Email</span>
                 </button>
+            </x-slot:actions>
+        </x-page-header>
 
+        <div class="row g-4">
+            {{-- Message --}}
+            <div class="col-lg-8">
+                <x-card title="{{ $contactUs->subject }}" subtitle="Received {{ $contactUs->created_at?->diffForHumans() }}" class="h-100">
+                    <x-slot:icon><i class="fas fa-envelope-open-text"></i></x-slot:icon>
+                    <div class="lh-lg" style="white-space: pre-line; color: var(--theme-body-color, #334155);">{{ $contactUs->message }}</div>
+                </x-card>
+            </div>
+
+            {{-- Sender Info --}}
+            <div class="col-lg-4">
+                <x-card title="Sender Information" class="h-100">
+                    <x-slot:icon><i class="fas fa-user"></i></x-slot:icon>
+                    <dl class="mb-0 contact-meta">
+                        <dt>Name</dt>
+                        <dd>{{ $contactUs->name ?: 'N/A' }}</dd>
+
+                        <dt>Email</dt>
+                        <dd><a href="mailto:{{ $contactUs->email }}" class="text-decoration-none">{{ $contactUs->email }}</a></dd>
+
+                        <dt>Phone</dt>
+                        <dd>{{ $contactUs->phone ?: 'N/A' }}</dd>
+
+                        <dt>Sent At</dt>
+                        <dd>{{ $contactUs->created_at?->format('d M, Y h:i A') ?? 'N/A' }}</dd>
+
+                        <dt>Read At</dt>
+                        <dd class="mb-0">{{ $contactUs->read_at?->format('d M, Y h:i A') ?? 'Not read yet' }}</dd>
+                    </dl>
+                </x-card>
             </div>
         </div>
     </div>
 
-
-    <!-- Reply Email Modal -->
-    <div class="modal fade" id="replyModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <form action="{{ route('contact-us.reply', $contactUs->id) }}" method="POST">
+    {{-- Reply Email Modal --}}
+    <div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <form action="{{ route('contact-us.reply', $contactUs->id) }}" method="POST" class="modal-content border-0 shadow">
                 @csrf
-
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Reply to {{ $contactUs->email }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-header px-4">
+                    <h5 class="modal-title fw-bold d-flex align-items-center gap-2" id="replyModalLabel">
+                        <i class="fas fa-reply text-primary"></i> Reply to {{ $contactUs->email }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">To</label>
+                        <input type="email" class="form-control" value="{{ $contactUs->email }}" disabled>
                     </div>
-
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">To</label>
-                            <input type="email" class="form-control" value="{{ $contactUs->email }}" disabled>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Subject</label>
-                            <input type="text" name="subject" class="form-control" value="Re: {{ $contactUs->subject }}"
-                                required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Message</label>
-                            <textarea name="message" rows="6" class="form-control" required>
-Hello {{ $contactUs->name }},
-
-                        </textarea>
-                        </div>
+                    <div class="mb-3">
+                        <label for="reply-subject" class="form-label fw-medium">Subject</label>
+                        <input type="text" id="reply-subject" name="subject" class="form-control" value="Re: {{ $contactUs->subject }}" required>
                     </div>
+                    <div class="mb-0">
+                        <label for="reply-message" class="form-label fw-medium">Message</label>
+                        <textarea id="reply-message" name="message" rows="7" class="form-control" required>Hello {{ $contactUs->name }},
 
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">
-                            📤 Send Email
-                        </button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Cancel
-                        </button>
+</textarea>
                     </div>
+                </div>
+                <div class="modal-footer px-4">
+                    <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary px-4 d-inline-flex align-items-center gap-2">
+                        <i class="fas fa-paper-plane"></i><span>Send Email</span>
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-
-    @push('scripts')
-    <script>
-        $(document).ready(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            const table = $('#datatable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: "{{ route('contact.me') }}",
-                order: [
-                    [5, 'desc']
-                ], // latest first
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'subject',
-                        name: 'subject'
-                    },
-                    {
-                        data: 'email',
-                        name: 'email'
-                    },
-                    {
-                        data: 'phone',
-                        name: 'phone',
-                        render: data => data ?? 'N/A'
-                    },
-                    {
-                        data: 'is_read',
-                        name: 'is_read'
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    }
-                ],
-                pageLength: 25,
-                lengthMenu: [10, 25, 50, 100],
-                language: {
-                    processing: '<div class="spinner-border text-primary"></div>'
-                }
-            });
-
-            // View Button
-            $(document).on('click', '.view-btn', function() {
-                const id = $(this).data('id');
-                const url = "{{ route('contact.me.show', ':id') }}".replace(':id', id);
-
-                $.get(url, function(res) {
-                    if (res.success) {
-                        $('#modal-name').text(res.data.name);
-                        $('#modal-email').text(res.data.email);
-                        $('#modal-phone').text(res.data.phone);
-                        $('#modal-sent_at').text(res.data.sent_at);
-                        $('#modal-email').text(res.data.email);
-                        $('#modal-subject').text(res.data.subject);
-                        $('#modal-message').html(res.data.message);
-                        $('#viewModal').modal('show');
-
-                        // Reload table silently to update "Unread" badge without resetting pagination
-                        table.ajax.reload(null, false);
-                    }
-                }).fail(function(xhr) {
-                    console.error(xhr);
-                    toastr.error('Failed to load message details');
-                });
-            });
-
-            // Delete Button
-            $(document).on('click', '.delete-btn', function() {
-                const id = $(this).data('id');
-                const deleteUrl = "{{ route('contact.me.delete', ':id') }}".replace(':id', id);
-
-                Swal.fire({
-                    title: 'Delete this message?',
-                    text: "This action cannot be undone!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, Delete!',
-                    cancelButtonText: 'Cancel',
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6'
-                }).then(result => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: deleteUrl,
-                            type: 'DELETE',
-                            success: function(res) {
-                                if (res.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Deleted!',
-                                        text: res.message,
-                                        timer: 2000,
-                                        showConfirmButton: false
-                                    });
-
-                                    // Reload DataTable without page reset
-                                    table.ajax.reload(null, false);
-                                } else {
-                                    toastr.error(res.message || 'Failed to delete');
-                                }
-                            },
-                            error: function(xhr) {
-                                toastr.error(xhr.responseJSON?.message ||
-                                    'Failed to delete message');
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    </script>
+    @push('styles')
+    <style>
+        .contact-meta dt {
+            font-size: .75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: var(--theme-muted-color, #64748b);
+            margin-bottom: .15rem;
+        }
+        .contact-meta dd {
+            font-size: .875rem;
+            margin-bottom: 1rem;
+            word-break: break-word;
+        }
+    </style>
     @endpush
-
 </x-admin-layout>

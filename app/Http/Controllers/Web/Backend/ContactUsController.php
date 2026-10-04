@@ -27,19 +27,25 @@ class ContactUsController extends Controller
                 ->editColumn(
                     'is_read',
                     fn($row) => $row->is_read
-                        ? '<span class="badge bg-success">Read</span>'
-                        : '<span class="badge bg-warning">Unread</span>'
+                        ? '<span class="badge bg-success-subtle text-success border border-success-subtle">Read</span>'
+                        : '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Unread</span>'
                 )
+                ->editColumn('subject', fn($row) => '<span class="' . ($row->is_read ? '' : 'fw-semibold') . '">' . e($row->subject) . '</span>')
+                ->editColumn('phone', fn($row) => $row->phone ? e($row->phone) : '<span class="text-muted">N/A</span>')
                 ->addColumn('action', function ($row) {
-                    $viewBtn = '<a href="' . route('contact.me.show', $row->id) . '" class="btn btn-sm btn-info view-btn me-1" data-id="' . $row->id . '"><i class="fe fe-eye"></i></a>';
-                    $deleteBtn = '<button class="btn btn-sm btn-danger delete-btn" data-id="' . $row->id . '"><i class="fe fe-trash"></i></button>';
-                    return '<div class="btn-list">' . $viewBtn . $deleteBtn . '</div>';
+                    return '<div class="d-flex align-items-center gap-1">'
+                        . view('components.table.action', ['type' => 'view', 'href' => route('contact.me.show', $row->id)])->render()
+                        . view('components.table.action', ['type' => 'delete', 'onclick' => "deleteContact({$row->id})"])->render()
+                        . '</div>';
                 })
-                ->rawColumns(['is_read', 'action'])
+                ->rawColumns(['is_read', 'subject', 'phone', 'action'])
                 ->make(true);
         }
 
-        return view('backend.contact.index');
+        $total = ContactUs::count();
+        $unread = ContactUs::where('is_read', false)->count();
+
+        return view('backend.contact.index', compact('total', 'unread'));
     }
 
 
