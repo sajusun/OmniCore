@@ -59,7 +59,7 @@ class RoleController extends Controller
 
     public function create()
     {
-        $permissions = Permission::all();
+        $permissions = Permission::where('guard_name', 'web')->orderBy('name')->get();
 
         return view('backend.access.role.create', compact('permissions'));
     }
@@ -83,8 +83,8 @@ class RoleController extends Controller
 
     public function edit(string $id)
     {
-        $role = Role::findOrFail($id);
-        $permissions = Permission::all();
+        $role = Role::with('permissions')->findOrFail($id);
+        $permissions = Permission::where('guard_name', $role->guard_name)->orderBy('name')->get();
 
         return view('backend.access.role.edit', compact('role', 'permissions'));
     }

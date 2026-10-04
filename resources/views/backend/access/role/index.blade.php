@@ -1,32 +1,23 @@
-@extends('layouts.admin', ['title' => 'Role Management'])
+<x-admin-layout>
+<x-slot name="title">Role Management</x-slot>
 
-@section('content')
+<div class="container-fluid py-4">
+    <x-page-header title="Role Management" subtitle="Manage roles and their associated permissions."
+        :breadcrumbs="['Access Control' => null, 'Roles' => null]">
+        <x-slot:actions>
+            <a href="{{ route('admin.roles.create') }}" class="btn btn-primary d-inline-flex align-items-center gap-2 px-3 shadow-sm">
+                <i class="fas fa-plus"></i><span>Add New Role</span>
+            </a>
+        </x-slot:actions>
+    </x-page-header>
 
-{{-- Page Header --}}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <nav aria-label="breadcrumb" class="mb-1">
-            <ol class="breadcrumb mb-0" style="font-size: 0.875rem;">
-                <li class="breadcrumb-item text-muted">
-                    <i class="fas fa-shield-alt me-1"></i> Access Control
-                </li>
-                <li class="breadcrumb-item active text-primary fw-medium" aria-current="page">Roles</li>
-            </ol>
-        </nav>
-        <h1 class="h3 mb-1 font-weight-bold text-dark dark:text-light">Role Management</h1>
-        <p class="text-muted small mb-0">Manage roles and their associated permissions.</p>
-    </div>
-    <div>
-        <a href="{{ route('admin.roles.create') }}"
-            class="btn btn-primary px-3 py-2 shadow-sm d-inline-flex align-items-center gap-2">
-            <i class="fas fa-plus"></i>
-            Add New Role
-        </a>
-    </div>
-</div>
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 border-0 shadow-sm mb-4" role="alert">
+            <i class="fas fa-check-circle"></i><span>{{ session('success') }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-{{-- Datatable Section --}}
-<div class="card border-0 shadow-sm p-3">
     <x-datatable id="role-datatable" url="{{ route('admin.roles.index') }}" :columns="[
             ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => '#', 'orderable' => false, 'searchable' => false],
             ['data' => 'name', 'name' => 'name', 'title' => 'Role Name'],
@@ -66,8 +57,6 @@
         </div>
     </div>
 </div>
-
-@endsection
 
 @push('scripts')
 <script>
@@ -121,3 +110,4 @@
     }
 </script>
 @endpush
+</x-admin-layout>
