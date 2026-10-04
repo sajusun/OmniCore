@@ -1,37 +1,59 @@
 <x-admin-layout>
-    @slot('title')
-        Bulk Notification
-    @endslot
-    @slot('header')
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Send Bulk Notification
-        </h2>
-    @endslot
+    <x-slot name="title">Send Bulk Notification</x-slot>
 
-    <div class="max-w-4xl mx-auto mt-8">
-        <x-card title="Send to All Users">
-            @if(session('success'))
-                <div class="mb-4 p-4 text-green-700 bg-green-100 dark:bg-green-200 dark:text-green-800">
-                    {{ session('success') }}
-                </div>
-            @endif
+    <div class="container-fluid py-4">
+        <x-page-header
+            title="Send Bulk Notification"
+            subtitle="Broadcast notification message to all registered users across the system."
+            :breadcrumbs="['Dashboard' => route('admin.dashboard'), 'Notifications' => route('admin.notifications.index'), 'Send Bulk' => null]">
+            <x-slot:actions>
+                <a href="{{ route('admin.notifications.index') }}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1.5 px-3 py-2" style="font-size: 0.8125rem; border-radius: 8px;">
+                    <i class="fa fa-arrow-left"></i>
+                    <span>Back to Notifications</span>
+                </a>
+            </x-slot:actions>
+        </x-page-header>
 
-            <form action="{{ route('admin.notifications.store') }}" method="POST">
-                @csrf
-                <div class="mb-4">
-                    <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Subject</label>
-                    <input type="text" name="subject" id="subject" class="mt-1 block w-full border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm" required placeholder="e.g. System Update">
-                </div>
-                <div class="mb-4">
-                    <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
-                    <textarea name="message" id="message" rows="4" class="mt-1 block w-full border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm" required placeholder="Enter the notification content..."></textarea>
-                </div>
-                <div class="flex justify-end">
-                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none">
-                        Send Notification
-                    </button>
-                </div>
-            </form>
-        </x-card>
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+                <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-xl-8">
+                <form action="{{ route('admin.notifications.store') }}" method="POST">
+                    @csrf
+                    <x-card title="Notification Content" class="mb-4">
+                        <x-slot:icon>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                            </svg>
+                        </x-slot:icon>
+
+                        <div class="mb-3">
+                            <label for="subject" class="form-label fw-medium small">Subject <span class="text-danger">*</span></label>
+                            <input type="text" name="subject" id="subject" class="form-control" required placeholder="e.g. Scheduled System Maintenance Notice">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="message" class="form-label fw-medium small">Message Content <span class="text-danger">*</span></label>
+                            <textarea name="message" id="message" rows="5" class="form-control" required placeholder="Write your announcement details here..."></textarea>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-end gap-2">
+                            <a href="{{ route('admin.notifications.index') }}" class="btn btn-light px-4 py-2 fw-semibold" style="font-size: 0.8125rem; border-radius: 6px;">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2 px-4 py-2 fw-semibold shadow-sm" style="font-size: 0.8125rem; border-radius: 6px;">
+                                <i class="fa fa-paper-plane"></i>
+                                <span>Broadcast Notification</span>
+                            </button>
+                        </div>
+                    </x-card>
+                </form>
+            </div>
+        </div>
     </div>
 </x-admin-layout>

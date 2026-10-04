@@ -1,108 +1,103 @@
 <x-admin-layout>
-    <x-slot name="title">Create User</x-slot>
+    <x-slot name="title">Create Staff</x-slot>
 
-    <div class="py-8">
-        <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+    <div class="container-fluid py-4">
+        <x-page-header
+            title="Create Staff"
+            subtitle="Create a new administrative staff account and assign roles."
+            :breadcrumbs="['Dashboard' => route('admin.dashboard'), 'Staff' => route('admin.stuff.index'), 'Create' => null]">
+            <x-slot:actions>
+                <a href="{{ route('admin.stuff.index') }}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1.5 px-3 py-2" style="font-size: 0.8125rem; border-radius: 8px;">
+                    <i class="fa fa-arrow-left"></i>
+                    <span>Back to Staff</span>
+                </a>
+            </x-slot:actions>
+        </x-page-header>
 
-            {{-- Header --}}
-            <div class="mb-8 flex items-center justify-between">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900">
-                        Create User
-                    </h2>
-                    <p class="mt-1 text-sm text-gray-500">
-                        Create a new admin stuff account and assign a role.
-                    </p>
+        <form action="{{ route('admin.stuff.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+
+            <x-card title="Staff Information" :noPadding="true" class="mb-4">
+                <x-slot:icon>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </x-slot:icon>
+
+                {{-- Profile Photo Upload --}}
+                <div class="p-4 bg-light border-bottom">
+                    <x-form.file name="image" label="Profile Photo" file="{{ $user->image ?? '' }}" />
                 </div>
 
-                <nav class="flex items-center gap-2 text-sm text-gray-500">
-                    <a href="{{ route('admin.dashboard') }}" class="hover:text-indigo-600">Dashboard</a>
-                    <span>/</span>
-                    <a href="{{ route('admin.stuff.index') }}" class="hover:text-indigo-600">Users</a>
-                    <span>/</span>
-                    <span class="font-medium text-gray-800">Create</span>
-                </nav>
-            </div>
-
-            <form action="{{ route('admin.stuff.store') }}" method="POST">
-                @csrf
-
-                <div class="overflow-hidden border border-gray-200 bg-white shadow-sm">
-
-                    {{-- Card Header --}}
-                    <div class="border-b border-gray-200 px-6 py-5">
-                        <h3 class="text-lg font-semibold">
-                            User Information
-                        </h3>
-                    </div>
-
-                    {{-- Card Body --}}
-                    <div class="w-full">
-                        <div class="bg-transparent dark:bg-gray-900/90 p-5">
-                            <x-form.file name="image" label="Profile Photo" file="{{ $user->image ?? '' }}">
-                            </x-form.file>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
-
+                {{-- Inputs Grid --}}
+                <div class="p-4">
+                    <div class="row g-4">
                         {{-- Name --}}
-                        <x-form.text name="name" label="Name" placeholder="Enter full name" :value="old('name')"
-                            required autofocus />
+                        <div class="col-12 col-md-6">
+                            <x-form.text name="name" label="Full Name" placeholder="Enter full name" :value="old('name')" required autofocus />
+                        </div>
 
                         {{-- Email --}}
-                        <x-form.email name="email" label="Email Address" placeholder="user@example.com"
-                            :value="old('email')" required />
+                        <div class="col-12 col-md-6">
+                            <x-form.email name="email" label="Email Address" placeholder="staff@example.com" :value="old('email')" required />
+                        </div>
 
                         {{-- Role --}}
-                        <x-form.select name="role" label="Role" required>
-                            <option value="">Select Role</option>
-                            @foreach($roles as $role)
-                            <option value="{{ $role->name }}" @selected(old('role')==$role->name)>
-                                {{ ucfirst($role->name) }}
-                            </option>
-                            @endforeach
-                        </x-form.select>
+                        <div class="col-12 col-md-6">
+                            <x-form.select name="role" label="Role" required>
+                                <option value="">Select Role</option>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->name }}" @selected(old('role') == $role->name)>
+                                        {{ ucfirst($role->name) }}
+                                    </option>
+                                @endforeach
+                            </x-form.select>
+                        </div>
 
                         {{-- Password --}}
-                        <x-form.password name="password" label="Password" placeholder="Enter password" required>
-                            <x-slot name="labelActions">
-                                <button type="button" onclick="generatePassword()"
-                                    class="text-sm font-medium text-indigo-600 hover:text-indigo-700">Generate</button>
-                            </x-slot>
-                        </x-form.password>
+                        <div class="col-12 col-md-6">
+                            <x-form.password name="password" label="Password" placeholder="Enter password" required>
+                                <x-slot name="labelActions">
+                                    <button type="button" onclick="generatePassword()" class="btn btn-link p-0 text-decoration-none small fw-semibold text-primary">
+                                        <i class="fa fa-magic me-1"></i> Generate
+                                    </button>
+                                </x-slot>
+                            </x-form.password>
+                        </div>
 
                         {{-- Confirm Password --}}
-                        <x-form.password name="password_confirmation" label="Confirm Password"
-                            placeholder="Repeat password" required />
-
+                        <div class="col-12 col-md-6">
+                            <x-form.password name="password_confirmation" label="Confirm Password" placeholder="Repeat password" required />
+                        </div>
                     </div>
-
-                    {{-- Footer --}}
-                    <div class="flex justify-end gap-3 border-t border-gray-200 bg-gray-50 px-6 py-5">
-                        <x-form.cancel href="{{ route('admin.users.index') }}">Cancel</x-form.cancel>
-                        <x-form.submit>Save User</x-form.submit>
-                    </div>
-
                 </div>
 
-            </form>
-
-        </div>
+                <x-slot:footer>
+                    <div class="d-flex align-items-center justify-content-end gap-2">
+                        <a href="{{ route('admin.stuff.index') }}" class="btn btn-light px-4 py-2 fw-semibold" style="font-size: 0.8125rem; border-radius: 6px;">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-1.5 px-4 py-2 shadow-sm fw-semibold" style="font-size: 0.8125rem; border-radius: 6px;">
+                            <i class="fa fa-check"></i>
+                            <span>Save Staff</span>
+                        </button>
+                    </div>
+                </x-slot:footer>
+            </x-card>
+        </form>
     </div>
 
+    @push('scripts')
     <script>
     function generatePassword() {
         const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
         let password = "";
-
         for (let i = 0; i < 12; i++) {
             password += charset.charAt(Math.floor(Math.random() * charset.length));
         }
-        console.log(password);
-
         document.getElementById('password').value = password;
         document.getElementById('password_confirmation').value = password;
     }
     </script>
-
+    @endpush
 </x-admin-layout>
