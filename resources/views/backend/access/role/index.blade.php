@@ -40,6 +40,33 @@
 
 <x-modal.status />
 
+{{-- View All Permissions Modal --}}
+<div class="modal fade" id="permissionsModal" tabindex="-1" aria-labelledby="permissionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom py-3 px-4">
+                <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2 mb-0" id="permissionsModalLabel">
+                    <i class="fas fa-shield-alt text-primary"></i>
+                    <span>Permissions — <span id="modalRoleName" class="text-primary"></span></span>
+                    <span class="badge bg-primary text-white rounded-0 ms-1" id="modalPermCount" style="font-size: 0.75rem; padding: 0.35em 0.65em;">0</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <input type="text" id="modalPermSearch" class="form-control form-control-sm" placeholder="Search permissions..." onkeyup="filterModalPermissions(this.value)">
+                </div>
+                <div id="modalPermissionsContainer" class="d-flex flex-wrap gap-1" style="max-height: 380px; overflow-y: auto;">
+                    {{-- Badges rendered dynamically --}}
+                </div>
+            </div>
+            <div class="modal-footer border-top py-2 px-4">
+                <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -53,5 +80,44 @@
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
 }
+
+    function showPermissionsModal(btn) {
+        const roleName = btn.getAttribute('data-role');
+        const permissions = JSON.parse(btn.getAttribute('data-permissions'));
+
+        document.getElementById('modalRoleName').textContent = roleName;
+        document.getElementById('modalPermCount').textContent = permissions.length;
+
+        const container = document.getElementById('modalPermissionsContainer');
+        container.innerHTML = '';
+
+        permissions.forEach(function(perm) {
+            const badge = document.createElement('span');
+            badge.className = 'bg-primary text-white fw-medium rounded-0 perm-badge-item';
+            badge.style.fontSize = '0.75rem';
+            badge.style.padding = '0.35em 0.65em';
+            badge.textContent = perm;
+            container.appendChild(badge);
+        });
+
+        const searchInput = document.getElementById('modalPermSearch');
+        if (searchInput) searchInput.value = '';
+
+        const modalElement = document.getElementById('permissionsModal');
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+    }
+
+    function filterModalPermissions(query) {
+        query = query.toLowerCase().trim();
+        const items = document.querySelectorAll('.perm-badge-item');
+        items.forEach(function(item) {
+            if (query === '' || item.textContent.toLowerCase().includes(query)) {
+                item.style.display = 'inline-block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
 </script>
 @endpush

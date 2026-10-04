@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Web\Backend\Access;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Spatie\Permission\Models\Role;
-use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 
 class RoleController extends Controller
@@ -24,11 +24,22 @@ class RoleController extends Controller
                         return '<span class="text-muted fst-italic" style="font-size: 0.75rem;">No permissions</span>';
                     }
 
+                    $total = $row->permissions->count();
+                    $displayLimit = 10;
+                    $visible = $row->permissions->take($displayLimit);
+                    $remaining = $total - $displayLimit;
+
                     // Bootstrap flex layout with gap, ensuring zero rounding
-                    $badges = '<div class="d-flex flex-wrap gap-1">';
-                    foreach ($row->permissions as $permission) {
-                        $badges .= '<span class="bg-primary text-white fw-medium rounded-0" style="font-size: 0.75rem; padding: 0.35em 0.65em;">' . e($permission->name) . '</span>';
+                    $badges = '<div class="d-flex flex-wrap gap-1 align-items-center">';
+                    foreach ($visible as $permission) {
+                        $badges .= '<span class="bg-primary text-white fw-medium rounded-0" style="font-size: 0.75rem; padding: 0.35em 0.65em;">'.e($permission->name).'</span>';
                     }
+
+                    if ($remaining > 0) {
+                        $allPermNames = $row->permissions->pluck('name')->values()->all();
+                        $badges .= '<button type="button" class="badge bg-secondary text-white fw-medium rounded-0 border-0 shadow-none" style="font-size: 0.75rem; cursor: pointer;" data-role="'.e($row->name).'" data-permissions="'.e(json_encode($allPermNames)).'" onclick="showPermissionsModal(this)" title="View all '.$total.' permissions">+'.$remaining.' View More</button>';
+                    }
+
                     $badges .= '</div>';
 
                     return $badges;
@@ -36,8 +47,8 @@ class RoleController extends Controller
                 ->addColumn('action', function ($row) {
                     return '
                     <div class="d-flex align-items-center gap-1">
-                    ' . view('components.table.action', ['type' => 'edit', 'href' => route('admin.roles.edit', $row->id)])->render() . '
-                    ' . view('components.table.action', ['type' => 'delete', 'onclick' => "deleteRole({$row->id})"])->render() . '
+                    '.view('components.table.action', ['type' => 'edit', 'href' => route('admin.roles.edit', $row->id)])->render().'
+                    '.view('components.table.action', ['type' => 'delete', 'onclick' => "deleteRole({$row->id})"])->render().'
                     </div>
                 ';
                 })->rawColumns(['permissions', 'action'])->make(true);
@@ -49,6 +60,7 @@ class RoleController extends Controller
     public function create()
     {
         $permissions = Permission::all();
+
         return view('backend.access.role.create', compact('permissions'));
     }
 
@@ -56,7 +68,7 @@ class RoleController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:roles,name',
-            'permissions' => 'nullable|array'
+            'permissions' => 'nullable|array',
         ]);
 
         $role = Role::create(['name' => $request->name, 'guard_name' => 'web']);
@@ -73,6 +85,7 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
         $permissions = Permission::all();
+
         return view('backend.access.role.edit', compact('role', 'permissions'));
     }
 
@@ -88,7 +101,7 @@ class RoleController extends Controller
                         return $query->where('guard_name', $role->guard_name);
                     }),
             ],
-            'permissions' => 'nullable|array'
+            'permissions' => 'nullable|array',
         ]);
 
         $role->update(['name' => $request->name]);
@@ -109,6 +122,7 @@ class RoleController extends Controller
             return response()->json(['status' => false, 'message' => 'Cannot delete system roles!']);
         }
         $role->delete();
+
         return response()->json(['status' => true, 'message' => 'Role deleted successfully']);
     }
 }
