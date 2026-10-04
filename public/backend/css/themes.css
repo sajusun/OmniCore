@@ -926,4 +926,105 @@ body.fullscreen-window-fallback .page {
     min-height: 100vh !important;
 }
 
+/* ============================================================================
+ * UNIVERSAL THEME-ADAPTIVE BOOTSTRAP TABS & NAV-PILLS
+ * Resolves active tab contrast issues in light & dark modes across all 5 themes.
+ * ============================================================================ */
+.nav-tabs {
+    border-bottom: 1px solid var(--theme-card-border, #e2e8f0) !important;
+}
+
+.nav-tabs .nav-link {
+    color: var(--theme-muted-color, #64748b) !important;
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 8px 8px 0 0 !important;
+    font-weight: 500 !important;
+    padding: 0.65rem 1.25rem !important;
+    transition: all 0.2s ease-in-out !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+}
+
+.nav-tabs .nav-link svg,
+.nav-tabs .nav-link i {
+    color: currentColor !important;
+    stroke: currentColor !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link:focus {
+    color: var(--primary-bg-color, #6366f1) !important;
+    background-color: rgba(99, 102, 241, 0.06) !important;
+    border-color: transparent !important;
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+    color: var(--primary-bg-color, #6366f1) !important;
+    background-color: var(--theme-card-bg, #ffffff) !important;
+    border-color: var(--theme-card-border, #e2e8f0) var(--theme-card-border, #e2e8f0) var(--theme-card-bg, #ffffff) !important;
+    font-weight: 600 !important;
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.02) !important;
+}
+
+.nav-tabs .nav-link.active svg,
+.nav-tabs .nav-link.active i {
+    color: var(--primary-bg-color, #6366f1) !important;
+    stroke: var(--primary-bg-color, #6366f1) !important;
+}
+
+/* Specific profile tab styling */
+#profileTab .nav-link {
+    color: var(--theme-muted-color, #64748b) !important;
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 8px 8px 0 0 !important;
+}
+
+#profileTab .nav-link:hover {
+    color: var(--primary-bg-color, #6366f1) !important;
+    background-color: rgba(99, 102, 241, 0.08) !important;
+}
+
+#profileTab .nav-link.active {
+    color: var(--primary-bg-color, #6366f1) !important;
+    background-color: var(--theme-card-bg, #ffffff) !important;
+    border-color: var(--theme-card-border, #e2e8f0) var(--theme-card-border, #e2e8f0) var(--theme-card-bg, #ffffff) !important;
+    font-weight: 600 !important;
+}
+
+#profileTab .nav-link.active svg {
+    stroke: var(--primary-bg-color, #6366f1) !important;
+}
+
+/* Dark mode tab overrides */
+body.dark-mode .nav-tabs {
+    border-bottom-color: var(--theme-card-border, rgba(255, 255, 255, 0.1)) !important;
+}
+
+body.dark-mode .nav-tabs .nav-link {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .nav-tabs .nav-link:hover {
+    color: var(--primary-bg-color, #818cf8) !important;
+    background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+body.dark-mode .nav-tabs .nav-link.active,
+body.dark-mode #profileTab .nav-link.active {
+    color: var(--primary-bg-color, #818cf8) !important;
+    background-color: var(--theme-card-bg, #1e293b) !important;
+    border-color: var(--theme-card-border, rgba(255, 255, 255, 0.1)) var(--theme-card-border, rgba(255, 255, 255, 0.1)) var(--theme-card-bg, #1e293b) !important;
+}
+
+body.dark-mode .nav-tabs .nav-link.active svg,
+body.dark-mode #profileTab .nav-link.active svg {
+    stroke: var(--primary-bg-color, #818cf8) !important;
+}
+
+
 

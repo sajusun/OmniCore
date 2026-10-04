@@ -142,4 +142,80 @@
         content: none !important;
         display: none !important;
     }
+    /* Universal Bootstrap Nav Tabs & Profile Tab Fix */
+    .nav-tabs .nav-link,
+    #profileTab .nav-link {
+        color: var(--theme-muted-color, #64748b) !important;
+        background-color: transparent !important;
+        border: 1px solid transparent !important;
+        border-radius: 8px 8px 0 0 !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+
+    .nav-tabs .nav-link:hover,
+    .nav-tabs .nav-link:focus,
+    #profileTab .nav-link:hover,
+    #profileTab .nav-link:focus {
+        color: var(--primary-bg-color, #6366f1) !important;
+        background-color: rgba(99, 102, 241, 0.08) !important;
+        border-color: transparent !important;
+    }
+
+    .nav-tabs .nav-link.active,
+    .nav-tabs .nav-item.show .nav-link,
+    #profileTab .nav-link.active {
+        color: var(--primary-bg-color, #6366f1) !important;
+        background-color: var(--theme-card-bg, #ffffff) !important;
+        border: 1px solid var(--theme-card-border, #e2e8f0) !important;
+        border-bottom-color: var(--theme-card-bg, #ffffff) !important;
+        font-weight: 600 !important;
+    }
+
+    .nav-tabs .nav-link.active span,
+    #profileTab .nav-link.active span {
+        color: var(--primary-bg-color, #6366f1) !important;
+        background-color: transparent !important;
+        border: none !important;
+    }
+
+    .nav-tabs .nav-link.active svg,
+    .nav-tabs .nav-link.active i,
+    #profileTab .nav-link.active svg,
+    #profileTab .nav-link.active i {
+        color: var(--primary-bg-color, #6366f1) !important;
+        stroke: var(--primary-bg-color, #6366f1) !important;
+        background-color: transparent !important;
+        border: none !important;
+    }
+
+    body.dark-mode .nav-tabs .nav-link,
+    body.dark-mode #profileTab .nav-link {
+        color: #94a3b8 !important;
+    }
+
+    body.dark-mode .nav-tabs .nav-link:hover,
+    body.dark-mode #profileTab .nav-link:hover {
+        color: var(--primary-bg-color, #818cf8) !important;
+        background-color: rgba(255, 255, 255, 0.04) !important;
+    }
+
+    body.dark-mode .nav-tabs .nav-link.active,
+    body.dark-mode #profileTab .nav-link.active {
+        color: var(--primary-bg-color, #818cf8) !important;
+        background-color: var(--theme-card-bg, #1e293b) !important;
+        border-color: var(--theme-card-border, rgba(255, 255, 255, 0.1)) !important;
+        border-bottom-color: var(--theme-card-bg, #1e293b) !important;
+    }
+
+    body.dark-mode .nav-tabs .nav-link.active span,
+    body.dark-mode #profileTab .nav-link.active span {
+        color: var(--primary-bg-color, #818cf8) !important;
+    }
+
+    body.dark-mode .nav-tabs .nav-link.active svg,
+    body.dark-mode #profileTab .nav-link.active svg {
+        color: var(--primary-bg-color, #818cf8) !important;
+        stroke: var(--primary-bg-color, #818cf8) !important;
+    }
 </style>
